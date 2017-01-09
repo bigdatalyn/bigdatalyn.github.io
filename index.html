@@ -4,14 +4,15 @@ layout: default
 
 <div class="page clearfix" index>
     <div class="left">
-		<h2>
-			<a href="/2016/01/31/2016-booklist/" title="2016年阅读清单">
+		<h2>  
+			<a href="{{ site.baseurl }}/booklist2016/" title="2016年阅读清单">
 			<div class="post-list-header">
 			  <font color="#EE0000">【学习】</font>
 			  <font color="#333333">2016年阅读清单</font>
 			  <br />
 			</div>
 		  </a>
+		  
 		</h2>
 		
 
@@ -53,7 +54,39 @@ layout: default
         </ul>
 
 
+		
+		          <!-- 分页 -->
+				  
+				   <!-- 
+      <div class="paginator">
+   		<ul class="pagination">
+			{% if paginator.total_pages > 1 %}
+				  {% if paginator.previous_page %}
+			<li class=""><a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}" aria-label="Previous"><span aria-hidden="true">Previous</span></a></li>
+		  {% else %}
+			<li class="disabled"><a aria-label="Previous"><span aria-hidden="true">Previous</span></a></li>
+		  {% endif %}
 
+		  {% for page in (1..paginator.total_pages) %}
+			{% if page == paginator.page %}
+			  <li class="active"><a>{{ page }}<span class="sr-only">(current)</span></a></li>
+			{% elsif page == 1 %}
+			  <li class=""><a href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}<span class="sr-only">(current)</span></a></li>
+			{% else %}
+			  <li class=""><a href="/{{ site.paginate_path | replace: '//', '/' | replace: ':num', page }}">{{ page }}<span class="sr-only">(current)</span></a></li>
+			{% endif %}
+		  {% endfor %}
+
+		  {% if paginator.next_page %}
+			<li class=""><a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}" aria-label="Previous"><span aria-hidden="true">Next</span></a></li>
+		  {% else %}
+			<li class="disabled"><a aria-label="Previous"><span aria-hidden="true">Next</span></a></li>
+		  {% endif %}
+			{% endif %}
+		  </ul>    
+      </div>
+		-->
+		
         <!-- Pagination links -->
         <div class="pagination">
           {% if paginator.previous_page %}
@@ -66,12 +99,14 @@ layout: default
           <span class="page_number ">{{ paginator.page }}/{{ paginator.total_pages }}</span>
           {% if paginator.next_page %}
             <a href="{{ paginator.next_page_path }}" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page{{ paginator.total_pages }}" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/blog/page{{ paginator.total_pages }}" class="next"><i class="fa fa-angle-double-right"></i></a>
           {% else %}
             <span class="next disable"><i class="fa fa-angle-right"></i></span>
             <span class="next disable"><i class="fa fa-angle-double-right"></i></span>
           {% endif %}
         </div>
+		
+
 
 		
     </div>

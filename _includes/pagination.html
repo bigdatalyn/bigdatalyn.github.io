@@ -1,0 +1,28 @@
+{% if paginator.total_pages != 1  %}
+<div id="pagination" class="pagination">
+    <ul class="pages fix_height">
+        {% if paginator.page == 1  %}
+        <li class="current-page">
+            <span>1</span>
+            {% else  %}
+        <li class="page">
+            <a href="{{ pager_url  }}/">1</a>
+            {% endif  %}
+        </li>
+        {% for count in (2..paginator.total_pages)  %}
+
+        {% if count == paginator.page  %}
+        <li class="page current-page">
+            <span>{{ count  }}</span>
+            {% else  %}
+        <li class="page">
+            <a href="{{ pager_url  }}/page{{ count  }}/">{{ count  }}</a>
+            {% endif  %}
+        </li>
+        {% endfor  %}
+        <li class="page last_page">
+            <a href="{{ pager_url  }}/page{{ paginator.total_pages  }}/">Last</a>
+        </li>
+    </ul>
+</div>
+{% endif   %}

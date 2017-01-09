@@ -2,7 +2,7 @@
 layout: post
 title: "[原创]DB2 存储结构（db2dart分析）"
 date:   2016-02-22 20:28:25
-category: DB2
+categories: DB2
 tags: DB2 db2dart 原创
 ---
 
