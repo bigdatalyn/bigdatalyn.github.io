@@ -1,0 +1,81 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var navigation_dwStr = '';
+
+function dw(s) {
+	navigation_dwStr+=s;
+}
+
+
+	dw("<div class='lotusFooter' role='contentinfo' aria-label='Footer'>");
+
+	dw("<ul aria-label='Additional links'>");
+
+	
+		dw("<li><a href='https://apps.na.collabserv.com/manage/account/dashboardHandler/input' aria-label='Home (This link opens a new window)' target='_blank'>Home</a></li>");
+
+	
+		dw("<li><a href='mailto:support@collabserv.com' aria-label='Contact Us (This link opens a new window)' target='_blank'>Contact Us</a></li>");
+
+	
+		dw("<li><a href='https://www-03.ibm.com/software/sla/sladb.nsf/sla/tou/' aria-label='Terms of Use (This link opens a new window)' target='_blank'>Terms of Use</a></li>");
+
+	
+		dw("<li><a href='https://www.na.collabserv.com/privacy' aria-label='Privacy (This link opens a new window)' target='_blank'>Privacy</a></li>");
+
+	
+		dw("<li><a href='https://apps.na.collabserv.com/help/index.jsp?topic=/com.ibm.cloud.whatsnew.doc/ll_wn_whats_new.html&amp;lang=en' aria-label='What&#39;s New (This link opens a new window)' target='_blank'>What&#39;s New</a></li>");
+
+	
+		dw("<li><a href='https://www.na.collabserv.com/support/status' aria-label='System Status (This link opens a new window)' target='_blank'>System Status</a></li>");
+
+
+	dw("</ul>");
+
+	dw("</div>");
+
+
+document.getElementById("footer").innerHTML = navigation_dwStr;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

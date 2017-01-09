@@ -1,0 +1,691 @@
+.lconnPicker {
+background-color: #eaecee;
+}
+.lconnPicker .lconnLeftSide, .lconnPicker .lconnRightSide {
+background-color: #ffffff;
+}
+@-moz-document url-prefix(){
+.lconnPicker .lotusDialogClose:focus, .lconnPicker .checkbox input[type = radio]:focus, .lconnPicker .lconnLeftSide, .lconnPicker .lconnRightSide .lotusNowrap.lotusFirstCell input[name = fileSelectionBtn]:focus {
+outline: dotted 1px black;
+}
+}
+.dijit_a11y .lconnPicker, .dijit_a11y .lconnPicker .lconnMenuScrollContainer, .dijit_a11y .lconnPicker .lconnRightSide {
+border: 1px solid #000000;
+}
+.lconnPicker .lconnSectionHeader, .lconnPicker .lotusSearch, .lconnPicker .lconnPickerStream .lotusPaging {
+border-bottom: 1px solid #e5e5e5;
+padding-right: 5px;
+}
+.lconnPicker .lconnEmptyMsg, .lconnPicker .lconnErrorMsg {
+border-top: 1px solid #e5e5e5;
+padding-top: 5px;
+margin-top: 15px;
+}
+.lconnPicker .loutsFormTable {font-size: 1em;}
+.lconnPicker .lconnFolderIcon {padding-bottom: 4px;}
+.lconnPicker .lconnDivider {
+background-color: #e5e5e5;
+height: 1px;
+margin: 5px 0px;
+line-height: 1px;
+font-size: 1px;
+}
+.lotusui30 .lconnPicker .lotusForm tr.lotusFormFieldRow td{
+padding-top: 0px;
+}
+.lconnPicker .lotusTable td label.lconnFilenameLable {
+font-weight: normal;
+padding-top: 2px;
+padding-bottom: 2px;
+font-size: 1em;
+display: block;
+overflow: hidden;
+width: 100%;
+text-overflow:ellipsis;
+}
+.lconnPicker .lotusTable td label.lconnFilenameLableCustom {
+padding-top: 2px;
+padding-bottom: 2px;
+}
+.lconnPicker .lotusTable td label.lconnFilenameLableCustomQuirks {
+padding-top: 3px;
+padding-bottom: 3px;
+font-size: 0.8em;
+}
+.lconnPicker .lconnLeftSide .lconnMenuScrollContainer a {
+color: #000000;
+}
+.dijit_a11y .lconnPicker .lconnMenuScrollContainer a {
+text-decoration: underline;
+}
+.lconnPicker a.lotusSelected, .lconnPicker a.lotusSelected span {
+background-color: #CFECFF;
+color: #000000;
+}
+.dijit_a11y .lconnPicker a.lotusSelected { text-decoration: underline; }
+.lconnPicker .lconnPickerInput, .lconnPicker .lconnPickerOtherFiles {
+color: #848484;
+}
+.lconnPicker .radioSwitch .lconnPickerDialogBody {
+padding: 15px 0px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerDialogBody {
+padding: 0px;
+}
+.lconnPicker .radioSwitch .lconnPickerSourceArea {
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceArea {
+padding-top: 15px;
+overflow: hidden;
+}
+.lconnPicker .tabSwitchPane {
+background: #F1F1F1;
+overflow: hidden;
+}
+.lconnPicker .radioSwitch .switchContainer {
+margin-bottom: 4px;
+padding-bottom: 7px;
+}
+.lconnPicker .tabbedSwitch .switchContainer {
+height: 45px;
+margin-bottom: inherit;
+padding-bottom: inherit;
+}
+.lconnPicker .radioSwitch .lconnPickerSourceSwitchingContentArea {
+margin-left: 5px;
+padding-top: 4px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceSwitchingContentArea {
+margin-left: 0px;
+padding-top: 15px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceRadioButtonHiddenInTabbedSwitch {
+display: none;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabel {
+padding-top: 5px;
+color: #1D3649
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelSpan {
+margin-left: 10px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelSpanChecked {
+color: #366BB2;
+border-bottom: 5px solid #3E76C0;
+padding-bottom: 10px;
+}
+.lconnPicker .radioSwitch .lconnPickerSourceLabelImg {
+display: none;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelImg {
+display: inherit;
+position: relative;
+top: -2px;
+}
+.lconnPicker .tabbedSwitch .pickerSourceChecked  .lconnPickerSourceLabelIconCloud {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px -48px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelIconCloud {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px -72px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch  .pickerSourceChecked  .lconnPickerSourceLabelIconUpload{
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px -96px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelIconUpload {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px -120px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch  .pickerSourceChecked .lconnPickerSourceLabelIconCommunity {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px 0px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelIconCommunity {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px -24px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .pickerDropfilesHorizentalPrompt {
+border: 2px dashed #cccccc;
+width: 9999px;
+height: 170px;
+text-align: center;
+vertical-align: middle !important;
+display: table-cell;
+background: repeating-linear-gradient(
+45deg,
+#f6f6f6,
+#f6f6f6 10px,
+#f8f9f9 10px,
+#f8f9f9 20px
+);
+}
+.lconnPicker .pickerDropfilesVerticalPrompt {
+border: 2px dashed #cccccc;
+border-spacing: 0;
+display: block;
+height: 170px !important;
+max-height:200px !important;
+text-align: center;
+vertical-align: top;
+overflow-y: auto !important;
+background: repeating-linear-gradient(
+45deg,
+#f6f6f6,
+#f6f6f6 10px,
+#f8f9f9 10px,
+#f8f9f9 20px
+);
+}
+.lconnPicker .pickerDropfilesDesc {
+color: #292929;
+font-size: 1.25em;
+font-family: "Helvetica Neue",Helvetica,Arial,Roboto;
+font-weight: 200;
+margin-left: 30px !important;
+margin-right: 30px !important;
+}
+.lconnPicker .pickerDropfilesVerticalPrompt .pickerBrowserContainer {
+width: 99999px;
+height: 60px;
+display: table-cell;
+vertical-align: middle;
+}
+.lconnPicker .pickerInputSpan INPUT {
+margin: 0 !important;
+}
+.lconnPicker .pickerDnDLabelRow {
+margin-top: 20px;
+padding-left:20px;
+}
+.lconnPicker .pickerDropfilesList {
+margin-left: 20px;
+margin-right: 20px;
+text-align: left;
+}
+.lconnPicker .lotusSearch.pickerSearchBar {
+height: 30px;
+padding: 5px 0;
+margin: 0;
+}
+.lconnPicker .lconnPickerCompact .lotusSearch.pickerSearchBar {
+line-height: 22px;
+height: 30px;
+padding: inherit;
+border-bottom: 0px;
+}
+.lconnPicker .lotusSearch.pickerSearchBar .pickerSearchBarStatusText {
+padding-top: 2px;
+}
+.lotusui30 .lconnPicker .lotusForm td label { font-weight: normal; }
+.lotusui30 .lconnPicker .lotusForm td.lotusFormLabel { font-weight: normal; text-align: left; }
+.lconnPicker .lconnPickerInput, .lconnPicker .lconnPickerOtherFiles {
+color: #676767;
+}
+.lconnPicker .radioSwitch .lconnPickerDialogBody {
+padding: 15px 0px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerDialogBody {
+padding: 0px;
+}
+.lconnPicker .radioSwitch .lconnPickerSourceArea {
+overflow: hidden;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceArea {
+padding-top: 15px;
+overflow: hidden;
+}
+.lconnPicker .switchPane {
+overflow: hidden;
+}
+.lconnPicker .tabbedSwitch .switchPane {
+background: #F1F1F1;
+}
+.lconnPicker .radioSwitch .switchContainer {
+margin-bottom: 4px;
+padding-bottom: 7px;
+}
+.lconnPicker .tabbedSwitch .switchContainer {
+height: 45px;
+background: #F1F1F1;
+margin-bottom: inherit;
+padding-bottom: inherit;
+}
+.lconnPicker .lconnPickerSourceToCheck+.lconnPickerSourceToCheck {
+margin-left: 40px;
+}
+.lconnPicker .radioSwitch .lconnPickerSourceSwitchingContentArea {
+margin-left: 5px;
+padding-top: 4px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceSwitchingContentArea {
+margin-left: 0px;
+padding-top: 15px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceRadioButtonHiddenInTabbedSwitch {
+display: none;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabel {
+padding-top: 5px;
+color: #1D3649;
+cursor: pointer;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelSpan {
+margin-left: 10px;
+}
+.lconnPicker .tabbedSwitch .pickerSourceChecked .lconnPickerSourceLabel {
+border-bottom: 5px solid #222;
+padding-bottom: 10px;
+}
+.lconnPicker .tabbedSwitch .pickerSourceChecked .lconnPickerSourceLabelSpan {
+color: #222;
+padding-bottom: 15px;
+}
+.lconnPicker .radioSwitch .lconnPickerSourceLabelImg {
+display: none;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelImg {
+display: inherit;
+position: relative;
+top: -2px;
+}
+.lconnPicker .tabbedSwitch .pickerSourceChecked  .lconnPickerSourceLabelIconCloud {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px -48px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelIconCloud {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");
+background-position: 0px -72px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch  .pickerSourceChecked  .lconnPickerSourceLabelIconUpload{
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/Picker/iconsPicker16-8bit.png?etag=20160903.134200");
+background-position: 0px -96px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelIconUpload {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/Picker/iconsPicker16-8bit.png?etag=20160903.134200");
+background-position: 0px -120px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch  .pickerSourceChecked .lconnPickerSourceLabelIconCommunity {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/Picker/iconsPicker16-8bit.png?etag=20160903.134200");
+background-position: 0px -48px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelIconCommunity {
+background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/Picker/iconsPicker16-8bit.png?etag=20160903.134200");
+background-position: 0px -72px;
+height: 16px;
+width: 16px;
+display: -moz-inline-box;
+display: inline-block;
+}
+.lconnPicker .pickerDropfilesHorizentalPrompt {
+border: 2px dashed #cccccc;
+width: 9999px;
+height: 170px;
+text-align: center;
+vertical-align: middle !important;
+display: table-cell;
+background: repeating-linear-gradient(
+45deg,
+#f6f6f6,
+#f6f6f6 10px,
+#f8f9f9 10px,
+#f8f9f9 20px
+);
+}
+.lconnPicker .pickerDropfilesVerticalPrompt {
+border: 2px dashed #cccccc;
+border-spacing: 0;
+display: block;
+height: 170px !important;
+max-height:200px !important;
+text-align: center;
+vertical-align: top;
+overflow-y: auto !important;
+background: repeating-linear-gradient(
+45deg,
+#f6f6f6,
+#f6f6f6 10px,
+#f8f9f9 10px,
+#f8f9f9 20px
+);
+}
+.lconnPicker .pickerDropfilesDesc {
+color: #292929;
+font-size: 1.25em;
+font-family: "Helvetica Neue",Helvetica,Arial,Roboto;
+font-weight: 200;
+margin-left: 30px !important;
+margin-right: 30px !important;
+}
+.lconnPicker .pickerDropfilesVerticalPrompt .pickerBrowserContainer {
+width: 99999px;
+height: 60px;
+display: table-cell;
+vertical-align: middle;
+}
+.lconnPicker .pickerInputSpan INPUT {
+margin: 0 !important;
+}
+.lconnPicker .pickerDnDLabelRow {
+margin-top: 20px;
+padding-left:20px;
+}
+.lconnPicker .pickerDropfilesList {
+margin-left: 20px;
+margin-right: 20px;
+text-align: left;
+}
+.lotusui30  .lconnPicker .lotusForm .lotusText {
+width: 97%
+}
+.lconnPicker .lconnFileUpload {
+position: relative;
+padding: 0 20px;
+z-index: 1
+}
+.lconnPicker .lconnFileUploadIcon {
+position: absolute;
+left: 0;
+top: 0
+}
+.lconnPicker .lconnFileUploadLabel {
+width: 100%
+}
+.lconnPicker .lconnFileUploadLabel .lconnFilenameContainer {
+overflow: hidden;
+text-overflow: ellipsis;
+width: 100%;
+display: block;
+white-space: nowrap
+}
+.lconnPicker .lconnFileUploadAction {
+position: absolute;
+right: 0;
+top: 0
+}
+.lconnPicker .lconnFileUploadDisabled a {
+color: #000;
+text-decoration: none;
+cursor: text
+}
+.lconnPicker .lconnFileUploadDisabled .lconnFileUploadAction a {
+display: none
+}
+.lconnPicker .lconnFileUploadDisabled .lconnFileUploadIcon,.lconnPicker .lconnFileUploadDisabled .lconnFileUploadLabel,.lconnPicker .lconnFileUploadDisabled .lconnFileUploadStatus {
+opacity: .5;
+filter: alpha(opacity = 50)
+}
+.lconnPicker .lconnFileUploadDisabled .lconnFileUploadStatus .lotusInlinelist,.lconnPicker .lconnFileUploadDisabled .lconnFileUploadStatus_FileRenamed,.lconnPicker .lconnFileUploadDisabled .lconnFileUploadStatus_IsDuplicate,.lconnPicker .lconnFileUploadDisabled .lconnUploadContainer,.lconnPicker .lconnFileUploadEditing .lconnFileUploadStatus_IsDuplicate {
+display: none
+}
+.lconnPicker .lconnFileUploadStatus {
+padding-top: 1px;
+padding-bottom: 2px
+}
+.lconnPicker .lconnFileUploadStatus .lotusMessage {
+border: none;
+padding: 3px;
+margin-bottom: 2px
+}
+.lconnPicker .lconnFileUploadStatus .lotusInlinelist {
+display: inline
+}
+.lconnPicker .lconnUploadContainer {
+display: inline-block;
+position: relative;
+z-index: 2
+}
+.lconnPicker .lconnUploadMultiple .lconnUploadHover {
+background-color: #f0f0f0
+}
+.lconnPicker .lconnFileUploadAction .lconnRemoveLink {
+padding: 0 4px
+}
+.lconnPicker.lotusImagesOff .lotusBtnImg img,
+.lconnPicker.lotusImagesOff .lconnTextA11yHidden {
+display: none;
+}
+.lconnPicker.lotusImagesOff .lotusAltText {
+display: inline;
+}
+.lconnPicker .lconnFilesTree {
+font-size: 13px;
+font-weight:300;
+color:#292929;
+}
+.lconnPicker .lconnFilesTree .node {
+margin-top: 0px;
+}
+.lconnPicker .lconnPickerStream > div > .lconnFilesTree > .tree > .node:first-child {
+padding-top: 5px;
+}
+.lotusui30 .lconnPicker .lconnFilesTree .node .headerOuter,
+.lconnPicker .lconnFilesTree .node .headerOuter {
+clear:both;
+cursor:pointer;
+border-left: 4px solid rgba(0, 0, 0, 0);
+border-bottom: 1px solid rgba(0, 0, 0, 0);
+border-top: 1px solid rgba(0, 0, 0, 0);
+}
+.lotusui30 .lconnPicker .lconnFilesTree .node .disabled,
+.lconnPicker .lconnFilesTree .node .disabled {
+cursor:auto;
+}
+.lotusui30 .lconnPicker .lconnFilesTree .node .headerOuter:hover:not(.disabled),
+.lconnPicker .lconnFilesTree .node .headerOuter:hover:not(.disabled) {
+border-bottom-color: rgba(229, 229, 229, 100);
+border-top-color: rgba(229, 229, 229, 100);
+box-shadow: none;
+background-color: inherit;
+color: inherit;
+}
+.lconnPicker .lconnFilesTree .node .header {
+overflow: hidden;
+}
+.lconnPicker .lconnFilesTree .node .checkbox {
+float:left;
+}
+.lconnPicker .lconnFilesTree .node .twisty {
+float:left;
+}
+.lconnPicker .lconnFilesTree .node .icon {
+float:left;
+}
+.lconnPicker .lconnFilesTree .node .title {
+float:left;
+padding: 0 5px 0 5px;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+}
+.lconnPicker .lconnFilesTree .node .external {
+float:left;
+}
+.lconnPicker .lconnFilesTree .node .visibility {
+float:right;
+}
+.lconnPicker .lconnFilesTree .node .highlight {
+border-left: 4px solid #3e76c0;
+background-color: inherit;
+font-weight: inherit;
+}
+.lconnPicker .lconnFilesTree.lconnFilesTreeCheckbox .node .highlight {
+border-left-color: rgba(0, 0, 0, 0);
+}
+.lconnPicker .lconnFilesTree .node .disabled {
+opacity: 0.50 !important;
+filter: alpha(opacity=50) !important;
+text-decoration: none !important;
+cursor: text !important;
+}
+.lconnPicker .lconnPickerStream>div>.lconnFilesTree {
+margin-top: 5px;
+border: 1px solid #F1F1F1;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb {
+border-bottom: 1px solid #F1F1F1;
+height: 30px;
+padding-left: 10px;
+padding-right: 10px;
+padding-top: 9px;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbPrefix {
+float: left;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbitem {
+float: left;
+margin-left: 5px;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbitem.lconnBreadcrumbtwisty {
+padding-top: 2px;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbdropdown .lotusBtn {
+background-image: url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/overflow16-gray.png?etag=20160903.134200");
+background-repeat: no-repeat;
+background-color: transparent;
+height: 16px;
+width: 20px;
+margin: 2px 0 0 0;
+padding: 0;
+border: none;
+box-shadow: inherit;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbdropdown .lotusBtn:hover,
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbdropdown .lotusBtn:focus {
+background-image: url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/overflow16-blue.png?etag=20160903.134200");
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbdropdown .lotusDropDownSprite {
+display: none;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbnode {
+max-width: none;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+cursor: pointer;
+}
+.lconnPicker .lconnFilesTree .lconnBreadcrumb .lconnBreadcrumbdiv:last-child .lconnBreadcrumbnode {
+font-weight: bold;
+}
+.lotusui30dojo .dijitMenu.lconnPickerFilesTreeBreadcrumb {
+border-color: #F1F1F1;
+}
+.lotusui_ie8 .lotusui30dojo .dijitMenu.lconnPickerFilesTreeBreadcrumb {
+table-layout: fixed;
+width: 322px;
+}
+.lconnPickerFilesTreeBreadcrumb .dijitMenuItem td.dijitMenuItemLabel {
+max-width: 290px;
+white-space: nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
+padding: 7px 10px !important;
+}
+.lotusui_ie8 .lconnPickerFilesTreeBreadcrumb .dijitMenuItem td.dijitMenuItemLabel {
+width: 290px;
+}
+.lotusui30 .lconnPicker .lotusDialogBorder .lotusDialog {
+border-width: 0px;
+}
+.lconnPicker .lotusDialog .lotusFormTable,
+.lconnPicker .lotusDialog .lotusFormTable td,
+.lconnPicker .lotusDialog .lotusDialogContent {
+border: 0;
+}
+.lconnPicker .lotusDialogBorder .lconnMessageBox{
+padding: 15px 18px 0;
+}
+.lconnPicker .tabbedSwitch  .pickerSourceChecked  .lconnPickerSourceLabelCreateFolder{
+background-image:url("/connections/resources/web/com.ibm.oneui3.styles/css/images/Icons/States/iconsStates16-8bit.png?etag=20160903.134200");
+width:16px;height:16px;background-position:0 -798px;
+}
+.lconnPicker .tabbedSwitch .lconnPickerSourceLabelCreateFolder {
+background-image:url("/connections/resources/web/com.ibm.oneui3.styles/css/images/Icons/States/iconsStates16-8bit.png?etag=20160903.134200");
+width:16px;height:16px;background-position:0 -822px;
+}
+.lconnPicker .lconnFilesTree .node .checkbox {
+margin-top: 3px;
+margin-right: 6px;
+}
+.lconnPicker .lconnFilesTree .node .title {
+margin-left: 5px;
+margin-top: 4px;
+}
+.lconnPicker .lotusDialogBorder .lotusDialogHeader .dijitDialogTitle{
+font-size: 1em;
+font-weight:normal;
+}
+.lotusui30 .lconnPickerDialogBody .lotusMessage2{
+margin-bottom: 0px;
+}
+.lconnPicker .lotusDialogBorder .lotusDialog .lotusDialogContent{
+max-height:none;
+overflow:hidden;
+}
+.lconnPicker .lotusDialogBorder .lotusDialog .qkrDialogScrolledY{
+overflow-y:hidden;
+}
+.lconnPicker .lconnPickerSourceArea .lotusMessageContainer {
+margin-right: 0;
+padding-right: 0;
+}
+.lconnPicker .lconnPickerSourceArea .lotusSearch {
+margin-right: 0;
+}
+.lconnPicker .lconnPickerSourceArea .lotusTwistyClosed {
+opacity: 1;
+}
+.lconnPicker  .lotusUploadFile  .lotusFormTable .lotusFormFieldRow td{
+padding-right: 0px;
+}
+.lconnPicker  .lotusFormTable{
+border-spacing:0px;
+}
+.lconnPicker  .lconnPickerSourceArea .lotusMessageContainer .lotusMessage2{
+margin-bottom:12px;
+}.lconnPicker .radioSwitch .lconnPickerSourceArea,.lconnPicker .switchPane{overflow:hidden}.lconnPicker .radioSwitch .lconnPickerSourceLabelImg,.lconnPicker .tabbedSwitch .lconnPickerSourceRadioButtonHiddenInTabbedSwitch{display:none}.lconnPicker .lotusui30_fonts{font-family:"Helvetica Neue",Helvetica,Roboto,Arial;-webkit-font-smoothing:antialiased}.lotusui30 .lconnPicker .lotusForm td label{font-weight:400}.lotusui30 .lconnPicker .lotusForm td.lotusFormLabel{font-weight:400;text-align:left}.lconnPicker .radioSwitch .lconnPickerDialogBody{padding:15px 0}.lconnPicker .tabbedSwitch .lconnPickerDialogBody{padding:0}.lconnPicker .tabbedSwitch .lconnPickerSourceArea{padding-top:15px;overflow:hidden}.lconnPicker .tabbedSwitch .switchPane{background:#fff}.lconnPicker .radioSwitch .switchContainer{margin-bottom:4px;padding-bottom:7px}.lconnPicker .tabbedSwitch .switchContainer{background:#fff;border-bottom:1px solid #4178be;height:45px;margin-bottom:inherit;padding-bottom:inherit}.lconnPicker .tabbedSwitch .lconnPickerSourceToCheck+.lconnPickerSourceToCheck{margin-left:4px}.lconnPicker .radioSwitch .lconnPickerSourceSwitchingContentArea{margin-left:5px;padding-top:4px}.lconnPicker .tabbedSwitch .lconnPickerSourceSwitchingContentArea{height:33px;margin-left:0;padding-top:12px}.lconnPicker .tabbedSwitch .lconnPickerSourceSwitchingContentArea fieldset{margin-top:8px}.lconnPicker .tabbedSwitch .lconnPickerSourceLabel{padding:9px 11px;color:#4178be;margin-top:1px;margin-left:1px;margin-right:1px}.lconnPicker .tabbedSwitch .lconnPickerSourceLabel:focus,.lconnPicker .tabbedSwitch .lconnPickerSourceLabel:hover{margin-top:0;margin-left:0;margin-right:0;border-top:1px solid #4178be;border-left:1px solid #4178be;border-right:1px solid #4178be}.lconnPicker .tabbedSwitch .lconnPickerSourceLabelSpan{color:#4178be;text-transform:uppercase;font-weight:700;margin-left:6px;padding-bottom:13px}.lconnPicker .tabbedSwitch .pickerSourceChecked .lconnPickerSourceLabel{border-bottom:3px solid #4178be;padding:9px 11px 6px}.lconnPicker .tabbedSwitch .pickerSourceChecked .lconnPickerSourceLabelSpan{color:#366BB2;padding-bottom:15px}.lconnPicker .tabbedSwitch .lconnPickerSourceLabelImg{display:inherit;position:relative;top:-2px}.lconnPicker .lconnFilesTree .lconnBreadcrumbnode:focus,.lconnPicker .lconnFilesTree .lconnBreadcrumbnode:hover{text-decoration:underline}.lotusImagesOff .lconnPicker .lconnFilesTree .lconnBreadcrumbnode:focus,.lotusImagesOff .lconnPicker .lconnFilesTree .lconnBreadcrumbnode:hover{text-decoration:inherit}.lotusui30dojo .lconnPickerFilesTreeBreadcrumb.dijitMenuTable{border-collapse:separate;border-spacing:0 2px}.lotusui30dojo .lconnPickerFilesTreeBreadcrumb .dijitMenuItem{color:#676767}.lotusui30dojo .lconnPickerFilesTreeBreadcrumb .dijitMenuItem:not(.dijitMenuItemFocused):not(.dijitMenuItemHover) .dijitReset{border-top:1px solid transparent;border-bottom:1px solid transparent}.lotusui30dojo .lconnPickerFilesTreeBreadcrumb .dijitMenuItem:not(.dijitMenuItemFocused).dijitMenuItemHover td.dijitMenuItemLabel{border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5}.lotusui30dojo .lconnPickerFilesTreeBreadcrumb .dijitMenuItem.dijitMenuItemFocused .dijitReset{border-top:1px solid #4178be;border-bottom:1px solid #4178be}.lconnPicker .pickerDropfilesHorizentalPrompt,.lconnPicker .pickerDropfilesVerticalPrompt{border:2px dashed #ccc;text-align:center;background:repeating-linear-gradient(45deg,#f6f6f6,#f6f6f6 10px,#f8f9f9 10px,#f8f9f9 20px)}.lconnPicker .pickerDropfilesHorizentalPrompt{width:9999px;height:170px;vertical-align:middle!important;display:table-cell}.lconnPicker .pickerDropfilesVerticalPrompt{border-spacing:0;display:block;height:170px!important;max-height:200px!important;vertical-align:top;overflow-y:auto!important}.lconnPicker .pickerDropfilesDesc{color:#292929;font-size:1.25em;font-family:"Helvetica Neue",Helvetica,Arial,Roboto;font-weight:200;margin-left:30px!important;margin-right:30px!important}.lconnPicker .pickerDropfilesVerticalPrompt .pickerBrowserContainer{width:99999px;height:60px;display:table-cell;vertical-align:middle}.lconnPicker .pickerDnDLabelRow{margin-top:20px;padding-left:20px}.lconnPicker .pickerDropfilesList{margin-left:20px;margin-right:20px;text-align:left}.lconnPicker .lconnUploadMultiple .lconnUploadHover{background-color:#f0f0f0}.lotusui30 .lconnPicker .lotusDialogBorder .lotusDialog{border-width:0}.lconnPicker .lotusDialogBorder .lconnUploadRectangle{background:rgba(103,103,103,.07)}.lconnPicker .tabbedSwitch .lconnPickerSourceLabel img{height:16px;width:16px;display:inline-block;vertical-align:sub}.lconnPicker .tabbedSwitch .lconnPickerSourceLabel img.lconnPickerSourceLabelIconCloud{background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/PickerGen4/iconsPicker16Gen4-8bit.png?etag=20160903.134200");background-position:0 -48px}.lconnPicker .tabbedSwitch .lconnPickerSourceLabel img.lconnPickerSourceLabelIconUpload{background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/Picker/iconsPicker16-8bit.png?etag=20160903.134200");background-position:0 -96px}.lconnPicker .tabbedSwitch .lconnPickerSourceLabel img.lconnPickerSourceLabelIconCommunity{background-image:url("/connections/resources/web/com.ibm.lconn.core.styles.oneui3/images/Icons/Picker/iconsPicker16-8bit.png?etag=20160903.134200");background-position:0 -48px}.lconnPicker .tabbedSwitch .lconnPickerSourceLabel img.lconnPickerSourceLabelCreateFolder{background-image:url("/connections/resources/web/com.ibm.oneui3.styles/css/images/Icons/States/iconsStates16-8bit.png?etag=20160903.134200");background-position:0 -798px}

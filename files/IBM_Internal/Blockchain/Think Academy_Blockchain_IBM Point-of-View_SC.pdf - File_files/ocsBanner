@@ -1,0 +1,943 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								
+	//Import global scripts
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/********************************************************************************************************************************/
+
+/**
+ * Wait for something to be ready before triggering a timeout
+ *
+ * @param {callback} isready Function which returns true when the thing we're waiting for has happened
+ * @param {callback} success Function to call when the thing is ready
+ * @param {int} count Number of times to retry the timeout (default 300 or 6s)
+ * @param {int} interval Number of milliseconds to wait between attempts (default 20ms)
+ */
+function waitUntil(isready, success, count, interval){
+
+	try {
+	    if (count === undefined) {
+	        count = 300;
+	    }
+	    if (interval === undefined) {
+	        interval = 20;
+	    }
+	    if (isready()) {
+	        return success();
+	    }
+	    // The call back isn't ready. We need to wait for it
+	    setTimeout(function(){
+	        if (!count) {
+	            // We have run out of retries
+	            return false;
+	        } else {
+	            // Try again, decrement the counter
+	            waitUntil(isready, success, count -1, interval);
+	        }
+	    }, interval);
+    
+	} catch (err) {
+		console.error(err.message);
+		return false;
+	}    
+}
+
+/**
+ * is Browser IE 
+ */
+if(typeof isIE != 'function'){ 
+	window.isIE = function() {
+		var nav = navigator.userAgent.toLowerCase();
+		return (nav.indexOf('msie') != -1) ? parseInt(nav.split('msie')[1]) : false;
+	};
+}
+
+/********************************************************************************************************************************/
+
+/**
+ * This is a public function which causes the topMenuValue menu item to be marked as "selected" (add class="lotusSelected").
+ * A previously selected menu item (if it exists) will be marked as "un-selected" (lotusSelected class is removed).
+ * Function has no effect for navbar using oneui prior to version 3.
+ * 
+ * @param topMenuValue	Below is given a full list of the possible values which may be used.:
+ * 						"home", "mail", "calendar", "people", "communities", "services" (for non-verse navbar) and "apps" (for verse/common navbar)
+ */
+function navigation_banner_select_menu(topMenuValue) {
+
+	//console.debug("Changing top menu selected to: " + topMenuValue);
+
+	var updated = false;
+	var commonNavBar = false;
+	
+	//Set the js variable based upon java variable for the GK setting
+	 commonNavBar = true; 
+	//commonNavBar = true; //FOR FAKEDASHBOARD ONLY: set to true to enable merged navbar.
+	
+	try{
+		
+		if (esc_oneuiversion < 3) return true; 
+
+		var currentApp = "";
+		var allElements;
+		var navbarDiv = document.getElementById("nav_bar_include");
+
+		//Determine which navbar has been loaded, common navbar or the old navbar
+		//if (navbarDiv.classList.contains("ics-scbanner")) {  
+		//	commonNavBar = true;			
+		//}
+				
+		if (commonNavBar) {
+		
+			topMenuValue = (topMenuValue === "services") ? "apps" : topMenuValue; //For common navbar, "services" --> "apps"
+			updated = waitUntil(function() {return (document.getElementsByClassName(topMenuValue).length > 0); }, function() {return selectCommonMenu(topMenuValue);}, 1000, 20);
+			
+		} else {  //old navbar
+			allElements = document.getElementById("nav_bar_include")
+					.getElementsByTagName("li");
+
+			for (var i = 0; i < allElements.length; i++) {
+				// getting a li's class attribute value at a current index [i]
+				var classAttr = getAttribute(allElements[i], "class");
+				// getting a li's topmenu attribute value at a current index [i]
+				var topMenuVal = getAttribute(allElements[i], "topmenu");
+
+				if (classAttr == null) {
+					var attr = document.createAttribute("class");
+					attr.nodeValue = "";
+					allElements[i].attributes.setNamedItem(attr);
+					classAttr = getAttribute(allElements[i], "class");
+				}
+
+				// 'lotusSelected' string position in li's class attribute value
+				var selectedPosIndx = classAttr.indexOf("lotusSelected");
+
+				/**
+				 * remove lotusSelected when 'lotusSelected' IS present and when
+				 * 'topmenu' is NOT the same as the parameter
+				 */
+				if (selectedPosIndx != -1 && topMenuVal != topMenuValue) {
+					/*
+					 * use regex to trim whitespace since ie8 doesn't support
+					 * .trim()
+					 */
+					allElements[i].setAttribute("class", classAttr.replace(
+							"lotusSelected", "").replace(/^\s+|\s+$/g, ''));
+				} else if (selectedPosIndx == -1 && topMenuVal == topMenuValue) {
+					/**
+					 * add lotusSelected when 'lotusSelected' IS NOT present and
+					 * when 'topmenu' IS the same as the parameter
+					 */
+					var newClassAttr = "lotusSelected " + classAttr;
+					allElements[i].setAttribute("class", newClassAttr);
+				}
+				updated = true;
+			}			
+		}
+	} catch (err) {
+		// Log and return false. Typically exception would be thrown due to incorrect usage of this function.
+		console.error("navigation_banner_select_menu failed to update the navbar menu");
+		console.error(err.message);
+	}
+
+	return updated;
+	}
+
+function selectCommonMenu(topMenuValue) {
+	var topMenuSelected = false;
+	
+	// Get the currently selected menu item
+	var navbarDiv = document.getElementById("nav_bar_include");
+	currentApp = navbarDiv.getAttribute("data-selected");
+			
+	if (currentApp === topMenuValue) return true;  //Nothing to do. topMenuValue is already selected.
+
+	// Set navbar's container div "data-selected" equal to the passed in menu item
+	// We may need it if this function is called again to determine if the 'selected' menu item is different
+	navbarDiv.setAttribute("data-selected", topMenuValue);
+
+	// Get the top menu elements
+	var menuElems = document.getElementById("nav_bar_include").childNodes;
+	for (var i = 0; i < menuElems.length; i++) {
+		// Remove the "selected" class from the currently selected menu item element
+		if (menuElems[i].classList.contains("selected"))
+			menuElems[i].classList.remove("selected");
+		// Add "selected" class to the topMenuValue menu item
+		if (menuElems[i].classList.contains(topMenuValue)) {
+			menuElems[i].classList.add("selected");
+			topMenuSelected = true;
+			//console.debug("Top menu selected updated to: " + topMenuValue);
+		}
+	}
+	
+	return topMenuSelected;
+}
+
+/********************************************************************************************************************************/
+
+/**
+ * This is a public function and if any changes are made in the function then the same changes must reflected in
+ * java method given below:
+ * 
+ * NavbarMarkup.java -> evaluateMainMenuContent(), and especially loadLinkTag()
+ */
+function navigation_banner_updateHelpMenu(text, url) {
+	
+	//console.debug("Changing Help url to: " + url);
+	
+	var updated = false;
+	var commonNavBar = false;
+	
+	//Set the js variable based upon java variable for the GK setting
+	 commonNavBar = true; 
+	//commonNavBar = true; //FOR FAKEDASHBOARD ONLY: set to true to enable merged navbar.
+	
+	try {
+		
+		//Determine if the page has the new commonNavBar or the old navbar
+		//var navbarDiv =  document.getElementById("nav_bar_include");		  
+		//	if (navbarDiv.classList.contains("ics-scbanner")) {
+		//	commonNavBar = true;
+		//}
+		
+		if (commonNavBar) {
+			updated = waitUntil(function() {return !(document.getElementById("bsscom-helpMenu") == null); }, function() {return updateCommonHelpMenu(text, url);}, 1000, 20);
+		}
+		else {
+			
+			var svcHelpAnchor = document.getElementById("svcHelp");   
+			// 149828 
+			//   - help url will be in onmousedown and onkeydown attributes too.
+			//   - not changing href since NavbarMarkup.loadLinkTag says: 
+			//     set href to # as JS is now passed to onMenuItemClick & onMenuItemKey JS functions
+			if (url != undefined) {
+				var old_onmousedown = svcHelpAnchor.getAttribute("onmousedown");
+				var old_onkeydown = svcHelpAnchor.getAttribute("onkeydown");
+				var new_onmousedown = "return  navigation_banner_onMenuItemClick(event, 'bsscom-helpMenu', 'javascript:open_new_window(\\x27" +url +"\\x27)');";
+				var new_onkeydown = "return  navigation_banner_onMenuItemKey(event, 'bsscom-helpMenu', 'javascript:open_new_window(\\x27" +url +"\\x27)');";
+				if (old_onmousedown) {
+					svcHelpAnchor.setAttribute("onmousedown", new_onmousedown);
+				}
+				if (old_onkeydown) {
+					svcHelpAnchor.setAttribute("onkeydown", new_onkeydown);
+				}
+				
+				// 178958 - for IE, the above code that does "setAttribute" does not work completely for older versions of IE.
+				// The DOM appears to be correct, but doesn't work at runtime. The following workaround
+				// just "re-saves" the innerHTML, allowing the attribute to work in IE.
+				// Only need to do this if we updated either attribute (mouse or keyboard) and if IE (any version).
+				if ( (old_onmousedown || old_onkeydown) && isIE() != false ) {
+					var helpParent = svcHelpAnchor.parentNode;
+					var helpParentInnerHTML = helpParent.innerHTML;
+					helpParent.innerHTML = helpParentInnerHTML;
+				}
+				updated = true;
+			}
+			
+			//if (text != undefined) svcHelpAnchor.innerHTML = text; //No longer allow the Help text to be changed
+		}
+	} catch (err) {
+		// Log and return false. Typically exception would be thrown due to incorrect usage of this function.
+		console.error("navigation_banner_updateHelpMenu failed to update help menu");
+		console.error(err.message);
+	}
+	
+	return updated;
+}
+
+function updateCommonHelpMenu(text, url) {
+	
+	var helpUpdated = false;
+	
+	//Get the Help menu
+	var helpMenu = document.getElementById("bsscom-helpMenu");
+	//Get the Help specific Menu elements (both the "li" and the "a" has class "contexthelp")
+	var helpElems = helpMenu.getElementsByClassName("contexthelp");			
+	var i = 0;	
+	//Find and update the Help anchor
+	while (!helpUpdated && i < helpElems.length) {
+		if (helpElems[i].tagName === "A") {
+	
+			//Build new Help node by cloning old Help node. 
+			//New node does not inherit old node event listeners added using addEventListener().
+			var newHelpElem = helpElems[i].cloneNode(true);
+
+			//Get the parent node
+			var parentNode = helpElems[i].parentNode;
+
+			//newHelpElem.text = text; //No longer allow the Help text to be changed
+			
+			//Initialize the window specs
+			var specialname = "helpwindow";
+			var special = "resizable=yes,scrollbars=yes,toolbar=yes,location=no,directories=no,status=no,menubar=no,width=1010,height=790,top=0,left=0";			
+			 
+			//Add the new url to the click and keydown events for opening the new window
+			newHelpElem.addEventListener("click", function(){
+				window.open(url, specialname, special);
+			});
+							
+			newHelpElem.addEventListener("keydown", function(evt){
+				if(evt.keyCode === 13) {
+					window.open(url, specialname, special);
+				}
+			});
+			
+			//Replace the old Help element with the new one
+			parentNode.replaceChild(newHelpElem, helpElems[i]);
+		
+			helpUpdated = true;
+			
+			console.debug("Help url updated to: " + url);
+		}
+		i++;
+	}	
+	
+	return helpUpdated;
+}
+
+/********************************************************************************************************************************/
+
+
+
+var navigation_banner_parNode = navigation_banner_findParentNode();
+
+function navigation_banner_findParentNode() {
+
+	//If is old banner is included by the component then include the banner content in the div containing script tag
+	var scriptTags = document.getElementsByTagName('script');
+	if(scriptTags.length > 0) {
+		for (i = 0; i < scriptTags.length; i++) {
+			if (scriptTags[i].src.indexOf('/manage/navbar/banner/') != -1) {
+				return scriptTags[i].parentNode;
+			}
+		}
+	}
+
+	//Else write the content in parentNode if passed else append it to the body
+	
+	var node = document.getElementById("ocsBanner");
+	if (node == null) node = document.getElementsByTagName('body').item(0);
+	return node;
+	
+}
+
+function sanitize(str){
+	var element = document.createElement('span');
+	var content = document.createTextNode(str);
+	element.appendChild(content);
+	return element.innerHTML;
+}
+
+function openMeetingPopup() {
+	targetUrl = 'https://apps.na.collabserv.com/meetings' + '/host';
+	var popup;
+	if (navigator.userAgent.indexOf('MSIE') >=0 || navigator.userAgent.indexOf('Microsoft') >= 0) {
+			popup = function(){
+			parent.window.open('', 'hostTarget', 'channelmode=yes, scrollbars=auto, resizable=yes, location=no');
+		}
+	} else {
+		var adjustW = 20;
+		var adjustH = 35;
+		if (navigator.userAgent.indexOf('Win') >= 0) {
+			adjustH = 30;
+			adjustW = 0;
+		}
+		var width = screen.availWidth-adjustW;
+		var height = screen.availHeight-adjustH;
+		popup = function(){
+		parent.window.open('', 'hostTarget', 'width='+width+',height='+height+',scrollbars=auto,resizable=yes,location=no,toolbars=no,status=no');
+		}
+	}
+	var postForm = document.createElement("form");
+	postForm.setAttribute("method", "post");
+	postForm.setAttribute("action", targetUrl);
+	postForm.setAttribute("target", "hostTarget");
+	var input = document.createElement('input');
+	input.type = 'hidden';
+	input.name = 'pwd';	
+	input.value = 'false';	
+	postForm.appendChild(input);
+	input = document.createElement('input');
+	input.type = 'hidden';
+	input.name = 'report';	
+	input.value = 'false';	
+	postForm.appendChild(input);
+	document.body.appendChild(postForm);
+	postForm.setAttribute("onClick", popup());
+	postForm.submit();
+	return false;
+}
+
+function openSTMeetingPopup() {
+	targetUrl = 'https://apps.na.collabserv.com/meetings' + '/host/sametime';
+	var popup;
+	if (navigator.userAgent.indexOf('MSIE') >=0 || navigator.userAgent.indexOf('Microsoft') >= 0) {
+		popup = function(){
+		parent.window.open('', 'hostTarget', 'channelmode=yes, scrollbars=auto, resizable=yes, location=no');
+		}
+	} else {
+		var adjustW = 20;
+		var adjustH = 35;
+		if (navigator.userAgent.indexOf('Win') >= 0) {
+			adjustH = 30;
+			adjustW = 0;
+		}
+		var width = screen.availWidth-adjustW;
+		var height = screen.availHeight-adjustH;
+		popup = function(){
+		parent.window.open('', 'hostTarget', 'width='+width+',height='+height+',scrollbars=auto,resizable=yes,location=no,toolbars=no,status=no');
+		}
+	}
+	var postForm = document.createElement("form");
+	postForm.setAttribute("method", "post");
+	postForm.setAttribute("action", targetUrl);
+	postForm.setAttribute("target", "hostTarget");
+	document.body.appendChild(postForm);
+	postForm.setAttribute("onClick", popup());
+	postForm.submit();
+	return false;
+}
+
+function openRoomMeetingPopup() {
+	
+	var bidi = 'false';
+	//console.log("bidi: " + bidi);
+	var targetUrl;
+	
+	var roomVideoTitle = "Room Video Call";
+	var goText = "Enter Room";
+	var goTitle = "Open Room Video Call";
+	var closeText = "Close";
+	var closeAriaLabel = "Close Room Video dialog";
+	var roomLinkText = "Your Video Call link is:";	
+	//var copyText = "room.copy";
+	
+	var roomDlgObjects = new Array();  
+	
+	document.getElementById('servicesMenu').style.display="none"; //Close the Apps dropdown menu immediately rather waiting for delayed close
+	
+	var divRoom = document.getElementById('roomDialog');	
+	deSelectText(); //For IE, otherwise previoualy selected text is still selected.	
+	var divRoomLink;
+	
+	if (divRoom) {
+		//Markup has already been built. Just show the dialog with the new Room url.
+		var visibility = getComputedStyle(divRoom).getPropertyValue('visibility');				
+		if (visibility != "visible") {
+			//Existing dialog is not visible (was displayed then closed). Generate a new URL, display the dialog and set focus to the link.
+			divRoomLink = document.getElementById('roomLink');
+			targetUrl =  'https://room.co/#/ibm-' + Math.floor((Math.random() * 1000000000) + 1); 
+			divRoomLink.innerHTML = targetUrl;
+			divRoom.removeAttribute("aria-hidden");		
+			setTimeout(function(){ divRoom.className = "lotusRoomDialog lotusRoomDlgVisible"; document.getElementById('roomLink').focus();}, 0);			
+		}
+		else {
+			//Dialog is visible. Just reset focus to the Room url div (tab stop 1)
+			document.getElementById('roomLink').focus();
+		}
+	} else {
+		//Build markup and show dialog
+		
+		<!--DIV: roomDialog -->
+		divRoom = document.createElement("div");
+		divRoom.setAttribute("id", "roomDialog");
+		divRoom.setAttribute("role", "dialog");
+		divRoom.setAttribute("aria-labelledby", "roomDlgTitle");
+		divRoom.className = "lotusRoomDialog lotusRoomDlgHidden";
+	
+		var closeButton = document.createElement('a');
+		closeButton.setAttribute("id", "roomDlgClose");
+		closeButton.setAttribute('href', 'javascript:;');
+		closeButton.className = "lotusRoomDlgClose";
+		closeButton.tabIndex = "3";
+		roomDlgObjects[2] = "roomDlgClose"; 
+		
+		var closeButtonImg = document.createElement('img');
+		closeButtonImg.setAttribute("id", "roomDlgCloseImg");
+		var imagePath = 'https://apps.na.collabserv.com' + '/theming/css/oneui3/images/blank.gif';				
+    	closeButtonImg.src= imagePath;    
+		var spritePath = 'https://apps.na.collabserv.com' + '/theming/css/oneui3/images/lotusHSprite-8bit.png';	
+    	closeButtonImg.style.backgroundImage = "url('" + spritePath + "')";
+ 
+    	closeButton.appendChild(closeButtonImg);
+    			
+		var closeSpan = document.createElement('span');
+		closeSpan.className = "lotusAltText"
+		closeSpan.innerHTML = "X";
+		
+		closeButton.appendChild(closeSpan);
+
+		closeButton.onkeydown = function(e){
+			handleRoomDlgEvents(e, "roomDlgClose", roomDlgObjects);
+		};
+		
+		closeButton.onclick = function() {
+		 	//divRoom.style.visibility = "hidden";
+			//divRoom.style.width = "0px";			
+			//setTimeout(function(){ divRoom.className = "lotusRoomDialog lotusRoomDlgHidden"; }, 0);
+			divRoom.className = "lotusRoomDialog lotusRoomDlgHidden";
+			divRoom.setAttribute("aria-hidden", "true");
+			document.getElementById('servicesMenu_btn').focus(); //Return focus to Apps in navbar menu
+		};
+			
+		divRoom.appendChild(closeButton);
+		
+		<!-- H1: roomDlgTitle -->
+		var h1Header = document.createElement("h1");
+		h1Header.setAttribute("id", "roomDlgTitle");
+		h1Header.className = "lotusRoomDlgTitle";
+		h1Header.innerHTML = roomVideoTitle;
+		divRoom.appendChild(h1Header);		
+			
+		<!-- DIV: roomLinkLabel -->
+		var divLinkLabel = document.createElement("div");
+		divLinkLabel.setAttribute("id", "roomLinkLabel");
+		divLinkLabel.className = "lotusRoomLinkLabel";
+		divLinkLabel.innerHTML = roomLinkText;
+		divRoom.appendChild(divLinkLabel);
+			
+		<!-- DIV: roomLink -->
+		divRoomLink = document.createElement("div");
+		divRoomLink.id = "roomLink";
+		divRoomLink.setAttribute("id", "roomLink");
+		divRoomLink.setAttribute("aria-labelledby", "roomLinkLabel");		
+		divRoomLink.className = "lotusRoomLink";
+		targetUrl =  'https://room.co/#/ibm-' + Math.floor((Math.random() * 1000000000) + 1);
+		divRoomLink.innerHTML = targetUrl;
+		divRoomLink.tabIndex = "1";
+		roomDlgObjects[0] = "roomLink"; 
+		
+		divRoomLink.onclick = function() {
+			document.getElementById('roomLink').focus(); 
+			selectText('roomLink');
+		};
+		
+		divRoomLink.onkeydown = function(e){
+			handleRoomDlgEvents(e, "roomLink", roomDlgObjects);
+		};
+		
+		divRoom.appendChild(divRoomLink);
+			
+		<!-- BUTTON: roomOpenButton -->
+		var goButton  = document.createElement("button");
+		goButton.setAttribute("id", "roomOpenButton");
+		goButton.setAttribute("role", "link");
+		goButton.setAttribute("aria-label", goTitle);
+		goButton.innerHTML = goText;
+		goButton.title = goTitle;
+		//goButton.className = "lotusBtn";
+		goButton.className = "lotusRoomOpenBtn";
+		goButton.tabIndex = "2";
+		roomDlgObjects[1] = "roomOpenButton"; 
+
+		goButton.onclick = function () {openRoom()};
+				
+		divRoom.appendChild(goButton);
+	
+		//Add dialog to DOM and determine alignment
+		var apps = document.getElementById("servicesMenu_container");	
+		var top = calcMenuTop(document.getElementById("servicesMenu_container"));		
+		divRoom.style.top = top.toString() + "px";
+		document.body.appendChild(divRoom);
+		//console.log("bidi: " + bidi);
+		if(bidi === "true") {
+			var roomLeft = apps.offsetLeft + apps.offsetWidth - divRoom.offsetWidth;
+			divRoom.style.left = roomLeft +"px";
+		} else {
+		 	divRoom.style.left = apps.offsetLeft + "px";
+		}
+
+		//Display the dialog and give the Room url container initial focus
+		setTimeout(function(){ divRoom.className = "lotusRoomDialog lotusRoomDlgVisible"; document.getElementById('roomLink').focus();}, 0);
+		
+	}
+}
+
+function openRoom() {
+	var divRoomLink = document.getElementById('roomLink');
+	if (divRoomLink != null) {
+		var targetUrl =  divRoomLink.innerHTML;
+		window.open(targetUrl, "_blank");
+		//parent.window.open(targetUrl);
+	}
+}
+
+function selectText(objId) {
+	deSelectText();
+	if (document.selection) {
+		/* IE */
+		var range = document.body.createTextRange();
+		range.moveToElementText(document.getElementById(objId));
+		range.select();
+	} else if (window.getSelection) {
+		/* Firefox, Opera, Chrome */
+		var selection = window.getSelection();
+		if(selection.rangeCount > 0) selection.removeAllRanges();
+		var range = document.createRange();
+		range.selectNode(document.getElementById(objId));
+		selection.addRange(range);	
+	}
+}
+
+function deSelectText() {
+	if (document.selection) {
+		document.selection.empty();
+	} else if (window.getSelection) {
+		window.getSelection().removeAllRanges();	
+	}
+}
+
+<!-- Similar handler in banner.js, navigation_banner_onMenuItemKey()
+<!-- If changes are made to handleRoomDlgEvents, they may also need to be made to navigation_banner_onMenuItemKey() -->
+<!-- We may want to combine them into a single, more generic function at some point  -->
+function handleRoomDlgEvents(evt, objId, focusObjects){
+	var index, prev, next;
+	var curObj = document.getElementById(objId);
+	index = focusObjects.indexOf(objId);
+	if (typeof evt.keyCode != "undefined") {
+	
+		prev = (index==0) ? focusObjects.length-1 : index-1;
+		next = (index==focusObjects.length-1) ? 0 : index+1;
+
+		// Reverse navigate when shift-tab is selected
+		if (evt.shiftKey && evt.keyCode == 9) {
+			document.getElementById(focusObjects[prev]).focus();
+			if (!document.all) evt.preventDefault();
+			preventDefaultBrowserAction(evt);
+			return;
+		}
+		
+		switch (evt.keyCode) {
+		case 37: // Left arrow
+		case 38: // Up arrow
+			// Move to previous item
+			document.getElementById(focusObjects[prev]).focus();
+			if (!document.all) evt.preventDefault();
+			preventDefaultBrowserAction(evt);
+			break;
+		case 9:  // Tab
+		case 39: // Right arrow
+		case 40: // Down arrow
+			// Move to next item
+			document.getElementById(focusObjects[next]).focus();
+			if (!document.all) evt.preventDefault();
+			preventDefaultBrowserAction(evt);			
+			break;
+		case 27:
+			// ESC closes menu and puts focus back on menu button
+			document.getElementById("roomDlgClose").onclick();	
+			preventDefaultBrowserAction(evt);		
+			break;
+		case 13: // Enter key = onclick
+			document.getElementById(objId).onclick();
+			preventDefaultBrowserAction(evt);		
+			break;
+		default:
+			return;
+		}
+	}
+}
+
+function isEmptyOrUndefined(str) {
+	if (Boolean(str == null || str.length === 0))
+    	return true;
+    return false;
+}
+
+function navigation_banner_createDiv(className, id, role) {
+	var div = document.createElement('div');
+	if (className != '') div.className = className;
+	if (role != '') div.setAttribute('role', role);
+	if (id != '') div.id = id;
+	div.setAttribute('aria-label', 'Navigation');
+	return div;
+}
+
+function appendAsFirstChild(parent, child) {
+	if (parent.firstChild != null) {
+		parent.insertBefore(child, parent.firstChild);
+	} else {
+		parent.appendChild(child);
+	}
+}
+
+function adjustMenuPosition (menuId,select) {
+	var bidi = 'false';
+	var menuPos;
+	
+	if(bidi === "true") {
+		var menuMap = {"networkMenu":1, "visitorMenu": 1, "communitiesMenu": 1, "servicesMenu": 1};
+	} else {
+		var menuMap = {"notificationsMenu":1, "bsscom-helpMenu":1, "bss-settingsMenu": 1, "meetingsMenu": 1, "bss-usersMenu": 1, "bss-adminMenu": 1, "chatMenu": 1};
+	}
+	var menu = document.getElementById(menuId);
+	if (menuMap[menuId]) {
+		var bVersion = navigator.appVersion;
+		if (bVersion.indexOf("MSIE 6") != -1) {
+			menuPos = document.body.clientWidth - (findPosX(select) + select.offsetWidth) -1;
+		} else {
+			menuPos = (findPosX(select) + select.offsetWidth) - menu.offsetWidth;
+		}
+		menu.style.left=""+menuPos+"px";
+	} else {
+		menuPos = findPosX(select);
+		menu.style.left=""+menuPos+"px";
+	}
+	menu.style.top=""+calcMenuTop(select)+"px";
+
+	var tbl = document.getElementById(menuId);
+	tbl.setAttribute("aria-hidden", "false");
+}
+
+function navigation_replace_dyn_link_placeholder(id,links,parent) {
+	var node = document.getElementById(id);
+	var table = node.parentNode.parentNode;
+
+	if (links && links.LIST) {
+		table.deleteRow(0);
+		var linkList = links.LIST;
+		for (var i=0; i < linkList.length; i++) {
+			var link = linkList[i];
+			var row = table.insertRow(i);
+			var cell = row.insertCell(0);
+
+	        
+			var markup = '<b><a role="menuitem" aria-label="' 
+					     + link.title 
+					     + '" onkeydown="return navigation_banner_onMenuItemKey(event, \'' +parent +'\');" onmousedown="return navigation_banner_onMenuItemClick(event, \'' +parent +'\');" href="' 
+					     + link.path +'" >'
+					     + link.title 
+					     + '</a></b>';
+			
+			cell.className = "lotusNowrap";
+			cell.innerHTML = markup;
+		}
+	}
+}
+
+function navigation_visitor_replace_dyn_link_placeholder(id,links,parent) {
+	var node = document.getElementById(id);
+	var table = node.parentNode.parentNode;
+	
+				
+			
+	if (links && links.LIST) {
+		table.deleteRow(0);
+		var linkList = links.LIST;
+		
+		if (linkList.length > 0) {
+			var downarrowimgnode = document.getElementById('visitorMenu_dwnarrow');
+			downarrowimgnode.style.visibility="visible";  // we do want to change classes to control this visibilily, results in brief visibility
+		} else {
+			document.getElementById("visitorMenu_btn").href= "https://apps.na.collabserv.com" + "/homepage/"; 
+		}
+		
+		
+		for (var i=0; i < linkList.length; i++) {
+			var link = linkList[i];
+			var row = table.insertRow(i);
+			var cell = row.insertCell(0);
+			var markup = '';
+			
+			markup += '<b><img class="visitorIcon" alt="" src="https://apps.na.collabserv.com' + '/navbar/images/varrow.png">' + '<a target="_blank" role="menuitem" aria-label="'
+						+ link.title 
+						+ '" onkeydown="return navigation_banner_onMenuItemKey(event, \'' +parent +'\');" onmousedown="return navigation_banner_onMenuItemClick(event, \'' +parent +'\');" href="' 
+						+ link.path +'" >';
+			markup += link.title;
+			markup +='</a></b>';
+			
+			cell.className = "lotusNowrap";
+			cell.innerHTML = markup;
+		}
+	}
+    
+
+}
+
+
+function navigation_waitFor(entity,callback) {
+		//console.debug("looking for " + entity);
+	 	var timer = setInterval(function () {
+		if (typeof window[entity] !== 'undefined') {
+			//console.debug("found " + entity);
+			clearInterval(timer);
+			callback();
+		}
+	},500);
+}
+
+
+
+
+
+		/*********************************************************************
+		 * Add the loading class to head, to force navbar hidden even if "base.css part of commonNavBar.css" is not loaded yet. 
+		 *  This class is also in scnavbar (verse) "base.css part of commonNavBar.css"
+		 *  Sadly, there are probably more styles that we will wish were also loaded, for slow network situations
+		 */
+		var styleValue = '.ics-scbanner.loading * { display: none; }';
+		var commonNavBar_style = document.createElement('style');
+		commonNavBar_style.type = 'text/css';
+		if (commonNavBar_style.styleSheet) { 
+			/* cannot use appendChild (of text node) on older IE (like scnotes page, which is ie5 compatibility mode) */
+			commonNavBar_style.styleSheet.cssText = styleValue;
+		} else {
+			commonNavBar_style.appendChild(document.createTextNode(styleValue));
+		}
+		
+		document.getElementsByTagName('head')[0].appendChild(commonNavBar_style);
+
+		/*********************************************************************
+		 * Namespaced navbar public module
+		 * Perhaps to be expanded in the future, but initially, this is put in place to handle the /navbar/bannernext JSONP response.
+		 */
+		var CommonNavBarModule = (function () {
+		
+		  var _bannerNextResponseHandler = null;
+		  
+		  var getLocale = function () {
+       		return "en_US";
+    	  };
+    	  
+		  var getLanguage = function () {
+       		return "en";
+    	  };    	  
+		  
+		 // BannerNext JSONP callback function (called from inside the JSONP response for bannernext).
+		 // When called, it will immediately call the registered response handler.
+		  var handleBannerNextResponse = function (responseData) {
+		    _bannerNextResponseHandler(responseData);
+		  };
+		  
+		 // Set (register) a bannernext response handler. 
+		 // This function is called from commonNavBar.js when bannernext XHR request is made.
+		 // passing in the standard cors/xhr response handler function
+		 // @param handler Response handler function to be called when JSONP response is executed.
+		  var setBannerNextResponseHandler = function (handler) {
+		    _bannerNextResponseHandler = handler;
+		  };
+		  
+		  // make sure that lotusBanner class is not present on any parent node of the navbar (it brings unwanted CSS from connections).
+		  var removeLotusBannerClass = function () {
+		     var currentNode = navigation_banner_parNode;
+		     while (currentNode != null) {
+		        var classlist = currentNode.classList;
+		        if (classlist) {
+		           currentNode.classList.remove("lotusBanner");
+		        }
+		        currentNode = currentNode.parentNode;
+		     }
+		  };
+		  
+		  //---//
+		  
+		  removeLotusBannerClass();
+		  
+		  // return public members only
+		  return {
+		    handleBannerNextResponse: handleBannerNextResponse,
+		    setBannerNextResponseHandler: setBannerNextResponseHandler,
+		    getLocale : getLocale,
+		    getLanguage : getLanguage
+		  };
+		
+		})();
+		
+		
+	
+
+	
+		
+		var esc_oneuiversion =	"3";
+		var navigation_banner={};
+		navigation_banner.windowName = new Array();
+		navigation_banner.windowFeatures = new Array();
+		navigation_banner.currentClickIndex=0;
+		navigation_banner.excludedDomains="e-signlive.com,e-signroom.com,ibm.com,lotuslive.com,lotus.com,collabserv.com,collabservtest.com,collabservstage.com,conferenceservers.com,webdialogs.com,yunmail.com,llnarchive.com,lotuslive-archive.com,scniris.com";
+		var commonNavBar = false;
+		var php_server ="https://apps.na.collabserv.com";
+		var navigation_banner_include = navigation_banner_createDiv('', 'dummy', '');
+				
+		
+
+		 
+		function foundations_img_error(image) {
+    		image.onerror = "";
+    		image.src = "https://apps.na.collabserv.com/navbar/images/photo.do.png";
+    		return true;
+		}
+
+	    
+	    
+	    
+	    
+		
+
+			//console.log("GK: NAVIGATION_COMMON_NAVBAR for commonNavBar = true");
+			commonNavBar = true;
+			
+			//Verse navbar container div ics-scbanner
+			//Hardcoded div for Verse navbar container. Leaving out 'data-selected' custom property for now.
+			navigation_banner_include.innerHTML = '<div class="ics-scbanner loading" id="nav_bar_include" data-selected="apps" aria-label="Site links" role="menubar" data-auto-create="false" data-hastheme="1" data-nonverse="true" data-navapi="https://apps.na.collabserv.com" data-contexthelp="https://apps.na.collabserv.com/help/index.jsp" ></div>';
+			
+
+            
+                    var adoptNodeNotifications = document.createElement('div');
+		            var adoptedMenuIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M13 9V6c0-2.4-1.7-4.5-4-5V0H7v1c-2.3.5-4 2.6-4 5v3c-1.7.4-2.9 2.2-3 4v1h6c0 1.1.9 2 2 2s2-.9 2-2h6v-1c-.1-1.8-1.3-3.6-3-4zm-4 4v1c0 .6-.4 1-1 1s-1-.4-1-1v-1H1c.1-1.4 1.1-2.8 2.2-3l.8-.2V6c0-1.9 1.5-4 4-4s4 2.1 4 4v3.8l.8.2c1.2.3 2.1 1.6 2.2 3H9z"/></svg>';
+                    adoptNodeNotifications.innerHTML = '<div id="notificationsMenu_container" class="notifications navmenu" role="button" aria-label="Notifications" aria-haspopup="true"><div class="navmenu-button"><ul class="navsimplelist"><li><a>Loading...</a></li></ul><div class="nav-icon">' +adoptedMenuIcon +'</div></div></div>';
+
+                    //Append the placeholder div as the first child in the banner div
+                    navigation_banner_include.firstChild.appendChild(adoptNodeNotifications.firstChild);
+             
+            
+            // Let add wrapper div here, was done here to not throw off nesting of divs
+            navigation_banner_include.innerHTML = '<div role="banner" aria-label="Navigation">' + navigation_banner_include.innerHTML + '</div>';
+			
+			appendAsFirstChild(navigation_banner_parNode, navigation_banner_include.firstChild);
+								
+			
+			
+			var navbar_inject_element = document.createElement("script");navbar_inject_element.setAttribute("type", "text/javascript");navbar_inject_element.setAttribute("src", "https://apps.na.collabserv.com/navbar/js/1.55-SNAPSHOT/commonNavBar.js");var navbar_inject_parentNode = document.getElementsByTagName("body")[0];navbar_inject_parentNode.appendChild(navbar_inject_element);var navbar_inject_element = document.createElement("script");navbar_inject_element.setAttribute("type", "text/javascript");navbar_inject_element.setAttribute("src", "https://apps.na.collabserv.com/connections/resources/web/ic-as/notification/NotificationLauncher.js?commonNav=true&etag=1475197200000");var navbar_inject_parentNode = document.getElementsByTagName("body")[0];navbar_inject_parentNode.appendChild(navbar_inject_element);			
+			
+			//navigation_banner_select_menu("people");
+			//navigation_banner_updateHelpMenu("blah", "https://www.google.com");
+			
+				
+	
+<!-- no need to include banner_stwebchat_common for banner (only the footer will inject sametime code). that may change in the future, but removing for now. -->

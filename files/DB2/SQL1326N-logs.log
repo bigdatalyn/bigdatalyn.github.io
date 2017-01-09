@@ -1,0 +1,138 @@
+
+root@sgxldap01:/tmp#cat db2iupgrade.log.16515272
+
+DB2 Setup log file started at:  Sat Jan 23 19:33:13 2016 JST
+============================================================
+
+Operating system information: AIX 6.1
+                                        
+                                        
+Existing instances to configure:        
+    Instance name:                              db2inst1
+        Instance user information:              
+            User name:                          db2inst1
+        Fenced user information:                
+            User name:                          fenced1
+                                        
+                                        
+                                        
+                                        
+
+Setting default global profile registry variables :.......Success
+Initializing instance list :.......Success
+ERROR: An error occurred while upgrading the instance "db2inst1". The return
+value is "1". If the problem persists contact your technical service
+representative.
+
+ERROR: DBI1205E  One or more local databases cannot be upgraded to the version
+      from which you are running this command. Check the log file
+      /dbhome/db2inst1/upgrade.log for the list of errors.
+
+Explanation:
+
+The following list provides the reasons why a database cannot be
+upgraded and the corrective action to take:
+
+*  Database is in Backup pending state. Perform backup of the database.
+*  Database is in Roll-forward pending state. Perform a roll-forward
+   database to end of logs and stop.
+*  Database is in Restore pending state. Perform restore of the
+   database.
+*  Database is inconsistent. Restart database to return it to a
+   consistent state.
+*  Database has one or more table space not in normal state. Perform a
+   roll-forward database.
+*  Database contains database objects that have a schema name of SYSCAT,
+   SYSFUN, SYSIBM, SYSPUBLIC, or SYSSTAT. Drop the object and re-create
+   the object with a correct schema name (qualifier). If the object is a
+   table you should first export its data, drop the table, re-create the
+   table with a correct schema name, and then import or load the data to
+   the new table.
+*  Database contains database objects that have a dependency on the
+   SYSFUN.DIFFERENCES function. Possible violated objects and the
+   associated action to correct the violation are:
+   *  constraint - alter table to drop the constraint
+   *  function - drop the function
+   *  trigger - drop the trigger
+   *  view - drop the view
+
+*  Database contains user-defined data types that are reserved in the
+   new version. Rename the data types.
+*  Database contains orphan rows in system catalog tables. Contact IBM
+   technical service representative.
+*  Cataloged database does not exist. Create cataloged database.
+*  Database does not allow successful connection as an HADR primary
+   database. Stop HADR on primary database.
+*  A database has HADR standby role. Stop HADR on the standby database
+   and drop the standby database. Upgrade the HADR primary database.
+   Reinitialize the standby database from the copy of upgraded primary
+   database via restore or db2inidb.
+
+User response:
+
+Determine the reason why the database cannot be upgraded and take the
+corresponding action specified in the explanation.
+
+
+   Related information:
+   Upgrading databases
+
+ERROR: An error occurred while configuring the instance "db2inst1".
+
+Configuring DB2 instances :.......Failure
+Updating global profile registry :.......Success
+
+Post Install Recommendations
+-----------------------------
+
+Required steps:
+There were some errors detected during DB2 installation. To collect the information files from the system, run the "db2support -install" command with the proper options before reporting the problem to IBM service. For information regarding the usage of the db2support tool, check the DB2 Information Center.
+
+DB2 Text Search has not been configured for the instance "db2inst1".To automatically configure DB2 text search services, run the db2iupdt command (or the db2nrupdt command for non-root installations) specifying the -j "TEXT_SEARCH" option.Manual configuration steps can be found in the DB2 Text Search documentation "http://publib.boulder.ibm.com/infocenter/db2luw/v10r1/topic/com.ibm.db2.luw.admin.ts.doc/doc/t0052968.html".
+
+Optional steps:
+To validate your installation files, instance, and database functionality, run the Validation Tool, /opt/IBM/db2/V10.1/bin/db2val. For more information, see "db2val" in the DB2 Information Center.
+
+Open First Steps by running "db2fs" using a valid user ID such as the DB2 instance owner's ID. You will need to have DISPLAY set and a supported web browser in the path of this user ID.
+
+Verify that you have access to the DB2 Information Center based on the choices you made during this installation. If you performed a typical or a compact installation, verify that you can access the IBM Web site using the internet. If you performed a custom installation, verify that you can access the DB2 Information Center location specified during the installation.
+
+Ensure that you have the correct license entitlements for DB2 products and features installed on this machine. Each DB2 product or feature comes with a license certificate file (also referred to as a license key) that is distributed on an Activation CD, which also includes instructions for applying the license file. If you purchased a base DB2 product, as well as, separately priced features, you might need to install more than one license certificate. The Activation CD for your product or feature can be downloaded from Passport Advantage if it is not part of the physical media pack you received from IBM. For more information about licensing, search the Information Center (http://publib.boulder.ibm.com/infocenter/db2luw/v10r1/index.jsp) using terms such as "license compliance", "licensing" or "db2licm".
+
+To use your DB2 database product, you must have a valid license. For information about obtaining and applying DB2 license files, see  http://pic.dhe.ibm.com/infocenter/db2luw/v10r1/topic/com.ibm.db2.luw.qb.server.doc/doc/c0061199.html.  
+
+
+DB2 Setup log file finished at:  Sat Jan 23 19:33:32 2016 JST
+============================================================
+
+root@sgxldap01:/tmp#
+root@sgxldap01:/tmp# cat /dbhome/db2inst1/upgrade.log
+执行的 DB2CKUPGRADE 版本: VERSION "10.1"
+
+数据库: "db2inst1B"
+
+DBT5537I  db2ckupgrade 对 "db2inst1" 处理完了。
+
+数据库: "IDSINODE"
+
+[IBM][CLI Driver][DB2/AIX64] SQL1326N  不能访问 "/dbhome/db2inst1/idsslapd-db2inst1/db2inst1"。
+
+
+DBT5537I  db2ckupgrade 对数据库 "IDSINODE" 处理完了。
+
+DBT5529N  db2ckupgrade 执行没有完成。 数据库不能升级。 输出文件是 "/dbhome/db2inst1/upgrade.log" 。
+
+root@sgxldap01:/tmp$
+root@sgxldap01:/tmp#ls -ld /dbhome/db2inst1/idsslapd-db2inst1/db2inst1
+drwxrwx---    3 db2inst1  dbsysadm        256 Nov 22 2010  /dbhome/db2inst1/idsslapd-db2inst1/db2inst1/
+root@sgxldap01:/tmp#
+
+
+fenced1
+
+db2inst1:/dbhome/db2inst1/idsslapd-db2inst1$ lsgroup dbsysadm
+dbsysadm id=25257 admin=false users=root,db2inst1,db2as registry=files
+db2inst1:/dbhome/db2inst1/idsslapd-db2inst1$ lsuser fenced1
+fenced1 id=252259 pgrp=fenced1 groups=fenced1,db2asgrp home=/dbhome/fenced1 shell=/usr/bin/ksh gecos=101/S/012314//bigdatalyn
+db2inst1:/dbhome/db2inst1/idsslapd-db2inst1$
+

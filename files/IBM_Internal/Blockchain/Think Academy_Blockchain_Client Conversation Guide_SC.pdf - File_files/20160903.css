@@ -1,0 +1,16 @@
+@import url('/connections/resources/web/_lconnappstyles/hikari/metricssc.css?version=oneui3&rtl=false&etag=20160903.134200');
+	
+	@import url('https://apps.na.collabserv.com/theming/css/1.40.55/smartcloud3/hikariTheme/onPrem.css');
+	
+@import url('/connections/resources/web/_lconntheme/hikari.css?version=oneui3&rtl=false&etag=20160903.134200');
+
+	
+	
+@import url('/connections/resources/web/_lconnappstyles/hikari/files.css?version=oneui3&rtl=false&etag=20160903.134200');
+
+	.scloud3 .lotusBanner {overflow: visible;}
+	
+	.lotusliveui, lotusliveui30, .scloud3 {font: normal .75em/1.5 "Helvetica Neue Roman", Helvetica, Arial, Roboto;} .lotusliveui button, lotusliveui30 button, .lotusliveui input, lotusliveui30 input, .lotusliveui select, lotusliveui30 select, .lotusliveui textarea, lotusliveui30 textarea {font-family: "Helvetica Neue Roman", Helvetica, Arial, Roboto; font-size: inherit;}
+.lotusui30 .lotusBanner{height:inherit !important;}
+.ics-scbanner > a,.ics-scbanner > a:active,.ics-scbanner > a:visited,.ics-scbanner > a:hover,.ics-scbanner > a:focus{color:#FFFFFF;}
+
