@@ -1,14 +1,12 @@
 ---
 layout: post
 title: "[原创] DB2 db2pd收集信息脚本"
-date:   2017-01-03 11:30:00
-category: Oracle
-tags: Oracle 
+categories: DB2
+tags: DB2 Shell 
 ---
 
 * content
 {:toc}
-
 
 问题：
 
@@ -20,12 +18,9 @@ tags: Oracle
 
 
 
-
 脚本逻辑：
 
-
 ```
-
 db2pd_gather_info.ksh
 #!/usr/bin/ksh
 ##########################################################################################
@@ -54,43 +49,42 @@ DBNAME=SAMPLE
 
 
 while test `date +%m%d%H%M` -lt $START_TIME; do 
-        sleep 30; 
+		sleep 30; 
 done
 
 while test `date +%m%d%H%M` -le $END___TIME ; do 
 
-        echo "++++++++++++++ Start `date +"%Y%m%d%H%M%S"` ++++++++++++++"
+		echo "++++++++++++++ Start `date +"%Y%m%d%H%M%S"` ++++++++++++++"
 
-        db2 list application show detail > /dbhome/db2inst1/monitor/db2listapplication_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2 list utilities show detail > /dbhome/db2inst1/monitor/db2utilities_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -reorg index > /dbhome/db2inst1/monitor/db2pd_reorg_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -runstats > /dbhome/db2inst1/monitor/db2pd_runstats_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -logs > /dbhome/db2inst1/monitor/db2pd_logs_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -applications > /dbhome/db2inst1/monitor/db2pd_app_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -transactions > /dbhome/db2inst1/monitor/db2pd_txn_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -locks -transactions -agents -applications -dynamic > /dbhome/db2inst1/monitor/lock_transactions_agents_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -tcbstats > /dbhome/db2inst1/monitor/db2pd_tcbstats_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -age -latches > /dbhome/db2inst1/monitor/db2pd_age_latches_`date +"%Y.%m.%d-%H.%M.%S"`
-        db2pd -d $DBNAME -api -wlocks -tra -act -edus > /dbhome/db2inst1/monitor/wlock_tra_act_edus`date +"%Y.%m.%d-%H.%M.%S"`
-        iostat -DlT 1 10 > /dbhome/db2inst1/monitor/iostat_`date +"%Y.%m.%d-%H.%M.%S"`
-        vmstat 1 10 > /dbhome/db2inst1/monitor/vmstat_`date +"%Y.%m.%d-%H.%M.%S"`
-        ps -ef >  /dbhome/db2inst1/monitor/ps_ef_`date +"%Y.%m.%d-%H.%M.%S"`
-        ps auxw > /dbhome/db2inst1/monitor/ps_auxw_`date +"%Y.%m.%d-%H.%M.%S"`
-        ipcs -ma > /dbhome/db2inst1/monitor/ipcs_ma_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2 list application show detail > /dbhome/db2inst1/monitor/db2listapplication_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2 list utilities show detail > /dbhome/db2inst1/monitor/db2utilities_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -reorg index > /dbhome/db2inst1/monitor/db2pd_reorg_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -runstats > /dbhome/db2inst1/monitor/db2pd_runstats_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -logs > /dbhome/db2inst1/monitor/db2pd_logs_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -applications > /dbhome/db2inst1/monitor/db2pd_app_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -transactions > /dbhome/db2inst1/monitor/db2pd_txn_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -locks -transactions -agents -applications -dynamic > /dbhome/db2inst1/monitor/lock_transactions_agents_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -tcbstats > /dbhome/db2inst1/monitor/db2pd_tcbstats_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -age -latches > /dbhome/db2inst1/monitor/db2pd_age_latches_`date +"%Y.%m.%d-%H.%M.%S"`
+		db2pd -d $DBNAME -api -wlocks -tra -act -edus > /dbhome/db2inst1/monitor/wlock_tra_act_edus`date +"%Y.%m.%d-%H.%M.%S"`
+		iostat -DlT 1 10 > /dbhome/db2inst1/monitor/iostat_`date +"%Y.%m.%d-%H.%M.%S"`
+		vmstat 1 10 > /dbhome/db2inst1/monitor/vmstat_`date +"%Y.%m.%d-%H.%M.%S"`
+		ps -ef >  /dbhome/db2inst1/monitor/ps_ef_`date +"%Y.%m.%d-%H.%M.%S"`
+		ps auxw > /dbhome/db2inst1/monitor/ps_auxw_`date +"%Y.%m.%d-%H.%M.%S"`
+		ipcs -ma > /dbhome/db2inst1/monitor/ipcs_ma_`date +"%Y.%m.%d-%H.%M.%S"`
 
-        echo "++++++++++++++ Completed `date +"%Y%m%d%H%M%S"` ++++++++++++++"
+		echo "++++++++++++++ Completed `date +"%Y%m%d%H%M%S"` ++++++++++++++"
 
 done
 
 _reorg=`db2 list applications show detail | grep db2reorg`
 if [[ -n $_reorg ]];then
-        echo "db2reorg is running"
-        db2pd -eve > /dbhome/db2inst1/monitor/db2pd-eve_`date +"%Y%m%d_%H%M%S"` 
-        db2pd -stack all        
+		echo "db2reorg is running"
+		db2pd -eve > /dbhome/db2inst1/monitor/db2pd-eve_`date +"%Y%m%d_%H%M%S"` 
+		db2pd -stack all        
 fi
 
 exit;
-
 ```
 
 **注意：
@@ -104,9 +98,10 @@ exit;
 
 `提前创建好目录 /dbhome/db2inst1/monitor/ 并赋予权限`
 
+
 ### 执行：
 
 
 ```
-	nohup /dbhome/db2inst1/db2pd_gather_info.ksh &
+nohup /dbhome/db2inst1/db2pd_gather_info.ksh &
 ```
