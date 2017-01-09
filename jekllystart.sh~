@@ -8,6 +8,6 @@ if [[ -n "$pid" ]];then
 kill -9 $pid
 fi
 
-cd /home/linhong/Blog/NewBlog/gaohaoyang.github.io-master
+cd /home/linhong/Blog/NewBlog/bigdatalyn.github.io
 #jekyll serve --watch &
 jekyll serve  &
