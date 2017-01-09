@@ -1,0 +1,142 @@
+---
+layout: post
+title: "Oracle 12c 大纲"
+categories: Oracle
+tags: Oracle 12c OCM 
+---
+
+* content
+{:toc}
+
+Oracle 12c OCM 大纲
+
+
+
+### 考场计划
+
+[Oracle OCM exam schedual](https://bigdatalyn.github.io/2016/12/12/OCM/)
+
+
+### 在线文档
+
+[Oracle12cR1_Online](http://www.oracle.com/technetwork/cn/database/enterprise-edition/documentation/index.html)
+12c OCM 升级考大纲，4个场景都有最低百分比，比之前11g/10g的OCM要求高了一些。
+
+
+大纲如下：
+
+[可以参考官网](http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:12COCMU&intcmp=WWOUCERTTOPBAN412CPG2&p_org_id=27&lang=US)
+
+### Acceptable performance on each skillset:
+
+    Skillset 1 - 56%
+    Skillset 2 - 32%
+    Skillset 3 - 43%
+    Skillset 4 - 44%
+
+### Exam Environment
+
+    Oracle Linux Release 6.5 64 bit
+    Mozilla Browser, Text (emacs, gedit) and vi editors
+    Shell environment: bash, csh
+    Use either CLI or GUI environment and tools when available
+    Oracle Database 12c Enterprise Edition Release 12.1.0.2.0  64 bit
+    Oracle Grid Infrastructure 12c Release 1 (12.1.0.2)
+    Oracle Enterprise Manager Cloud Control 12c Rel 4
+
+### Notes about the exam
+
+    Exam participants work through four skillsets that are based on the exam objectives.
+    Tasks can be performed using CLI or GUI environment and tools when available
+
+### 场景1：General Database and Network Administration, and Backup Strategy
+
+    Create and manage pluggable databases
+    Create and manage users, roles, and privileges
+    Configure the network environment to allow connections to multiple databases
+    Protect the database from loss of data due to any kind of failure
+    Create and manage database configuration files
+
+中文：
+
+Oracle 12c 数据及网络管理：
+
+	创建与管理PDB/克隆PDB/远程克隆PDB/升级11g 数据库到 12c PDB
+	创建CDB,PDB环境下的用户，组，及权限管理
+	配置网络环境
+	备份CDB
+	恢复CDB及PDB
+
+### 场景2：Data and Performance Management
+
+    Modify materialized views
+    Create a plugged-in tablespace by using the transportable tablespace feature
+    Create partitioned tables
+    Configure the database to retrieve all previous versions of the table rows
+    Configure the Resource Manager
+    Tune SQL statements
+    Perform real application testing
+    Create SQL Plan baselines
+
+中文：
+
+数据仓库管理及性能调优
+
+	管理物化视图
+	管理跨平台传送表空间
+	创建特殊类型分区表
+	配置数据闪回归档
+	配置 Resource Manager(用SQL的情况下配置Resource Manager)
+	SQL调优工具
+	管理 SQL计划基线
+	Oracle 12c 临时表空间调优新特性
+	Oracle 12c 并行调优新特性
+
+### 场景3：Data Guard
+
+    Create a physical standby database
+    Make the standby database available for testing
+    Restore the standby database to its normal function
+    Configure fast start failover
+
+中文：
+
+Data Guard
+
+	创建物理standby database
+	转换从库为快照数据库
+	配置只读standby库
+	配置fast start failover
+	使用Broker命令管理DG
+	
+
+### 场景4：rid Infrastructure and Real Application Clusters
+
+    Install Oracle Grid Infrastructure
+    Configure Oracle Flex ASM
+    Create ASM disk groups
+    Create and manage an ASM instance
+    Create ACFS
+    Start, stop, configure, and administer Oracle Grid Infrastructure
+    Install the Oracle Database 12c software
+    Create RAC databases
+    Configure services
+
+中文：
+
+Grid Infrastructure 及 RAC安装与配置
+
+	安装GI
+	Flex ASM架构
+	管理ASM实例
+	管理ASM磁盘组
+	创建  ACFS
+	启动, 关闭, 配置, Oracle 12c Grid Infrastructure
+	安装Oracle 12c 数据库
+	创建Oracle 12c RAC databases
+	配置服务
+
+
+-------- EOF TC 2017/01/08/ --------
+
+
