@@ -32,9 +32,6 @@ icon: heart
 * QQ：88322511 / Tel:13168741899
 
 <script src="//platform.linkedin.com/in.js" type="text/javascript"></script>
-<script type="IN/MemberProfile" data-id="http://www.linkedin.com/in/bigdatalyn" data-format="inline" data-related="false"></script>
-
-<script src="//platform.linkedin.com/in.js" type="text/javascript"></script>
 <script type="IN/MemberProfile" data-id="    https://cn.linkedin.com/in/lin-hong-79a392100" data-format="inline" data-related="false"></script>
 
 ---
@@ -55,7 +52,7 @@ icon: heart
 
 #### 友情链接
 
-[Gitbook](http://git-scm.com/book/zh/v2) \| [OCM 11g preparation](http://www.dbarj.com.br/en/ocm-11g-preparation/) \| [dbajunior](http://www.dbajunior.com/ocm/) \| [db2commerce](http://db2commerce.com) \| [IBM IM Tech](http://www.ibm.com/developerworks/data/library/) \|[dbajunior](http://www.dbajunior.com/ocm/)
+[Gitbook](http://git-scm.com/book/zh/v2) \| [OCM 11g preparation](http://www.dbarj.com.br/en/ocm-11g-preparation/) \| [dbajunior](http://www.dbajunior.com/ocm/) \| [db2commerce](http://db2commerce.com) \| [IBM IM Tech](http://www.ibm.com/developerworks/data/library/) \|[dbajunior](http://www.dbajunior.com/ocm/)\|[oraclealchemist](http://www.oraclealchemist.com/news/install-oracle-12c-12-1/)
 
 Comment below to exchange link with me.  
 
