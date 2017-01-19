@@ -10,8 +10,6 @@ tags: Oracle PGA
 
 Oracle 体系结构-PGA概念
 
-
-
 ### 什么是PGA
 
 
@@ -20,6 +18,10 @@ PGA程序全局区(Program Glogal Area)
 > 服务进程（server process）存储数据及控制信息的内存区域
 
 大家熟知的SGA是共享的，而PGA是私有的。另外：只要有一个服务进程，就会有一个PGA与之想对应服务
+
+
+
+
 
 ### PGA管理方式
 
