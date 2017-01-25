@@ -1,0 +1,48 @@
+---
+layout: post
+title: "什么是Oracle Block corruption？"
+categories: Oracle
+tags: Oracle Block
+---
+
+* content
+{:toc}
+
+
+
+Oracle的坏块定义,可以参考文档[Note 840978.1].
+
+### 1.坏块的主要分类,来自Oracle官方文档的解释,有助于更直接的了解区分物理坏块和逻辑坏块的区别(Note 840978.1有更加详细的描述):
+
+For purposes of the paper we will categorize corruption under three general areasand give best practices for prevention, detection and repair for each:
+
+    Memory corruption
+    Logical corruption(soft corruption)
+    Media corruption(Physicalcorruption)
+
+Physicalor structural corruption can be defined as damage to internal data structureswhich do not allow Oracle software to find user data within the database. Logical corruption involves Oracle beingable to find the data, but the data values are incorrect as far as the end useris concerned.
+Physica lcorruption due to hardware or software can occur in two general places — inmemory (including various IO buffers and the Oracle buffer cache) or on disk.Operator error such as overwriting a file can also be defined as a physicalcorruption. Logical corruption on theother hand is usually due to end-user error or non-robust(?) applicationdesign. A small physical corruption such as a single bit flip may be mistakenfor a logical error.
+
+### 2.坏块的产生主要原因
+
+#### 硬件问题
+如硬盘出现坏道,那么这部分的数据就处于无法读取的情况,和坏块没有区别.
+
+#### 操作系统BUG问题
+
+#### 操作系统的I/O错误或缓冲问题
+
+#### 内存问题
+
+#### 异常关机，掉电，终止服务使进程异常终止，也会导致坏块产生。
+
+#### 操作人为失误
+
+人为的破坏文件导致的坏块
+
+
+
+
+
+
+
