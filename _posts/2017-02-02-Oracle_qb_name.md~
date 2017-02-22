@@ -107,9 +107,7 @@ tags: Oracle hint qb_name
 
 #### qb_name的使用
 
-可以看到这种hint并没有起作用，这里test01,test02通过hash半连接。实际上是test02表为主表，test01表只是过滤条件
-
-这个时候 我们通过使用qb_name即可。定义了qb_name之后最大的好处就是再设定其他hint时，可以指定qb_name:
+可以看到这种hint并没有起作用，这里test01,test02通过hash半连接。实际上是test02表为主表，test01表只是过滤条件。这个时候 我们通过使用qb_name即可。定义了qb_name之后最大的好处就是再设定其他hint时，可以指定qb_name:
 
 也就是/*+ qb_name (queryblock ) */qb_name是定义一个查询模块的别名的意思
 
@@ -296,7 +294,7 @@ tags: Oracle hint qb_name
 
 #### qb_name结合outline的使用
 
-create table test01 as select* from dba_objects;  
+`create table test01 as select* from dba_objects;  
 
 create index idx_test01 on test01(object_id);  
 
@@ -306,7 +304,7 @@ select * from table(dbms_xplan.display(null, null, 'ALL'));
 
 explain plan for select /*+qb_name(qb) index(@qb t idx_test01)*/* from test01 t where object_id >= 10;  --这里表示qb模块走表t的idx_test01索引  
 
-select * from table(dbms_xplan.display(null, null, 'ALL'));  
+select * from table(dbms_xplan.display(null, null, 'ALL'));  `
 
 
 全表扫描和索引扫描：
