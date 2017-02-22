@@ -8,8 +8,6 @@ tags: Oracle Redo
 * content
 {:toc}
 
-
-
 Oracle 的Redo 机制DB的一个重要机制，理解这个机制对DBA来说也是非常重要。
 
 Oracle 的Online redo log 是为确保已经提交的事务不会丢失而建立的一个机制。 
