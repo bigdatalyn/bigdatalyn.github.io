@@ -52,7 +52,7 @@ icon: heart
 
 #### 友情链接
 
-[Gitbook](http://git-scm.com/book/zh/v2) \| [OCM 11g preparation](http://www.dbarj.com.br/en/ocm-11g-preparation/) \| [dbajunior](http://www.dbajunior.com/ocm/) \| [db2commerce](http://db2commerce.com) \| [IBM IM Tech](http://www.ibm.com/developerworks/data/library/) \|[dbajunior](http://www.dbajunior.com/ocm/)\|[oraclealchemist](http://www.oraclealchemist.com/news/install-oracle-12c-12-1/)
+[Gitbook](http://git-scm.com/book/zh/v2) \| [OCM 11g preparation](http://www.dbarj.com.br/en/ocm-11g-preparation/) \| [dbajunior](http://www.dbajunior.com/ocm/) \| [db2commerce](http://db2commerce.com) \| [IBM IM Tech](http://www.ibm.com/developerworks/data/library/) \|[dbajunior](http://www.dbajunior.com/ocm/)\|[oraclealchemist](http://www.oraclealchemist.com/news/install-oracle-12c-12-1/) \| [Oracle](https://oracle-base.com/blog/) 
 
 Comment below to exchange link with me.  
 
