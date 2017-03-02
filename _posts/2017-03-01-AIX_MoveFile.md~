@@ -30,7 +30,7 @@ tags: AIX Move
 
 	lsuser 文件 ### 查看文件的owner详细信息
 
-		
+	history/last/who 等确认下当前登录用户信息和之前历史操作命令等
 	
 	root@dbvg001:/tmp#istat  db2p44564578t1_1438712069499141.msg
 	Inode 255 on device 10/13       File
