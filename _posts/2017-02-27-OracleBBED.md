@@ -1455,3 +1455,5 @@ DBA一般指绝对数据块地址. rowid用来表示一行的物理地址，一�
 [DBA Scripts:转换RDBA的文件和数据块地址](http://www.eygle.com/archives/2007/07/function_rdba_convert.html)
 
 
+[Data block](http://www.orafaq.com/wiki/Data_block)
+
