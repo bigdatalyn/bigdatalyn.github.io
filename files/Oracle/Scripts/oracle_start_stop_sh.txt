@@ -1,0 +1,28 @@
+
+
+启动脚本举例：
+su – oracle <<EOF_ORA
+export ORACLE_HOME=/u01/oracle/product/db10gr2
+export ORACLE_SID=mm
+/u01/oracle/product/db10gr2/bin/lsnrctl start LISTENER
+/u01/oracle/product/db10gr2/bin/sqlplus -s ” / as sysdba” <<EOF_OLTP
+startup nomount;
+alter database mount standby database;
+alter database open read only;
+exit
+EOF_OLTP
+EOF_ORA
+banner “DB Start”
+
+关闭脚本举例：
+su – oracle <<EOF_ORA
+export ORACLE_HOME=/u01/oracle/product/db10gr2
+export ORACLE_SID=mm
+/u01/oracle/product/db10gr2/bin/lsnrctl stop AUTOCHN
+/u01/oracle/product/db10gr2/bin/sqlplus -s ” / as sysdba” <<EOF_OLTP
+shutdown immediate
+exit
+EOF_OLTP
+EOF_ORA
+banner “DB Stop”
+

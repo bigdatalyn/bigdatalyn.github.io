@@ -1,0 +1,18 @@
+alter session set nls_timestamp_tz_format='yyyy-mm-dd hh24:mi:ss.ff tzh:tzm';
+set markup html on spool on
+spool jobs.html
+select owner,object_name,object_type from dba_objects where status='INVALID';
+select * from dba_scheduler_jobs;
+select j.obj#, o.object_name from sys.scheduler$_job j, dba_objects o where j.obj# = o.object_id;
+select * from dba_scheduler_job_log order by 2,4;
+select * from dba_scheduler_job_run_details order by 2;
+select * from dba_scheduler_schedules;
+select * from dba_scheduler_windows;
+select * from dba_scheduler_window_details order by 2;
+select * from dba_scheduler_window_groups;
+select * from dba_scheduler_window_log order by 2;
+select * from dba_scheduler_wingroup_members;
+select * from dba_scheduler_programs;
+spool off
+set markup html off
+exit

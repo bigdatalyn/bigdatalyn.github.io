@@ -1,0 +1,112 @@
+#!/usr/bin/ksh
+#################################################################
+###   This is for DB backup
+###   ---------------------------------------------------------
+###   History :
+###   2009/10/28 H.M     Create
+#################################################################
+
+###
+### Send Mail Function
+###
+mailto(){
+
+MAILTO="TTTTTTTTT@jp.ibm.com"
+
+print $MAILTEXT | \
+/usr/bin/mail -s "TEPS DB Maintenance - (`hostname`)" -r root $MAILTO
+
+return
+
+}
+
+###
+### Send Mail Function
+###
+LOGFILE=/Tivoli/logs/db2backup-on-tepa.log
+EXECPATH=/Tivoli/scripts/dbbackup
+
+if [[ ! -a $LOGFILE ]];then
+   touch $LOGFILE
+fi
+
+chmod 640 $LOGFILE
+
+### TEPS DB REORG
+su - tepa -c "$EXECPATH/reorgtables_teps" >> $LOGFILE 2>&1
+
+### TEPS Data Backup (DB2)
+su - tepa -c "$EXECPATH/db2backup-tepsdb-on.ksh" >> $LOGFILE 2>&1
+VALUE=$? 
+if [[ $VALUE -eq 1 ]]; then
+   MAILTEXT="TEPS Data DB Backup Failed"
+   mailto
+   exit $VALUE
+else
+   ### DB Backup file Maintenace
+   TRGTDIR=/Tivoli/backup/tepsdbbackup/
+   AGE=7
+   find $TRGTDIR -type f  -mtime "+$AGE" -print >> /tmp/rm_tepsdbbackup.$$
+   rm -rf `cat /tmp/rm_tepsdbbackup.$$` 2> /dev/null
+   VALUE=$? 
+   rm -f /tmp/rm_tepsdbbackup.$$
+   if [[ $VALUE -eq 1 ]]; then
+      MAILTEXT="TEPS DB Backup file Maintenace Failed"
+      mailto
+      exit $VALUE
+   fi
+fi
+
+### Archivelog Maintenace
+TRGTDIR=/Tivoli/backup/archivelog/
+AGE=14
+find $TRGTDIR -type f  -mtime "+$AGE" -print >> /tmp/rm_archivelog.$$
+rm -rf `cat /tmp/rm_archivelog.$$` 2> /dev/null
+VALUE=$? 
+rm -f /tmp/rm_archivelog.$$
+if [[ $VALUE -eq 1 ]]; then
+   MAILTEXT="TEPS DB Archivelog Maintenace Failed"
+   mailto
+fi
+
+exit $VALUE
+
+
+
+
+db2backup-tepsdb-on.ksh
+#!/usr/bin/ksh
+#################################################################
+###   This script does online backup.
+###   ---------------------------------------------------------
+###   History :
+###   2009/10/28 H.M     Create
+#################################################################
+
+DBNAME=teps
+USER=tepa
+BACKUPDIR=/Tivoli/backup/tepsdbbackup
+
+. /home/tepa/.profile
+
+NUM=0
+echo $NUM
+while [[ $NUM < 5 ]]
+do
+   db2 backup db $DBNAME online to $BACKUPDIR include logs > /Tivoli/logs/db2-bkupresult/bkupresult-$DBNAME.txt
+   if [[ $? -eq 0 ]]; then
+      ((NUM=$NUM+5))
+      VALUE=0
+   else
+      ((NUM=$NUM+1))
+      if (( $NUM == 5 )); then
+         VALUE=1
+         echo On-line back-up of DB name $DBNAME failed at $NUM times! >> /Tivoli/logs/db2-bkupresult/bkupresult-$DBNAME.txt
+      fi
+   fi
+   echo $NUM
+done
+VALUE=$?
+db2 terminate
+
+exit $VALUE 
