@@ -1,0 +1,210 @@
+---
+layout: post
+title: "[原创]SQL在什么条件下使用索引"
+category: Oracle
+tags: Index Oracle
+---
+
+* content
+{:toc}
+
+SQL在什么条件下使用索引?
+
+创建合适的索引，可能让性能提升100倍，1000倍以上，不合理则会让新能下降100倍以上，以下汇总测试下什么情况下使用索引，什么时候不适用索引。
+
+
+
+
+
+
+
+### SQL在什么条件下使用索引（字段上建了索引时候）
+
+下面情况使用:
+
+	indx = ?
+	indx > ?
+	indx >= ?
+	indx < ?
+	indx <= ?
+	indx between ? and ?
+	indx in (?, ? ,...?)
+	indx like ?||'%' (后导模糊查询)
+	t1.indx_id = t2.indx_id(两表通过索引关联)
+
+测试样例：
+
+	SYS> select * from v$version;
+
+	BANNER
+	--------------------------------------------------------------------------------
+	Oracle Database 11g Enterprise Edition Release 11.2.0.3.0 - Production
+	PL/SQL Release 11.2.0.3.0 - Production
+	CORE    11.2.0.3.0      Production
+	TNS for Linux: Version 11.2.0.3.0 - Production
+	NLSRTL Version 11.2.0.3.0 - Production
+
+	SYS> 
+
+	SYS> set pages 100 lines 120
+	SYS> drop table t1 purge; 
+
+	Table dropped.
+
+	SYS> create table t1 (id number,name varchar2(40));
+
+	Table created.
+
+	SYS> insert into t1 select rownum,table_name from dba_tables;
+
+	2890 rows created.
+
+	SYS> commit;
+
+	Commit complete.
+
+	SYS> create index indx_t1 on t1(id); 
+
+	Index created.
+
+	SYS> exec dbms_stats.gather_table_stats('SYS','T1');
+
+	PL/SQL procedure successfully completed.
+
+	SYS> 
+	SYS> set autot on exp
+	SYS> select * from t1 where id = 1;
+
+		ID NAME
+	---------- ----------------------------------------
+		 1 TYPE_MISC$
+
+
+	Execution Plan
+	----------------------------------------------------------
+	Plan hash value: 1646002207
+
+	---------------------------------------------------------------------------------------
+	| Id  | Operation                   | Name    | Rows  | Bytes | Cost (%CPU)| Time     |
+	---------------------------------------------------------------------------------------
+	|   0 | SELECT STATEMENT            |         |     1 |    24 |     2   (0)| 00:00:01 |
+	|   1 |  TABLE ACCESS BY INDEX ROWID| T1      |     1 |    24 |     2   (0)| 00:00:01 |
+	|*  2 |   INDEX RANGE SCAN          | INDX_T1 |     1 |       |     1   (0)| 00:00:01 |
+	---------------------------------------------------------------------------------------
+
+	Predicate Information (identified by operation id):
+	---------------------------------------------------
+
+	   2 - access("ID"=1)
+
+	SYS> select * from t1 where id > 2889;
+
+		ID NAME
+	---------- ----------------------------------------
+	      2890 LOGMNR_SESSION_ACTIONS$
+
+
+	Execution Plan
+	----------------------------------------------------------
+	Plan hash value: 1646002207
+
+	---------------------------------------------------------------------------------------
+	| Id  | Operation                   | Name    | Rows  | Bytes | Cost (%CPU)| Time     |
+	---------------------------------------------------------------------------------------
+	|   0 | SELECT STATEMENT            |         |     1 |    24 |     3   (0)| 00:00:01 |
+	|   1 |  TABLE ACCESS BY INDEX ROWID| T1      |     1 |    24 |     3   (0)| 00:00:01 |
+	|*  2 |   INDEX RANGE SCAN          | INDX_T1 |     1 |       |     2   (0)| 00:00:01 |
+	---------------------------------------------------------------------------------------
+
+	Predicate Information (identified by operation id):
+	---------------------------------------------------
+
+	   2 - access("ID">2889)
+
+	SYS> 
+	
+	其他情况另行测试....
+
+
+#### 不使用索引
+
+下面情况不使用:
+
+	indx <> ?
+	indx not in (?,?)
+	function(indx) = ? (普通运算或者函数运算)
+	indx + 1 = ?
+	indx || 'A' = ?
+	indx like '%'||? (前导模糊查询)
+	indx like '%'||?||'%'
+	indx is null
+	number_indx = '123' 数字类型索引 与 字符匹配查询，发生隐式类型转换
+	char_indx = 123
+
+
+测试样例：
+
+	SYS> select * from t1 where id <> 1;
+
+	.......(省略)
+
+	Execution Plan
+	----------------------------------------------------------
+	Plan hash value: 3617692013
+
+	--------------------------------------------------------------------------
+	| Id  | Operation         | Name | Rows  | Bytes | Cost (%CPU)| Time     |
+	--------------------------------------------------------------------------
+	|   0 | SELECT STATEMENT  |      |  2889 | 69336 |     5   (0)| 00:00:01 |
+	|*  1 |  TABLE ACCESS FULL| T1   |  2889 | 69336 |     5   (0)| 00:00:01 |
+	--------------------------------------------------------------------------
+
+	Predicate Information (identified by operation id):
+	---------------------------------------------------
+
+	   1 - filter("ID"<>1)
+
+	SYS> 
+
+	SYS> select * from t1 where id is null;
+
+	no rows selected
+
+
+	Execution Plan
+	----------------------------------------------------------
+	Plan hash value: 3617692013
+
+	--------------------------------------------------------------------------
+	| Id  | Operation         | Name | Rows  | Bytes | Cost (%CPU)| Time     |
+	--------------------------------------------------------------------------
+	|   0 | SELECT STATEMENT  |      |     1 |    24 |     5   (0)| 00:00:01 |
+	|*  1 |  TABLE ACCESS FULL| T1   |     1 |    24 |     5   (0)| 00:00:01 |
+	--------------------------------------------------------------------------
+
+	Predicate Information (identified by operation id):
+	---------------------------------------------------
+
+	   1 - filter("ID" IS NULL)
+
+	SYS> 
+
+
+备注：函数可以使用函数索引，多列的有多列组合索引
+
+其他：
+
+	a.索引对DML有附加开销（insert/update/delete）
+	b.索引占用空间，索引信息变更产生日志记录，有记录日志时间的开销和空间开销
+	c.索引不合理，可能导致数据库选择错误的执行计划
+	d.字段上选择创建索引条件：
+	1）主键，外键
+	2)字段在查询条件中出现
+	3）sql执行频率高，每天上百几百次
+	4）字段条件返回结果集很少：表10%以内
+
+
+
+
+
+
