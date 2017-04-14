@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="Generator" content="iWeb 3.0" />
+    <meta name="iWeb-Build" content="local-build-20150128" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=700" />
+    <title>Skillset 3</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="../images/Skillset.css" />
+          <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+        </div>
+        <div style="margin-left: 0px; position: relative; width: 700px; z-index: 5; " id="body_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+          <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
+          <div style="margin-left: 0px; margin-top: 249px; position: relative; width: 707px; z-index: 1; " class="style_SkipStroke shape-with-text flowDefining">
+            <div class="text-content style_External_707_1452" style="padding: 0px; ">
+              <div class="style">
+                <p style="padding-top: 0pt; " class="paragraph_style">  NOTE: <br /></p>
+                <p class="paragraph_style"><br /></p>
+                <p class="paragraph_style_1"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_2"><span style="line-height: 14px; " class="style_2"><br /></span></p>
+                <p class="paragraph_style_2"><span style="line-height: 14px; " class="style_2"><br /></span></p>
+                <p class="paragraph_style">  TASKS:<span style="line-height: 14px; " class="style_1"><br /></span></p>
+
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">1.Create public synonym sh.sales in the PDBPROD1 database, name sales1<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>  
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">2. Create a physical standby database:<br /></span></p> 
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">   (1) PROD5 in the host01 as the Primary, SID is PROD5, DB_UNIQUE_NAME set to PROD5H1<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">   (2) PROD5 in teh host02 as a standby database, SID is PROD5, DB_UNIQUE_NAME set PROD5H2<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">   (3) The directory objects should exist in the primary and standby<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">   (4) Can be connected standby database using the following method, connect sys/oracle@PROD5H2 as sysdba, should be the dedicated mode<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">   (5) When the global temporary tables standby database were DML, minimizing the generation of Redo<br /></span></p>  
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>  
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>   
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">3. Configure a physical standby database for testing<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (1) Configuration PROD5 physical standby database for testing, you can DML and transaction processing<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">4. Configure a physical standby database for reporting and Redo Apply<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (1) Configure the physical standby database can be used for Reporting Services, make sure it is in open mode<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (2) When the configuration restoration log reaches the standby database for application immediately<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (3) Reduce the load standby database when incremental backup<br /></span></p> 
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (4) archived log deletion policy: When the backup archive logs after the database application is complete, it can be deleted in the Primary database<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p> 
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">5. Automatic management<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"> (1) Automatic failover for use host02 Observer. Make sure that is configured for synchronous<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"> (2) The physical standby database to acknowledge receipt of redo only when it can guarantee that when applying redo.<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"> (3) When the physical standby database to receive redo when more than 30 seconds, it should issue a warning, regardless of which database is standby database.<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"> (4) When the redo Not physical standby database applications within 45 seconds, an alarm should be issued, regardless of which database is standby database.<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">6. Perform switching:<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (1) Switching database roles, so that the Primary runs on host02, standby database running on host01<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (2) The new Primary must be open read write mode<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (3) The new standby database must be open read only mode, and can apply log<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1"><br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">7. Sequence<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (1) Create a sequence SEQ1, ensure that the Primary equipment can be used. Sequence starting from 1, incremented by 1 in the configuration of this value must be unique. This sequence should produce minimal performance overhead and maintained in memory.<br /></span></p>
+<p class="paragraph_style_3"><span style="line-height: 14px; " class="style_1">  (2) Create a sequence SEQ2, for global temporary tables. Its value must be unique at the session level, but different sessions may be allowed to repeat.<br /></span></p>
+ 
+
+
+
+              </div>
+              <div style="height: 1068px; line-height: 1068px; " class="tinyText"> </div>
+            </div>
+          </div>
+          
+
+
+          <div id="id1" style="height: 39px; left: -4px; position: absolute; top: 211px; width: 759px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+            <div class="text-content graphic_shape_layout_style_default_External_759_39" style="padding: 0px; ">
+              <div class="graphic_shape_layout_style_default">
+                <p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style_5">Skillset 7</p>
+              </div>
+            </div>
+          </div>
+          
+
+
+          <div style="height: 206px; width: 697px;  height: 206px; left: 1px; position: absolute; top: 0px; width: 697px; z-index: 1; " class="tinyText style_SkipStroke_2 stroke_0 shadow_0">
+            <img src="../images/12cOCM.jpg" alt="" style="border: none; height: 206px; width: 697px; " />
+          </div>
+          <div style="height: 0px; line-height: 0px; " class="spacer"> </div>
+        </div>
+        <div style="height: 100px; margin-left: 0px; position: relative; width: 700px; z-index: 15; " id="footer_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

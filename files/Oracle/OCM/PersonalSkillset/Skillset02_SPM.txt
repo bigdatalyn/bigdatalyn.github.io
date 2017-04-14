@@ -1,0 +1,124 @@
+3. Use SQL Performance Analyze
+(1) run the scripts 2_8_3.sql,create apps user, and password Apps1234
+(2) From the 11.2 migration to the 12c environment, provides a dump file (the user password: apps/Apps1234),
+
+      Contains the Sql Tuning Set, requires the use of a tool for optimization in STS SQL, and the optimized SQL plan_table write in the execution plan
+(3) Dump file location for: /home/oracle/scripts,the file :appsstq.dmp.
+
+(4) Migration from 11.2.0.3 to 12.1.0.2
+
+#### (1)
+[oracle@host01 scripts]$ sqlplus sys/oracle@PDBPROD1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Mar 10 15:55:41 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PDBPROD1> !pwd
+/home/oracle/scripts
+
+SYS@PDBPROD1> !ls
+2_8_3.sql  5-1.sql  5_2_1.sql  5_2_1.sql.back  8_1_1.sql  8_2_1.sql  8_4_1.sql	afiedt.buf  appsstq.dmp  impdp.log  initsec2.sh  Skillset1.txt	Skillset2.html	trans3_2.dmp  trpdata_6
+
+SYS@PDBPROD1> !cat 2_8_3.sql
+grant connect,resource,unlimited tablespace to apps identified by App1234;
+create directory dump_dir as '/home/oracle/scripts';
+!impdp \'sys/oracle@pdbprod1 as sysdba\' dumpfile=apps.dmp directory=dump_dir
+drop directory dump_dir;
+
+SYS@PDBPROD1> @2_8_3.sql
+
+Grant succeeded.
+
+
+Directory created.
+
+
+Import: Release 12.1.0.2.0 - Production on Fri Mar 10 15:56:01 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+ORA-39001: invalid argument value
+ORA-39000: bad dump file specification
+ORA-31640: unable to open dump file "/home/oracle/scripts/apps.dmp" for read
+ORA-27037: unable to obtain file status
+Linux-x86_64 Error: 2: No such file or directory
+Additional information: 3
+
+
+
+
+Directory dropped.
+
+SYS@PDBPROD1> !ls *dmp
+appsstq.dmp  trans3_2.dmp
+
+SYS@PDBPROD1> !vi 2_8_3.sql
+
+SYS@PDBPROD1> !cat vi 2_8_3.sql
+cat: vi: No such file or directory
+grant connect,resource,unlimited tablespace to apps identified by App1234;
+create directory dump_dir as '/home/oracle/scripts';
+!impdp \'sys/oracle@pdbprod1 as sysdba\' dumpfile=appsstq.dmp directory=dump_dir
+drop directory dump_dir;
+
+SYS@PDBPROD1> @2_8_3.sql
+
+Grant succeeded.
+
+
+Directory created.
+
+
+Import: Release 12.1.0.2.0 - Production on Fri Mar 10 15:57:05 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  "sys/********@pdbprod1 AS SYSDBA" dumpfile=appsstq.dmp directory=dump_dir 
+Processing object type SCHEMA_EXPORT/USER
+ORA-31684: Object type USER:"APPS" already exists
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+. . imported "APPS"."STS_JFV_TAB"                        123.8 KB      29 rows
+. . imported "APPS"."STS_JFV_TAB_CPLANS"                 281.8 KB     500 rows
+. . imported "APPS"."STS_JFV_PS"                         46.48 KB       8 rows
+. . imported "APPS"."STS_JFV_PS_CPLANS"                  106.5 KB     145 rows
+. . imported "APPS"."STS_JFV_PS_CBINDS"                      0 KB       0 rows
+. . imported "APPS"."STS_JFV_TAB_CBINDS"                     0 KB       0 rows
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Job "SYS"."SYS_IMPORT_FULL_01" completed with 1 error(s) at Fri Mar 10 15:57:37 2017 elapsed 0 00:00:27
+
+
+
+Directory dropped.
+
+SYS@PDBPROD1> 
+
+SYS@PDBPROD1> exec dbms_sqltune.unpack_stgtab_sqlset('%','%',true,'STS_JFV_PS','APPS');
+
+PL/SQL procedure successfully completed.
+
+SYS@PDBPROD1> 
+
+
+
+
+

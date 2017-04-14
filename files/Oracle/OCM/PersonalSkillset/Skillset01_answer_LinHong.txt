@@ -1,0 +1,3379 @@
+
+NOTE:
+
+1) Database Server and Management Server, user/pwd: oracle/ocm123
+
+2) if need root,use sudo
+
+3) oracle doc: /stage/.../English/index.htm
+
+4) The root directory must be kept free space 15%
+
+TASKS:
+
+Section 1：Create pluggable database
+
+1.Use the following descriptions to create 12c pluggable database PDBPROD3 in PRODCDB:
+
+（1）To create pluggable database PDBPROD3 by copying PDBPROD1
+
+[oracle@host01 ~]$ export ORACLE_SID=PRODCDB;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Thu Feb 23 15:20:45 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  570428144 bytes
+Database Buffers	  260046848 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+Database opened.
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+SQL> alter pluggable database all open;
+
+Pluggable database altered.
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+SQL> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/sysaux01.dbf
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/PDBPROD2_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/example01.dbf
+
+13 rows selected.
+
+SQL> 
+
+SQL> !mkdir /u01/app/oracle/oradata/PRODCDB/PDBPROD3
+
+SQL> !ls -ld /u01/app/oracle/oradata/PRODCDB/PDBPROD3
+drwxr-xr-x 2 oracle oinstall 4096 Feb 23 16:05 /u01/app/oracle/oradata/PRODCDB/PDBPROD3
+
+SQL> alter pluggable database PDBPROD1 open read only;
+
+Pluggable database altered.
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ ONLY  NO
+	 4 PDBPROD2			  MOUNTED
+SQL> create pluggable database PDBPROD3 from PDBPROD1 file_name_convert=('/u01/app/oracle/oradata/PRODCDB/PDBPROD1/','/u01/app/oracle/oradata/PRODCDB/PDBPROD3/');
+
+Pluggable database created.
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ ONLY  NO
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  MOUNTED
+SQL>
+
+（2）Ensure PRODCDB restarted at any time, PDBPROD3 automatically open to the same mode
+
+SQL> show con_name 
+
+CON_NAME
+------------------------------
+CDB$ROOT
+SQL> alter session set container=pdbprod3;
+
+Session altered.
+
+SQL> show con_name
+
+CON_NAME
+------------------------------
+PDBPROD3
+SQL> alter pluggable database pdbprod3 save state;
+
+Pluggable database altered.
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 5 PDBPROD3			  READ WRITE NO
+SQL>  
+
+test：
+
+SQL> conn / as sysdba
+Connected.
+SQL> show con_id
+
+CON_ID
+------------------------------
+1
+SQL> show con_name
+
+CON_NAME
+------------------------------
+CDB$ROOT
+SQL> alter pluggable database all close immediate;
+
+Pluggable database altered.
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  MOUNTED
+SQL> shu immediate;                   
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  570428144 bytes
+Database Buffers	  260046848 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+Database opened.
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  READ WRITE NO
+SQL> 
+
+
+2.Use the following Description, create pluggable database PDBPROD4 and PDBPROD5 in the PRODCDB：
+
+（1）The DB11G of non-CDB database introduced schemas(HR, OE, SH) of all applications into the container database PDBPROD4 pluggable database in PRODCDB. After this is complete, ensure DB11G database remains available.
+
++++++++++++++ export DB11G's schema's data:
+
+[oracle@host01 ~]$ vi .bash_profile
+[oracle@host01 ~]$ cat .bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/12.1.0/dbhome_1
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
+export PATH=$ORACLE_HOME/bin:$PATH
+
+export ORACLE_SID=PDBCDB
+export ORACLE_SID=DB11G
+
+set -o vi
+
+[oracle@host01 ~]$ 
+[oracle@host01 ~]$ source .bash_profile
+[oracle@host01 ~]$ export ORACLE_SID=DB11G;sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.4.0 Production on Thu Feb 23 15:43:15 2017
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area  521936896 bytes
+Fixed Size		    2254824 bytes
+Variable Size		  381683736 bytes
+Database Buffers	  130023424 bytes
+Redo Buffers		    7974912 bytes
+Database mounted.
+Database opened.
+SQL> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+[oracle@host01 ~]$ pwd
+/home/oracle
+[oracle@host01 ~]$ mkdir data
+[oracle@host01 ~]$ ls -ltr
+total 3436
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Videos
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Templates
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Public
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Pictures
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Music
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Downloads
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Documents
+drwxr-xr-x 2 oracle oinstall    4096 Dec 21  2015 Desktop
+-rw------- 1 oracle oinstall 4653056 Dec 21  2015 core.2917
+drwxr-xr-x 2 oracle oinstall    4096 Feb 23 15:47 data
+[oracle@host01 ~]$ 
+[oracle@host01 ~]$ cd data
+[oracle@host01 data]$ 
+[oracle@host01 data]$ pwd
+/home/oracle/data
+[oracle@host01 data]$ export ORACLE_SID=DB11G;sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.4.0 Production on Thu Feb 23 15:49:52 2017
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> create directory db11g as '/home/oracle/data';
+
+Directory created.
+
+SQL> grant read,write,execute on directory db11g to public;
+
+Grant succeeded.
+
+SQL> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@host01 data]$ expdp -help
+
+Export: Release 11.2.0.4.0 - Production on Thu Feb 23 15:50:45 2017
+
+Copyright (c) 1982, 2011, Oracle and/or its affiliates.  All rights reserved.
+
+
+The Data Pump export utility provides a mechanism for transferring data objects
+between Oracle databases. The utility is invoked with the following command:
+
+   Example: expdp scott/tiger DIRECTORY=dmpdir DUMPFILE=scott.dmp
+
+You can control how Export runs by entering the 'expdp' command followed
+by various parameters. To specify parameters, you use keywords:
+
+   Format:  expdp KEYWORD=value or KEYWORD=(value1,value2,...,valueN)
+   Example: expdp scott/tiger DUMPFILE=scott.dmp DIRECTORY=dmpdir SCHEMAS=scott
+               or TABLES=(T1:P1,T1:P2), if T1 is partitioned table
+
+USERID must be the first parameter on the command line.
+
+------------------------------------------------------------------------------
+
+The available keywords and their descriptions follow. Default values are listed within square brackets.
+
+ATTACH
+Attach to an existing job.
+For example, ATTACH=job_name.
+
+CLUSTER
+Utilize cluster resources and distribute workers across the Oracle RAC.
+Valid keyword values are: [Y] and N.
+
+COMPRESSION
+Reduce the size of a dump file.
+Valid keyword values are: ALL, DATA_ONLY, [METADATA_ONLY] and NONE.
+
+CONTENT
+Specifies data to unload.
+Valid keyword values are: [ALL], DATA_ONLY and METADATA_ONLY.
+
+DATA_OPTIONS
+Data layer option flags.
+Valid keyword values are: XML_CLOBS.
+
+DIRECTORY
+Directory object to be used for dump and log files.
+
+DUMPFILE
+Specify list of destination dump file names [expdat.dmp].
+For example, DUMPFILE=scott1.dmp, scott2.dmp, dmpdir:scott3.dmp.
+
+ENCRYPTION
+Encrypt part or all of a dump file.
+Valid keyword values are: ALL, DATA_ONLY, ENCRYPTED_COLUMNS_ONLY, METADATA_ONLY and NONE.
+
+ENCRYPTION_ALGORITHM
+Specify how encryption should be done.
+Valid keyword values are: [AES128], AES192 and AES256.
+
+ENCRYPTION_MODE
+Method of generating encryption key.
+Valid keyword values are: DUAL, PASSWORD and [TRANSPARENT].
+
+ENCRYPTION_PASSWORD
+Password key for creating encrypted data within a dump file.
+
+ESTIMATE
+Calculate job estimates.
+Valid keyword values are: [BLOCKS] and STATISTICS.
+
+ESTIMATE_ONLY
+Calculate job estimates without performing the export.
+
+EXCLUDE
+Exclude specific object types.
+For example, EXCLUDE=SCHEMA:"='HR'".
+
+FILESIZE
+Specify the size of each dump file in units of bytes.
+
+FLASHBACK_SCN
+SCN used to reset session snapshot.
+
+FLASHBACK_TIME
+Time used to find the closest corresponding SCN value.
+
+FULL
+Export entire database [N].
+
+HELP
+Display Help messages [N].
+
+INCLUDE
+Include specific object types.
+For example, INCLUDE=TABLE_DATA.
+
+JOB_NAME
+Name of export job to create.
+
+LOGFILE
+Specify log file name [export.log].
+
+NETWORK_LINK
+Name of remote database link to the source system.
+
+NOLOGFILE
+Do not write log file [N].
+
+PARALLEL
+Change the number of active workers for current job.
+
+PARFILE
+Specify parameter file name.
+
+QUERY
+Predicate clause used to export a subset of a table.
+For example, QUERY=employees:"WHERE department_id > 10".
+
+REMAP_DATA
+Specify a data conversion function.
+For example, REMAP_DATA=EMP.EMPNO:REMAPPKG.EMPNO.
+
+REUSE_DUMPFILES
+Overwrite destination dump file if it exists [N].
+
+SAMPLE
+Percentage of data to be exported. 
+
+SCHEMAS
+List of schemas to export [login schema].
+
+SERVICE_NAME
+Name of an active Service and associated resource group to constrain Oracle RAC resources.
+
+SOURCE_EDITION
+Edition to be used for extracting metadata.
+
+STATUS
+Frequency (secs) job status is to be monitored where
+the default [0] will show new status when available.
+
+TABLES
+Identifies a list of tables to export.
+For example, TABLES=HR.EMPLOYEES,SH.SALES:SALES_1995.
+
+TABLESPACES
+Identifies a list of tablespaces to export.
+
+TRANSPORTABLE
+Specify whether transportable method can be used.
+Valid keyword values are: ALWAYS and [NEVER].
+
+TRANSPORT_FULL_CHECK
+Verify storage segments of all tables [N].
+
+TRANSPORT_TABLESPACES
+List of tablespaces from which metadata will be unloaded.
+
+VERSION
+Version of objects to export.
+Valid keyword values are: [COMPATIBLE], LATEST or any valid database version.
+
+------------------------------------------------------------------------------
+
+The following commands are valid while in interactive mode.
+Note: abbreviations are allowed.
+
+ADD_FILE
+Add dumpfile to dumpfile set.
+
+CONTINUE_CLIENT
+Return to logging mode. Job will be restarted if idle.
+
+EXIT_CLIENT
+Quit client session and leave job running.
+
+FILESIZE
+Default filesize (bytes) for subsequent ADD_FILE commands.
+
+HELP
+Summarize interactive commands.
+
+KILL_JOB
+Detach and delete job.
+
+PARALLEL
+Change the number of active workers for current job.
+
+REUSE_DUMPFILES
+Overwrite destination dump file if it exists [N]. 
+
+START_JOB
+Start or resume current job.
+Valid keyword values are: SKIP_CURRENT.
+
+STATUS
+Frequency (secs) job status is to be monitored where
+the default [0] will show new status when available.
+
+STOP_JOB
+Orderly shutdown of job execution and exits the client.
+Valid keyword values are: IMMEDIATE.
+
+
+[oracle@host01 data]$ expdp system/oracle directory=db11g dumpfile=db11g.dmp logfile=db11g.log schema=hr,oe,sh;
+LRM-00101: unknown parameter name 'schema'
+
+[oracle@host01 data]$ expdp system/oracle directory=db11g dumpfile=db11g.dmp logfile=db11g.log schemas=hr,oe,sh;
+
+Export: Release 11.2.0.4.0 - Production on Thu Feb 23 15:52:30 2017
+
+Copyright (c) 1982, 2011, Oracle and/or its affiliates.  All rights reserved.
+
+UDE-28002: operation generated ORACLE error 28002
+ORA-28002: the password will expire within 7 days
+
+Connected to: Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+Starting "SYSTEM"."SYS_EXPORT_SCHEMA_02":  system/******** directory=db11g dumpfile=db11g.dmp logfile=db11g.log schemas=hr,oe,sh 
+Estimate in progress using BLOCKS method...
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Total estimation using BLOCKS method: 278.9 MB
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SYNONYM/SYNONYM
+Processing object type SCHEMA_EXPORT/TYPE/INC_TYPE
+Processing object type SCHEMA_EXPORT/TYPE/TYPE_SPEC
+Processing object type SCHEMA_EXPORT/TYPE/GRANT/OWNER_GRANT/OBJECT_GRANT
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/XMLSCHEMA/XMLSCHEMA
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/GRANT/OWNER_GRANT/OBJECT_GRANT
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/VIEW/GRANT/OWNER_GRANT/OBJECT_GRANT
+Processing object type SCHEMA_EXPORT/TYPE/TYPE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/TRIGGER
+Processing object type SCHEMA_EXPORT/VIEW/TRIGGER
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/DOMAIN_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/MATERIALIZED_VIEW
+Processing object type SCHEMA_EXPORT/DIMENSION
+. . exported "SH"."CUSTOMERS"                            9.853 MB   55500 rows
+. . exported "SH"."COSTS":"COSTS_Q1_1998"                139.5 KB    4411 rows
+. . exported "SH"."COSTS":"COSTS_Q1_1999"                183.5 KB    5884 rows
+. . exported "SH"."COSTS":"COSTS_Q1_2000"                120.6 KB    3772 rows
+. . exported "SH"."COSTS":"COSTS_Q1_2001"                227.8 KB    7328 rows
+. . exported "SH"."COSTS":"COSTS_Q2_1998"                79.52 KB    2397 rows
+. . exported "SH"."COSTS":"COSTS_Q2_1999"                132.5 KB    4179 rows
+. . exported "SH"."COSTS":"COSTS_Q2_2000"                119.0 KB    3715 rows
+. . exported "SH"."COSTS":"COSTS_Q2_2001"                184.5 KB    5882 rows
+. . exported "SH"."COSTS":"COSTS_Q3_1998"                131.1 KB    4129 rows
+. . exported "SH"."COSTS":"COSTS_Q3_1999"                137.3 KB    4336 rows
+. . exported "SH"."COSTS":"COSTS_Q3_2000"                151.4 KB    4798 rows
+. . exported "SH"."COSTS":"COSTS_Q3_2001"                234.4 KB    7545 rows
+. . exported "SH"."COSTS":"COSTS_Q4_1998"                144.7 KB    4577 rows
+. . exported "SH"."COSTS":"COSTS_Q4_1999"                159.0 KB    5060 rows
+. . exported "SH"."COSTS":"COSTS_Q4_2000"                160.2 KB    5088 rows
+. . exported "SH"."COSTS":"COSTS_Q4_2001"                278.4 KB    9011 rows
+. . exported "SH"."SALES":"SALES_Q1_1998"                1.412 MB   43687 rows
+. . exported "SH"."SALES":"SALES_Q1_1999"                2.071 MB   64186 rows
+. . exported "SH"."SALES":"SALES_Q1_2000"                2.012 MB   62197 rows
+. . exported "SH"."SALES":"SALES_Q1_2001"                1.965 MB   60608 rows
+. . exported "SH"."SALES":"SALES_Q2_1998"                1.160 MB   35758 rows
+. . exported "SH"."SALES":"SALES_Q2_1999"                1.754 MB   54233 rows
+. . exported "SH"."SALES":"SALES_Q2_2000"                1.802 MB   55515 rows
+. . exported "SH"."SALES":"SALES_Q2_2001"                2.051 MB   63292 rows
+. . exported "SH"."SALES":"SALES_Q3_1998"                1.633 MB   50515 rows
+. . exported "SH"."SALES":"SALES_Q3_1999"                2.166 MB   67138 rows
+. . exported "SH"."SALES":"SALES_Q3_2000"                1.909 MB   58950 rows
+. . exported "SH"."SALES":"SALES_Q3_2001"                2.130 MB   65769 rows
+. . exported "SH"."SALES":"SALES_Q4_1998"                1.581 MB   48874 rows
+. . exported "SH"."SALES":"SALES_Q4_1999"                2.014 MB   62388 rows
+. . exported "SH"."SALES":"SALES_Q4_2000"                1.814 MB   55984 rows
+. . exported "SH"."SALES":"SALES_Q4_2001"                2.257 MB   69749 rows
+. . exported "SH"."SUPPLEMENTARY_DEMOGRAPHICS"           697.3 KB    4500 rows
+. . exported "OE"."PRODUCT_DESCRIPTIONS"                 2.379 MB    8640 rows
+ORA-39181: Only partial table data may be exported due to fine grain access control on "OE"."PURCHASEORDER"
+. . exported "OE"."PURCHASEORDER"                        243.9 KB     132 rows
+. . exported "SH"."FWEEK_PSCAT_SALES_MV"                 419.8 KB   11266 rows
+. . exported "SH"."PROMOTIONS"                           58.89 KB     503 rows
+. . exported "SH"."TIMES"                                380.8 KB    1826 rows
+. . exported "OE"."WAREHOUSES"                           12.45 KB       9 rows
+. . exported "OE"."CUSTOMERS"                            77.97 KB     319 rows
+. . exported "OE"."PRODUCT_INFORMATION"                  72.77 KB     288 rows
+. . exported "HR"."COUNTRIES"                            6.367 KB      25 rows
+. . exported "HR"."DEPARTMENTS"                          7.007 KB      27 rows
+. . exported "HR"."EMPLOYEES"                            16.80 KB     107 rows
+. . exported "HR"."JOBS"                                 6.992 KB      19 rows
+. . exported "HR"."JOB_HISTORY"                          7.054 KB      10 rows
+. . exported "HR"."LOCATIONS"                            8.273 KB      23 rows
+. . exported "HR"."REGIONS"                              5.476 KB       4 rows
+. . exported "OE"."CATEGORIES_TAB"                       14.15 KB      22 rows
+. . exported "OE"."SUBCATEGORY_REF_LIST_NESTEDTAB"       6.585 KB      21 rows
+. . exported "OE"."PRODUCT_REF_LIST_NESTEDTAB"           12.50 KB     288 rows
+. . exported "OE"."INVENTORIES"                          21.67 KB    1112 rows
+. . exported "OE"."ORDERS"                               12.38 KB     105 rows
+. . exported "OE"."ORDER_ITEMS"                          20.87 KB     665 rows
+. . exported "OE"."PROMOTIONS"                             5.5 KB       2 rows
+. . exported "SH"."CAL_MONTH_SALES_MV"                   6.312 KB      48 rows
+. . exported "SH"."CHANNELS"                              7.25 KB       5 rows
+. . exported "SH"."COUNTRIES"                            10.20 KB      23 rows
+. . exported "SH"."PRODUCTS"                             26.17 KB      72 rows
+. . exported "SH"."COSTS":"COSTS_1995"                       0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_1996"                       0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_H1_1997"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_H2_1997"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q1_2002"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q1_2003"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q2_2002"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q2_2003"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q3_2002"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q3_2003"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q4_2002"                    0 KB       0 rows
+. . exported "SH"."COSTS":"COSTS_Q4_2003"                    0 KB       0 rows
+. . exported "SH"."DIMENSION_EXCEPTIONS"                     0 KB       0 rows
+. . exported "SH"."SALES":"SALES_1995"                       0 KB       0 rows
+. . exported "SH"."SALES":"SALES_1996"                       0 KB       0 rows
+. . exported "SH"."SALES":"SALES_H1_1997"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_H2_1997"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q1_2002"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q1_2003"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q2_2002"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q2_2003"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q3_2002"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q3_2003"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q4_2002"                    0 KB       0 rows
+. . exported "SH"."SALES":"SALES_Q4_2003"                    0 KB       0 rows
+Master table "SYSTEM"."SYS_EXPORT_SCHEMA_02" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYSTEM.SYS_EXPORT_SCHEMA_02 is:
+  /home/oracle/data/db11g.dmp
+Job "SYSTEM"."SYS_EXPORT_SCHEMA_02" completed with 1 error(s) at Thu Feb 23 15:53:56 2017 elapsed 0 00:01:20
+
+[oracle@host01 data]$ 
+
+
+
++++++++++++++ Create PDBPROD4 from seed and create tablespace / directory:
+
+SQL> conn / as sysdba
+Connected.
+SQL> show con_name
+
+CON_NAME
+------------------------------
+CDB$ROOT
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ ONLY  NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+SQL> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/sysaux01.dbf
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/PDBPROD2_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/example01.dbf
+
+17 rows selected.
+
+SQL> create pluggable database PDBPROD4 admin user admin1 identified by oracle file_name_convert=('pdbseed','PDBPROD4');
+
+Pluggable database created.
+
+SQL> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/sysaux01.dbf
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/PDBPROD2_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/sysaux01.dbf
+
+19 rows selected.
+
+SQL> alter pluggable database PDBPROD4 open;
+
+Pluggable database altered.
+
+SQL> alter session set container=PDBPROD4;
+
+Session altered.
+
+SQL> show con_name;
+
+CON_NAME
+------------------------------
+PDBPROD4
+SQL> create directory db11g as '/home/oracle/data';
+
+Directory created.
+
+SQL> grant read,write,execute on directory db11g to public;
+
+Grant succeeded.
+
+SQL> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/sysaux01.dbf
+
+SQL> create tablespace example datafile '/u01/app/oracle/oradata/PRODCDB/PDBPROD4/example01.dbf' size 400m;
+
+Tablespace created.
+
+SQL> create tablespace users datafile '//u01/app/oracle/oradata/PRODCDB/PDBPROD4/user01.dbf' size 400m;
+
+Tablespace created.
+
+SQL> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/user01.dbf
+
+SQL> 
+
+
++++++++++++++ Connect's setting:
+
+[oracle@host01 ~]$ cd $ORACLE_HOME/network/admin/
+[oracle@host01 admin]$ ls -ltr
+total 20
+-rw-r--r-- 1 oracle oinstall  373 Oct 31  2013 shrept.lst
+drwxr-xr-x 2 oracle oinstall 4096 Oct 22  2015 samples
+-rw-r----- 1 oracle oinstall  346 Oct 22  2015 listener.ora
+-rw-r----- 1 oracle oinstall  202 Oct 22  2015 sqlnet.ora
+-rw-r----- 1 oracle oinstall  929 Dec 21  2015 tnsnames.ora
+[oracle@host01 admin]$ cat listener.ora 
+# listener.ora Network Configuration File: /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+# Generated by Oracle configuration tools.
+
+LISTENER =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+    )
+  )
+
+[oracle@host01 admin]$ cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+
+192.0.2.101	host01.example.com	host01
+192.0.2.102	host02.example.com	host02
+192.0.2.103	host03.example.com	host03
+192.0.2.104	host04.example.com	host04
+[oracle@host01 admin]$ cat tnsnames.ora 
+# tnsnames.ora Network Configuration File: /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/tnsnames.ora
+# Generated by Oracle configuration tools.
+
+LISTENER_PROD5 =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+
+
+LISTENER_PROD4 =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+
+
+PRODCDB =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = PRODCDB.example.com)
+    )
+  )
+
+PROD5 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = PROD5.example.com)
+    )
+  )
+
+PROD4 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = PROD4.example.com)
+    )
+  )
+
+[oracle@host01 admin]$ vi tnsnames.ora
+[oracle@host01 admin]$ diff tnsnames.ora tnsnames.ora.back.lin 
+39,47d38
+< PDBPROD4 =
+<   (DESCRIPTION =
+<     (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+<     (CONNECT_DATA =
+<       (SERVER = DEDICATED)
+<       (SERVICE_NAME = pdbprod4.example.com)
+<     )
+<   )
+< 
+[oracle@host01 admin]$ lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 23-FEB-2017 16:39:49
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host01.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                23-FEB-2017 16:33:51
+Uptime                    0 days 0 hr. 5 min. 58 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host01/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+Services Summary...
+Service "DB11G.example.com" has 1 instance(s).
+  Instance "DB11G", status READY, has 1 handler(s) for this service...
+Service "DB11GXDB.example.com" has 1 instance(s).
+  Instance "DB11G", status READY, has 1 handler(s) for this service...
+Service "PRODCDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "PRODCDBXDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod1.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod2.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod3.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod4.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+The command completed successfully
+[oracle@host01 admin]$ 
+
+[oracle@host01 ~]$ sqlplus system/oracle@pdbprod4
+
+SQL*Plus: Release 12.1.0.2.0 Production on Thu Feb 23 16:40:57 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Last Successful login time: Thu Feb 23 2017 16:39:19 +08:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SQL> show parameter name
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+cell_offloadgroup_name		     string
+db_file_name_convert		     string
+db_name 			     string	 PRODCDB
+db_unique_name			     string	 PRODCDB
+global_names			     boolean	 FALSE
+instance_name			     string	 PRODCDB
+lock_name_space 		     string
+log_file_name_convert		     string
+pdb_file_name_convert		     string
+processor_group_name		     string
+service_names			     string	 PRODCDB.example.com
+SQL> show con_name
+
+CON_NAME
+------------------------------
+PDBPROD4
+SQL> 
+
+
++++++++++++++++ impdp dumpfile into pdbprod4
+
+[oracle@host01 ~]$ cd data
+[oracle@host01 data]$ pwd
+/home/oracle/data
+[oracle@host01 data]$ ls -ltr
+total 49868
+-rw-r----- 1 oracle oinstall 51052544 Feb 23 15:53 db11g.dmp
+-rw-r--r-- 1 oracle oinstall     9874 Feb 23 15:53 db11g.log
+[oracle@host01 data]$ impdp system/oracle@pdbprod4 directory=db11g dumpfile=db11g.dmp;
+
+Import: Release 12.1.0.2.0 - Production on Thu Feb 23 16:42:41 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+UDI-28002: operation generated ORACLE error 28002
+ORA-28002: the password will expire within 7 days
+
+Connected to: Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+Master table "SYSTEM"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYSTEM"."SYS_IMPORT_FULL_01":  system/********@pdbprod4 directory=db11g dumpfile=db11g.dmp 
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01919: role 'CWM_USER' does not exist
+Failing sql is:
+ GRANT "CWM_USER" TO "SH"
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SYNONYM/SYNONYM
+Processing object type SCHEMA_EXPORT/TYPE/INC_TYPE
+Processing object type SCHEMA_EXPORT/TYPE/TYPE_SPEC
+Processing object type SCHEMA_EXPORT/TYPE/GRANT/OWNER_GRANT/OBJECT_GRANT
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/XMLSCHEMA/XMLSCHEMA
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+ORA-39083: Object type TABLE:"SH"."SALES_TRANSACTIONS_EXT" failed to create with error:
+ORA-06564: object DATA_FILE_DIR does not exist
+Failing sql is:
+CREATE TABLE "SH"."SALES_TRANSACTIONS_EXT" ("PROD_ID" NUMBER, "CUST_ID" NUMBER, "TIME_ID" DATE, "CHANNEL_ID" NUMBER, "PROMO_ID" NUMBER, "QUANTITY_SOLD" NUMBER, "AMOUNT_SOLD" NUMBER(10,2), "UNIT_COST" NUMBER(10,2), "UNIT_PRICE" NUMBER(10,2)) ORGANIZATION EXTERNAL ( TYPE ORACLE_LOADER DEFAULT DIRECTORY "DATA_FILE_DIR" ACCESS PARAMETERS ( RECORDS DELIMITED BY NE
+ORA-39151: Table "OE"."PURCHASEORDER" exists. All dependent metadata and data will be skipped due to table_exists_action of skip
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+. . imported "SH"."CUSTOMERS"                            9.853 MB   55500 rows
+. . imported "SH"."COSTS":"COSTS_Q1_1998"                139.5 KB    4411 rows
+. . imported "SH"."COSTS":"COSTS_Q1_1999"                183.5 KB    5884 rows
+. . imported "SH"."COSTS":"COSTS_Q1_2000"                120.6 KB    3772 rows
+. . imported "SH"."COSTS":"COSTS_Q1_2001"                227.8 KB    7328 rows
+. . imported "SH"."COSTS":"COSTS_Q2_1998"                79.52 KB    2397 rows
+. . imported "SH"."COSTS":"COSTS_Q2_1999"                132.5 KB    4179 rows
+. . imported "SH"."COSTS":"COSTS_Q2_2000"                119.0 KB    3715 rows
+. . imported "SH"."COSTS":"COSTS_Q2_2001"                184.5 KB    5882 rows
+. . imported "SH"."COSTS":"COSTS_Q3_1998"                131.1 KB    4129 rows
+. . imported "SH"."COSTS":"COSTS_Q3_1999"                137.3 KB    4336 rows
+. . imported "SH"."COSTS":"COSTS_Q3_2000"                151.4 KB    4798 rows
+. . imported "SH"."COSTS":"COSTS_Q3_2001"                234.4 KB    7545 rows
+. . imported "SH"."COSTS":"COSTS_Q4_1998"                144.7 KB    4577 rows
+. . imported "SH"."COSTS":"COSTS_Q4_1999"                159.0 KB    5060 rows
+. . imported "SH"."COSTS":"COSTS_Q4_2000"                160.2 KB    5088 rows
+. . imported "SH"."COSTS":"COSTS_Q4_2001"                278.4 KB    9011 rows
+. . imported "SH"."SALES":"SALES_Q1_1998"                1.412 MB   43687 rows
+. . imported "SH"."SALES":"SALES_Q1_1999"                2.071 MB   64186 rows
+. . imported "SH"."SALES":"SALES_Q1_2000"                2.012 MB   62197 rows
+. . imported "SH"."SALES":"SALES_Q1_2001"                1.965 MB   60608 rows
+. . imported "SH"."SALES":"SALES_Q2_1998"                1.160 MB   35758 rows
+. . imported "SH"."SALES":"SALES_Q2_1999"                1.754 MB   54233 rows
+. . imported "SH"."SALES":"SALES_Q2_2000"                1.802 MB   55515 rows
+. . imported "SH"."SALES":"SALES_Q2_2001"                2.051 MB   63292 rows
+. . imported "SH"."SALES":"SALES_Q3_1998"                1.633 MB   50515 rows
+. . imported "SH"."SALES":"SALES_Q3_1999"                2.166 MB   67138 rows
+. . imported "SH"."SALES":"SALES_Q3_2000"                1.909 MB   58950 rows
+. . imported "SH"."SALES":"SALES_Q3_2001"                2.130 MB   65769 rows
+. . imported "SH"."SALES":"SALES_Q4_1998"                1.581 MB   48874 rows
+. . imported "SH"."SALES":"SALES_Q4_1999"                2.014 MB   62388 rows
+. . imported "SH"."SALES":"SALES_Q4_2000"                1.814 MB   55984 rows
+. . imported "SH"."SALES":"SALES_Q4_2001"                2.257 MB   69749 rows
+. . imported "SH"."SUPPLEMENTARY_DEMOGRAPHICS"           697.3 KB    4500 rows
+. . imported "OE"."PRODUCT_DESCRIPTIONS"                 2.379 MB    8640 rows
+. . imported "SH"."FWEEK_PSCAT_SALES_MV"                 419.8 KB   11266 rows
+. . imported "SH"."PROMOTIONS"                           58.89 KB     503 rows
+. . imported "SH"."TIMES"                                380.8 KB    1826 rows
+. . imported "OE"."WAREHOUSES"                           12.45 KB       9 rows
+. . imported "OE"."CUSTOMERS"                            77.97 KB     319 rows
+. . imported "OE"."PRODUCT_INFORMATION"                  72.77 KB     288 rows
+. . imported "HR"."COUNTRIES"                            6.367 KB      25 rows
+. . imported "HR"."DEPARTMENTS"                          7.007 KB      27 rows
+. . imported "HR"."EMPLOYEES"                            16.80 KB     107 rows
+. . imported "HR"."JOBS"                                 6.992 KB      19 rows
+. . imported "HR"."JOB_HISTORY"                          7.054 KB      10 rows
+. . imported "HR"."LOCATIONS"                            8.273 KB      23 rows
+. . imported "HR"."REGIONS"                              5.476 KB       4 rows
+. . imported "OE"."CATEGORIES_TAB"                       14.15 KB      22 rows
+. . imported "OE"."SUBCATEGORY_REF_LIST_NESTEDTAB"       6.585 KB      21 rows
+. . imported "OE"."PRODUCT_REF_LIST_NESTEDTAB"           12.50 KB     288 rows
+. . imported "OE"."INVENTORIES"                          21.67 KB    1112 rows
+. . imported "OE"."ORDERS"                               12.38 KB     105 rows
+. . imported "OE"."ORDER_ITEMS"                          20.87 KB     665 rows
+. . imported "OE"."PROMOTIONS"                             5.5 KB       2 rows
+. . imported "SH"."CAL_MONTH_SALES_MV"                   6.312 KB      48 rows
+. . imported "SH"."CHANNELS"                              7.25 KB       5 rows
+. . imported "SH"."COUNTRIES"                            10.20 KB      23 rows
+. . imported "SH"."PRODUCTS"                             26.17 KB      72 rows
+. . imported "SH"."COSTS":"COSTS_1995"                       0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_1996"                       0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_H1_1997"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_H2_1997"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q1_2002"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q1_2003"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q2_2002"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q2_2003"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q3_2002"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q3_2003"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q4_2002"                    0 KB       0 rows
+. . imported "SH"."COSTS":"COSTS_Q4_2003"                    0 KB       0 rows
+. . imported "SH"."DIMENSION_EXCEPTIONS"                     0 KB       0 rows
+. . imported "SH"."SALES":"SALES_1995"                       0 KB       0 rows
+. . imported "SH"."SALES":"SALES_1996"                       0 KB       0 rows
+. . imported "SH"."SALES":"SALES_H1_1997"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_H2_1997"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q1_2002"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q1_2003"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q2_2002"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q2_2003"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q3_2002"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q3_2003"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q4_2002"                    0 KB       0 rows
+. . imported "SH"."SALES":"SALES_Q4_2003"                    0 KB       0 rows
+Processing object type SCHEMA_EXPORT/TABLE/GRANT/OWNER_GRANT/OBJECT_GRANT
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."PROMOTIONS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."CUSTOMERS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."CUSTOMERS" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."WAREHOUSES" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."WAREHOUSES" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."ORDERS" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."ORDERS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."ORDER_ITEMS" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."ORDER_ITEMS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."INVENTORIES" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."INVENTORIES" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."PRODUCT_INFORMATION" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT REFERENCES ON "OE"."PRODUCT_INFORMATION" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."PRODUCT_INFORMATION" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'PM' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."PRODUCT_DESCRIPTIONS" TO "PM"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."PRODUCT_DESCRIPTIONS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."COSTS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."SALES" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."FWEEK_PSCAT_SALES_MV" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."CAL_MONTH_SALES_MV" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."COUNTRIES" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."CUSTOMERS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."PROMOTIONS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."PRODUCTS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."TIMES" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "SH"."CHANNELS" TO "BI"
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+ORA-39083: Object type INDEX_STATISTICS failed to create with error:
+ORA-20000: INDEX "OE"."LINEITEM_TABLE_MEMBERS" does not exist or insufficient privileges
+Failing sql is:
+DECLARE I_N VARCHAR2(60);   I_O VARCHAR2(60);   NV VARCHAR2(1);   c DBMS_METADATA.T_VAR_COLL;   df varchar2(21) := 'YYYY-MM-DD:HH24:MI:SS';  stmt varchar2(300) := ' INSERT INTO "SYS"."IMPDP_STATS" (type,version,flags,c1,c2,c3,c5,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,d1,cl1) VALUES (''I'',6,:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11,:12,:13,NUL
+ORA-39083: Object type INDEX_STATISTICS failed to create with error:
+ORA-20000: INDEX "OE"."ACTION_TABLE_MEMBERS" does not exist or insufficient privileges
+Failing sql is:
+DECLARE I_N VARCHAR2(60);   I_O VARCHAR2(60);   NV VARCHAR2(1);   c DBMS_METADATA.T_VAR_COLL;   df varchar2(21) := 'YYYY-MM-DD:HH24:MI:SS';  stmt varchar2(300) := ' INSERT INTO "SYS"."IMPDP_STATS" (type,version,flags,c1,c2,c3,c5,n1,n2,n3,n4,n5,n6,n7,n8,n9,n10,n11,n12,d1,cl1) VALUES (''I'',6,:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11,:12,:13,NULL,
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/VIEW/GRANT/OWNER_GRANT/OBJECT_GRANT
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."PRODUCTS" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."SYDNEY_INVENTORY" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."BOMBAY_INVENTORY" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."TORONTO_INVENTORY" TO "BI"
+ORA-39083: Object type OBJECT_GRANT failed to create with error:
+ORA-01917: user or role 'BI' does not exist
+Failing sql is:
+GRANT SELECT ON "OE"."PRODUCT_PRICES" TO "BI"
+Processing object type SCHEMA_EXPORT/TYPE/TYPE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/TRIGGER
+Processing object type SCHEMA_EXPORT/VIEW/TRIGGER
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/DOMAIN_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/MATERIALIZED_VIEW
+Processing object type SCHEMA_EXPORT/DIMENSION
+Job "SYSTEM"."SYS_IMPORT_FULL_01" completed with 36 error(s) at Thu Feb 23 16:44:53 2017 elapsed 0 00:02:05
+
+[oracle@host01 data]$ 
+
+
+（2）Create PROD4 of non-CDB database copies as PDBPROD5 pluggable database in PRODCDB container database.
+
+
+Database Administrator’s Guide/38 Creating and Removing PDBs with SQL*Plus/Cloning a Remote PDB or Non-CDB
+
+Example 38-25 Creating a PDB by Cloning a Remote PDB Using No Clauses
+
++++++++++++++++ Open PROD4  read only
+
+[oracle@host01 ~]$ ps -ef | grep -i smon | grep -v grep
+oracle     3948      1  0 08:05 ?        00:00:00 ora_smon_PRODCDB
+oracle     4344      1  0 08:14 ?        00:00:02 ora_smon_DB11G
+[oracle@host01 ~]$ ls -ltr /u01/app/oracle/oradata
+total 16
+drwxr-x--- 2 oracle oinstall 4096 Oct 23  2015 DB11G
+drwxr-x--- 2 oracle oinstall 4096 Oct 23  2015 PROD4
+drwxr-x--- 2 oracle oinstall 4096 Oct 23  2015 PROD5
+drwxr-x--- 7 oracle oinstall 4096 Feb 23 16:16 PRODCDB
+[oracle@host01 ~]$ export ORACLE_SID=PROD4;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Feb 24 09:58:58 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> startup mount;
+ORACLE instance started.
+
+Total System Global Area  524288000 bytes
+Fixed Size		    2926320 bytes
+Variable Size		  440404240 bytes
+Database Buffers	   75497472 bytes
+Redo Buffers		    5459968 bytes
+Database mounted.
+SQL> alter database open read only;
+
+Database altered.
+
+SQL> select open_mode from v$database;
+
+OPEN_MODE
+--------------------
+READ ONLY
+
+SQL> 
+SQL> alter system register;
+
+System altered.
+
+SQL> 
+
+test
+[oracle@host01 ~]$ sqlplus sys/oracle@prod4 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Feb 24 10:03:30 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SQL> select name,open_mode from v$database;
+
+NAME	  OPEN_MODE
+--------- --------------------
+PROD4	  READ ONLY
+
+SQL> 
+
+
+
++++++++++++++++ create public db link;
+[oracle@host01 ~]$ export ORACLE_SID=PROD4;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Feb 24 10:44:04 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> shu immediate;
+ERROR:
+ORA-01034: ORACLE not available
+ORA-27101: shared memory realm does not exist
+Linux-x86_64 Error: 2: No such file or directory
+Additional information: 3640
+Additional information: -2052371329
+Process ID: 0
+Session ID: 0 Serial number: 0
+
+
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area  524288000 bytes
+Fixed Size		    2926320 bytes
+Variable Size		  440404240 bytes
+Database Buffers	   75497472 bytes
+Redo Buffers		    5459968 bytes
+Database mounted.
+Database opened.
+SQL> alter user system identified by oracle account unlock;
+
+User altered.
+
+SQL> alter system register;
+
+System altered.
+
+SQL> exit
+
++++
+
+[oracle@host01 ~]$ export ORACLE_SID=PRODCDB;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Feb 24 10:39:15 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SQL> select name,open_mode from v$database;
+
+NAME	  OPEN_MODE
+--------- --------------------
+PRODCDB   READ WRITE
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ ONLY  NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+SQL> create public database link prod4 connect to system identified by oracle using 'PROD4';
+
+Database link created.
+
+SQL>
+
+[oracle@host01 ~]$ export ORACLE_SID=PRODCDB;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Fri Feb 24 10:46:11 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SQL> select sysdate from dual@prod4;
+
+SYSDATE
+---------
+24-FEB-17
+
+SQL> select name,open_mode from v$database;
+
+NAME	  OPEN_MODE
+--------- --------------------
+PRODCDB   READ WRITE
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ ONLY  NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+SQL> 
+
+!ls -ltr /u01/app/oracle/oradata
+
+select name from v$datafile;
+
+create pluggable database PDBPROD5 from non$cdb$PROD4 file_name_convert=('/u01/app/oracle/oradata/PROD4/','/u01/app/oracle/oradata/PRODCDB/PDBPROD5/');
+
+alter pluggable database PDBPROD5 open;
+
+-->warning error.
+
+@$ORACLE_HOME/rdbms/admin/noncdb_to_pdb.sql
+
+...........
+
+PL/SQL procedure successfully completed.
+
+SQL> 
+SQL> WHENEVER SQLERROR CONTINUE;
+SQL>  
+SQL> show pdbs;
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         7 PDBPROD5                       READ WRITE YES
+SQL> shu immediate;
+Pluggable Database closed.
+SQL> startup
+Pluggable Database opened.
+SQL> show pdbs;
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         7 PDBPROD5                       READ WRITE NO
+SQL> 
+
+
+3.Create the following users:
+
+（1）Use the following descriptions to create a user USER1：
+
+In PDBPROD1, PDBPROD2, PDBPROD3, PDBPROD4, PDBPROD5 in USER1 should have the same identity.
+
+In the PDB PRODCDB later created, USER1 should have the same identity.
+
+
+SQL> show parameter prefix
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+common_user_prefix                   string      C##
+os_authent_prefix                    string      ops$
+SQL> alter system set common_user_prefix='' scope=spfile;
+
+System altered.
+
+SQL> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size                  2929936 bytes
+Variable Size             570428144 bytes
+Database Buffers          260046848 bytes
+Redo Buffers                5455872 bytes
+Database mounted.
+Database opened.
+SQL> show pdbs;
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 PDBPROD1                       MOUNTED
+         4 PDBPROD2                       MOUNTED
+         5 PDBPROD3                       READ WRITE NO
+         6 PDBPROD4                       MOUNTED
+         7 PDBPROD5                       MOUNTED
+SQL> alter pluggable database all open;
+
+Pluggable database altered.
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 PDBPROD1                       READ WRITE NO
+         4 PDBPROD2                       READ WRITE NO
+         5 PDBPROD3                       READ WRITE NO
+         6 PDBPROD4                       READ WRITE NO
+         7 PDBPROD5                       READ WRITE NO
+SQL> 
+
+
+SQL> show parameter prefix
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+common_user_prefix                   string
+os_authent_prefix                    string      ops$
+SQL> create user user1 identified by oracle container=all;
+
+User created.
+
+SQL> col username for a40
+
+SQL> select username,common,con_id from cdb_users where username like 'USER%';
+
+USERNAME                                 COM     CON_ID
+---------------------------------------- --- ----------
+USER1                                    YES          1
+USER1                                    YES          4
+USER1                                    YES          7
+USER1                                    YES          3
+USER1                                    YES          6
+USER1                                    YES          5
+
+6 rows selected.
+
+SQL> 
+
+
+
+
+
+
+（2）Create only defined the user USER2 in PDBPROD1
+
+SQL> show pdbs;
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 PDBPROD1                       READ WRITE NO
+         4 PDBPROD2                       READ WRITE NO
+         5 PDBPROD3                       READ WRITE NO
+         6 PDBPROD4                       READ WRITE NO
+         7 PDBPROD5                       READ WRITE NO
+SQL> alter session set container=PDBPROD1;
+
+Session altered.
+
+SQL>    
+  
+SQL> create user user2 identified by oracle;
+
+User created.
+
+SQL>
+SQL> select username,common from dba_users where username like 'USER%';
+
+USERNAME                                 COM
+---------------------------------------- ---
+USER2                                    NO
+USER1                                    YES
+
+2 rows selected.
+
+SQL> 
+
+
+
+4.Create the following roles:
+
+（1）Use the following descriptions to create a role called ROLE1:
+
+You should be granted to all users in the PDB of PRODCDB container database
+
+ROLE1 there should also be created in the future in the PDB
+
+
+SYS@PRODCDB> desc cdb_roles;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLE					   NOT NULL VARCHAR2(128)
+ PASSWORD_REQUIRED				    VARCHAR2(8)
+ AUTHENTICATION_TYPE				    VARCHAR2(11)
+ COMMON 					    VARCHAR2(3)
+ ORACLE_MAINTAINED				    VARCHAR2(1)
+ CON_ID 					    NUMBER
+
+SYS@PRODCDB> col role format a20
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  MOUNTED
+	 7 PDBPROD5			  MOUNTED
+SYS@PRODCDB> alter pluggable database all open;
+
+Pluggable database altered.
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> create role role1 container=all;
+
+Role created.
+
+SYS@PRODCDB> select role,common,con_id from cdb_roles where role like 'ROLE1%';
+
+ROLE		     COM     CON_ID
+-------------------- --- ----------
+ROLE1		     YES	  1
+ROLE1		     YES	  3
+ROLE1		     YES	  5
+ROLE1		     YES	  4
+ROLE1		     YES	  6
+ROLE1		     YES	  7
+
+6 rows selected.
+
+SYS@PRODCDB> 
+
+
+
+（2）Create a role name is ROLE2, it can only be granted to PDBPROD1 in the PRODCDB
+
+SYS@PRODCDB> show pdbs 
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> alter session set container=PDBPROD1;
+
+Session altered.
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 3 PDBPROD1			  READ WRITE NO
+SYS@PRODCDB> create role role2;
+
+Role created.
+
+SYS@PRODCDB> desc dba_roles;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLE					   NOT NULL VARCHAR2(128)
+ PASSWORD_REQUIRED				    VARCHAR2(8)
+ AUTHENTICATION_TYPE				    VARCHAR2(11)
+ COMMON 					    VARCHAR2(3)
+ ORACLE_MAINTAINED				    VARCHAR2(1)
+
+SYS@PRODCDB> col role format a20 
+SYS@PRODCDB> select role,common from dba_roles where role like 'ROLE%';
+
+ROLE		     COM
+-------------------- ---
+ROLE1		     YES
+ROLE2		     NO
+
+SYS@PRODCDB> spool off
+SYS@PRODCDB> 
+
+
+
+5.The following description, grant privileges and roles to users and roles:
+
+（1）USER1 can connect to grant access to all current and future container database. Do not grant additional other privileges
+
+（2）USER2 can grant privileges to connect only PDBPROD1 container database. Do not grant additional other privileges
+
+（3）ROLE1 can grant privileges to create stored procedures, so that this privileges can be granted to all PDB in PRODCDB
+
+SYS@PRODCDB> spool skillset01-05_role.txt
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 3 PDBPROD1			  READ WRITE NO
+SYS@PRODCDB> conn / as sysdba
+Connected.
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> desc cdb_sys_privs;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ GRANTEE					    VARCHAR2(128)
+ PRIVILEGE					    VARCHAR2(40)
+ ADMIN_OPTION					    VARCHAR2(3)
+ COMMON 					    VARCHAR2(3)
+ CON_ID 					    NUMBER
+
+SYS@PRODCDB> select * from cdb_sys_privs where grantee like 'USER%';
+
+no rows selected
+
+SYS@PRODCDB> grant create session to user1 container=all;
+
+Grant succeeded.
+
+SYS@PRODCDB> select * from cdb_sys_privs where grantee like 'USER%';
+
+GRANTEE
+--------------------------------------------------------------------------------
+PRIVILEGE				 ADM COM     CON_ID
+---------------------------------------- --- --- ----------
+USER1
+CREATE SESSION				 NO  YES	  1
+
+USER1
+CREATE SESSION				 NO  YES	  6
+
+USER1
+CREATE SESSION				 NO  YES	  3
+
+
+GRANTEE
+--------------------------------------------------------------------------------
+PRIVILEGE				 ADM COM     CON_ID
+---------------------------------------- --- --- ----------
+USER1
+CREATE SESSION				 NO  YES	  7
+
+USER1
+CREATE SESSION				 NO  YES	  4
+
+USER1
+CREATE SESSION				 NO  YES	  5
+
+
+6 rows selected.
+
+SYS@PRODCDB> col grantee format a20
+SYS@PRODCDB> select * from cdb_sys_privs where grantee like 'USER%';
+
+GRANTEE 	     PRIVILEGE				      ADM COM	  CON_ID
+-------------------- ---------------------------------------- --- --- ----------
+USER1		     CREATE SESSION			      NO  YES	       5
+USER1		     CREATE SESSION			      NO  YES	       4
+USER1		     CREATE SESSION			      NO  YES	       3
+USER1		     CREATE SESSION			      NO  YES	       1
+USER1		     CREATE SESSION			      NO  YES	       7
+USER1		     CREATE SESSION			      NO  YES	       6
+
+6 rows selected.
+
+SYS@PRODCDB> alter session set container=PDBPROD1;
+
+Session altered.
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 3 PDBPROD1			  READ WRITE NO
+SYS@PRODCDB> select * from cdb_sys_privs where grantee like 'USER%'
+  2  ;
+
+GRANTEE 	     PRIVILEGE				      ADM COM	  CON_ID
+-------------------- ---------------------------------------- --- --- ----------
+USER1		     CREATE SESSION			      NO  YES	       3
+
+SYS@PRODCDB> grant create session to user2;
+
+Grant succeeded.
+
+SYS@PRODCDB> select * from cdb_sys_privs where grantee like 'USER%';
+
+GRANTEE 	     PRIVILEGE				      ADM COM	  CON_ID
+-------------------- ---------------------------------------- --- --- ----------
+USER2		     CREATE SESSION			      NO  NO	       3
+USER1		     CREATE SESSION			      NO  YES	       3
+
+SYS@PRODCDB> 
+SYS@PRODCDB> conn / as sysdba
+Connected.
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> select * from cdb_sys_privs where grantee like 'USER%';
+
+GRANTEE 	     PRIVILEGE				      ADM COM	  CON_ID
+-------------------- ---------------------------------------- --- --- ----------
+USER1		     CREATE SESSION			      NO  YES	       5
+USER1		     CREATE SESSION			      NO  YES	       4
+USER1		     CREATE SESSION			      NO  YES	       1
+USER1		     CREATE SESSION			      NO  YES	       7
+USER1		     CREATE SESSION			      NO  YES	       6
+USER2		     CREATE SESSION			      NO  NO	       3
+USER1		     CREATE SESSION			      NO  YES	       3
+
+7 rows selected.
+
+SYS@PRODCDB> grant create procedure to role1 container=all;
+
+Grant succeeded.
+
+SYS@PRODCDB> select * from cdb_sys_privs where grantee like 'USER%';
+
+GRANTEE 	     PRIVILEGE				      ADM COM	  CON_ID
+-------------------- ---------------------------------------- --- --- ----------
+USER1		     CREATE SESSION			      NO  YES	       7
+USER1		     CREATE SESSION			      NO  YES	       6
+USER1		     CREATE SESSION			      NO  YES	       4
+USER1		     CREATE SESSION			      NO  YES	       5
+USER1		     CREATE SESSION			      NO  YES	       1
+USER2		     CREATE SESSION			      NO  NO	       3
+USER1		     CREATE SESSION			      NO  YES	       3
+
+7 rows selected.
+
+SYS@PRODCDB> desc role_sys_privs
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ROLE						    VARCHAR2(128)
+ PRIVILEGE					    VARCHAR2(40)
+ ADMIN_OPTION					    VARCHAR2(3)
+ COMMON 					    VARCHAR2(3)
+
+SYS@PRODCDB> col role format a20
+SYS@PRODCDB> select * from role_sys_privs where role like 'ROLE%';
+
+ROLE		     PRIVILEGE				      ADM COM
+-------------------- ---------------------------------------- --- ---
+ROLE1		     CREATE PROCEDURE			      NO  YES
+
+SYS@PRODCDB> 
+
+
+Section 2：Configuring OEM Express
+
+1.Configure OEM Express to PRODCDB, using the http protocol, port 5501
+
+Oracle Database Online Documentation 12c Release 1 (12.1) / Database Administration 
+37 Creating and Configuring a CDB
+Configuring EM Express for a CDB
+
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> desc dbms_xdb_config
+PROCEDURE ADDAUTHENTICATIONMAPPING
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ PATTERN			VARCHAR2		IN
+ NAME				VARCHAR2		IN
+ USER_PREFIX			VARCHAR2		IN     DEFAULT
+ ON_DENY			NUMBER			IN     DEFAULT
+~
+
+
+SYS@PRODCDB> 
+SYS@PRODCDB> spool skillset01_02_em.txt
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> set pagesize 1000    
+SYS@PRODCDB> desc dbms_xdb_config
+PROCEDURE ADDAUTHENTICATIONMAPPING
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ PATTERN			VARCHAR2		IN
+ NAME				VARCHAR2		IN
+ USER_PREFIX			VARCHAR2		IN     DEFAULT
+ ON_DENY			NUMBER			IN     DEFAULT
+PROCEDURE ADDAUTHENTICATIONMETHOD
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ NAME				VARCHAR2		IN
+ DESCRIPTION			VARCHAR2		IN
+ IMPLEMENT_SCHEMA		VARCHAR2		IN
+ IMPLEMENT_METHOD		VARCHAR2		IN
+ LANGUAGE			VARCHAR2		IN     DEFAULT
+
+~~
+~~
+
+PROCEDURE SETFTPPORT
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ NEW_PORT			NUMBER			IN
+PROCEDURE SETHTTPCONFIGREALM
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ REALM				VARCHAR2		IN
+PROCEDURE SETHTTPPORT
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ NEW_PORT			NUMBER			IN
+PROCEDURE SETHTTPSPORT
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ NEW_PORT			NUMBER			IN
+PROCEDURE SETLISTENERENDPOINT
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ ENDPOINT			NUMBER			IN
+ HOST				VARCHAR2		IN
+ PORT				NUMBER			IN
+ PROTOCOL			NUMBER			IN
+PROCEDURE SETLISTENERLOCALACCESS
+ Argument Name			Type			In/Out Default?
+ ------------------------------ ----------------------- ------ --------
+ L_ACCESS			BOOLEAN 		IN
+FUNCTION USEDPORT RETURNS XMLTYPE
+
+SYS@PRODCDB> 
+SYS@PRODCDB> !lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 27-FEB-2017 11:49:57
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host01.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                27-FEB-2017 10:54:55
+Uptime                    0 days 0 hr. 55 min. 2 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host01/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+Services Summary...
+Service "PRODCDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "PRODCDBXDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod1.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod2.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod3.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod4.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod5.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+SYS@PRODCDB> 
+SYS@PRODCDB> exec dbms_xdb_config.SETHTTPPORT(5501);
+
+PL/SQL procedure successfully completed.
+
+SYS@PRODCDB> !lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 27-FEB-2017 11:51:22
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host01.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                27-FEB-2017 10:54:55
+Uptime                    0 days 0 hr. 56 min. 27 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host01/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=5501))(Presentation=HTTP)(Session=RAW))
+Services Summary...
+Service "PRODCDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "PRODCDBXDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod1.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod2.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod3.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod4.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod5.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+SYS@PRODCDB> show parameter dispatchers
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+dispatchers			     string	 (PROTOCOL=TCP) (SERVICE=PRODCD
+						 BXDB)
+max_dispatchers 		     integer
+SYS@PRODCDB> 
+
+
+http://host01.example.com:5501/em/login
+
+sys/oracle 
+
+as sysdba
+
+Section 3：Server and client network configuration
+
+1.Configuring the alias of PDBPROD1, PDBPROD2, PDBPROD3, PDBPROD4, PDBPROD5, EMREP, using the default listener, port 1521
+
+host02:
+
+[oracle@host02 ~]$ cat .bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+[oracle@host02 ~]$ cat .bash_rc
+cat: .bash_rc: No such file or directory
+[oracle@host02 ~]$ cat .bashrc
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific aliases and functions
+[oracle@host02 ~]$ cd /u01/app/oracle
+[oracle@host02 oracle]$ ls 
+admin  audit  cfgtoollogs  checkpoints  diag  fast_recovery_area  oradata  product
+[oracle@host02 oracle]$ cd product/
+[oracle@host02 product]$ ls -ltr
+total 12
+drwxr-xr-x 3 oracle oinstall 4096 Oct 22  2015 12.1.0
+drwxr-xr-x 5 oracle oinstall 4096 Oct 23  2015 middleware
+drwxr-xr-x 6 oracle oinstall 4096 Oct 23  2015 agent12c
+[oracle@host02 product]$ cd 12.1.0/
+[oracle@host02 12.1.0]$ ls -ltr
+total 4
+drwxr-xr-x 71 oracle oinstall 4096 Dec 21  2015 dbhome_1
+[oracle@host02 12.1.0]$ cd dbhome_1/
+[oracle@host02 dbhome_1]$ pwd
+/u01/app/oracle/product/12.1.0/dbhome_1
+[oracle@host02 dbhome_1]$ 
+[oracle@host02 dbhome_1]$ 
+[oracle@host02 dbhome_1]$ 
+[oracle@host02 dbhome_1]$ 
+[oracle@host02 dbhome_1]$ cd
+[oracle@host02 ~]$ pwd
+/home/oracle
+[oracle@host02 ~]$ vi .bash_profile
+[oracle@host02 ~]$ 
+[oracle@host02 ~]$ 
+[oracle@host02 ~]$ ls -ltr /u01/app/oracle/oradata
+total 4
+drwxr-x--- 2 oracle oinstall 4096 Oct 23  2015 EMREP
+[oracle@host02 ~]$ vi .bash_profile
+[oracle@host02 ~]$ cat .bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
+
+export ORACLE_BASE=/u01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/12.1.0/dbhome_1
+#export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
+export PATH=$ORACLE_HOME/bin:$PATH
+
+export ORACLE_SID=EMREP
+#export ORACLE_SID=PDBCDB
+#export ORACLE_SID=DB11G
+
+set -o vi
+
+[oracle@host02 ~]$ source .bash_profile
+[oracle@host02 ~]$ export ORACLE_SID=EMREP;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:19:34 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area 2147483648 bytes
+Fixed Size		    2926472 bytes
+Variable Size		  805308536 bytes
+Database Buffers	 1325400064 bytes
+Redo Buffers		   13848576 bytes
+Database mounted.
+Database opened.
+SQL> !lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 27-FEB-2017 12:20:09
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host02.example.com)(PORT=1521)))
+TNS-12541: TNS:no listener
+ TNS-12560: TNS:protocol adapter error
+  TNS-00511: No listener
+   Linux Error: 111: Connection refused
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=IPC)(KEY=EXTPROC1521)))
+TNS-12541: TNS:no listener
+ TNS-12560: TNS:protocol adapter error
+  TNS-00511: No listener
+   Linux Error: 111: Connection refused
+
+SQL> !lsnrctl start
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 27-FEB-2017 12:20:15
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Starting /u01/app/oracle/product/12.1.0/dbhome_1/bin/tnslsnr: please wait...
+
+TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+System parameter file is /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Log messages written to /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host02.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                27-FEB-2017 12:20:20
+Uptime                    0 days 0 hr. 0 min. 2 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+The listener supports no services
+The command completed successfully
+
+SQL> alter system register;
+
+System altered.
+
+SQL> !lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 27-FEB-2017 12:20:33
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host02.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                27-FEB-2017 12:20:20
+Uptime                    0 days 0 hr. 0 min. 14 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+Services Summary...
+Service "EMREP.example.com" has 1 instance(s).
+  Instance "EMREP", status READY, has 1 handler(s) for this service...
+Service "EMREPXDB.example.com" has 1 instance(s).
+  Instance "EMREP", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+SQL> show parameter service
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+service_names			     string	 EMREP.example.com
+SQL> 
+
+
+host01:
+
+[oracle@host01 ~]$ sqlplus sys/oracle@host02.example.com:1521/EMREP.example.com as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:21:57 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@host02.example.com:1521/EMREP.example.com> 
+
+host01:
+
+[oracle@host01 ~]$ cd $ORACLE_HOME/network/admin
+[oracle@host01 admin]$ pwd
+/u01/app/oracle/product/12.1.0/dbhome_1/network/admin
+[oracle@host01 admin]$ cp tnsnames.ora tnsnames.ora.skillset01_sec03
+[oracle@host01 admin]$ vi tnsnames.ora
+[oracle@host01 admin]$ 
+[oracle@host01 admin]$ cat tnsnames.ora
+# tnsnames.ora Network Configuration File: /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/tnsnames.ora
+# Generated by Oracle configuration tools.
+
+LISTENER_PROD5 =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+
+
+LISTENER_PROD4 =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+
+
+PRODCDB =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = PRODCDB.example.com)
+    )
+  )
+
+PROD5 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = PROD5.example.com)
+    )
+  )
+
+PROD4 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = PROD4.example.com)
+    )
+  )
+
+PDBPROD4 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = pdbprod4.example.com)
+    )
+  )
+
+PDBPROD1 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = pdbprod1.example.com)
+    )
+  )
+
+PDBPROD2 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = pdbprod2.example.com)
+    )
+  )
+
+PDBPROD3 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = pdbprod3.example.com)
+    )
+  )
+
+PDBPROD5 =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = pdbprod5.example.com)
+    )
+  )
+
+EMREP =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = host02.example.com)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = EMREP.example.com)
+    )
+  )
+
+[oracle@host01 admin]$ 
+
+[oracle@host01 admin]$ sqlplus sys/oracle@pdbprod1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:25:05 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@pdbprod1> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 admin]$ sqlplus sys/oracle@pdbprod2 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:25:10 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@pdbprod2> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 admin]$ sqlplus sys/oracle@pdbprod3 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:25:14 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@pdbprod3> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 admin]$ sqlplus sys/oracle@pdbprod4 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:25:18 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SYS@pdbprod4> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+[oracle@host01 admin]$ sqlplus sys/oracle@pdbprod5 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:25:22 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@pdbprod5> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 admin]$ sqlplus sys/oracle@emrep as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:25:28 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@emrep>
+
+Section 4： Configuration container database
+
+1.Configuration the PRODCDB container database, diagnostic information is stored in ORACLE_HOME
+
+2.In PRODCDB container database, configure minimize Redo generated when DML operations on a global temporary tables.
+
+3.In PDBPROD2, create a permanent table space to store the sample data. Use the following description:
+
+Table space name: BIG_TBS
+
+The initial file size is 500m, it can be extended to 1TB
+
+
+
+[oracle@host01 admin]$ 
+[oracle@host01 admin]$ export ORACLE_SID=PRODCDB;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 12:04:20 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PRODCDB> show parameter diag
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+diagnostic_dest 		     string	 /u01/app/oracle
+SYS@PRODCDB> !echo $ORACLE_HOME 
+/u01/app/oracle/product/12.1.0/dbhome_1
+
+SYS@PRODCDB> alter system set diagnostic_dest='/u01/app/oracle/product/12.1.0/dbhome_1';
+
+System altered.
+
+SYS@PRODCDB> show parameter diag
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+diagnostic_dest 		     string	 /u01/app/oracle/product/12.1.0
+						 /dbhome_1
+SYS@PRODCDB> 
+
+SYS@PRODCDB> alter system set temp_undo_enabled=true;
+
+System altered.
+
+SYS@PRODCDB> show parameter temp
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+sec_max_failed_login_attempts	     integer	 3
+temp_undo_enabled		     boolean	 TRUE
+SYS@PRODCDB> 
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> alter session set container=PDBPROD2;
+
+Session altered.
+
+SYS@PRODCDB> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/PDBPROD2_users01.dbf
+
+SYS@PRODCDB> create bigfile tablespace BIG_TBS datafile '/u01/app/oracle/oradata/PRODCDB/PDBPROD2/big_tbs.dbf' size 500m autoextend on maxsize 1T;
+
+Tablespace created.
+
+SYS@PRODCDB> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/PDBPROD2_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/big_tbs.dbf
+
+SYS@PRODCDB> 
+
+
+
+Section 5： backup and availability
+
+1.Create a third copy of the control file of PRODCDB container database, in the directory of $ORACLE_HOME/dbs/
+
+2.Connect EMREP database to access the Catalog database. catalog owner is rc_admin, password RC_ADMIN
+
+ensure compatible of Rman catalog with 12c
+
+Registration PRODCDB, PROD4 and PROD5 in the catalog
+
+3.Backup PRODCDB container database and all pluggable databases
+
+4.Backup the SYSAUX tablespace in PDBPROD1, and can be retained for a long time. Serial backup performance problems, please resolve, each backup piece 100m
+
+
+
+SYS@PRODCDB> show parameter control	
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+control_file_record_keep_time	     integer	 7
+control_files			     string	 /u01/app/oracle/oradata/PRODCD
+						 B/control01.ctl, /u01/app/orac
+						 le/fast_recovery_area/PRODCDB/
+						 control02.ctl
+control_management_pack_access	     string	 DIAGNOSTIC+TUNING
+SYS@PRODCDB> alter system set control_files='/u01/app/oracle/oradata/PRODCDB/control01.ctl','/u01/app/oracle/fast_recovery_area/PRODCDB/control02.ctl','/u01/app/oracle/product/12.1.0/dbhome_1/dbs/control03.ctl' scope=spfile;
+
+System altered.
+
+SYS@PRODCDB> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SYS@PRODCDB> !ls -ltr /u01/app/oracle/oradata/PRODCDB/control01.ctl
+-rw-r----- 1 oracle oinstall 17973248 Feb 27 12:32 /u01/app/oracle/oradata/PRODCDB/control01.ctl
+
+SYS@PRODCDB> !cp /u01/app/oracle/oradata/PRODCDB/control01.ctl /u01/app/oracle/product/12.1.0/dbhome_1/dbs/control03.ctl
+
+SYS@PRODCDB> !ls -ltr /u01/app/oracle/product/12.1.0/dbhome_1/dbs/control03.ctl
+-rw-r----- 1 oracle oinstall 17973248 Feb 27 12:33 /u01/app/oracle/product/12.1.0/dbhome_1/dbs/control03.ctl
+
+SYS@PRODCDB> startup
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  570428144 bytes
+Database Buffers	  260046848 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+Database opened.
+SYS@PRODCDB> show parameter control
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+control_file_record_keep_time	     integer	 7
+control_files			     string	 /u01/app/oracle/oradata/PRODCD
+						 B/control01.ctl, /u01/app/orac
+						 le/fast_recovery_area/PRODCDB/
+						 control02.ctl, /u01/app/oracle
+						 /product/12.1.0/dbhome_1/dbs/c
+						 ontrol03.ctl
+control_management_pack_access	     string	 DIAGNOSTIC+TUNING
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  MOUNTED
+	 7 PDBPROD5			  MOUNTED
+SYS@PRODCDB> alter pluggable database all open;
+
+Pluggable database altered.
+
+SYS@PRODCDB> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> 
+
++++++++++++++++++++++++++++++++++++++++
+
+
+
+[oracle@host01 ~]$ sqlplus rc_admin/RC_ADMIN@EMREP
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 13:47:05 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Last Successful login time: Fri Oct 23 2015 23:50:11 +08:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+RC_ADMIN@EMREP> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 ~]$ 
+
+[oracle@host01 ~]$ echo $ORACLE_SID
+PDBCDB
+[oracle@host01 ~]$ export ORACLE_SID=PDBCDB;rman target / catalog rc_admin/RC_ADMIN@EMREP
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Feb 27 13:50:28 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database (not started)
+RMAN-04007: WARNING from recovery catalog database: ORA-28002: the password will expire within 7 days
+
+connected to recovery catalog database
+
+RMAN> upgrade catalog
+
+recovery catalog owner is RC_ADMIN
+enter UPGRADE CATALOG command again to confirm catalog upgrade
+
+RMAN> upgrade catalog
+
+recovery catalog upgraded to version 12.01.00.02
+DBMS_RCVMAN package upgraded to version 12.01.00.02
+DBMS_RCVCAT package upgraded to version 12.01.00.02.
+
+RMAN> exit
+
+
+Recovery Manager complete.
+
+
+
+[oracle@host01 ~]$ 
+
+
+
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  MOUNTED
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  MOUNTED
+	 6 PDBPROD4			  MOUNTED
+	 7 PDBPROD5			  MOUNTED
+SYS@PRODCDB> alter database archivelog;
+
+Database altered.
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  MOUNTED
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  MOUNTED
+	 6 PDBPROD4			  MOUNTED
+	 7 PDBPROD5			  MOUNTED
+SYS@PRODCDB> archive log list;
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     199
+Next log sequence to archive   201
+Current log sequence	       201
+SYS@PRODCDB> alter database open;
+
+Database altered.
+
+SYS@PRODCDB> archive log list;
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     199
+Next log sequence to archive   201
+Current log sequence	       201
+SYS@PRODCDB> show parameter db_reco
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest		     string	 /u01/app/oracle/fast_recovery_
+						 area
+db_recovery_file_dest_size	     big integer 4815M
+SYS@PRODCDB> archive log list;
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     199
+Next log sequence to archive   201
+Current log sequence	       201
+SYS@PRODCDB> 
+
+
+[oracle@host01 archivelog]$ export ORACLE_SID=PRODCDB;rman target / catalog rc_admin/RC_ADMIN@EMREP
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Feb 27 14:09:38 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PRODCDB (DBID=2891862819)
+RMAN-04007: WARNING from recovery catalog database: ORA-28002: the password will expire within 7 days
+
+connected to recovery catalog database
+
+RMAN> register database;
+
+database registered in recovery catalog
+starting full resync of recovery catalog
+full resync complete
+
+RMAN>
+
+
+
+
+[oracle@host01 ~]$ export ORACLE_SID=PROD4;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Feb 27 14:14:32 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SYS@PROD4> startup mount;
+ORACLE instance started.
+
+Total System Global Area  524288000 bytes
+Fixed Size		    2926320 bytes
+Variable Size		  440404240 bytes
+Database Buffers	   75497472 bytes
+Redo Buffers		    5459968 bytes
+Database mounted.
+SYS@PROD4> archive log list;
+Database log mode	       No Archive Mode
+Automatic archival	       Disabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     15
+Current log sequence	       17
+SYS@PROD4> show parameter db_recovery
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest		     string	 /u01/app/oracle/fast_recovery_
+						 area
+db_recovery_file_dest_size	     big integer 4560M
+SYS@PROD4> alter database archivelog;
+
+Database altered.
+
+SYS@PROD4> archive log list;
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     15
+Next log sequence to archive   17
+Current log sequence	       17
+SYS@PROD4> alter database open;
+
+Database altered.
+
+SYS@PROD4> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+[oracle@host01 ~]$ 
+
+show all;
+CONFIGURE DEFAULT DEVICE TYPE TO DISK;
+CONFIGURE BACKUP OPTIMIZATION ON;
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+CONFIGURE DEVICE TYPE DISK PARALLELISM 2 BACKUP TYPE TO BACKUPSET;
+show all;
+
+RMAN> show all;
+
+RMAN configuration parameters for database with db_unique_name PRODCDB are:
+CONFIGURE RETENTION POLICY TO REDUNDANCY 1; # default
+CONFIGURE BACKUP OPTIMIZATION ON;
+CONFIGURE DEFAULT DEVICE TYPE TO DISK;
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO '%F'; # default
+CONFIGURE DEVICE TYPE DISK PARALLELISM 2 BACKUP TYPE TO BACKUPSET;
+CONFIGURE DATAFILE BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE ARCHIVELOG BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE MAXSETSIZE TO UNLIMITED; # default
+CONFIGURE ENCRYPTION FOR DATABASE OFF; # default
+CONFIGURE ENCRYPTION ALGORITHM 'AES128'; # default
+CONFIGURE COMPRESSION ALGORITHM 'BASIC' AS OF RELEASE 'DEFAULT' OPTIMIZE FOR LOAD TRUE ; # default
+CONFIGURE RMAN OUTPUT TO KEEP FOR 7 DAYS; # default
+CONFIGURE ARCHIVELOG DELETION POLICY TO NONE; # default
+CONFIGURE SNAPSHOT CONTROLFILE NAME TO '/u01/app/oracle/product/12.1.0/dbhome_1/dbs/snapcf_PRODCDB.f'; # default
+
+RMAN> 
+
+
++++++++++++++++++++++++++++++++++++++++
+
+backup as compressed backupset database plus archivelog;
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  MOUNTED
+	 7 PDBPROD5			  MOUNTED
+SYS@PRODCDB> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 ~]$ export ORACLE_SID=PRODCDB;rman target / catalog rc_admin/RC_ADMIN@EMREP
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Feb 27 15:52:50 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PRODCDB (DBID=2891862819)
+RMAN-04007: WARNING from recovery catalog database: ORA-28002: the password will expire within 7 days
+
+connected to recovery catalog database
+
+RMAN> backup as compressed backupset database plus archivelog;
+
+starting full resync of recovery catalog
+full resync complete
+
+Starting backup at 27-FEB-17
+current log archived
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=22 device type=DISK
+allocated channel: ORA_DISK_2
+channel ORA_DISK_2: SID=260 device type=DISK
+channel ORA_DISK_1: starting compressed archived log backup set
+channel ORA_DISK_1: specifying archived log(s) in backup set
+input archived log thread=1 sequence=201 RECID=1 STAMP=937065200
+channel ORA_DISK_1: starting piece 1 at 27-FEB-17
+channel ORA_DISK_1: finished piece 1 at 27-FEB-17
+piece handle=/u01/app/oracle/fast_recovery_area/PRODCDB/backupset/2017_02_27/o1_mf_annnn_TAG20170227T155322_dc7pqlrb_.bkp tag=TAG20170227T155322 comment=NONE
+channel ORA_DISK_1: backup set complete, elapsed time: 00:00:03
+Finished backup at 27-FEB-17
+
+
+RMAN> report schema;
+
+Report of database schema for database with db_unique_name PRODCDB
+
+List of Permanent Datafiles
+===========================
+File Size(MB) Tablespace           RB segs Datafile Name
+---- -------- -------------------- ------- ------------------------
+1    800      SYSTEM               YES     /u01/app/oracle/oradata/PRODCDB/system01.dbf
+2    260      PDB$SEED:SYSTEM      NO      /u01/app/oracle/oradata/PRODCDB/pdbseed/system01.dbf
+3    720      SYSAUX               NO      /u01/app/oracle/oradata/PRODCDB/sysaux01.dbf
+4    585      PDB$SEED:SYSAUX      NO      /u01/app/oracle/oradata/PRODCDB/pdbseed/sysaux01.dbf
+5    865      UNDOTBS1             YES     /u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+6    5        USERS                NO      /u01/app/oracle/oradata/PRODCDB/users01.dbf
+7    280      PDBPROD1:SYSTEM      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD1/system01.dbf
+8    615      PDBPROD1:SYSAUX      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+9    5        PDBPROD1:USERS       NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD1/PDBPROD1_users01.dbf
+10   260      PDBPROD2:SYSTEM      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD2/system01.dbf
+11   605      PDBPROD2:SYSAUX      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD2/sysaux01.dbf
+12   5        PDBPROD2:USERS       NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD2/PDBPROD2_users01.dbf
+13   321      PDBPROD1:EXAMPLE     NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD1/example01.dbf
+18   280      PDBPROD3:SYSTEM      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD3/system01.dbf
+19   615      PDBPROD3:SYSAUX      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD3/sysaux01.dbf
+20   5        PDBPROD3:USERS       NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD3/PDBPROD1_users01.dbf
+21   321      PDBPROD3:EXAMPLE     NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD3/example01.dbf
+22   270      PDBPROD4:SYSTEM      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD4/system01.dbf
+23   615      PDBPROD4:SYSAUX      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD4/sysaux01.dbf
+24   400      PDBPROD4:EXAMPLE     NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD4/example01.dbf
+25   400      PDBPROD4:USERS       NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD4/user01.dbf
+26   810      PDBPROD5:SYSTEM      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD5/system01.dbf
+27   700      PDBPROD5:SYSAUX      NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD5/sysaux01.dbf
+28   5        PDBPROD5:USERS       NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD5/users01.dbf
+29   1243     PDBPROD5:EXAMPLE     NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD5/example01.dbf
+30   500      PDBPROD2:BIG_TBS     NO      /u01/app/oracle/oradata/PRODCDB/PDBPROD2/big_tbs.dbf
+
+List of Temporary Files
+=======================
+File Size(MB) Tablespace           Maxsize(MB) Tempfile Name
+---- -------- -------------------- ----------- --------------------
+1    71       TEMP                 32767       /u01/app/oracle/oradata/PRODCDB/temp01.dbf
+2    62       PDB$SEED:TEMP        32767       /u01/app/oracle/oradata/PRODCDB/pdbseed/temp01.dbf
+3    20       PDBPROD1:TEMP        32767       /u01/app/oracle/oradata/PRODCDB/PDBPROD1/temp01.dbf
+4    20       PDBPROD2:TEMP        32767       /u01/app/oracle/oradata/PRODCDB/PDBPROD2/temp01.dbf
+5    20       PDBPROD3:TEMP        32767       /u01/app/oracle/oradata/PRODCDB/PDBPROD3/temp01.dbf
+6    20       PDBPROD4:TEMP        32767       /u01/app/oracle/oradata/PRODCDB/PDBPROD4/temp01.dbf
+7    60       PDBPROD5:TEMP        32767       /u01/app/oracle/oradata/PRODCDB/PDBPROD5/temp01.dbf
+
+RMAN> list backup summary;
+
+
+List of Backups
+===============
+Key     TY LV S Device Type Completion Time #Pieces #Copies Compressed Tag
+------- -- -- - ----------- --------------- ------- ------- ---------- ---
+547     B  A  A DISK        27-FEB-17       1       1       YES        TAG20170227T155322
+557     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+558     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+559     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+560     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+561     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+562     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+563     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+564     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+565     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+566     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+567     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+568     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+569     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+570     B  F  A DISK        27-FEB-17       1       1       YES        TAG20170227T155326
+618     B  A  A DISK        27-FEB-17       1       1       YES        TAG20170227T155943
+628     B  F  A DISK        27-FEB-17       1       1       NO         TAG20170227T155945
+
+RMAN> list backup of controlfile;
+
+
+List of Backup Sets
+===================
+
+
+BS Key  Type LV Size       Device Type Elapsed Time Completion Time
+------- ---- -- ---------- ----------- ------------ ---------------
+628     Full    17.20M     DISK        00:00:01     27-FEB-17      
+        BP Key: 630   Status: AVAILABLE  Compressed: NO  Tag: TAG20170227T155945
+        Piece Name: /u01/app/oracle/fast_recovery_area/PRODCDB/autobackup/2017_02_27/o1_mf_s_937065585_dc7q3lfl_.bkp
+  Control File Included: Ckp SCN: 2903604      Ckp time: 27-FEB-17
+
+RMAN> list backup of archivelog all;
+
+
+List of Backup Sets
+===================
+
+
+BS Key  Size       Device Type Elapsed Time Completion Time
+------- ---------- ----------- ------------ ---------------
+547     9.75M      DISK        00:00:01     27-FEB-17      
+        BP Key: 548   Status: AVAILABLE  Compressed: YES  Tag: TAG20170227T155322
+        Piece Name: /u01/app/oracle/fast_recovery_area/PRODCDB/backupset/2017_02_27/o1_mf_annnn_TAG20170227T155322_dc7pqlrb_.bkp
+
+  List of Archived Logs in backup set 547
+  Thrd Seq     Low SCN    Low Time  Next SCN   Next Time
+  ---- ------- ---------- --------- ---------- ---------
+  1    201     2871884    27-FEB-17 2903366    27-FEB-17
+
+BS Key  Size       Device Type Elapsed Time Completion Time
+------- ---------- ----------- ------------ ---------------
+618     34.50K     DISK        00:00:00     27-FEB-17      
+        BP Key: 620   Status: AVAILABLE  Compressed: YES  Tag: TAG20170227T155943
+        Piece Name: /u01/app/oracle/fast_recovery_area/PRODCDB/backupset/2017_02_27/o1_mf_annnn_TAG20170227T155943_dc7q3hrm_.bkp
+
+  List of Archived Logs in backup set 618
+  Thrd Seq     Low SCN    Low Time  Next SCN   Next Time
+  ---- ------- ---------- --------- ---------- ---------
+  1    202     2903366    27-FEB-17 2903574    27-FEB-17
+
+RMAN> 
+
+
++++++++++++++++++++++++++++++++++++++++
+
+RMAN> run {
+allocate channel c1 type disk;
+allocate channel c2 type disk;
+backup as compressed backupset section size 100m tablespace PDBPROD1:SYSAUX keep forever;
+}
+2> 3> 4> 5> 
+released channel: ORA_DISK_1
+released channel: ORA_DISK_2
+allocated channel: c1
+channel c1: SID=22 device type=DISK
+
+allocated channel: c2
+channel c2: SID=260 device type=DISK
+
+Starting backup at 27-FEB-17
+
+backup will never be obsolete
+archived logs required to recover from this backup will be backed up
+channel c1: starting compressed full datafile backup set
+channel c1: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 1 through 12800
+channel c1: starting piece 1 at 27-FEB-17
+channel c2: starting compressed full datafile backup set
+channel c2: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 12801 through 25600
+channel c2: starting piece 2 at 27-FEB-17
+PSDRPC returns significant error 1013.
+released channel: c1
+released channel: c2
+RMAN-00571: ===========================================================
+RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS ===============
+RMAN-00571: ===========================================================
+RMAN-03002: failure of backup command at 02/27/2017 16:05:45
+ORA-19811: cannot have files in DB_RECOVERY_FILE_DEST with keep attributes
+
+RMAN> show all;
+
+RMAN configuration parameters for database with db_unique_name PRODCDB are:
+CONFIGURE RETENTION POLICY TO REDUNDANCY 1; # default
+CONFIGURE BACKUP OPTIMIZATION ON;
+CONFIGURE DEFAULT DEVICE TYPE TO DISK;
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO '%F'; # default
+CONFIGURE DEVICE TYPE DISK PARALLELISM 2 BACKUP TYPE TO BACKUPSET;
+CONFIGURE DATAFILE BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE ARCHIVELOG BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE MAXSETSIZE TO UNLIMITED; # default
+CONFIGURE ENCRYPTION FOR DATABASE OFF; # default
+CONFIGURE ENCRYPTION ALGORITHM 'AES128'; # default
+CONFIGURE COMPRESSION ALGORITHM 'BASIC' AS OF RELEASE 'DEFAULT' OPTIMIZE FOR LOAD TRUE ; # default
+CONFIGURE RMAN OUTPUT TO KEEP FOR 7 DAYS; # default
+CONFIGURE ARCHIVELOG DELETION POLICY TO NONE; # default
+CONFIGURE SNAPSHOT CONTROLFILE NAME TO '/u01/app/oracle/product/12.1.0/dbhome_1/dbs/snapcf_PRODCDB.f'; # default
+
+RMAN> run {
+allocate channel c1 type disk;
+allocate channel c2 type disk;
+backup as compressed backupset section size 100m tablespace PDBPROD1:SYSAUX format '/home/oracle/data/pdbprod1_sysaux_%U' keep forever;
+}
+2> 3> 4> 5> 
+allocated channel: c1
+channel c1: SID=22 device type=DISK
+
+allocated channel: c2
+channel c2: SID=260 device type=DISK
+
+Starting backup at 27-FEB-17
+
+backup will never be obsolete
+archived logs required to recover from this backup will be backed up
+channel c1: starting compressed full datafile backup set
+channel c1: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 1 through 12800
+channel c1: starting piece 1 at 27-FEB-17
+channel c2: starting compressed full datafile backup set
+channel c2: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 12801 through 25600
+channel c2: starting piece 2 at 27-FEB-17
+channel c2: finished piece 2 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0krtkvlp_2_1 tag=TAG20170227T160929 comment=NONE
+channel c2: backup set complete, elapsed time: 00:00:07
+channel c2: starting compressed full datafile backup set
+channel c2: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 25601 through 38400
+channel c2: starting piece 3 at 27-FEB-17
+channel c1: finished piece 1 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0krtkvlp_1_1 tag=TAG20170227T160929 comment=NONE
+channel c1: backup set complete, elapsed time: 00:00:10
+channel c1: starting compressed full datafile backup set
+channel c1: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 38401 through 51200
+channel c1: starting piece 4 at 27-FEB-17
+channel c2: finished piece 3 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0krtkvlp_3_1 tag=TAG20170227T160929 comment=NONE
+channel c2: backup set complete, elapsed time: 00:00:04
+channel c2: starting compressed full datafile backup set
+channel c2: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 51201 through 64000
+channel c2: starting piece 5 at 27-FEB-17
+channel c1: finished piece 4 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0krtkvlp_4_1 tag=TAG20170227T160929 comment=NONE
+channel c1: backup set complete, elapsed time: 00:00:05
+channel c1: starting compressed full datafile backup set
+channel c1: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 64001 through 76800
+channel c1: starting piece 6 at 27-FEB-17
+channel c2: finished piece 5 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0krtkvlp_5_1 tag=TAG20170227T160929 comment=NONE
+channel c2: backup set complete, elapsed time: 00:00:06
+channel c2: starting compressed full datafile backup set
+channel c2: specifying datafile(s) in backup set
+input datafile file number=00008 name=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+backing up blocks 76801 through 78720
+channel c2: starting piece 7 at 27-FEB-17
+channel c1: finished piece 6 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0krtkvlp_6_1 tag=TAG20170227T160929 comment=NONE
+channel c1: backup set complete, elapsed time: 00:00:03
+channel c2: finished piece 7 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0krtkvlp_7_1 tag=TAG20170227T160929 comment=NONE
+channel c2: backup set complete, elapsed time: 00:00:01
+
+backup will never be obsolete
+archived logs will not be kept or backed up
+channel c1: starting compressed full datafile backup set
+channel c1: specifying datafile(s) in backup set
+including current SPFILE in backup set
+channel c1: starting piece 1 at 27-FEB-17
+channel c1: finished piece 1 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0rrtkvme_1_1 tag=TAG20170227T160929 comment=NONE
+channel c1: backup set complete, elapsed time: 00:00:01
+
+backup will never be obsolete
+archived logs will not be kept or backed up
+channel c1: starting compressed full datafile backup set
+channel c1: specifying datafile(s) in backup set
+including current control file in backup set
+channel c1: starting piece 1 at 27-FEB-17
+channel c1: finished piece 1 at 27-FEB-17
+piece handle=/home/oracle/data/pdbprod1_sysaux_0srtkvmg_1_1 tag=TAG20170227T160929 comment=NONE
+channel c1: backup set complete, elapsed time: 00:00:01
+Finished backup at 27-FEB-17
+released channel: c1
+released channel: c2
+
+RMAN> 
+
+
++++++++++++++++++++++++++++++++++++++++
+
+Section 6： Enable Flashback Database
+
+1.Enable flashback database for PROD4, fast recovery area must be in the /u01/app/oracle/flash, the size of 5GB
+
+2.Create a restore point is DBRSP1, this restore point in the control file never expires
+
+3.EMP_DEPT1 table under the HR user in PDBPROD1 is removed several times, the recovery column containing DEPARTMENT_NAME version, and the recovery after the table name DEPT_EMP1.
+
+
+++++++++++++++++++++++++++++++++
+
+SYS@PROD4> startup
+ORACLE instance started.
+
+Total System Global Area  524288000 bytes
+Fixed Size		    2926320 bytes
+Variable Size		  440404240 bytes
+Database Buffers	   75497472 bytes
+Redo Buffers		    5459968 bytes
+Database mounted.
+Database opened.
+SYS@PROD4> archive log list;
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     15
+Next log sequence to archive   17
+Current log sequence	       17
+SYS@PROD4> show parameter db_recove  
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest		     string	 /u01/app/oracle/fast_recovery_
+						 area
+db_recovery_file_dest_size	     big integer 4560M
+SYS@PROD4> alter system set db_recovery_file_dest_size=5g;
+
+System altered.
+
+SYS@PROD4> alter system set db_recovery_file_dest='/u01/app/oracle/flash';
+
+System altered.
+
+SYS@PROD4> show parameter db_recov
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest		     string	 /u01/app/oracle/flash
+db_recovery_file_dest_size	     big integer 5G
+SYS@PROD4> select name,flashback_on from v$database;
+
+NAME	  FLASHBACK_ON
+--------- ------------------
+PROD4	  NO
+
+SYS@PROD4> alter database flashback on;
+
+Database altered.
+
+SYS@PROD4> select name,flashback_on from v$database;
+
+NAME	  FLASHBACK_ON
+--------- ------------------
+PROD4	  YES
+
+SYS@PROD4> 
+
+
+
+++++++++++++++++++++++++++++++++++++
+
+Database Backup and Recovery User's Guide
+--7 Using Flashback Database and Restore Points
+----SQL> CREATE RESTORE POINT before_upgrade GUARANTEE FLASHBACK DATABASE;
+
+SYS@PROD4> create restore point DBRSP1 guarantee flashback database;
+
+Restore point created.
+
+SYS@PROD4>   
+
+SYS@PROD4> SELECT NAME, SCN, TIME, DATABASE_INCARNATION#,
+        GUARANTEE_FLASHBACK_DATABASE,STORAGE_SIZE
+        FROM V$RESTORE_POINT;  2    3  
+
+NAME
+--------------------------------------------------------------------------------
+       SCN
+----------
+TIME
+---------------------------------------------------------------------------
+DATABASE_INCARNATION# GUA STORAGE_SIZE
+--------------------- --- ------------
+DBRSP1
+   2429774
+27-FEB-17 04.22.06.000000000 PM
+		    2 YES     52428800
+
+
+SYS@PROD4> 
+
+
+[oracle@host01 ~]$ export ORACLE_SID=PROD4;rman target  / catalog rc_admin/RC_ADMIN@EMREP
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Feb 27 16:22:50 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PROD4 (DBID=1644960615)
+RMAN-04007: WARNING from recovery catalog database: ORA-28002: the password will expire within 7 days
+
+connected to recovery catalog database
+
+RMAN> LIST RESTORE POINT ALL;
+
+SCN              RSP Time  Type       Time      Name
+---------------- --------- ---------- --------- ----
+2429774                    GUARANTEED 27-FEB-17 DBRSP1
+
+RMAN> 
+
+
+
+++++++++++++++++++++++++++++++++++++
+
+
+SYS@PRODCDB> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  MOUNTED
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  MOUNTED
+	 7 PDBPROD5			  MOUNTED
+SYS@PRODCDB> alter pluggable database PDBPROD1 open;
+
+Pluggable database altered.
+
+SYS@PRODCDB> alter session set container=PDBPROD1;
+
+Session altered.
+
+SYS@PRODCDB> conn hr/hr@PDBPROD1
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Connected.
+HR@PDBPROD1> show recyclebin;
+HR@PDBPROD1> create table emp_dept1 (department_id number(10),department_name varchar2(20));
+
+Table created.
+
+HR@PDBPROD1> drop table emp_dept1 cascade constraints;
+
+Table dropped.
+
+HR@PDBPROD1> show recyclebin;
+ORIGINAL NAME	 RECYCLEBIN NAME		OBJECT TYPE  DROP TIME
+---------------- ------------------------------ ------------ -------------------
+EMP_DEPT1	 BIN$SX/hxLP5LFXgU2UCAMCQ4w==$0 TABLE	     2017-02-27:16:29:46
+HR@PDBPROD1> desc EMP_DEPT1."BIN$SX/hxLP5LFXgU2UCAMCQ4w==$0";
+ERROR:
+ORA-04043: object EMP_DEPT1."BIN$SX/hxLP5LFXgU2UCAMCQ4w==$0" does not exist
+
+
+HR@PDBPROD1> desc hr."BIN$SX/hxLP5LFXgU2UCAMCQ4w==$0"
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPARTMENT_ID					    NUMBER(10)
+ DEPARTMENT_NAME				    VARCHAR2(20)
+
+HR@PDBPROD1> flashback table hr."BIN$SX/hxLP5LFXgU2UCAMCQ4w==$0" to before drop rename to dept_emp1;
+
+Flashback complete.
+
+HR@PDBPROD1> desc dept_emp1;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPARTMENT_ID					    NUMBER(10)
+ DEPARTMENT_NAME				    VARCHAR2(20)
+
+HR@PDBPROD1> 
+
+

@@ -1,0 +1,112 @@
+
+NOTE:
+
+1) Database Server and Management Server, user/pwd: oracle/ocm123
+
+2) if need root,use sudo
+
+3) oracle doc: /stage/.../English/index.htm
+
+4) The root directory must be kept free space 15%
+
+TASKS:
+
+Section 1：Create pluggable database
+
+1.Use the following descriptions to create 12c pluggable database PDBPROD3 in PRODCDB:
+
+（1）To create pluggable database PDBPROD3 by copying PDBPROD1
+
+（2）Ensure PRODCDB restarted at any time, PDBPROD3 automatically open to the same mode
+
+
+2.Use the following Description, create pluggable database PDBPROD4 and PDBPROD5 in the PRODCDB：
+
+（1）The DB11G of non-CDB database introduced schemas(HR, OE, SH) of all applications into the container database PDBPROD4 pluggable database in PRODCDB. After this is complete, ensure DB11G database remains available.
+
+（2）Create PROD4 of non-CDB database copies as PDBPROD5 pluggable database in PRODCDB container database.
+
+
+3.Create the following users:
+
+（1）Use the following descriptions to create a user USER1：
+
+In PDBPROD1, PDBPROD2, PDBPROD3, PDBPROD4, PDBPROD5 in USER1 should have the same identity.
+
+In the PDB PRODCDB later created, USER1 should have the same identity.
+
+（2）Create only defined the user USER2 in PDBPROD1
+
+
+4.Create the following roles:
+
+（1）Use the following descriptions to create a role called ROLE1:
+
+You should be granted to all users in the PDB of PRODCDB container database
+
+ROLE1 there should also be created in the future in the PDB
+
+（2）Create a role name is ROLE2, it can only be granted to PDBPROD1 in the PRODCDB
+
+
+5.The following description, grant privileges and roles to users and roles:
+
+（1）USER1 can connect to grant access to all current and future container database. Do not grant additional other privileges
+
+（2）USER2 can grant privileges to connect only PDBPROD1 container database. Do not grant additional other privileges
+
+（3）ROLE1 can grant privileges to create stored procedures, so that this privileges can be granted to all PDB in PRODCDB
+
+
+
+Section 2：Configuring OEM Express
+
+1.Configure OEM Express to PRODCDB, using the http protocol, port 5501
+
+
+
+Section 3：Server and client network configuration
+
+1.Configuring the alias of PDBPROD1, PDBPROD2, PDBPROD3, PDBPROD4, PDBPROD5, EMREP, using the default listener, port 1521
+
+
+
+Section 4： Configuration container database
+
+1.Configuration the PRODCDB container database, diagnostic information is stored in ORACLE_HOME
+
+2.In PRODCDB container database, configure minimize Redo generated when DML operations on a global temporary tables.
+
+3.In PDBPROD2, create a permanent table space to store the sample data. Use the following description:
+
+Table space name: BIG_TBS
+
+The initial file size is 500m, it can be extended to 1TB
+
+
+
+Section 5： backup and availability
+
+1.Create a third copy of the control file of PRODCDB container database, in the directory of $ORACLE_HOME/dbs/
+
+2.Connect EMREP database to access the Catalog database. catalog owner is rc_admin, password RC_ADMIN
+
+ensure compatible of Rman catalog with 12c
+
+Registration PRODCDB, PROD4 and PROD5 in the catalog
+
+3.Backup PRODCDB container database and all pluggable databases
+
+4.Backup the SYSAUX tablespace in PDBPROD1, and can be retained for a long time. Serial backup performance problems, please resolve, each backup piece 100m
+
+
+
+Section 6： Enable Flashback Database
+
+1.Enable flashback database for PROD4, fast recovery area must be in the /u01/app/oracle/flash, the size of 5GB
+
+2.Create a restore point is DBRSP1, this restore point in the control file never expires
+
+3.EMP_DEPT1 table under the HR user in PDBPROD1 is removed several times, the recovery column containing DEPARTMENT_NAME version, and the recovery after the table name DEPT_EMP1.
+
+

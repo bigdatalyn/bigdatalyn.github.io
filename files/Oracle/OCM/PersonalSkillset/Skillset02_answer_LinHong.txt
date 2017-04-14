@@ -1,0 +1,433 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Materivalized View's query rewrite:
+
+SYS@PRODCDB> show pdbs 
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  MOUNTED
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  MOUNTED
+	 7 PDBPROD5			  MOUNTED
+SYS@PRODCDB> alter session set container=PDBPROD1;          
+
+Session altered.
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 3 PDBPROD1			  READ WRITE NO
+SYS@PRODCDB> show parameter query;
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+inmemory_query			     string	 ENABLE
+query_rewrite_enabled		     string	 TRUE
+query_rewrite_integrity 	     string	 enforced
+SYS@PRODCDB> alter system set query_rewrite_integrity=true;
+alter system set query_rewrite_integrity=true
+*
+ERROR at line 1:
+ORA-00096: invalid value TRUE for parameter query_rewrite_integrity, must be
+from among stale_tolerated, trusted, enforced
+
+
+SYS@PRODCDB> alter system set query_rewrite_integrity=trusted;
+
+System altered.
+
+SYS@PRODCDB> show parameter query;
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+inmemory_query			     string	 ENABLE
+query_rewrite_enabled		     string	 TRUE
+query_rewrite_integrity 	     string	 TRUSTED
+SYS@PRODCDB> 
+
+http://blog.itpub.net/53956/viewspace-1784273/
+QUERY_REWRITE_INTEGRITY=STALE_TOLERATED虽然对于MV内容是否stale没有要求，但在对各种约束的完整性检查方面与ENFORCED遵循同样严格的标准；
+QUERY_REWRITE_INTEGRITY=TRUSTED能够信任被标示为rely的约束，无论该约束是否enabled
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Oracle® Database Administrator's Guide
+15 Transporting Data
+Transporting Tablespaces Between Databases / Converting Data Files on the Target System Before Import
+
+SELECT * FROM DBA_DIRECTORIES WHERE DIRECTORY_NAME = 'DATA_PUMP_DIR';
+
+COLUMN PLATFORM_NAME FORMAT A40
+COLUMN ENDIAN_FORMAT A14
+ 
+SELECT PLATFORM_ID, PLATFORM_NAME, ENDIAN_FORMAT 
+  FROM V$TRANSPORTABLE_PLATFORM
+  ORDER BY PLATFORM_ID;
+
+
+
+
+SYS@PRODCDB> COLUMN PLATFORM_NAME FORMAT A40
+SYS@PRODCDB> COLUMN ENDIAN_FORMAT FORMAT A14
+SYS@PRODCDB> SELECT PLATFORM_ID, PLATFORM_NAME, ENDIAN_FORMAT 
+  FROM V$TRANSPORTABLE_PLATFORM
+  ORDER BY PLATFORM_ID;  2    3  
+
+PLATFORM_ID PLATFORM_NAME			     ENDIAN_FORMAT
+----------- ---------------------------------------- --------------
+	  1 Solaris[tm] OE (32-bit)		     Big
+	  2 Solaris[tm] OE (64-bit)		     Big
+	  3 HP-UX (64-bit)			     Big
+	  4 HP-UX IA (64-bit)			     Big
+	  5 HP Tru64 UNIX			     Little
+	  6 AIX-Based Systems (64-bit)		     Big
+	  7 Microsoft Windows IA (32-bit)	     Little
+	  8 Microsoft Windows IA (64-bit)	     Little
+	  9 IBM zSeries Based Linux		     Big
+	 10 Linux IA (32-bit)			     Little
+	 11 Linux IA (64-bit)			     Little
+
+PLATFORM_ID PLATFORM_NAME			     ENDIAN_FORMAT
+----------- ---------------------------------------- --------------
+	 12 Microsoft Windows x86 64-bit	     Little
+	 13 Linux x86 64-bit			     Little
+	 15 HP Open VMS 			     Little
+	 16 Apple Mac OS			     Big
+	 17 Solaris Operating System (x86)	     Little
+	 18 IBM Power Based Linux		     Big
+	 19 HP IA Open VMS			     Little
+	 20 Solaris Operating System (x86-64)	     Little
+	 21 Apple Mac OS (x86-64)		     Little
+
+20 rows selected.
+
+SYS@PRODCDB> 
+
+
+
+
+[oracle@host01 ~]$ pwd
+/home/oracle
+[oracle@host01 ~]$ ls -ltr | tail -3
+drwxr-xr-x 2 oracle oinstall     4096 Feb 27 16:09 data
+-rwxr-xr-x 1 oracle oinstall   106496 Feb 28 10:35 EXPDAT_GENERATETTS000021.DMP
+-rwxr-xr-x 1 oracle oinstall 10493952 Feb 28 15:26 transport_tbs01.dbf
+[oracle@host01 ~]$ export ORACLE_SID=PRODCDB;rman target /
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Tue Feb 28 16:08:13 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PRODCDB (DBID=2891862819)
+
+RMAN> convert datafile '/home/oracle/transport_tbs01.dbf' from platform="Solaris[tm] OE (32-bit)" DB_FILE_NAME_CONVERT='/home/oracle/','/u01/app/oracle/oradata/PRODCDB/PDBPROD1/';
+
+Starting conversion at target at 28-FEB-17
+using channel ORA_DISK_1
+using channel ORA_DISK_2
+channel ORA_DISK_1: starting datafile conversion
+input file name=/home/oracle/transport_tbs01.dbf
+converted datafile=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/transport_tbs01.dbf
+channel ORA_DISK_1: datafile conversion complete, elapsed time: 00:00:01
+Finished conversion at target at 28-FEB-17
+
+RMAN> 
+
+impdp user_name/password DUMPFILE=expdat.dmp DIRECTORY=dpump_dir
+   TRANSPORT_DATAFILES='D:\catalog.f'  
+
+
+[oracle@host01 ~]$ ls -ltr /u01/app/oracle/oradata/PRODCDB/PDBPROD1/
+total 1261228
+-rw-r----- 1 oracle oinstall  20979712 Dec 21  2015 temp01.dbf
+-rw-r----- 1 oracle oinstall 336732160 Feb 28 10:28 example01.dbf
+-rw-r----- 1 oracle oinstall   5251072 Feb 28 10:28 PDBPROD1_users01.dbf
+-rw-r----- 1 oracle oinstall 644882432 Feb 28 16:15 sysaux01.dbf
+-rw-r----- 1 oracle oinstall  10493952 Feb 28 16:15 transport_tbs01.dbf
+-rw-r----- 1 oracle oinstall 293609472 Feb 28 16:17 system01.dbf
+[oracle@host01 ~]$ sqlplus system/oracle@pdbprod1 
+
+SQL*Plus: Release 12.1.0.2.0 Production on Tue Feb 28 16:17:50 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 2 days
+
+
+Last Successful login time: Tue Feb 28 2017 16:17:34 +08:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYSTEM@pdbprod1> create directory dump_dir as '/home/oracle';
+
+Directory created.
+
+SYSTEM@pdbprod1> grant read,write,execute on directory dump_dir to public;
+
+Grant succeeded.
+
+SYSTEM@pdbprod1> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 ~]$ 
+
++++++++++++ Impdp the tablespace
+
+[oracle@host01 ~]$ impdp system/oracle@pdbprod1 dumpfile=EXPDAT_GENERATETTS000021.DMP directory=dump_dir transport_datafile='/u01/app/oracle/oradata/PRODCDB/PDBPROD1/transport_tbs01.dbf';
+LRM-00101: unknown parameter name 'transport_datafile'
+
+[oracle@host01 ~]$ impdp system/oracle@pdbprod1 dumpfile=EXPDAT_GENERATETTS000021.DMP directory=dump_dir transport_datafiles='/u01/app/oracle/oradata/PRODCDB/PDBPROD1/transport_tbs01.dbf';
+
+Import: Release 12.1.0.2.0 - Production on Tue Feb 28 16:21:15 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+UDI-28002: operation generated ORACLE error 28002
+ORA-28002: the password will expire within 2 days
+
+Connected to: Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+Master table "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01" successfully loaded/unloaded
+Source time zone version is 14 and target time zone version is 18.
+Source time zone is +00:00 and target time zone is +08:00.
+Starting "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01":  system/********@pdbprod1 dumpfile=EXPDAT_GENERATETTS000021.DMP directory=dump_dir transport_datafiles=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/transport_tbs01.dbf 
+Processing object type TRANSPORTABLE_EXPORT/PLUGTS_BLK
+ORA-39123: Data Pump transportable tablespace job aborted
+ORA-29342: user TRANS_USER does not exist in the database
+
+Job "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01" stopped due to fatal error at Tue Feb 28 16:21:25 2017 elapsed 0 00:00:05
+
+[oracle@host01 ~]$ sqlplus sys/oracle@pdbprod1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Tue Feb 28 16:21:47 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@pdbprod1> create user trasn_user identified by oracle account unlock;
+
+User created.
+
+SYS@pdbprod1> drop user trasn_user;          
+
+User dropped.
+
+SYS@pdbprod1> create user trans_user identified by oracle account unlock;
+
+User created.
+
+SYS@pdbprod1> grant connect,resource to trans_user;
+
+Grant succeeded.
+
+SYS@pdbprod1> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 ~]$ impdp system/oracle@pdbprod1 dumpfile=EXPDAT_GENERATETTS000021.DMP directory=dump_dir transport_datafiles='/u01/app/oracle/oradata/PRODCDB/PDBPROD1/transport_tbs01.dbf';
+
+Import: Release 12.1.0.2.0 - Production on Tue Feb 28 16:22:57 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+UDI-28002: operation generated ORACLE error 28002
+ORA-28002: the password will expire within 2 days
+
+Connected to: Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+Master table "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01" successfully loaded/unloaded
+Source time zone version is 14 and target time zone version is 18.
+Source time zone is +00:00 and target time zone is +08:00.
+Starting "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01":  system/********@pdbprod1 dumpfile=EXPDAT_GENERATETTS000021.DMP directory=dump_dir transport_datafiles=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/transport_tbs01.dbf 
+Processing object type TRANSPORTABLE_EXPORT/PLUGTS_BLK
+Processing object type TRANSPORTABLE_EXPORT/TABLE
+Processing object type TRANSPORTABLE_EXPORT/POST_INSTANCE/PLUGTS_BLK
+Job "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01" successfully completed at Tue Feb 28 16:23:03 2017 elapsed 0 00:00:04
+
+[oracle@host01 ~]$ 
+
++++++++++++ Modify the status of Tablespace;
+
+[oracle@host01 ~]$ sqlplus sys/oracle@pdbprod1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Tue Feb 28 16:26:46 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@pdbprod1> select tablespace_name,status from dba_tablespaces;
+
+TABLESPACE_NAME 	       STATUS
+------------------------------ ---------
+SYSTEM			       ONLINE
+SYSAUX			       ONLINE
+TEMP			       ONLINE
+USERS			       ONLINE
+EXAMPLE 		       ONLINE
+TRANS_TBS		       READ ONLY
+
+6 rows selected.
+
+SYS@pdbprod1> alter tablespace trans_tbs read write;
+
+Tablespace altered.
+
+SYS@pdbprod1> select tablespace_name,status from dba_tablespaces;
+
+TABLESPACE_NAME 	       STATUS
+------------------------------ ---------
+SYSTEM			       ONLINE
+SYSAUX			       ONLINE
+TEMP			       ONLINE
+USERS			       ONLINE
+EXAMPLE 		       ONLINE
+TRANS_TBS		       ONLINE
+
+6 rows selected.
+
+SYS@pdbprod1> 
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+[oracle@host01 ~]$ sqlplus sys/oracle@pdbprod1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Tue Feb 28 16:29:47 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@pdbprod1> show parameter star
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+dg_broker_start 		     boolean	 FALSE
+fast_start_io_target		     integer	 0
+fast_start_mttr_target		     integer	 0
+fast_start_parallel_rollback	     string	 LOW
+log_archive_start		     boolean	 FALSE
+star_transformation_enabled	     string	 FALSE
+SYS@pdbprod1> alter system set star_transformation_enabled=true;
+
+System altered.
+
+SYS@pdbprod1> show parameter star
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+dg_broker_start 		     boolean	 FALSE
+fast_start_io_target		     integer	 0
+fast_start_mttr_target		     integer	 0
+fast_start_parallel_rollback	     string	 LOW
+log_archive_start		     boolean	 FALSE
+star_transformation_enabled	     string	 TRUE
+SYS@pdbprod1> 
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+SYS@pdbprod1> alter table sh.sales parallel;
+
+Table altered.
+
+SYS@pdbprod1> show parameter parallel
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+fast_start_parallel_rollback	     string	 LOW
+parallel_adaptive_multi_user	     boolean	 TRUE
+parallel_automatic_tuning	     boolean	 FALSE
+parallel_degree_level		     integer	 100
+parallel_degree_limit		     string	 CPU
+parallel_degree_policy		     string	 MANUAL
+parallel_execution_message_size      integer	 16384
+parallel_force_local		     boolean	 FALSE
+parallel_instance_group 	     string
+parallel_io_cap_enabled 	     boolean	 FALSE
+parallel_max_servers		     integer	 80
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+parallel_min_percent		     integer	 0
+parallel_min_servers		     integer	 8
+parallel_min_time_threshold	     string	 AUTO
+parallel_server 		     boolean	 FALSE
+parallel_server_instances	     integer	 1
+parallel_servers_target 	     integer	 32
+parallel_threads_per_cpu	     integer	 2
+recovery_parallelism		     integer	 0
+SYS@pdbprod1> 
+
+SYS@pdbprod1> alter system set parallel_degree_policy=1;
+alter system set parallel_degree_policy=1
+*
+ERROR at line 1:
+ORA-00096: invalid value 1 for parameter parallel_degree_policy, must be from
+among ADAPTIVE, AUTO, LIMITED, MANUAL
+
+
+SYS@pdbprod1> alter system set parallel_degree_policy=LIMITED;
+
+System altered.
+
+SYS@pdbprod1> show parameter parallel
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+fast_start_parallel_rollback	     string	 LOW
+parallel_adaptive_multi_user	     boolean	 TRUE
+parallel_automatic_tuning	     boolean	 FALSE
+parallel_degree_level		     integer	 100
+parallel_degree_limit		     string	 CPU
+parallel_degree_policy		     string	 LIMITED
+parallel_execution_message_size      integer	 16384
+parallel_force_local		     boolean	 FALSE
+parallel_instance_group 	     string
+parallel_io_cap_enabled 	     boolean	 FALSE
+parallel_max_servers		     integer	 80
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+parallel_min_percent		     integer	 0
+parallel_min_servers		     integer	 8
+parallel_min_time_threshold	     string	 AUTO
+parallel_server 		     boolean	 FALSE
+parallel_server_instances	     integer	 1
+parallel_servers_target 	     integer	 32
+parallel_threads_per_cpu	     integer	 2
+recovery_parallelism		     integer	 0
+SYS@pdbprod1> 
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+

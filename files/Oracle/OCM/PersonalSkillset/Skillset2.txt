@@ -1,0 +1,265 @@
+Skillset2
+
+解决oms无法登录的问题：
+1.alter system set job_queue_processes=20;
+2.conn sysman/Oracle123
+  update mgmt_audit_master set prepopulate_days=5 where prepopulate_days is null;
+  exec mgmt_audit_admin.add_audit_partition; 只需要执行此步骤
+
+
+Section 1：物化视图
+
+1.配置PDBPROD1数据库，使其中的物化视图支持查询重写，即使在约束没有被验证的情况下
+SQL> alter system set query_rewrite_enabled=true;
+SQL> alter system set query_rewrite_integrity=trusted;
+
+  
+Section 2：表空间传输
+1.使用表空间传输方法，将TRPDATA传输到PDBPROD1数据库中。
+
+
+Section 3：优化星型查询
+1.配置PDBPROD1数据库支持星型查询，确保这个改变不影响其他PRODCDB中的其他PDB
+
+
+Section 4： 配置并行执行
+1.在PDBPROD1中配置并行执行，使用SYS用户，执行如下：
+  （1）设置sh.sales表的并行度为默认并行；
+       alter table sh.sales parallel 
+       select table_name,DEGREE from dba_tables where owner='SH'
+       
+   （2）配置PDBPROD1使用自动并行度，只有当语句中的对象没有在数据字典中指定并行度时生效。
+    alter system set parallel_degree_policy=limited;
+
+   
+ 
+Section 5： 管理分区
+1.在PDBPROD1中，SH用户下创建间隔分区
+  表名：sales_history_2014,按照2011，2012，2013，2014年份来分区
+  分区名为SAL1，SAL2，SAL3，SAL4
+  基于time_id分区
+  
+  列
+  PROD_ID number not null
+  CUST_ID number not null
+  TIME_ID DATE not null
+  CHANNEL_ID  number not null
+  PROMO_ID  number not null
+  QUANTITY_SOLD number(10,2) not null
+  AMOUNT_SOLD number(10,2) not null
+  
+  使用脚本加载数据，脚本都是insert语句
+
+
+
+Section 6： 配置闪回技术
+1.配置PDBPROD1，实现闪回归档
+  表空间名称为：FLASH_ARC ，数据文件 50M
+  用户名为：FARC_OWNER
+  SH.PROMOTIONS表之前的版本，能够通过flasharc1 闪回归档查询到
+  
+  create tablespace flash_arc
+datafile '/u01/app/oracle/oradata/PRODCDB/PDBPROD1/flash_arc01.dbf'
+size 50m autoextend on;
+
+create user farc_owner identified by oracle;
+
+grant connect,resource,unlimited tablespace,FLASHBACK ARCHIVE ADMINISTER to farc_owner;
+
+create table sh.PROMOTIONS (id number);
+conn farc_owner/oracle@pdbprod1
+CREATE FLASHBACK ARCHIVE flasharc1 TABLESPACE flash_arc RETENTION 1 YEAR;
+
+conn sys/oracle@pdbprod1 as sysdba
+
+ALTER TABLE sh.PROMOTIONS FLASHBACK ARCHIVE flasharc1;
+
+  
+
+
+Development Guide手册
+
+Section 7： 使用EM Cloud Control 配置资源管理器
+EM CC安装在host02中。在host01上安装agent，发现host01和
+host02
+
+agent安装手册
+http://docs.oracle.com/cd/E25178_01/install.1111/e22624/install_agent.htm
+
+
+为PRODCDB配置资源管理器
+1.分配SYSTEM用户作为资源管理员权限
+
+27 Managing Resources with Oracle Database Resource Manager
+About Resource Manager Administration Privileges
+
+
+BEGIN
+  DBMS_RESOURCE_MANAGER_PRIVS.GRANT_SYSTEM_PRIVILEGE(
+   GRANTEE_NAME   => 'HR',
+   PRIVILEGE_NAME => 'ADMINISTER_RESOURCE_MANAGER',
+   ADMIN_OPTION   => FALSE);
+END;
+/
+
+2.为PRODCDB创建资源计划为DAYTIMEP
+  PDBPROD1得到6份共享CDB资源
+  PDBPROD2得到3份共享CDB资源
+  PDBPROD3得到1份共享CDB资源
+  没有PDB可以得到多余75%的可用cpu时间
+  没有PDB可以得到多余50%的parallel_servers_target
+
+3.在PDBPROD1中创建资源消耗组 ONLINE_GRP和REPORTING_GRP 
+使用注释标明该组用途
+
+4.在PDBPROD1中创建资源管理计划
+  （1）计划名称：DAYTIMEC
+   （2）对于ONLINE_GRP组，不能允许超过25个活动会话。如果26个用户
+   尝试登录，等待90秒以后，这个需求将被终止。
+   （3）REPORTING_GRP组最大活动会话数量为8.如果需要多余8个会话
+   150秒以后这个要求将被终止。
+   
+   （4）在ONLINE_GRP组，一个会话最长查询执行时间为5秒，
+   如果查询估算超过5s，则查询应该报错
+   
+   （5）ONLINE_GRP组最大undo为350M
+   (6)cpu比率，ONLINE_GRP，REPORTING_GRP，OTHER_GROUPS分别为
+   50，40，10
+   
+   （7）REPORTING_GRP组应该限制并行度为30
+   （8) 如果会话超过8000i/o或者超过2000m的数据传输，任何在PEPORTING_grp
+   组都应该被临时交互到low_group组中。当调用完成，会话还回到组中。
+   
+    NEW_SWITCH_FOR_CALL=>true
+    cancel_sql
+    
+    
+    BEGIN
+    DBMS_RESOURCE_MANAGER.CLEAR_PENDING_AREA();
+    DBMS_RESOURCE_MANAGER.CREATE_PENDING_AREA();
+    DBMS_RESOURCE_MANAGER.CREATE_PLAN_DIRECTIVE(
+        PLAN => 'DAYTIMEC',
+        GROUP_OR_SUBPLAN => 'ONLINE_GRP',
+        COMMENT => '',
+        MGMT_P1 => 50,
+        MGMT_P2 => NULL,
+        MGMT_P3 => NULL,
+        MGMT_P4 => NULL,
+        MGMT_P5 => NULL,
+        MGMT_P6 => NULL,
+        MGMT_P7 => NULL,
+        MGMT_P8 => NULL,
+        ACTIVE_SESS_POOL_P1 => 25,
+        QUEUEING_P1 => 90,
+        PARALLEL_DEGREE_LIMIT_P1 => NULL,
+        SWITCH_GROUP => 'CANCEL_SQL',
+        SWITCH_TIME => 5,
+        MAX_EST_EXEC_TIME => 5,
+        UNDO_POOL => 350000,
+        MAX_IDLE_TIME => NULL,
+        MAX_IDLE_BLOCKER_TIME => NULL,
+        SWITCH_IO_MEGABYTES => NULL,
+        SWITCH_IO_REQS => NULL);
+    DBMS_RESOURCE_MANAGER.SUBMIT_PENDING_AREA();
+END;
+BEGIN
+    DBMS_RESOURCE_MANAGER.CLEAR_PENDING_AREA();
+    DBMS_RESOURCE_MANAGER.CREATE_PENDING_AREA();
+    DBMS_RESOURCE_MANAGER.CREATE_PLAN_DIRECTIVE(
+        PLAN => 'DAYTIMEC',
+        GROUP_OR_SUBPLAN => 'REPOTING_GRP',
+        COMMENT => '',
+        MGMT_P1 => 40,
+        MGMT_P2 => NULL,
+        MGMT_P3 => NULL,
+        MGMT_P4 => NULL,
+        MGMT_P5 => NULL,
+        MGMT_P6 => NULL,
+        MGMT_P7 => NULL,
+        MGMT_P8 => NULL,
+        ACTIVE_SESS_POOL_P1 => 8,
+        QUEUEING_P1 => 150,
+        PARALLEL_DEGREE_LIMIT_P1 => 30,
+        SWITCH_GROUP => 'LOW_GROUP',
+        SWITCH_TIME => NULL,
+        MAX_EST_EXEC_TIME => NULL,
+        UNDO_POOL => NULL,
+        MAX_IDLE_TIME => NULL,
+        MAX_IDLE_BLOCKER_TIME => NULL,
+        SWITCH_IO_MEGABYTES => 8000,
+        SWITCH_IO_REQS => 2000,
+        SWITCH_FOR_CALL => true);
+    DBMS_RESOURCE_MANAGER.SUBMIT_PENDING_AREA();
+END;
+
+
+5 daytimep 激活，daytimec也要激活
+
+Section 8： 调优sql语句
+
+1.使用result cache
+在PDBPROD1数据库中，设置result cache size 15m，
+使用hr登录，让脚本中的语句都可以使用result cache
+select department_id,sum(salary) from employees group by department_id; 
+update employees set salary=salary+10 where department_id=20;
+commit;
+select department_id,sum(salary) from employees group by department_id; 
+update employees set salary=salary+10 where department_id=60;
+commit;
+select department_id,sum(salary) from employees group by department_id;
+
+
+
+cdb:alter system set result_cache_max_size=5m
+pdbprod1:alter session set result_cache_mode=force;
+sys: select name,status from v$result_cache_objects;
+
+2.多列统计信息
+登录PDBPROD1数据库中的SH用户，运行脚本，脚本中的查询，CUST_CITY，CUST_STATE_PROVINCE,COUNTRY_ID列经常
+一起使用。提高优化器对这些语句计算的可选择率
+
+SQL Tuning Guide ->13 Managing Optimizer Statistics: Advanced Topics ->13.3 Managing Extended Statistics
+13.3.1.2 Detecting Useful Column Groups for a Specific Workload
+13.3.1.3 Creating Column Groups Detected During Workload Monitoring
+
+脚本内容：
+  SELECT *
+  FROM   customers
+  WHERE  cust_city = 'Los Angeles'
+  AND    cust_state_province = 'CA'
+  AND    country_id = 52790;
+
+
+
+
+3.SPA，从11.2.0.3
+
+
+4.SPM，演进基线
+在PDBPROD1的SH用户下，执行脚本，并演进基线
+
+SQL Tuning Guide ->
+23 Managing SQL Plan Baselines
+23.4.2 Loading Plans from the Shared SQL Area
+
+
+SELECT /*LOAD_CC*/ * FROM   sh.sales WHERE  quantity_sold > 40
+ORDER BY prod_id;
+
+
+Section 9： 索引调优
+1.在向PDBPROD1数据库sh用户的PROD_INFO表插入数据时，发现大量的
+buffer busy waits 等待事件。PRODUCT_ID列上一个序列被使用。
+范围扫描也频繁执行在PRODUCT_ID列上。创建一个索引PROD_IDX,
+在PRODUCT_ID列上，不要产生大量的buffer buffer waits等待，并且可以
+用于范围扫描。
+
+创建全局hash 分区索引
+
+
+
+
+
+
+
+

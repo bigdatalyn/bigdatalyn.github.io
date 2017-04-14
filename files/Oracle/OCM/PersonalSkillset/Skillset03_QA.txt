@@ -1,0 +1,559 @@
+
+1.Create public synonym sh.sales in the PDBPROD1 database, name sales1
+
+############## Drop datafile;
+
+SYS@PRODCDB> select name from v$database;
+
+NAME
+---------
+PRODCDB
+
+SYS@PRODCDB> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/pdbseed/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/sysaux01.dbf
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/PDBPROD2_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD3/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD4/user01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD5/system01.dbf
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/PDBPROD5/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD5/users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD5/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD2/big_tbs.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/trpdata_6
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/flash_arc01.dbf
+
+28 rows selected.
+
+SYS@PRODCDB> !mv /u01/app/oracle/oradata/PRODCDB/users01.dbf /u01/app/oracle/oradata/PRODCDB/users01.dbf.back
+
+SYS@PRODCDB> 
+
+############## list/advise/repair failure;
+
+
+[oracle@host01 ~]$ export ORACLE_SID=PRODCDB;rman target /
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Mar 13 14:29:08 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PRODCDB (DBID=2891862819, not open)
+
+RMAN> list failure;
+
+using target database control file instead of recovery catalog
+Database Role: PRIMARY
+
+List of Database Failures
+=========================
+
+Failure ID Priority Status    Time Detected Summary
+---------- -------- --------- ------------- -------
+762        HIGH     OPEN      13-MAR-17     One or more non-system datafiles are missing
+
+RMAN> advise failure;
+
+Database Role: PRIMARY
+
+List of Database Failures
+=========================
+
+Failure ID Priority Status    Time Detected Summary
+---------- -------- --------- ------------- -------
+762        HIGH     OPEN      13-MAR-17     One or more non-system datafiles are missing
+
+analyzing automatic repair options; this may take some time
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=240 device type=DISK
+allocated channel: ORA_DISK_2
+channel ORA_DISK_2: SID=13 device type=DISK
+analyzing automatic repair options complete
+
+Mandatory Manual Actions
+========================
+no manual actions available
+
+Optional Manual Actions
+=======================
+1. If file /u01/app/oracle/oradata/PRODCDB/users01.dbf was unintentionally renamed or moved, restore it
+
+Automated Repair Options
+========================
+Option Repair Description
+------ ------------------
+1      Restore and recover datafile 6  
+  Strategy: The repair includes complete media recovery with no data loss
+  Repair script: /u01/app/oracle/product/12.1.0/dbhome_1/diag/rdbms/prodcdb/PRODCDB/hm/reco_627142537.hm
+
+RMAN> repair failure;
+
+Strategy: The repair includes complete media recovery with no data loss
+Repair script: /u01/app/oracle/product/12.1.0/dbhome_1/diag/rdbms/prodcdb/PRODCDB/hm/reco_627142537.hm
+
+contents of repair script:
+   # restore and recover datafile
+   restore ( datafile 6 );
+   recover datafile 6;
+   sql 'alter database datafile 6 online';
+
+Do you really want to execute the above repair (enter YES or NO)? yes
+executing repair script
+
+Starting restore at 13-MAR-17
+using channel ORA_DISK_1
+using channel ORA_DISK_2
+
+channel ORA_DISK_1: starting datafile backup set restore
+channel ORA_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_DISK_1: restoring datafile 00006 to /u01/app/oracle/oradata/PRODCDB/users01.dbf
+channel ORA_DISK_1: reading from backup piece /u01/app/oracle/fast_recovery_area/PRODCDB/backupset/2017_02_27/o1_mf_nnndf_TAG20170227T155326_dc7pxrok_.bkp
+channel ORA_DISK_1: piece handle=/u01/app/oracle/fast_recovery_area/PRODCDB/backupset/2017_02_27/o1_mf_nnndf_TAG20170227T155326_dc7pxrok_.bkp tag=TAG20170227T155326
+channel ORA_DISK_1: restored backup piece 1
+channel ORA_DISK_1: restore complete, elapsed time: 00:00:01
+Finished restore at 13-MAR-17
+
+Starting recover at 13-MAR-17
+using channel ORA_DISK_1
+using channel ORA_DISK_2
+
+starting media recovery
+
+archived log for thread 1 with sequence 202 is already on disk as file /u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_02_27/o1_mf_1_202_dc7q3fw5_.arc
+archived log for thread 1 with sequence 203 is already on disk as file /u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_06/o1_mf_1_203_dcshvbpj_.arc
+archived log for thread 1 with sequence 204 is already on disk as file /u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_06/o1_mf_1_204_dcsyq8hx_.arc
+archived log for thread 1 with sequence 205 is already on disk as file /u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_10/o1_mf_1_205_dd47d5z7_.arc
+archived log for thread 1 with sequence 206 is already on disk as file /u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_10/o1_mf_1_206_dd4q321n_.arc
+archived log for thread 1 with sequence 207 is already on disk as file /u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_13/o1_mf_1_207_dddfyrtf_.arc
+archived log file name=/u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_02_27/o1_mf_1_202_dc7q3fw5_.arc thread=1 sequence=202
+archived log file name=/u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_06/o1_mf_1_203_dcshvbpj_.arc thread=1 sequence=203
+archived log file name=/u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_06/o1_mf_1_204_dcsyq8hx_.arc thread=1 sequence=204
+archived log file name=/u01/app/oracle/fast_recovery_area/PRODCDB/archivelog/2017_03_10/o1_mf_1_205_dd47d5z7_.arc thread=1 sequence=205
+media recovery complete, elapsed time: 00:00:01
+Finished recover at 13-MAR-17
+
+sql statement: alter database datafile 6 online
+repair failure complete
+
+Do you want to open the database (enter YES or NO)? yes
+database opened
+
+RMAN> 
+
+
+
+############## database link/synonym
+
+
+
+SYS@PROD5> create public database link pdbprod1 connect to sh identified by oracle using 'PDBPROD1';
+
+Database link created.
+
+SYS@PROD5> select count(*) from sh.sales@pdbprod1;
+select count(*) from sh.sales@pdbprod1
+                              *
+ERROR at line 1:
+ORA-01017: invalid username/password; logon denied
+ORA-02063: preceding line from PDBPROD1
+
+
+SYS@PROD5> select count(*) from sh.sales@pdbprod1;
+
+  COUNT(*)
+----------
+    918843
+
+SYS@PROD5> create public synonym sales for sh.sales@pdbprod1;
+
+Synonym created.
+
+SYS@PROD5> select count(*) from sales;
+
+  COUNT(*)
+----------
+    918843
+
+SYS@PROD5> 
+
+
+2. Create a physical standby database:
+
+   (1) PROD5 in the host01 as the Primary, SID is PROD5, DB_UNIQUE_NAME set to PROD5H1
+   (2) PROD5 in teh host02 as a standby database, SID is PROD5, DB_UNIQUE_NAME set PROD5H2
+   (3) The directory objects should exist in the primary and standby
+   (4) Can be connected standby database using the following method, connect sys/oracle@PROD5H2 as sysdba, should be the dedicated mode
+   (5) When the global temporary tables standby database were DML, minimizing the generation of Red
+
+############ parameter's setting:
+
+SYS@PROD5> show parameter liste
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+listener_networks		     string
+local_listener			     string	 LISTENER_PROD5
+remote_listener 		     string
+SYS@PROD5> alter system set local_listener='';
+
+System altered.
+
+SYS@PROD5> select owner,table_name from dba_external_tables;
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+SYS
+OPATCH_XML_INV
+
+SH
+SALES_TRANSACTIONS_EXT
+
+
+SYS@PROD5> drop table sys.OPATCH_XML_INV purge;
+
+Table dropped.
+
+SYS@PROD5> drop table SH.SALES_TRANSACTIONS_EXT purge;
+
+Table dropped.
+
+SYS@PROD5> 
+
+SYS@PROD5> alter database flashback off;
+
+Database altered.
+
+SYS@PROD5> select flashback_on from v$database;
+
+FLASHBACK_ON
+------------------
+NO
+
+SYS@PROD5> 
+
+SYS@PROD5> alter database force logging;
+
+Database altered.
+
+SYS@PROD5> 
+
+SYS@PROD5> select MEMBER from v$logfile;
+
+MEMBER
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PROD5/redo03.log
+/u01/app/oracle/oradata/PROD5/redo02.log
+/u01/app/oracle/oradata/PROD5/redo01.log
+
+SYS@PROD5> !du -sm /u01/app/oracle/oradata/PROD5/redo0*    
+51	/u01/app/oracle/oradata/PROD5/redo01.log
+51	/u01/app/oracle/oradata/PROD5/redo02.log
+51	/u01/app/oracle/oradata/PROD5/redo03.log
+
+SYS@PROD5> alter database add standby logfile ('/u01/app/oracle/oradata/PROD5/redo04.log') size 50m;
+
+Database altered.
+
+SYS@PROD5> alter database add standby logfile ('/u01/app/oracle/oradata/PROD5/redo05.log') size 50m;
+
+Database altered.
+
+SYS@PROD5> alter database add standby logfile ('/u01/app/oracle/oradata/PROD5/redo06.log') size 50m;
+
+Database altered.
+
+SYS@PROD5> show parameter control
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+control_file_record_keep_time	     integer	 7
+control_files			     string	 /u01/app/oracle/oradata/PROD5/
+						 control01.ctl, /u01/app/oracle
+						 /fast_recovery_area/PROD5/cont
+						 rol02.ctl
+control_management_pack_access	     string	 DIAGNOSTIC+TUNING
+SYS@PROD5> alter system set control_files='/u01/app/oracle/oradata/PROD5/control01.ctl','/u01/app/oracle/oradata/PROD5/control03.ctl' scope=spfile;
+
+System altered.
+
+SYS@PROD5> 
+
+SYS@PROD5> alter system set db_unique_name=PROD5H1 scope=spfile;
+
+System altered.
+
+SYS@PROD5>
+
+SYS@PROD5> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SYS@PROD5> !ls -l $ORACLE_HOME/dbs  
+total 54788
+drwxr-x--- 3 oracle oinstall     4096 Feb 23 15:25 ,
+-rw-r----- 1 oracle oinstall 17973248 Mar 13 14:56 control03.ctl
+-rw-rw---- 1 oracle oinstall     1544 Feb 27 17:10 hc_PROD4.dat
+-rw-rw---- 1 oracle oinstall     1544 Mar 13 14:56 hc_PROD5.dat
+-rw-rw---- 1 oracle oinstall     1544 Mar 13 14:29 hc_PRODCDB.dat
+-rw-r--r-- 1 oracle oinstall     2992 Feb  3  2012 init.ora
+-rw-r----- 1 oracle oinstall       24 Oct 23  2015 lkPROD4
+-rw-r----- 1 oracle oinstall       24 Oct 23  2015 lkPROD5
+-rw-r----- 1 oracle oinstall       24 Oct 22  2015 lkPRODCDB
+-rw-r----- 1 oracle oinstall     7680 Oct 23  2015 orapwPROD4
+-rw-r----- 1 oracle oinstall     7680 Oct 23  2015 orapwPROD5
+-rw-r----- 1 oracle oinstall     7680 Oct 22  2015 orapwPRODCDB
+-rw-r----- 1 oracle oinstall 10043392 Feb 27 16:27 snapcf_PROD4.f
+-rw-r----- 1 oracle oinstall 10043392 Feb 27 14:20 snapcf_PROD5.f
+-rw-r----- 1 oracle oinstall 17973248 Mar 13 14:39 snapcf_PRODCDB.f
+-rw-r----- 1 oracle oinstall     3584 Feb 27 16:27 spfilePROD4.ora
+-rw-r----- 1 oracle oinstall     2560 Mar 13 14:55 spfilePROD5.ora
+-rw-r----- 1 oracle oinstall     3584 Mar 13 14:53 spfilePRODCDB.ora
+
+SYS@PROD5> create pfile from spfile;
+
+File created.
+
+SYS@PROD5> !ls -l $ORACLE_HOME/dbs
+total 54792
+drwxr-x--- 3 oracle oinstall     4096 Feb 23 15:25 ,
+-rw-r----- 1 oracle oinstall 17973248 Mar 13 14:56 control03.ctl
+-rw-rw---- 1 oracle oinstall     1544 Feb 27 17:10 hc_PROD4.dat
+-rw-rw---- 1 oracle oinstall     1544 Mar 13 14:56 hc_PROD5.dat
+-rw-rw---- 1 oracle oinstall     1544 Mar 13 14:29 hc_PRODCDB.dat
+-rw-r--r-- 1 oracle oinstall     2992 Feb  3  2012 init.ora
+-rw-r--r-- 1 oracle oinstall      963 Mar 13 14:56 initPROD5.ora
+-rw-r----- 1 oracle oinstall       24 Oct 23  2015 lkPROD4
+-rw-r----- 1 oracle oinstall       24 Oct 23  2015 lkPROD5
+-rw-r----- 1 oracle oinstall       24 Oct 22  2015 lkPRODCDB
+-rw-r----- 1 oracle oinstall     7680 Oct 23  2015 orapwPROD4
+-rw-r----- 1 oracle oinstall     7680 Oct 23  2015 orapwPROD5
+-rw-r----- 1 oracle oinstall     7680 Oct 22  2015 orapwPRODCDB
+-rw-r----- 1 oracle oinstall 10043392 Feb 27 16:27 snapcf_PROD4.f
+-rw-r----- 1 oracle oinstall 10043392 Feb 27 14:20 snapcf_PROD5.f
+-rw-r----- 1 oracle oinstall 17973248 Mar 13 14:39 snapcf_PRODCDB.f
+-rw-r----- 1 oracle oinstall     3584 Feb 27 16:27 spfilePROD4.ora
+-rw-r----- 1 oracle oinstall     2560 Mar 13 14:55 spfilePROD5.ora
+-rw-r----- 1 oracle oinstall     3584 Mar 13 14:53 spfilePRODCDB.ora
+
+SYS@PROD5> 
+
+SYS@PROD5> !cp /u01/app/oracle/oradata/PROD5/control01.ctl /u01/app/oracle/oradata/PROD5/control03.ctl
+
+SYS@PROD5> startup
+ORACLE instance started.
+
+Total System Global Area 1224736768 bytes
+Fixed Size		    2923824 bytes
+Variable Size		  838861520 bytes
+Database Buffers	  369098752 bytes
+Redo Buffers		   13852672 bytes
+Database mounted.
+Database opened.
+SYS@PROD5>
+
+SYS@PROD5> show parameter control
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+control_file_record_keep_time	     integer	 7
+control_files			     string	 /u01/app/oracle/oradata/PROD5/
+						 control01.ctl, /u01/app/oracle
+						 /oradata/PROD5/control03.ctl
+control_management_pack_access	     string	 DIAGNOSTIC+TUNING
+SYS@PROD5> show parameter db_unique
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_unique_name			     string	 PROD5H1
+SYS@PROD5> 
+
+
+########## 
+
+[oracle@host01 dbs]$ pwd
+/u01/app/oracle/product/12.1.0/dbhome_1/dbs
+[oracle@host01 dbs]$ 
+[oracle@host01 dbs]$ vi initPROD5.ora
+[oracle@host01 dbs]$ cat initPROD5.ora
+PROD5.__data_transfer_cache_size=0
+PROD5.__db_cache_size=335544320
+PROD5.__java_pool_size=16777216
+PROD5.__large_pool_size=150994944
+PROD5.__oracle_base='/u01/app/oracle'#ORACLE_BASE set from environment
+PROD5.__pga_aggregate_target=503316480
+PROD5.__sga_target=721420288
+PROD5.__shared_io_pool_size=33554432
+PROD5.__shared_pool_size=167772160
+PROD5.__streams_pool_size=0
+*.audit_file_dest='/u01/app/oracle/admin/PROD5/adump'
+*.audit_trail='db'
+*.compatible='12.1.0.2.0'
+*.control_files='/u01/app/oracle/oradata/PROD5/control01.ctl','/u01/app/oracle/oradata/PROD5/control03.ctl'
+*.db_block_size=8192
+*.db_domain='example.com'
+*.db_name='PROD5'
+*.db_recovery_file_dest_size=5368709120
+*.db_recovery_file_dest='/u01/app/oracle/flash'
+*.db_unique_name='PROD5H1'
+*.diagnostic_dest='/u01/app/oracle'
+*.dispatchers='(PROTOCOL=TCP) (SERVICE=PROD5XDB)'
+*.local_listener=''
+*.memory_target=1160m
+*.open_cursors=300
+*.processes=300
+*.remote_login_passwordfile='EXCLUSIVE'
+*.undo_tablespace='UNDOTBS1'
+DB_UNIQUE_NAME=PROD5
+LOG_ARCHIVE_CONFIG='DG_CONFIG=(PROD5,SBDB5)'
+LOG_ARCHIVE_DEST_1=
+ 'LOCATION=USE_DB_RECOVERY_FILE_DEST 
+  VALID_FOR=(ALL_LOGFILES,ALL_ROLES)
+  DB_UNIQUE_NAME=PROD5'
+LOG_ARCHIVE_DEST_2=
+ 'SERVICE=SBDB5 ASYNC
+  VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) 
+  DB_UNIQUE_NAME=SBDB5'
+REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE
+LOG_ARCHIVE_FORMAT=%t_%s_%r.arc
+FAL_SERVER=SBDB5
+DB_FILE_NAME_CONVERT='/SBDB5/','/PROD5/'
+LOG_FILE_NAME_CONVERT='/SBDB5/','/PROD5/' 
+STANDBY_FILE_MANAGEMENT=AUTO
+[oracle@host01 dbs]$ 
+
+[oracle@host01 dbs]$ scp initPROD5.ora oracle@host02:/u01/app/oracle/product/12.1.0/dbhome_1/dbs/
+The authenticity of host 'host02 (192.0.2.102)' can't be established.
+RSA key fingerprint is dd:a8:ad:6a:6c:3d:04:07:4b:8c:9c:b1:cd:11:d1:26.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'host02,192.0.2.102' (RSA) to the list of known hosts.
+oracle@host02's password: 
+initPROD5.ora                                                                100% 1506     1.5KB/s   00:00    
+[oracle@host01 dbs]$ scp orapwPROD5 oracle@host02:/u01/app/oracle/product/12.1.0/dbhome_1/dbs/
+oracle@host02's password: 
+orapwPROD5                                                                   100% 7680     7.5KB/s   00:00    
+[oracle@host01 dbs]$ 
+
+
+
+[oracle@host02 dbs]$ vi initPROD5.ora
+[oracle@host02 dbs]$ cat initPROD5.ora
+SBDB5.__data_transfer_cache_size=0
+SBDB5.__db_cache_size=335544320
+SBDB5.__java_pool_size=16777216
+SBDB5.__large_pool_size=150994944
+SBDB5.__oracle_base='/u01/app/oracle'#ORACLE_BASE set from environment
+SBDB5.__pga_aggregate_target=503316480
+SBDB5.__sga_target=721420288
+SBDB5.__shared_io_pool_size=33554432
+SBDB5.__shared_pool_size=167772160
+SBDB5.__streams_pool_size=0
+*.audit_file_dest='/u01/app/oracle/admin/SBDB5/adump'
+*.audit_trail='db'
+*.compatible='12.1.0.2.0'
+*.control_files='/u01/app/oracle/oradata/SBDB5/control01.ctl','/u01/app/oracle/oradata/SBDB5/control03.ctl'
+*.db_block_size=8192
+*.db_domain='example.com'
+*.db_name='PROD5'
+*.db_recovery_file_dest_size=5368709120
+*.db_recovery_file_dest='/u01/app/oracle/flash'
+*.db_unique_name='PROD5H2'
+*.diagnostic_dest='/u01/app/oracle'
+*.dispatchers='(PROTOCOL=TCP) (SERVICE=SBDB5XDB)'
+*.local_listener=''
+*.memory_target=1160m
+*.open_cursors=300
+*.processes=300
+*.remote_login_passwordfile='EXCLUSIVE'
+*.undo_tablespace='UNDOTBS1'
+DB_UNIQUE_NAME=SBDB5
+LOG_ARCHIVE_CONFIG='DG_CONFIG=(SBDB5,PROD5)'
+LOG_ARCHIVE_DEST_1=
+ 'LOCATION=USE_DB_RECOVERY_FILE_DEST 
+  VALID_FOR=(ALL_LOGFILES,ALL_ROLES)
+  DB_UNIQUE_NAME=SBDB5'
+LOG_ARCHIVE_DEST_2=
+ 'SERVICE=PROD5 ASYNC
+  VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) 
+  DB_UNIQUE_NAME=PROD5'
+REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE
+LOG_ARCHIVE_FORMAT=%t_%s_%r.arc
+FAL_SERVER=PROD5
+DB_FILE_NAME_CONVERT='/PROD5/','/SBDB5/'
+LOG_FILE_NAME_CONVERT='/PROD5/','/SBDB5/' 
+STANDBY_FILE_MANAGEMENT=AUTO
+[oracle@host02 dbs]$ 
+
+[oracle@host02 dbs]$ mkdir -p /u01/app/oracle/oradata/SBDB5
+[oracle@host02 dbs]$ mkdir -p /u01/app/oracle/admin/SBDB5/adump
+[oracle@host02 dbs]$ 
+
+############## startup instance
+
+SYS@PROD5> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SYS@PROD5> create spfile from pfile;
+
+File created.
+
+SYS@PROD5>
+
+
+3. Configure a physical standby database for testing
+
+  (1) Configuration PROD5 physical standby database for testing, you can DML and transaction processing
+
+
+4. Configure a physical standby database for reporting and Redo Apply
+
+  (1) Configure the physical standby database can be used for Reporting Services, make sure it is in open mode
+  (2) When the configuration restoration log reaches the standby database for application immediately
+  (3) Reduce the load standby database when incremental backup
+  (4) archived log deletion policy: When the backup archive logs after the database application is complete, it can be deleted in the Primary database
+
+5. Automatic management
+
+ (1) Automatic failover for use host02 Observer. Make sure that is configured for synchronous
+ (2) The physical standby database to acknowledge receipt of redo only when it can guarantee that when applying redo.
+ (3) When the physical standby database to receive redo when more than 30 seconds, it should issue a warning, regardless of which database is standby database.
+ (4) When the redo Not physical standby database applications within 45 seconds, an alarm should be issued, regardless of which database is standby database.
+
+6. Perform switching:
+
+  (1) Switching database roles, so that the Primary runs on host02, standby database running on host01
+  (2) The new Primary must be open read write mode
+  (3) The new standby database must be open read only mode, and can apply log
+
+
+7. Sequence
+
+  (1) Create a sequence SEQ1, ensure that the Primary equipment can be used. Sequence starting from 1, incremented by 1 in the configuration of this value must be unique. This sequence should produce minimal performance overhead and maintained in memory.
+  (2) Create a sequence SEQ2, for global temporary tables. Its value must be unique at the session level, but different sessions may be allowed to repeat.

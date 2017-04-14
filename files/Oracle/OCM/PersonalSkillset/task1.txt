@@ -1,0 +1,46 @@
+模块一：Oracle 12c 数据及网络管理
+Oracle 12c 云数据库架构体系
+创建与管理PDB
+克隆PDB
+远程克隆PDB
+升级11g 数据库到 12c PDB
+创建CDB,PDB环境下的用户，组，及权限管理
+配置网络环境
+#避免网络配置导致OCM考试没有成绩
+备份CDB
+恢复CDB及PDB
+
+模块二：Oracle 12c 数据仓库管理及性能调优
+管理物化视图
+管理跨平台传送表空间
+#创建特殊类型分区表
+配置数据闪回归档
+配置 Resource Manager
+#EM不能工作及不使用SQL的情况下配置Resource Manager
+SQL调优工具
+管理 SQL计划基线
+Oracle 12c 临时表空间调优新特性
+Oracle 12c 并行调优新特性
+
+模块三：Data Guard
+创建物理standby database
+转换从库为快照数据库
+配置只读standby库
+配置fast start failover
+使用Broker命令管理DG
+# 处理standby database 配置失败
+
+
+模块四：Oracle 12c Grid Infrastructure 及 RAC安装与配置
+
+安装GI
+Oracle 12c Flex ASM架构
+管理ASM实例
+管理ASM磁盘组
+创建  ACFS
+启动, 关闭, 配置, Oracle 12c Grid Infrastructure
+#快速处理Oracle 12c 安装失败
+安装Oracle 12c 数据库
+创建Oracle 12c RAC databases
+配置服务
+#处理由于机器，及磁盘问题引起的RAC安装失败，及安装超时问题

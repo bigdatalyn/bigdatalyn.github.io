@@ -1,0 +1,42 @@
+
+1.Create public synonym sh.sales in the PDBPROD1 database, name sales1
+
+2. Create a physical standby database:
+
+   (1) PROD5 in the host01 as the Primary, SID is PROD5, DB_UNIQUE_NAME set to PROD5H1
+   (2) PROD5 in teh host02 as a standby database, SID is PROD5, DB_UNIQUE_NAME set PROD5H2
+   (3) The directory objects should exist in the primary and standby
+   (4) Can be connected standby database using the following method, connect sys/oracle@PROD5H2 as sysdba, should be the dedicated mode
+   (5) When the global temporary tables standby database were DML, minimizing the generation of Red
+
+
+3. Configure a physical standby database for testing
+
+  (1) Configuration PROD5 physical standby database for testing, you can DML and transaction processing
+
+
+4. Configure a physical standby database for reporting and Redo Apply
+
+  (1) Configure the physical standby database can be used for Reporting Services, make sure it is in open mode
+  (2) When the configuration restoration log reaches the standby database for application immediately
+  (3) Reduce the load standby database when incremental backup
+  (4) archived log deletion policy: When the backup archive logs after the database application is complete, it can be deleted in the Primary database
+
+5. Automatic management
+
+ (1) Automatic failover for use host02 Observer. Make sure that is configured for synchronous
+ (2) The physical standby database to acknowledge receipt of redo only when it can guarantee that when applying redo.
+ (3) When the physical standby database to receive redo when more than 30 seconds, it should issue a warning, regardless of which database is standby database.
+ (4) When the redo Not physical standby database applications within 45 seconds, an alarm should be issued, regardless of which database is standby database.
+
+6. Perform switching:
+
+  (1) Switching database roles, so that the Primary runs on host02, standby database running on host01
+  (2) The new Primary must be open read write mode
+  (3) The new standby database must be open read only mode, and can apply log
+
+
+7. Sequence
+
+  (1) Create a sequence SEQ1, ensure that the Primary equipment can be used. Sequence starting from 1, incremented by 1 in the configuration of this value must be unique. This sequence should produce minimal performance overhead and maintained in memory.
+  (2) Create a sequence SEQ2, for global temporary tables. Its value must be unique at the session level, but different sessions may be allowed to repeat.

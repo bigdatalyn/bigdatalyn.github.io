@@ -1,0 +1,2032 @@
+Section 1：Materialized views
+
+1.Configuration PDBPROD1 database, so that the materialized view query rewrite be supportted, even in the case of constraint is not verified
+
+
+Oracle® Database Reference 12c Release 1 (12.1)/QUERY_REWRITE_INTEGRITY
+
+SYS@PRODCDB> show pdbs;         
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 3 PDBPROD1			  READ WRITE NO
+SYS@PRODCDB> show parameter query;
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+inmemory_query			     string	 ENABLE
+query_rewrite_enabled		     string	 TRUE
+query_rewrite_integrity 	     string	 TRUSTED
+SYS@PRODCDB> alter system set query_rewrite_integrity=1;
+alter system set query_rewrite_integrity=1
+*
+ERROR at line 1:
+ORA-00096: invalid value 1 for parameter query_rewrite_integrity, must be from
+among stale_tolerated, trusted, enforced
+
+
+SYS@PRODCDB> alter system set query_rewrite_integrity=enforced;
+
+System altered.
+
+SYS@PRODCDB> show parameter query
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+inmemory_query			     string	 ENABLE
+query_rewrite_enabled		     string	 TRUE
+query_rewrite_integrity 	     string	 ENFORCED
+SYS@PRODCDB> 
+
+
+
+
+Section 2：Transport tablespace
+
+1.Use the Transport tablespace method, The TRPDATA tablespace will be transferred to the PDBPROD1 database,the metadata dump is trans3_2.dmp, data file is trpdata_6.
+
+Oracle® Database Administrator's Guide 12c Release 1 (12.1) / 15 Transporting Data / Transporting Tablespaces Between Databases
+
+
+++++++++++ create directory and check platform's info
+
+[oracle@host01 ~]$ sqlplus sys/oracle@PDBPROD1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 10:12:27 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PDBPROD1> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 3 PDBPROD1			  READ WRITE NO
+SYS@PDBPROD1> select tablespace_name from dba_tablespaces;
+
+TABLESPACE_NAME
+------------------------------
+SYSTEM
+SYSAUX
+TEMP
+USERS
+EXAMPLE
+
+SYS@PDBPROD1> 
+
+SYS@PDBPROD1> create directory data_dir as '/home/oracle/scripts';
+
+Directory created.
+
+SYS@PDBPROD1> grant read,write,execute on directory data_dir to public;
+
+Grant succeeded.
+
+SYS@PDBPROD1> 
+
+SYS@PDBPROD1> SELECT d.PLATFORM_NAME, ENDIAN_FORMAT
+     FROM V$TRANSPORTABLE_PLATFORM tp, V$DATABASE d
+     WHERE tp.PLATFORM_NAME = d.PLATFORM_NAME;  2    3  
+
+PLATFORM_NAME
+--------------------------------------------------------------------------------
+ENDIAN_FORMAT
+--------------
+Linux x86 64-bit
+Little
+
+
+SYS@PDBPROD1> 
+
+SYS@PDBPROD1> desc V$TRANSPORTABLE_PLATFORM
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PLATFORM_ID					    NUMBER
+ PLATFORM_NAME					    VARCHAR2(101)
+ ENDIAN_FORMAT					    VARCHAR2(14)
+ CON_ID 					    NUMBER
+
+SYS@PDBPROD1>
+
+SYS@PDBPROD1> select platform_name from v$transportable_platform;
+
+PLATFORM_NAME
+--------------------------------------------------------------------------------
+Solaris[tm] OE (32-bit)
+Solaris[tm] OE (64-bit)
+Microsoft Windows IA (32-bit)
+Linux IA (32-bit)
+AIX-Based Systems (64-bit)
+HP-UX (64-bit)
+HP Tru64 UNIX
+HP-UX IA (64-bit)
+Linux IA (64-bit)
+HP Open VMS
+Microsoft Windows IA (64-bit)
+
+PLATFORM_NAME
+--------------------------------------------------------------------------------
+IBM zSeries Based Linux
+Linux x86 64-bit
+Apple Mac OS
+Microsoft Windows x86 64-bit
+Solaris Operating System (x86)
+IBM Power Based Linux
+HP IA Open VMS
+Solaris Operating System (x86-64)
+Apple Mac OS (x86-64)
+
+20 rows selected.
+
+SYS@PDBPROD1> 
+
+++++++++++ convert datafile by RMAN
+
+[oracle@host01 scripts]$ export ORACLE_SID=PRODCDB;rman target /
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Mar 6 10:18:10 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PRODCDB (DBID=2891862819)
+
+RMAN> 
+
+RMAN> convert datafile 
+2> '/home/oracle/scripts/trpdata_6'
+3> to platform="Linux x86 64-bit"
+4> from platform="Solaris[tm] OE (32-bit)"
+5> db_file_name_convert=
+6> '/home/oracle/scripts/','/u01/app/oracle/oradata/PRODCDB/PDBPROD1/';
+
+Starting conversion at target at 06-MAR-17
+using target database control file instead of recovery catalog
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=45 device type=DISK
+allocated channel: ORA_DISK_2
+channel ORA_DISK_2: SID=266 device type=DISK
+channel ORA_DISK_1: starting datafile conversion
+input file name=/home/oracle/scripts/trpdata_6
+converted datafile=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/trpdata_6
+channel ORA_DISK_1: datafile conversion complete, elapsed time: 00:00:01
+Finished conversion at target at 06-MAR-17
+
+RMAN> 
+
+++++++++++ create user and impdp the dumpfile/datafile
+
+[oracle@host01 scripts]$ sqlplus system/oracle@PDBPROD1
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 10:47:16 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Mar 06 2017 10:46:32 +08:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYSTEM@PDBPROD1> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 scripts]$ ls
+2_8_3.sql  8_1_1.sql  8_4_1.sql    initsec2.sh    Skillset2.html  trpdata_6
+5_2_1.sql  8_2_1.sql  appsstq.dmp  Skillset1.txt  trans3_2.dmp
+[oracle@host01 scripts]$
+[oracle@host01 scripts]$ strings trans3_2.dmp | tail -10
+TEST
+TRANS_USER
+TRANS_USER
+TEST
+	TRANS_TBS
+TRANS_USER
+-TRANSPORTABLE_EXPORT/POST_INSTANCE/PLUGTS_BLK
+PLUGTS_BLK
+-TRANSPORTABLE_EXPORT/POST_INSTANCE/PLUGTS_BLK
+PLUGTS_BLK
+[oracle@host01 scripts]$ 
+[oracle@host01 scripts]$ sqlplus sys/oracle@PDBPROD1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 10:48:46 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PDBPROD1> create user TRANS_USER identified by oracle account unlock;
+
+User created.
+
+SYS@PDBPROD1> grant connect,resource to trans_user;
+
+Grant succeeded.
+
+SYS@PDBPROD1> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 scripts]$ 
+
+[oracle@host01 scripts]$ ls
+2_8_3.sql  8_1_1.sql  8_4_1.sql    initsec2.sh    Skillset2.html  trpdata_6
+5_2_1.sql  8_2_1.sql  appsstq.dmp  Skillset1.txt  trans3_2.dmp
+[oracle@host01 scripts]$ impdp system/oracle dumpfile=trans3_2.dmp directory=data_dir transport_datafiles='/u01/app/oracle/oradata/PRODCDB/PDBPROD1/trpdata_6' logfile=impdp.log;
+
+Import: Release 12.1.0.2.0 - Production on Mon Mar 6 10:52:23 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+ORA-39002: invalid operation
+ORA-39070: Unable to open the log file.
+ORA-39087: directory name DATA_DIR is invalid
+
+
+[oracle@host01 scripts]$ 
+[oracle@host01 scripts]$ 
+[oracle@host01 scripts]$ impdp system/oracle@PDBPROD1 dumpfile=trans3_2.dmp directory=data_dir transport_datafiles='/u01/app/oracle/oradata/PRODCDB/PDBPROD1/trpdata_6' logfile=impdp.log;
+
+Import: Release 12.1.0.2.0 - Production on Mon Mar 6 10:52:50 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+Master table "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01" successfully loaded/unloaded
+Source time zone version is 14 and target time zone version is 18.
+Source time zone is +00:00 and target time zone is +08:00.
+Starting "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01":  system/********@PDBPROD1 dumpfile=trans3_2.dmp directory=data_dir transport_datafiles=/u01/app/oracle/oradata/PRODCDB/PDBPROD1/trpdata_6 logfile=impdp.log 
+Processing object type TRANSPORTABLE_EXPORT/PLUGTS_BLK
+Processing object type TRANSPORTABLE_EXPORT/TABLE
+Processing object type TRANSPORTABLE_EXPORT/POST_INSTANCE/PLUGTS_BLK
+Job "SYSTEM"."SYS_IMPORT_TRANSPORTABLE_01" successfully completed at Mon Mar 6 10:53:00 2017 elapsed 0 00:00:06
+
+[oracle@host01 scripts]$ 
+
+++++++++++ change the status of new tablespace and check the new table's count;
+
+[oracle@host01 ~]$ sqlplus sys/oracle@PDBPROD1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 10:54:08 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PDBPROD1> select tablespace_name,status from dba_tablespaces;
+
+TABLESPACE_NAME 	       STATUS
+------------------------------ ---------
+SYSTEM			       ONLINE
+SYSAUX			       ONLINE
+TEMP			       ONLINE
+USERS			       ONLINE
+EXAMPLE 		       ONLINE
+TRANS_TBS		       READ ONLY
+
+6 rows selected.
+
+SYS@PDBPROD1> alter tablespace TRANS_TBS read write;
+
+Tablespace altered.
+
+SYS@PDBPROD1> select tablespace_name,status from dba_tablespaces;
+
+TABLESPACE_NAME 	       STATUS
+------------------------------ ---------
+SYSTEM			       ONLINE
+SYSAUX			       ONLINE
+TEMP			       ONLINE
+USERS			       ONLINE
+EXAMPLE 		       ONLINE
+TRANS_TBS		       ONLINE
+
+6 rows selected.
+
+SYS@PDBPROD1> conn trans_user/oracle@PDBPROD1 
+Connected.
+TRANS_USER@PDBPROD1> select table_name from user_tables;
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+TEST
+
+TRANS_USER@PDBPROD1> select count(*) from test;
+
+  COUNT(*)
+----------
+	37
+
+TRANS_USER@PDBPROD1> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 ~]$ 
+
+
+Section 3：Star query optimization
+
+1.Configuring PDBPROD1 database supports star queries to ensure that this change does not affect other PDB in the PRODCDB
+
+
+[oracle@host01 ~]$ sqlplus sys/oracle@PDBPROD1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 11:34:44 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PDBPROD1> show parameter star
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+dg_broker_start 		     boolean	 FALSE
+fast_start_io_target		     integer	 0
+fast_start_mttr_target		     integer	 0
+fast_start_parallel_rollback	     string	 LOW
+log_archive_start		     boolean	 FALSE
+star_transformation_enabled	     string	 FALSE
+SYS@PDBPROD1> alter system set star_transformation_enabled=true;
+
+System altered.
+
+SYS@PDBPROD1> show parameter star
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+dg_broker_start 		     boolean	 FALSE
+fast_start_io_target		     integer	 0
+fast_start_mttr_target		     integer	 0
+fast_start_parallel_rollback	     string	 LOW
+log_archive_start		     boolean	 FALSE
+star_transformation_enabled	     string	 TRUE
+SYS@PDBPROD1> 
+
+
+
+Section 4： Configuring parallel execution
+
+1.PDBPROD1 deploy in parallel execution, use the SYS user, do the following:
+
+（1）Setting sh.sales table parallel degree of parallelism is the default;
+
+（2）Configuring PDBPROD1 use automatic parallelism, take effect only when the statement object does not specify the degree of parallelism in the data dictionary.
+
+
+[oracle@host01 ~]$ sqlplus sys/oracle@PDBPROD1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 11:37:12 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PDBPROD1> show parameter parallel
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+fast_start_parallel_rollback	     string	 LOW
+parallel_adaptive_multi_user	     boolean	 TRUE
+parallel_automatic_tuning	     boolean	 FALSE
+parallel_degree_level		     integer	 100
+parallel_degree_limit		     string	 CPU
+parallel_degree_policy		     string	 MANUAL
+parallel_execution_message_size      integer	 16384
+parallel_force_local		     boolean	 FALSE
+parallel_instance_group 	     string
+parallel_io_cap_enabled 	     boolean	 FALSE
+parallel_max_servers		     integer	 80
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+parallel_min_percent		     integer	 0
+parallel_min_servers		     integer	 8
+parallel_min_time_threshold	     string	 AUTO
+parallel_server 		     boolean	 FALSE
+parallel_server_instances	     integer	 1
+parallel_servers_target 	     integer	 32
+parallel_threads_per_cpu	     integer	 2
+recovery_parallelism		     integer	 0
+SYS@PDBPROD1> alter system set parallel_degree_policy=1;
+alter system set parallel_degree_policy=1
+*
+ERROR at line 1:
+ORA-00096: invalid value 1 for parameter parallel_degree_policy, must be from
+among ADAPTIVE, AUTO, LIMITED, MANUAL
+
+
+SYS@PDBPROD1> alter system set parallel_degree_policy=LIMITED;
+
+System altered.
+
+SYS@PDBPROD1> alter table sh.sales parallel;
+
+Table altered.
+
+SYS@PDBPROD1> show parameter parallel;
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+fast_start_parallel_rollback	     string	 LOW
+parallel_adaptive_multi_user	     boolean	 TRUE
+parallel_automatic_tuning	     boolean	 FALSE
+parallel_degree_level		     integer	 100
+parallel_degree_limit		     string	 CPU
+parallel_degree_policy		     string	 LIMITED
+parallel_execution_message_size      integer	 16384
+parallel_force_local		     boolean	 FALSE
+parallel_instance_group 	     string
+parallel_io_cap_enabled 	     boolean	 FALSE
+parallel_max_servers		     integer	 80
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+parallel_min_percent		     integer	 0
+parallel_min_servers		     integer	 8
+parallel_min_time_threshold	     string	 AUTO
+parallel_server 		     boolean	 FALSE
+parallel_server_instances	     integer	 1
+parallel_servers_target 	     integer	 32
+parallel_threads_per_cpu	     integer	 2
+recovery_parallelism		     integer	 0
+SYS@PDBPROD1> 
+
+
+
+
+Section 5： Partition Management
+
+1.Create interval partitions using SH user, in PDBPROD1
+
+  Table name: sales_history_2014, according to the 2011, 2012, 2013, 2014 Year to partition
+
+  The partition is named SAL1, SAL2, SAL3, SAL4
+
+  Based time_id partition
+
+
+PROD_ID number not null
+
+CUST_ID number not null
+
+TIME_ID DATE not null
+
+CHANNEL_ID number not null
+
+PROMO_ID number not null
+
+QUANTITY_SOLD number(10,2) not null
+
+AMOUNT_SOLD number(10,2) not null
+
+Loading data using a 5_2_1.sql script
+
+
+
+VLDB and Partitioning Guide / 4 Partition Administration / Creating Interval-Partitioned Tables
+
+
+
+SYS@PDBPROD1> ed 5-1
+
+SYS@PDBPROD1> 
+SYS@PDBPROD1> get 5-1
+  1  create table sh.sales_history_2014(
+  2  PROD_ID number not null,
+  3  CUST_ID number not null,
+  4  TIME_ID DATE not null,
+  5  CHANNEL_ID number not null,
+  6  PROMO_ID number not null,
+  7  QUANTITY_SOLD number(10,2) not null,
+  8  AMOUNT_SOLD number(10,2) not null)
+  9  partition by range(TIME_ID)
+ 10  interval(numtoyminterval(1,'YEAR'))
+ 11  (
+ 12  partition SAL1 values less than(to_date('1-1-2012','DD-MM-YYYY')),
+ 13  partition SAL2 values less than(to_date('1-1-2013','DD-MM-YYYY')),
+ 14  partition SAL3 values less than(to_date('1-1-2014','DD-MM-YYYY')),
+ 15  partition SAL4 values less than(to_date('1-1-2015','DD-MM-YYYY'))
+ 16* );
+SYS@PDBPROD1> @5-1
+
+Table created.
+
+SYS@PDBPROD1> desc sh.sales_history_2014
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PROD_ID				   NOT NULL NUMBER
+ CUST_ID				   NOT NULL NUMBER
+ TIME_ID				   NOT NULL DATE
+ CHANNEL_ID				   NOT NULL NUMBER
+ PROMO_ID				   NOT NULL NUMBER
+ QUANTITY_SOLD				   NOT NULL NUMBER(10,2)
+ AMOUNT_SOLD				   NOT NULL NUMBER(10,2)
+
+SYS@PDBPROD1> 
+
+
+SYS@PDBPROD1>  conn sh/sh@PDBPROD1
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Connected.
+SH@PDBPROD1> @5_2_1.sql
+insert into sales_history_2014 values(101,to_date('2005-02-03','yyyy-mm-dd'),'x1',1001,1,20000,880     01,88002)
+                                                                                                       *
+ERROR at line 1:
+ORA-00917: missing comma
+
+
+insert into sales_history_2014 values(102,to_date('2005-05-15','yyyy-mm-dd'),'x1',1002,1,30000,880     02,88002)
+                                                                                                       *
+ERROR at line 1:
+ORA-00917: missing comma
+
+
+insert into sales_history_2014 values(103,to_date('2005-09-22','yyyy-mm-dd'),'x1',1003,1,40000,880     03,88002)
+                                                                                                       *
+ERROR at line 1:
+ORA-00917: missing comma
+
+
+insert into sales_history_2014 values(104,to_date('2005-12-30','yyyy-mm-dd'),'x1',1004,1,10000,880     04,88002)
+                                                                                                       *
+ERROR at line 1:
+ORA-00917: missing comma
+
+
+insert into sales_history_2014 values(101,801,200001,200,100)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+insert into sales_history_2014 values(102,802,200002,300,100)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+insert into sales_history_2014 values(103,803,200003,400,100)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+insert into sales_history_2014 values(104,804,200004,100,100)
+            *
+ERROR at line 1:
+ORA-00947: not enough values
+
+
+
+Commit complete.
+
+SH@PDBPROD1> desc sales_history_2014
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PROD_ID				   NOT NULL NUMBER
+ CUST_ID				   NOT NULL NUMBER
+ TIME_ID				   NOT NULL DATE
+ CHANNEL_ID				   NOT NULL NUMBER
+ PROMO_ID				   NOT NULL NUMBER
+ QUANTITY_SOLD				   NOT NULL NUMBER(10,2)
+ AMOUNT_SOLD				   NOT NULL NUMBER(10,2)
+
+SH@PDBPROD1> 
+
+insert test's data
+
+insert into sales_history_2014 values(113,801,to_date('2011-02-03','yyyy-mm-dd'),2,200,100,88002);
+
+insert into sales_history_2014 values(114,801,to_date('2012-02-03','yyyy-mm-dd'),2,200,100,88002);
+
+insert into sales_history_2014 values(115,801,to_date('2013-02-03','yyyy-mm-dd'),2,200,100,88002);
+
+insert into sales_history_2014 values(116,801,to_date('2014-02-03','yyyy-mm-dd'),2,200,100,88002);
+
+commit;
+
+SH@PDBPROD1> select * from sh.sales_history_2014;
+
+   PROD_ID    CUST_ID TIME_ID	CHANNEL_ID   PROMO_ID QUANTITY_SOLD AMOUNT_SOLD
+---------- ---------- --------- ---------- ---------- ------------- -----------
+       113	  801 03-FEB-11 	 2	  200		100	  88002
+       114	  801 03-FEB-12 	 2	  200		100	  88002
+       115	  801 03-FEB-13 	 2	  200		100	  88002
+       116	  801 03-FEB-14 	 2	  200		100	  88002
+
+SH@PDBPROD1> 
+
+
+
+Section 6： Configuring Flashback Technology
+
+1.Configuring PDBPROD1 achieve Flashback Archive
+
+  Tablespace name: FLASH_ARC, data files 50M
+
+  User name: FARC_OWNER
+
+  the previous version of SH.PROMOTIONS table , through flasharc1 Flashback Query to Archive
+
+Oracle® Database Development Guide 12c Release 1 (12.1) / 16 Using Oracle Flashback Technology / 
+
+[oracle@host01 scripts]$ sqlplus sys/oracle@PDBPROD1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 12:46:25 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PDBPROD1> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PRODCDB/undotbs01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/system01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/sysaux01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/PDBPROD1_users01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/example01.dbf
+/u01/app/oracle/oradata/PRODCDB/PDBPROD1/trpdata_6
+
+6 rows selected.
+
+SYS@PDBPROD1> create tablespace FLASH_ARC datafile '/u01/app/oracle/oradata/PRODCDB/PDBPROD1/flash_arc01.dbf' size 50m;
+
+Tablespace created.
+
+SYS@PDBPROD1> 
+
+SYS@PDBPROD1> create user FARC_OWNER identified by farc_owner account unlock default tablespace FLASH_ARC;
+
+User created.
+
+SYS@PDBPROD1> grant connect,resource to farc_owner;
+
+Grant succeeded.
+
+SYS@PDBPROD1> 
+
+SYS@PDBPROD1> grant flashback archive administer to farc_owner;
+
+Grant succeeded.
+
+SYS@PDBPROD1> 
+
+SYS@PDBPROD1> conn farc_owner/farc_owner@PDBPROD1
+Connected.
+FARC_OWNER@PDBPROD1> create flashback archive fra1 tablespace FLASH_ARC retention 1 year;
+create flashback archive fra1 tablespace FLASH_ARC retention 1 year
+                                         *
+ERROR at line 1:
+ORA-01950: no privileges on tablespace 'FLASH_ARC'
+
+
+FARC_OWNER@PDBPROD1>
+
+FARC_OWNER@PDBPROD1> conn sys/oracle@PDBPROD1 as sysdba
+Connected.
+SYS@PDBPROD1> grant dba to farc_owner;
+
+Grant succeeded.
+
+SYS@PDBPROD1> conn farc_owner/farc_owner@PDBPROD1
+Connected.
+FARC_OWNER@PDBPROD1> create flashback archive fra1 tablespace flash_arc retention 1 year;
+
+Flashback archive created.
+
+FARC_OWNER@PDBPROD1> grant flashback archive on fra1 to sh;
+
+Grant succeeded.
+
+FARC_OWNER@PDBPROD1> conn sh/sh@PDBPROD1
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Connected.
+SH@PDBPROD1> alter table sh.promotion flashback archive fra1;
+alter table sh.promotion flashback archive fra1
+*
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SH@PDBPROD1> alter table sh.promotions flashback archive fra1;
+
+Table altered.
+
+SH@PDBPROD1> 
+
+SH@PDBPROD1> select count(*) from sh.promotions versions between timestamp(systimestamp-interval '20' minute) and (systimestamp - interval '1' minute);
+
+  COUNT(*)
+----------
+       503
+
+SH@PDBPROD1> 
+
+
+
+Section 7： Use EM Cloud Control Configuration Resource Manager
+
+Configuring Resource Manager to PRODCDB
+
+1.Assign SYSTEM user as a resource administrator privileges
+
+2.Create resource plans to DAYTIMEP for PRODCDB
+
+   PDBPROD1 get 6 parts CDB shared resources
+
+   PDBPROD2 get 3 parts of a shared resource CDB
+
+   PDBPROD3 get 1 share resources CDB
+
+   PDB can not get the extra 75% of available cpu time
+
+   PDB can not get the extra 50% parallel_servers_target
+
+3.Create two consumer group ONLINE_GRP and REPORTING_GRP in the PDBPROD1
+
+Use comments indicated the group used
+
+4.Create a resource management plan in PDBPROD1
+
+（1）Project Title: DAYTIMEC
+
+（2）For ONLINE_GRP group can not be allowed more than 25 active sessions. If 26 users try to log on, wait 90 seconds later, this demand will be terminated.
+
+（3）REPORTING_GRP set the maximum number of active sessions to 8. If you need extra eight sessions ,150 seconds after this request will be terminated.
+
+（4）In ONLINE_GRP group, a conversation longest query execution time is 5 seconds,If the query estimate exceeds 5s, the query should be error
+
+（5）ONLINE_GRP group of maximum undo 350M
+
+（6）cpu ratio, ONLINE_GRP, REPORTING_GRP, OTHER_GROUPS respectively 50,40,10
+
+（7）REPORTING_GRP group should limit the degree of parallelism of 30
+
+（8）If the session exceeds 8000i / o or data transmission over 2000m, and in any PEPORTING_grp Group interaction should be temporary to low_group group. When the call is completed, the session also return to the group.
+
+5.daytime activation
+
+
+EMREP/LISTENER:
+
+[oracle@host02 ~]$ export ORACLE_SID=EMREP;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 13:32:18 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area 2147483648 bytes
+Fixed Size		    2926472 bytes
+Variable Size		  805308536 bytes
+Database Buffers	 1325400064 bytes
+Redo Buffers		   13848576 bytes
+Database mounted.
+Database opened.
+SQL> !lsnrctl start
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 06-MAR-2017 13:32:59
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Starting /u01/app/oracle/product/12.1.0/dbhome_1/bin/tnslsnr: please wait...
+
+TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+System parameter file is /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Log messages written to /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host02.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                06-MAR-2017 13:33:10
+Uptime                    0 days 0 hr. 0 min. 4 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+The listener supports no services
+The command completed successfully
+
+SQL> alter system register;
+
+System altered.
+
+SQL> !lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 06-MAR-2017 13:33:27
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host02.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                06-MAR-2017 13:33:10
+Uptime                    0 days 0 hr. 0 min. 22 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+Services Summary...
+Service "EMREP.example.com" has 1 instance(s).
+  Instance "EMREP", status READY, has 1 handler(s) for this service...
+Service "EMREPXDB.example.com" has 1 instance(s).
+  Instance "EMREP", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+[oracle@host02 ~]$
+
+OMS:
+
+[oracle@host02 ~]$ cd /u01/app/oracle/product/middleware/oms/oms/bin/
+[oracle@host02 bin]$ pwd
+/u01/app/oracle/product/middleware/oms/oms/bin
+[oracle@host02 bin]$ ./emctl status oms
+Oracle Enterprise Manager Cloud Control 12c Release 4  
+Copyright (c) 1996, 2014 Oracle Corporation.  All rights reserved.
+WebTier is Down
+Oracle Management Server is Down
+[oracle@host02 bin]$ ./emctl start oms
+Oracle Enterprise Manager Cloud Control 12c Release 4  
+Copyright (c) 1996, 2014 Oracle Corporation.  All rights reserved.
+Starting Oracle Management Server...
+Starting WebTier...
+WebTier Successfully Started
+Oracle Management Server Successfully Started
+Oracle Management Server is Up
+[oracle@host02 bin]$ 
+[oracle@host02 bin]$ cd /u01/app/oracle/product/middleware/oms/oms/install
+[oracle@host02 install]$ pwd
+/u01/app/oracle/product/middleware/oms/oms/install
+[oracle@host02 install]$ ls -ltr
+total 92
+-rw-r--r-- 1 oracle oinstall     0 Nov 27  2007 readme.txt
+-rw-r--r-- 1 oracle oinstall   165 Jul 14  2010 filesCopy.txt
+-rwxr-xr-x 1 oracle oinstall     0 Jun 20  2012 ocm_silent.rsp
+drwxr-xr-x 3 oracle oinstall  4096 Oct 23  2015 nt
+drwxr-xr-x 3 oracle oinstall  4096 Oct 23  2015 unix
+drwxr-xr-x 6 oracle oinstall  4096 Oct 23  2015 requisites
+drwxr-xr-x 6 oracle oinstall  4096 Oct 23  2015 oneoffs
+drwxr-xr-x 2 oracle oinstall  4096 Oct 23  2015 rpm
+drwxr-xr-x 2 oracle oinstall  4096 Oct 23  2015 selfUpdate
+drwxr-xr-x 2 oracle oinstall  4096 Oct 23  2015 clone
+drwxr-xr-x 2 oracle oinstall  4096 Oct 23  2015 utl
+drwxr-xr-x 2 oracle oinstall  4096 Oct 23  2015 config
+-rw-r--r-- 1 oracle oinstall 19004 Oct 23  2015 make.log
+-rw-r--r-- 1 oracle oinstall   265 Oct 23  2015 eminstall.info
+drwxr-xr-x 2 oracle oinstall  4096 Oct 23  2015 scripts
+drwxr-xr-x 3 oracle oinstall  4096 Oct 23  2015 installer
+-rw-r--r-- 1 oracle oinstall   203 Oct 23  2015 envVars.properties
+-rw-r--r-- 1 oracle oinstall   352 Oct 23  2015 portlist.ini
+-rw-r--r-- 1 oracle oinstall  4464 Oct 23  2015 setupinfo.txt
+-rw-r--r-- 1 root   root       394 Oct 23  2015 root.log
+[oracle@host02 install]$ 
+[oracle@host02 install]$ cat portlist.ini
+Enterprise Manager Upload Http Port=4889
+Enterprise Manager Upload Http SSL Port=4903
+Enterprise Manager Central Console Http SSL Port=7802
+Node Manager Http SSL Port=7403
+Managed Server Http Port=7202
+Enterprise Manager Central Console Http Port=7788
+Oracle Management Agent Port=3872
+Admin Server Http SSL Port=7102
+Managed Server Http SSL Port=7301
+[oracle@host02 install]$ 
+[oracle@host02 install]$ cat setupinfo.txt
+
+
+
+Use the following URL to access:
+
+	1. Enterprise Manager Cloud Control URL: https://host02.example.com:7802/em
+	2. Admin Server URL: https://host02.example.com:7102/console
+
+The following details need to be provided during the additional OMS install:
+
+	1. Admin Server Hostname: host02.example.com
+	2. Admin Server Port: 7102
+
+
+
+
+Agent:
+
+[oracle@host02 bin]$ pwd
+/u01/app/oracle/product/agent12c/agent_inst/bin
+[oracle@host02 bin]$ 
+[oracle@host02 bin]$ ./emctl start agent
+Oracle Enterprise Manager Cloud Control 12c Release 4  
+Copyright (c) 1996, 2014 Oracle Corporation.  All rights reserved.
+Starting agent ..................... started.
+[oracle@host02 bin]$ ./emctl status agent
+Oracle Enterprise Manager Cloud Control 12c Release 4  
+Copyright (c) 1996, 2014 Oracle Corporation.  All rights reserved.
+---------------------------------------------------------------
+Agent Version          : 12.1.0.4.0
+OMS Version            : 12.1.0.4.0
+Protocol Version       : 12.1.0.1.0
+Agent Home             : /u01/app/oracle/product/agent12c/agent_inst
+Agent Log Directory    : /u01/app/oracle/product/agent12c/agent_inst/sysman/log
+Agent Binaries         : /u01/app/oracle/product/agent12c/core/12.1.0.4.0
+Agent Process ID       : 10630
+Parent Process ID      : 10576
+Agent URL              : https://host02.example.com:3872/emd/main/
+Local Agent URL in NAT : https://host02.example.com:3872/emd/main/
+Repository URL         : https://host02.example.com:4903/empbs/upload
+Started at             : 2017-03-06 13:58:42
+Started by user        : oracle
+Operating System       : Linux version 3.8.13-16.2.1.el6uek.x86_64 (amd64)
+Last Reload            : (none)
+Last successful upload                       : 2017-03-06 14:02:07
+Last attempted upload                        : 2017-03-06 14:02:07
+Total Megabytes of XML files uploaded so far : 0.01
+Number of XML files pending upload           : 0
+Size of XML files pending upload(MB)         : 0
+Available disk space on upload filesystem    : 66.35%
+Collection Status                            : Collections enabled
+Heartbeat Status                             : Ok
+Last attempted heartbeat to OMS              : 2017-03-06 14:01:55
+Last successful heartbeat to OMS             : 2017-03-06 14:01:55
+Next scheduled heartbeat to OMS              : 2017-03-06 14:02:56
+
+---------------------------------------------------------------
+Agent is Running and Ready
+[oracle@host02 bin]$ 
+
+++++++++++++++++++++++++++
+
+https://host02:7802/em
+
+
+sysman/Oracle123
+
+
+Can't Open the firefox ...
+
+
+
+Section 8： Tuning sql statement
+
+1. Use the result cache
+
+In PDBPROD1 database, set the result cache size 15m,Hr using a 8_1_1.sql login script so that the statements can be used in result cache
+
+
+[oracle@host01 scripts]$ export ORACLE_SID=PRODCDB;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 14:27:45 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@PRODCDB> show parameter result
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+client_result_cache_lag 	     big integer 3000
+client_result_cache_size	     big integer 0
+result_cache_max_result 	     integer	 5
+result_cache_max_size		     big integer 2M
+result_cache_mode		     string	 MANUAL
+result_cache_remote_expiration	     integer	 0
+SYS@PRODCDB> alter session set container=PDBPROD1;
+
+Session altered.
+
+SYS@PRODCDB> show parameter result;
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+client_result_cache_lag 	     big integer 3000
+client_result_cache_size	     big integer 0
+result_cache_max_result 	     integer	 5
+result_cache_max_size		     big integer 2M
+result_cache_mode		     string	 MANUAL
+result_cache_remote_expiration	     integer	 0
+SYS@PRODCDB> alter system set result_cache_max_size=15m;
+alter system set result_cache_max_size=15m
+*
+ERROR at line 1:
+ORA-65040: operation not allowed from within a pluggable database
+
+
+SYS@PRODCDB> alter session set container=CDB$ROOT;
+
+Session altered.
+
+SYS@PRODCDB> show pdbs;
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 PDBPROD1			  READ WRITE NO
+	 4 PDBPROD2			  READ WRITE NO
+	 5 PDBPROD3			  READ WRITE NO
+	 6 PDBPROD4			  READ WRITE NO
+	 7 PDBPROD5			  READ WRITE NO
+SYS@PRODCDB> alter system set result_cache_max_size=15m;
+
+System altered.
+
+SYS@PRODCDB> show parameter result 
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+client_result_cache_lag 	     big integer 3000
+client_result_cache_size	     big integer 0
+result_cache_max_result 	     integer	 5
+result_cache_max_size		     big integer 15M
+result_cache_mode		     string	 MANUAL
+result_cache_remote_expiration	     integer	 0
+SYS@PRODCDB> alter session set container=PDBPROD1;
+
+Session altered.
+
+SYS@PRODCDB> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 3 PDBPROD1			  READ WRITE NO
+SYS@PRODCDB> show parameter result
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+client_result_cache_lag 	     big integer 3000
+client_result_cache_size	     big integer 0
+result_cache_max_result 	     integer	 5
+result_cache_max_size		     big integer 15M
+result_cache_mode		     string	 MANUAL
+result_cache_remote_expiration	     integer	 0
+SYS@PRODCDB>                  
+
+
+[oracle@host01 scripts]$ sqlplus hr/hr@PDBPROD1
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Mar 6 14:31:43 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 0 days
+
+
+Last Successful login time: Mon Mar 06 2017 14:27:15 +08:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+HR@PDBPROD1> set autot on
+SP2-0618: Cannot find the Session Identifier.  Check PLUSTRACE role is enabled
+SP2-0611: Error enabling STATISTICS report
+HR@PDBPROD1> conn sys/oracle@PDBPROD1 as sysdba
+Connected.
+SYS@PDBPROD1> grant PLUSTRACE to hr;
+grant PLUSTRACE to hr
+      *
+ERROR at line 1:
+ORA-01919: role 'PLUSTRACE' does not exist
+
+
+SYS@PDBPROD1> @/u01/app/oracle/product/12.1.0/dbhome_1/sqlplus/admin/plustrce.sql
+SYS@PDBPROD1> 
+SYS@PDBPROD1> drop role plustrace;
+drop role plustrace
+          *
+ERROR at line 1:
+ORA-01919: role 'PLUSTRACE' does not exist
+
+
+SYS@PDBPROD1> create role plustrace;
+
+Role created.
+
+SYS@PDBPROD1> 
+SYS@PDBPROD1> grant select on v_$sesstat to plustrace;
+
+Grant succeeded.
+
+SYS@PDBPROD1> grant select on v_$statname to plustrace;
+
+Grant succeeded.
+
+SYS@PDBPROD1> grant select on v_$mystat to plustrace;
+
+Grant succeeded.
+
+SYS@PDBPROD1> grant plustrace to dba with admin option;
+
+Grant succeeded.
+
+SYS@PDBPROD1> 
+SYS@PDBPROD1> set echo off
+SYS@PDBPROD1> 
+SYS@PDBPROD1> @/u01/app/oracle/product/12.1.0/dbhome_1/rdbms/admin/utlxplan.sql
+
+Table created.
+
+SYS@PDBPROD1> conn hr/hr@PDBPROD1
+ERROR:
+ORA-28002: the password will expire within 0 days
+
+
+Connected.
+HR@PDBPROD1> set autot on
+ERROR:
+ORA-28002: the password will expire within 0 days
+
+
+SP2-0619: Error while connecting
+SP2-0611: Error enabling STATISTICS report
+HR@PDBPROD1> @/u01/app/oracle/product/12.1.0/dbhome_1/rdbms/admin/utlxplan.sql
+
+Table created.
+
+HR@PDBPROD1> set autot on
+ERROR:
+ORA-24315: illegal attribute type
+
+
+SP2-0619: Error while connecting
+SP2-0611: Error enabling STATISTICS report
+HR@PDBPROD1> 
+HR@PDBPROD1> conn sys/oracle@PDBPROD1 as sysdba
+Connected.
+SYS@PDBPROD1>
+SYS@PDBPROD1> alter user hr identified by hr account unlock;
+
+User altered.
+
+SYS@PDBPROD1> conn hr/hr@PDBPROD1 
+Connected.
+HR@PDBPROD1> set autot on
+HR@PDBPROD1> 
+
+HR@PDBPROD1> set autot on
+HR@PDBPROD1> !ls
+2_8_3.sql  5_2_1.sql	   8_1_1.sql  8_4_1.sql   appsstq.dmp  initsec2.sh    Skillset2.html  trpdata_6
+5-1.sql    5_2_1.sql.back  8_2_1.sql  afiedt.buf  impdp.log    Skillset1.txt  trans3_2.dmp
+
+HR@PDBPROD1> @8_1_1.sql
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	  100	    51608
+	   30	    24900
+		     7000
+	   20	    19000
+	   70	    10000
+	   90	    58000
+	  110	    20308
+	   50	   156400
+	   40	     6500
+	   80	   304500
+	   10	     4400
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	   60	    28800
+
+12 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1192169904
+
+--------------------------------------------------------------------------------
+------------------
+
+| Id  | Operation	    | Name			 | Rows  | Bytes | Cost
+(%CPU)| Time	 |
+
+--------------------------------------------------------------------------------
+------------------
+
+|   0 | SELECT STATEMENT    |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   1 |  RESULT CACHE	    | 40r2a6bjda8bp5wd30bwswuqux |	 |	 |
+      | 	 |
+
+|   2 |   HASH GROUP BY     |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   3 |    TABLE ACCESS FULL| EMPLOYEES 		 |   107 |   749 |     3
+   (0)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+------------------
+
+
+Result Cache Information (identified by operation id):
+------------------------------------------------------
+
+   1 - column-count=2; dependencies=(HR.EMPLOYEES); name="select /*+ result_cach
+e */ department_id,sum(salary) from employees group by department_id"
+
+
+
+Statistics
+----------------------------------------------------------
+	144  recursive calls
+	  0  db block gets
+	213  consistent gets
+	  7  physical reads
+	  0  redo size
+	799  bytes sent via SQL*Net to client
+	551  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  7  sorts (memory)
+	  0  sorts (disk)
+	 12  rows processed
+
+
+2 rows updated.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 4075606039
+
+--------------------------------------------------------------------------------
+-------
+
+| Id  | Operation	  | Name	      | Rows  | Bytes | Cost (%CPU)| Tim
+e     |
+
+--------------------------------------------------------------------------------
+-------
+
+|   0 | UPDATE STATEMENT  |		      |     2 |    14 |     2	(0)| 00:
+00:01 |
+
+|   1 |  UPDATE 	  | EMPLOYEES	      |       |       | 	   |
+      |
+
+|*  2 |   INDEX RANGE SCAN| EMP_DEPARTMENT_IX |     2 |    14 |     1	(0)| 00:
+00:01 |
+
+--------------------------------------------------------------------------------
+-------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("DEPARTMENT_ID"=20)
+
+
+Statistics
+----------------------------------------------------------
+	258  recursive calls
+	  2  db block gets
+	328  consistent gets
+	 16  physical reads
+	544  redo size
+	860  bytes sent via SQL*Net to client
+	868  bytes received via SQL*Net from client
+	  3  SQL*Net roundtrips to/from client
+	 17  sorts (memory)
+	  0  sorts (disk)
+	  2  rows processed
+
+
+Commit complete.
+
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	  100	    51608
+	   30	    24900
+		     7000
+	   20	    19020
+	   70	    10000
+	   90	    58000
+	  110	    20308
+	   50	   156400
+	   40	     6500
+	   80	   304500
+	   10	     4400
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	   60	    28800
+
+12 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1192169904
+
+--------------------------------------------------------------------------------
+------------------
+
+| Id  | Operation	    | Name			 | Rows  | Bytes | Cost
+(%CPU)| Time	 |
+
+--------------------------------------------------------------------------------
+------------------
+
+|   0 | SELECT STATEMENT    |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   1 |  RESULT CACHE	    | 40r2a6bjda8bp5wd30bwswuqux |	 |	 |
+      | 	 |
+
+|   2 |   HASH GROUP BY     |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   3 |    TABLE ACCESS FULL| EMPLOYEES 		 |   107 |   749 |     3
+   (0)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+------------------
+
+
+Result Cache Information (identified by operation id):
+------------------------------------------------------
+
+   1 - column-count=2; dependencies=(HR.EMPLOYEES); name="select /*+ result_cach
+e */ department_id,sum(salary) from employees group by department_id"
+
+
+
+Statistics
+----------------------------------------------------------
+	  0  recursive calls
+	  0  db block gets
+	  4  consistent gets
+	  0  physical reads
+	  0  redo size
+	800  bytes sent via SQL*Net to client
+	551  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  0  sorts (disk)
+	 12  rows processed
+
+
+5 rows updated.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 4075606039
+
+--------------------------------------------------------------------------------
+-------
+
+| Id  | Operation	  | Name	      | Rows  | Bytes | Cost (%CPU)| Tim
+e     |
+
+--------------------------------------------------------------------------------
+-------
+
+|   0 | UPDATE STATEMENT  |		      |     5 |    35 |     2	(0)| 00:
+00:01 |
+
+|   1 |  UPDATE 	  | EMPLOYEES	      |       |       | 	   |
+      |
+
+|*  2 |   INDEX RANGE SCAN| EMP_DEPARTMENT_IX |     5 |    35 |     1	(0)| 00:
+00:01 |
+
+--------------------------------------------------------------------------------
+-------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("DEPARTMENT_ID"=60)
+
+
+Statistics
+----------------------------------------------------------
+	 18  recursive calls
+	  5  db block gets
+	  5  consistent gets
+	  0  physical reads
+       1360  redo size
+	859  bytes sent via SQL*Net to client
+	868  bytes received via SQL*Net from client
+	  3  SQL*Net roundtrips to/from client
+	  2  sorts (memory)
+	  0  sorts (disk)
+	  5  rows processed
+
+
+Commit complete.
+
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	  100	    51608
+	   30	    24900
+		     7000
+	   20	    19020
+	   70	    10000
+	   90	    58000
+	  110	    20308
+	   50	   156400
+	   40	     6500
+	   80	   304500
+	   10	     4400
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	   60	    28850
+
+12 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1192169904
+
+--------------------------------------------------------------------------------
+------------------
+
+| Id  | Operation	    | Name			 | Rows  | Bytes | Cost
+(%CPU)| Time	 |
+
+--------------------------------------------------------------------------------
+------------------
+
+|   0 | SELECT STATEMENT    |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   1 |  RESULT CACHE	    | 40r2a6bjda8bp5wd30bwswuqux |	 |	 |
+      | 	 |
+
+|   2 |   HASH GROUP BY     |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   3 |    TABLE ACCESS FULL| EMPLOYEES 		 |   107 |   749 |     3
+   (0)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+------------------
+
+
+Result Cache Information (identified by operation id):
+------------------------------------------------------
+
+   1 - column-count=2; dependencies=(HR.EMPLOYEES); name="select /*+ result_cach
+e */ department_id,sum(salary) from employees group by department_id"
+
+
+
+Statistics
+----------------------------------------------------------
+	  0  recursive calls
+	  0  db block gets
+	  4  consistent gets
+	  0  physical reads
+	  0  redo size
+	801  bytes sent via SQL*Net to client
+	551  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  0  sorts (disk)
+	 12  rows processed
+
+HR@PDBPROD1> 
+
+
+or:
+
+HR@PDBPROD1> alter table employees result_cache(mode force);
+
+Table altered.
+
+HR@PDBPROD1> !ls -ltr
+total 11556
+-rwxr-xr-x 1 oracle oinstall   106496 Mar  6 08:46 trans3_2.dmp
+-rwxr-xr-x 1 oracle oinstall 10493952 Mar  6 08:46 trpdata_6
+-rwxr-xr-x 1 oracle oinstall     1977 Mar  6 08:46 initsec2.sh
+-rwxr-xr-x 1 oracle oinstall      231 Mar  6 08:46 2_8_3.sql
+-rwxr-xr-x 1 oracle oinstall    16343 Mar  6 08:46 Skillset2.html
+-rwxr-xr-x 1 oracle oinstall    11686 Mar  6 08:46 Skillset1.txt
+-rwxr-xr-x 1 oracle oinstall       81 Mar  6 08:46 8_4_1.sql
+-rwxr-xr-x 1 oracle oinstall      123 Mar  6 08:46 8_2_1.sql
+-rwxr-xr-x 1 oracle oinstall      887 Mar  6 08:46 5_2_1.sql
+-rwxr-xr-x 1 oracle oinstall  1163264 Mar  6 08:47 appsstq.dmp
+-rw-r--r-- 1 oracle oinstall     1054 Mar  6 10:53 impdp.log
+-rw-r--r-- 1 oracle oinstall      571 Mar  6 11:58 5-1.sql
+-rwxr-xr-x 1 oracle oinstall      887 Mar  6 12:02 5_2_1.sql.back
+-rw-r--r-- 1 oracle oinstall       62 Mar  6 12:12 afiedt.buf
+-rwxr-xr-x 1 oracle oinstall      425 Mar  6 14:31 8_1_1.sql
+
+HR@PDBPROD1> !vi 8_1_1.sql
+
+HR@PDBPROD1> !cat 8_1_1.sql
+select  department_id,sum(salary) from employees group by department_id; 
+update employees set salary=salary+10 where department_id=20;
+commit;
+select  department_id,sum(salary) from employees group by department_id; 
+update employees set salary=salary+10 where department_id=60;
+commit;
+select  department_id,sum(salary) from employees group by department_id;
+
+HR@PDBPROD1> @8_1_1.sql
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	  100	    51608
+	   30	    24900
+		     7000
+	   20	    19020
+	   70	    10000
+	   90	    58000
+	  110	    20308
+	   50	   156400
+	   40	     6500
+	   80	   304500
+	   10	     4400
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	   60	    28850
+
+12 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1192169904
+
+--------------------------------------------------------------------------------
+------------------
+
+| Id  | Operation	    | Name			 | Rows  | Bytes | Cost
+(%CPU)| Time	 |
+
+--------------------------------------------------------------------------------
+------------------
+
+|   0 | SELECT STATEMENT    |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   1 |  RESULT CACHE	    | 40r2a6bjda8bp5wd30bwswuqux |	 |	 |
+      | 	 |
+
+|   2 |   HASH GROUP BY     |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   3 |    TABLE ACCESS FULL| EMPLOYEES 		 |   107 |   749 |     3
+   (0)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+------------------
+
+
+Result Cache Information (identified by operation id):
+------------------------------------------------------
+
+   1 - column-count=2; dependencies=(HR.EMPLOYEES); name="select  department_id,
+sum(salary) from employees group by department_id"
+
+
+
+Statistics
+----------------------------------------------------------
+	 48  recursive calls
+	  0  db block gets
+	 83  consistent gets
+	  0  physical reads
+	  0  redo size
+	801  bytes sent via SQL*Net to client
+	551  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  2  sorts (memory)
+	  0  sorts (disk)
+	 12  rows processed
+
+
+2 rows updated.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 4075606039
+
+--------------------------------------------------------------------------------
+-------
+
+| Id  | Operation	  | Name	      | Rows  | Bytes | Cost (%CPU)| Tim
+e     |
+
+--------------------------------------------------------------------------------
+-------
+
+|   0 | UPDATE STATEMENT  |		      |     2 |    14 |     2	(0)| 00:
+00:01 |
+
+|   1 |  UPDATE 	  | EMPLOYEES	      |       |       | 	   |
+      |
+
+|*  2 |   INDEX RANGE SCAN| EMP_DEPARTMENT_IX |     2 |    14 |     1	(0)| 00:
+00:01 |
+
+--------------------------------------------------------------------------------
+-------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("DEPARTMENT_ID"=20)
+
+
+Statistics
+----------------------------------------------------------
+	 22  recursive calls
+	  2  db block gets
+	 20  consistent gets
+	  0  physical reads
+	608  redo size
+	861  bytes sent via SQL*Net to client
+	868  bytes received via SQL*Net from client
+	  3  SQL*Net roundtrips to/from client
+	  3  sorts (memory)
+	  0  sorts (disk)
+	  2  rows processed
+
+
+Commit complete.
+
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	  100	    51608
+	   30	    24900
+		     7000
+	   20	    19040
+	   70	    10000
+	   90	    58000
+	  110	    20308
+	   50	   156400
+	   40	     6500
+	   80	   304500
+	   10	     4400
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	   60	    28850
+
+12 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1192169904
+
+--------------------------------------------------------------------------------
+------------------
+
+| Id  | Operation	    | Name			 | Rows  | Bytes | Cost
+(%CPU)| Time	 |
+
+--------------------------------------------------------------------------------
+------------------
+
+|   0 | SELECT STATEMENT    |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   1 |  RESULT CACHE	    | 40r2a6bjda8bp5wd30bwswuqux |	 |	 |
+      | 	 |
+
+|   2 |   HASH GROUP BY     |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   3 |    TABLE ACCESS FULL| EMPLOYEES 		 |   107 |   749 |     3
+   (0)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+------------------
+
+
+Result Cache Information (identified by operation id):
+------------------------------------------------------
+
+   1 - column-count=2; dependencies=(HR.EMPLOYEES); name="select  department_id,
+sum(salary) from employees group by department_id"
+
+
+
+Statistics
+----------------------------------------------------------
+	  0  recursive calls
+	  0  db block gets
+	  4  consistent gets
+	  0  physical reads
+	  0  redo size
+	801  bytes sent via SQL*Net to client
+	551  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  0  sorts (disk)
+	 12  rows processed
+
+
+5 rows updated.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 4075606039
+
+--------------------------------------------------------------------------------
+-------
+
+| Id  | Operation	  | Name	      | Rows  | Bytes | Cost (%CPU)| Tim
+e     |
+
+--------------------------------------------------------------------------------
+-------
+
+|   0 | UPDATE STATEMENT  |		      |     5 |    35 |     2	(0)| 00:
+00:01 |
+
+|   1 |  UPDATE 	  | EMPLOYEES	      |       |       | 	   |
+      |
+
+|*  2 |   INDEX RANGE SCAN| EMP_DEPARTMENT_IX |     5 |    35 |     1	(0)| 00:
+00:01 |
+
+--------------------------------------------------------------------------------
+-------
+
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("DEPARTMENT_ID"=60)
+
+
+Statistics
+----------------------------------------------------------
+	 18  recursive calls
+	  5  db block gets
+	  5  consistent gets
+	  0  physical reads
+       1344  redo size
+	860  bytes sent via SQL*Net to client
+	868  bytes received via SQL*Net from client
+	  3  SQL*Net roundtrips to/from client
+	  2  sorts (memory)
+	  0  sorts (disk)
+	  5  rows processed
+
+
+Commit complete.
+
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	  100	    51608
+	   30	    24900
+		     7000
+	   20	    19040
+	   70	    10000
+	   90	    58000
+	  110	    20308
+	   50	   156400
+	   40	     6500
+	   80	   304500
+	   10	     4400
+
+DEPARTMENT_ID SUM(SALARY)
+------------- -----------
+	   60	    28900
+
+12 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1192169904
+
+--------------------------------------------------------------------------------
+------------------
+
+| Id  | Operation	    | Name			 | Rows  | Bytes | Cost
+(%CPU)| Time	 |
+
+--------------------------------------------------------------------------------
+------------------
+
+|   0 | SELECT STATEMENT    |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   1 |  RESULT CACHE	    | 40r2a6bjda8bp5wd30bwswuqux |	 |	 |
+      | 	 |
+
+|   2 |   HASH GROUP BY     |				 |    11 |    77 |     4
+  (25)| 00:00:01 |
+
+|   3 |    TABLE ACCESS FULL| EMPLOYEES 		 |   107 |   749 |     3
+   (0)| 00:00:01 |
+
+--------------------------------------------------------------------------------
+------------------
+
+
+Result Cache Information (identified by operation id):
+------------------------------------------------------
+
+   1 - column-count=2; dependencies=(HR.EMPLOYEES); name="select  department_id,
+sum(salary) from employees group by department_id"
+
+
+
+Statistics
+----------------------------------------------------------
+	  0  recursive calls
+	  0  db block gets
+	  4  consistent gets
+	  0  physical reads
+	  0  redo size
+	800  bytes sent via SQL*Net to client
+	551  bytes received via SQL*Net from client
+	  2  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  0  sorts (disk)
+	 12  rows processed
+
+HR@PDBPROD1> 
+
+
+
+2.Multi-column statistics
+
+Login PDBPROD1 SH user database, run the 8_2_1.sql script, the script queries, CUST_CITY, CUST_STATE_PROVINCE, COUNTRY_ID regular column use together. Improve optimizer These statements compute selectable rate
+
+SYS@PDBPROD1> create index sh.cust_com_indx on sh.customers(cust_city,cust_state_province,country_id);
+
+Index created.
+
+SYS@PDBPROD1>exec dbms_stats.gather_table_stats('SH','CUSTOMERS',method_opt=>'for columns(cust_city,cust_state_province,country_id) size auto');
+
+PL/SQL procedure successfully completed.
+
+SYS@PDBPROD1> 
+
+
+3. Use SQL Performance Analyze
+(1) run the scripts 2_8_3.sql,create apps user, and password Apps1234
+(2) From the 11.2 migration to the 12c environment, provides a dump file (the user password: apps/Apps1234),
+
+      Contains the Sql Tuning Set, requires the use of a tool for optimization in STS SQL, and the optimized SQL plan_table write in the execution plan
+(3) Dump file location for: /home/oracle/scripts,the file :appsstq.dmp.
+
+(4) Migration from 11.2.0.3 to 12.1.0.2
+
+
+4.Evolution of baseline
+
+In PDBPROD1 the SH user, execute the 8_4_1.sql script, and the evolution of the baseline
+
+
+Section 9: Index Tuning
+
+1. When inserting data into a database sh PDBPROD1 user PROD_INFO table, found a large number of buffer busy waits waiting for the event. PRODUCT_ID column on a sequence is used.Range scan is frequently performed on the PRODUCT_ID columns. Create an index PROD_IDX, On PRODUCT_ID columns do not have a lot of buffer buffer waits wait, and can for a range scan.
+
+
+CREATE TABLE SH.PROD_INFO
+(
+  PRODUCT_ID           NUMBER(6),
+  PRODUCT_NAME         VARCHAR2(50 BYTE),
+  PRODUCT_DESCRIPTION  VARCHAR2(2000 BYTE),
+  CATEGORY_ID          NUMBER(2),
+  WEIGHT_CLASS         NUMBER(1),
+  WARRANTY_PERIOD      INTERVAL YEAR(2) TO MONTH,
+  SUPPLIER_ID          NUMBER(6),
+  PRODUCT_STATUS       VARCHAR2(20 BYTE),
+  LIST_PRICE           NUMBER(8,2),
+  MIN_PRICE            NUMBER(8,2),
+  CATALOG_URL          VARCHAR2(50 BYTE)
+);
+
+insert into SH.PROD_INFO select * from OE.PRODUCT_INFORMATION;
+commit;
+------------------
+
+SYS@PDBPROD1> CREATE TABLE SH.PROD_INFO
+(
+  PRODUCT_ID           NUMBER(6),
+  PRODUCT_NAME         VARCHAR2(50 BYTE),
+  PRODUCT_DESCRIPTION  VARCHAR2(2000 BYTE),
+  CATEGORY_ID          NUMBER(2),
+  WEIGHT_CLASS         NUMBER(1),
+  WARRANTY_PERIOD      INTERVAL YEAR(2) TO MONTH,
+  SUPPLIER_ID          NUMBER(6),
+  PRODUCT_STATUS       VARCHAR2(20 BYTE),
+  LIST_PRICE           NUMBER(8,2),
+  MIN_PRICE            NUMBER(8,2),
+  CATALOG_URL          VARCHAR2(50 BYTE)
+);
+
+insert into SH.PROD_INFO select * from OE.PRODUCT_INFORMATION;
+commit;  2    3    4    5    6    7    8    9   10   11   12   13   14  
+Table created.
+
+SYS@PDBPROD1> SYS@PDBPROD1> 
+288 rows created.
+
+SYS@PDBPROD1> 
+
+Commit complete.
+
+SYS@PDBPROD1> desc sh.prod_info;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PRODUCT_ID					    NUMBER(6)
+ PRODUCT_NAME					    VARCHAR2(50)
+ PRODUCT_DESCRIPTION				    VARCHAR2(2000)
+ CATEGORY_ID					    NUMBER(2)
+ WEIGHT_CLASS					    NUMBER(1)
+ WARRANTY_PERIOD				    INTERVAL YEAR(2) TO MONTH
+ SUPPLIER_ID					    NUMBER(6)
+ PRODUCT_STATUS 				    VARCHAR2(20)
+ LIST_PRICE					    NUMBER(8,2)
+ MIN_PRICE					    NUMBER(8,2)
+ CATALOG_URL					    VARCHAR2(50)
+
+SYS@PDBPROD1> create index prod_info_hash_indx on sh.prod_info(PRODUCT_ID) global partition by hash(PRODUCT_ID) partitions 4 parallel 4;
+
+Index created.
+
+SYS@PDBPROD1> 
+
+
+

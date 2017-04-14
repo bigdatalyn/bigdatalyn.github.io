@@ -1,0 +1,1358 @@
+
+1.0 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+SYS@PRODCDB> !lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 03-APR-2017 10:23:31
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host01.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                03-APR-2017 10:16:52
+Uptime                    0 days 0 hr. 6 min. 38 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host01/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=5501))(Presentation=HTTP)(Session=RAW))
+Services Summary...
+Service "PRODCDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "PRODCDBXDB.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod1.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod2.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod3.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod4.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+Service "pdbprod5.example.com" has 1 instance(s).
+  Instance "PRODCDB", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+SYS@PRODCDB> create public database link pdbprod connect to sys identified by oracle using 'PDBPROD1';
+
+Database link created.
+
+SYS@PRODCDB> 
+
+SYS@PRODCDB> select count(*) from sh.sales@pdbprod1;
+
+  COUNT(*)
+----------
+    918843
+
+SYS@PRODCDB> create public synonym sales1 for sh.sales@pdbprod1;
+
+Synonym created.
+
+SYS@PRODCDB> select count(*) from sales1;
+
+  COUNT(*)
+----------
+    918843
+
+SYS@PRODCDB> 
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+2.0
+
+
+SYS@PROD5> archive log list;
+Database log mode	       Archive Mode
+Automatic archival	       Enabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     14
+Next log sequence to archive   16
+Current log sequence	       16
+SYS@PROD5> show parameter recovery
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest		     string	 /u01/app/oracle/flash
+db_recovery_file_dest_size	     big integer 5G
+recovery_parallelism		     integer	 0
+SYS@PROD5> alter database flashback off;
+
+Database altered.
+
+SYS@PROD5> alter database force logging;
+
+Database altered.
+
+SYS@PROD5> 
+
+SYS@PROD5> show parameter diag
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+diagnostic_dest 		     string	 /u01/app/oracle
+SYS@PROD5> desc dba_external_tables;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ OWNER					   NOT NULL VARCHAR2(128)
+ TABLE_NAME				   NOT NULL VARCHAR2(128)
+ TYPE_OWNER					    CHAR(3)
+ TYPE_NAME				   NOT NULL VARCHAR2(128)
+ DEFAULT_DIRECTORY_OWNER			    CHAR(3)
+ DEFAULT_DIRECTORY_NAME 		   NOT NULL VARCHAR2(128)
+ REJECT_LIMIT					    VARCHAR2(40)
+ ACCESS_TYPE					    VARCHAR2(7)
+ ACCESS_PARAMETERS				    CLOB
+ PROPERTY					    VARCHAR2(10)
+
+SYS@PROD5> select owner,table_name from dba_external_tables;
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+SYS
+OPATCH_XML_INV
+
+SH
+SALES_TRANSACTIONS_EXT
+
+
+SYS@PROD5> drop table SH.SALES_TRANSACTIONS_EXT;
+
+Table dropped.
+
+SYS@PROD5> drop table sys.OPATCH_XML_INV;
+
+Table dropped.
+
+SYS@PROD5> 
+
+SYS@PROD5> select member from v$logfile;
+
+MEMBER
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/PROD5/redo03.log
+/u01/app/oracle/oradata/PROD5/redo02.log
+/u01/app/oracle/oradata/PROD5/redo01.log
+
+SYS@PROD5> !du -sm /u01/app/oracle/oradata/PROD5/redo01.log
+51	/u01/app/oracle/oradata/PROD5/redo01.log
+
+SYS@PROD5> alter database add standby logfile '/u01/app/oracle/oradata/PROD5/redo04.log' size 50m;
+
+Database altered.
+
+SYS@PROD5> alter database add standby logfile '/u01/app/oracle/oradata/PROD5/redo05.log' size 50m;
+
+Database altered.
+
+SYS@PROD5> alter database add standby logfile '/u01/app/oracle/oradata/PROD5/redo06.log' size 50m;
+
+Database altered.
+
+SYS@PROD5> 
+SYS@PROD5> alter database add standby logfile '/u01/app/oracle/oradata/PROD5/redo07.log' size 50m;
+
+Database altered.
+
+SYS@PROD5> 
+
+SYS@PROD5> create pfile from spfile;
+
+File created.
+
+SYS@PROD5> 
+
+SYS@PROD5> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SYS@PROD5> !cp /u01/app/oracle/oradata/PROD5/control01.ctl /u01/app/oracle/oradata/PROD5/control03.ctl
+
+SYS@PROD5> 
+
+
+
+
+
+
+[oracle@host01 dbs]$ vi dg.txt
+[oracle@host01 dbs]$ cat dg.txt
+DB_UNIQUE_NAME=PROD5H1
+LOG_ARCHIVE_CONFIG='DG_CONFIG=(PROD5,PROD5)'
+LOG_ARCHIVE_DEST_1=
+ 'LOCATION=USE_DB_RECOVERY_FILE_DEST 
+  VALID_FOR=(ALL_LOGFILES,ALL_ROLES)
+  DB_UNIQUE_NAME=PROD5'
+LOG_ARCHIVE_DEST_2=
+ 'SERVICE=PROD5 ASYNC
+  VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) 
+  DB_UNIQUE_NAME=PROD5'
+REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE
+LOG_ARCHIVE_FORMAT=%t_%s_%r.arc
+FAL_SERVER=PROD5
+DB_FILE_NAME_CONVERT='/PROD5/','/PROD5/'
+LOG_FILE_NAME_CONVERT='/PROD5/','/PROD5/' 
+STANDBY_FILE_MANAGEMENT=AUTO
+
+[oracle@host01 dbs]$ 
+
+
+
+
+[oracle@host01 dbs]$ cp initPROD5.ora initPROD5.ora.001
+[oracle@host01 dbs]$ vi initPROD5.ora
+
+
+[oracle@host01 dbs]$ vi initPROD5.ora
+[oracle@host01 dbs]$ 
+[oracle@host01 dbs]$ 
+[oracle@host01 dbs]$ cat initPROD5.ora
+PROD5.__data_transfer_cache_size=0
+PROD5.__db_cache_size=436207616
+PROD5.__java_pool_size=16777216
+PROD5.__large_pool_size=33554432
+PROD5.__oracle_base='/u01/app/oracle'#ORACLE_BASE set from environment
+PROD5.__pga_aggregate_target=503316480
+PROD5.__sga_target=721420288
+PROD5.__shared_io_pool_size=33554432
+PROD5.__shared_pool_size=184549376
+PROD5.__streams_pool_size=0
+*.audit_file_dest='/u01/app/oracle/admin/PROD5/adump'
+*.audit_trail='db'
+*.compatible='12.1.0.2.0'
+*.control_files='/u01/app/oracle/oradata/PROD5/control01.ctl','/u01/app/oracle/oradata/PROD5/control03.ctl'
+*.db_block_size=8192
+*.db_domain='example.com'
+*.db_name='PROD5'
+*.db_recovery_file_dest_size=5368709120
+*.db_recovery_file_dest='/u01/app/oracle/flash'
+*.diagnostic_dest='/u01/app/oracle'
+*.dispatchers='(PROTOCOL=TCP) (SERVICE=PROD5XDB)'
+*.local_listener=''
+*.memory_target=800m
+*.open_cursors=300
+*.processes=300
+*.remote_login_passwordfile='EXCLUSIVE'
+*.undo_tablespace='UNDOTBS1'
+DB_UNIQUE_NAME=PROD5H1
+LOG_ARCHIVE_CONFIG='DG_CONFIG=(PROD5H1,PROD5H2)'
+LOG_ARCHIVE_DEST_1=
+ 'LOCATION=USE_DB_RECOVERY_FILE_DEST 
+  VALID_FOR=(ALL_LOGFILES,ALL_ROLES)
+  DB_UNIQUE_NAME=PROD5H1'
+LOG_ARCHIVE_DEST_2=
+ 'SERVICE=PROD5H2 ASYNC
+  VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) 
+  DB_UNIQUE_NAME=PROD5H2'
+REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE
+LOG_ARCHIVE_FORMAT=%t_%s_%r.arc
+FAL_SERVER=PROD5H2
+DB_FILE_NAME_CONVERT='/SBDB5/','/PROD5/'
+LOG_FILE_NAME_CONVERT='/SBDB5/','/PROD5/' 
+STANDBY_FILE_MANAGEMENT=AUTO
+[oracle@host01 dbs]$ 
+
+
+
+
+@PROD5> create spfile from pfile;
+
+File created.
+
+@PROD5> startup
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  603982576 bytes
+Database Buffers	  226492416 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+Database opened.
+@PROD5> 
+
+
+[oracle@host01 admin]$ pwd
+/u01/app/oracle/product/12.1.0/dbhome_1/network/admin
+[oracle@host01 admin]$ cp tnsnames.ora tnsnames.ora.001
+[oracle@host01 admin]$ vi tnsnames.ora
+[oracle@host01 admin]$ diff tnsnames.ora tnsnames.ora.001
+57,74d56
+< PROD5H1 =
+<   (DESCRIPTION =
+<     (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+<     (CONNECT_DATA =
+<       (SERVER = DEDICATED)
+<       (SERVICE_NAME = prod5H1.example.com)
+<     )
+<   )
+< 
+< PROD5H2 =
+<   (DESCRIPTION =
+<     (ADDRESS = (PROTOCOL = TCP)(HOST = host02.example.com)(PORT = 1521))
+<     (CONNECT_DATA =
+<       (SERVER = DEDICATED)
+<       (SERVICE_NAME = prod5h2.example.com)
+<     )
+<   )
+< 
+[oracle@host01 admin]$ 
+
+
+[oracle@host01 dbs]$ pwd
+/u01/app/oracle/product/12.1.0/dbhome_1/dbs
+[oracle@host01 dbs]$ scp initPROD5.ora oracle@host02:/u01/app/oracle/product/12.1.0/dbhome_1/dbs/
+The authenticity of host 'host02 (192.0.2.102)' can't be established.
+RSA key fingerprint is dd:a8:ad:6a:6c:3d:04:07:4b:8c:9c:b1:cd:11:d1:26.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'host02,192.0.2.102' (RSA) to the list of known hosts.
+oracle@host02's password: 
+initPROD5.ora                                                                            100% 1469     1.4KB/s   00:00    
+[oracle@host01 dbs]$ scp orapwPROD
+orapwPROD4    orapwPROD5    orapwPRODCDB  
+[oracle@host01 dbs]$ scp orapwPROD
+orapwPROD4    orapwPROD5    orapwPRODCDB  
+[oracle@host01 dbs]$ scp orapwPROD5 oracle@host02:/u01/app/oracle/product/12.1.0/dbhome_1/dbs/
+oracle@host02's password: 
+orapwPROD5                                                                               100% 7680     7.5KB/s   00:00    
+[oracle@host01 dbs]$ 
+
+
+
++++++++++++++++++++++
+
+
+[oracle@host02 dbs]$ vi initPROD5.ora
+[oracle@host02 dbs]$ 
+[oracle@host02 dbs]$ 
+[oracle@host02 dbs]$ cat initPROD5.ora
+PROD5.__data_transfer_cache_size=0
+PROD5.__db_cache_size=436207616
+PROD5.__java_pool_size=16777216
+PROD5.__large_pool_size=33554432
+PROD5.__oracle_base='/u01/app/oracle'#ORACLE_BASE set from environment
+PROD5.__pga_aggregate_target=503316480
+PROD5.__sga_target=721420288
+PROD5.__shared_io_pool_size=33554432
+PROD5.__shared_pool_size=184549376
+PROD5.__streams_pool_size=0
+*.audit_file_dest='/u01/app/oracle/admin/SBDB5/adump'
+*.audit_trail='db'
+*.compatible='12.1.0.2.0'
+*.control_files='/u01/app/oracle/oradata/SBDB5/control01.ctl','/u01/app/oracle/oradata/SBDB5/control03.ctl'
+*.db_block_size=8192
+*.db_domain='example.com'
+*.db_name='PROD5'
+*.db_recovery_file_dest_size=5368709120
+*.db_recovery_file_dest='/u01/app/oracle/flash'
+*.diagnostic_dest='/u01/app/oracle'
+*.dispatchers='(PROTOCOL=TCP) (SERVICE=PROD5XDB)'
+*.local_listener=''
+*.memory_target=800m
+*.open_cursors=300
+*.processes=300
+*.remote_login_passwordfile='EXCLUSIVE'
+*.undo_tablespace='UNDOTBS1'
+DB_UNIQUE_NAME=PROD5H2
+LOG_ARCHIVE_CONFIG='DG_CONFIG=(PROD5H2,PROD5H1)'
+LOG_ARCHIVE_DEST_1=
+ 'LOCATION=USE_DB_RECOVERY_FILE_DEST 
+  VALID_FOR=(ALL_LOGFILES,ALL_ROLES)
+  DB_UNIQUE_NAME=PROD5H2'
+LOG_ARCHIVE_DEST_2=
+ 'SERVICE=PROD5H1 ASYNC
+  VALID_FOR=(ONLINE_LOGFILES,PRIMARY_ROLE) 
+  DB_UNIQUE_NAME=PROD5H1'
+REMOTE_LOGIN_PASSWORDFILE=EXCLUSIVE
+LOG_ARCHIVE_FORMAT=%t_%s_%r.arc
+FAL_SERVER=PROD5H1
+DB_FILE_NAME_CONVERT='/PROD5/','/SBDB5/'
+LOG_FILE_NAME_CONVERT='/PROD5/','/SBDB5/' 
+STANDBY_FILE_MANAGEMENT=AUTO
+[oracle@host02 dbs]$ mkdir -p /u01/app/oracle/admin/SBDB5/adump
+[oracle@host02 dbs]$ mkdir -p /u01/app/oracle/flash
+[oracle@host02 dbs]$ mkdir -p /u01/app/oracle/oradata/SBDB5
+[oracle@host02 dbs]$ 
+
++++++++++++++++++++++++++++++++
+
+[oracle@host01 admin]$ cat listener.ora 
+# listener.ora Network Configuration File: /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+# Generated by Oracle configuration tools.
+
+LISTENER =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = host01.example.com)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+    )
+  )
+
+SID_LIST_LISTENER =
+ (SID_LIST =
+	(SID_DESC =
+	 (GLOBAL_DBNAME = prod5h1.example.com)
+	 (ORACLE_HOME = /u01/app/oracle/product/12.1.0/dbhome_1)
+	 (SID_NAME = PROD5)
+	)
+  )
+[oracle@host01 admin]$ 
+
+
+
+[oracle@host02 admin]$ vi listener.ora 
+[oracle@host02 admin]$ lsnrctl start
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 03-APR-2017 11:17:48
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Starting /u01/app/oracle/product/12.1.0/dbhome_1/bin/tnslsnr: please wait...
+
+TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+System parameter file is /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Log messages written to /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host02.example.com)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                03-APR-2017 11:17:49
+Uptime                    0 days 0 hr. 0 min. 0 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/host02/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+Services Summary...
+Service "prod5h1.example.com" has 1 instance(s).
+  Instance "PROD5", status UNKNOWN, has 1 handler(s) for this service...
+The command completed successfully
+[oracle@host02 admin]$ cat listener.ora 
+# listener.ora Network Configuration File: /u01/app/oracle/product/12.1.0/dbhome_1/network/admin/listener.ora
+# Generated by Oracle configuration tools.
+
+LISTENER =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = host02.example.com)(PORT = 1521))
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+    )
+  )
+
+
+SID_LIST_LISTENER = 
+ (SID_LIST =
+	(SID_DESC =
+		(GLOBAL_DBNAME = prod5h2.example.com)
+		(ORACLE_HOME = /u01/app/oracle/product/12.1.0/dbhome_1)
+		(SID_NAME = PROD5)
+	)
+ )
+[oracle@host02 admin]$ 
+
+
+[oracle@host01 dbs]$ sqlplus sys/oracle@prod5h1 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Apr 3 11:26:21 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+
+SYS@prod5h1> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, Oracle Label Security, OLAP, Advanced Analytics
+and Real Application Testing options
+[oracle@host01 dbs]$ sqlplus sys/oracle@prod5h2 as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Apr 3 11:26:24 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+
+SYS@prod5h2> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.1.0.2.0 - 64bit Production
+With the Partitioning, OLAP, Advanced Analytics and Real Application Testing options
+[oracle@host01 dbs]$ 
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+[oracle@host01 dbs]$ rman target sys/oracle@prod5h1 auxiliary sys/oracle@prod5h2
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Apr 3 11:28:08 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PROD5 (DBID=1606298904)
+connected to auxiliary database: PROD5 (not mounted)
+
+RMAN> duplicate target database for standby from active database;         
+
+Starting Duplicate Db at 03-APR-17
+using target database control file instead of recovery catalog
+allocated channel: ORA_AUX_DISK_1
+channel ORA_AUX_DISK_1: SID=240 device type=DISK
+allocated channel: ORA_AUX_DISK_2
+channel ORA_AUX_DISK_2: SID=13 device type=DISK
+
+contents of Memory Script:
+{
+   backup as copy reuse
+   targetfile  '/u01/app/oracle/product/12.1.0/dbhome_1/dbs/orapwPROD5' auxiliary format 
+ '/u01/app/oracle/product/12.1.0/dbhome_1/dbs/orapwPROD5'   ;
+}
+executing Memory Script
+
+Starting backup at 03-APR-17
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=255 device type=DISK
+allocated channel: ORA_DISK_2
+channel ORA_DISK_2: SID=25 device type=DISK
+Finished backup at 03-APR-17
+
+contents of Memory Script:
+{
+   restore clone from service  'prod5h1' standby controlfile;
+}
+executing Memory Script
+
+Starting restore at 03-APR-17
+using channel ORA_AUX_DISK_1
+using channel ORA_AUX_DISK_2
+
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service prod5h1
+channel ORA_AUX_DISK_1: restoring control file
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+output file name=/u01/app/oracle/oradata/SBDB5/control01.ctl
+output file name=/u01/app/oracle/oradata/SBDB5/control03.ctl
+Finished restore at 03-APR-17
+
+contents of Memory Script:
+{
+   sql clone 'alter database mount standby database';
+}
+executing Memory Script
+
+sql statement: alter database mount standby database
+
+contents of Memory Script:
+{
+   set newname for tempfile  1 to 
+ "/u01/app/oracle/oradata/SBDB5/temp01.dbf";
+   switch clone tempfile all;
+   set newname for datafile  1 to 
+ "/u01/app/oracle/oradata/SBDB5/system01.dbf";
+   set newname for datafile  3 to 
+ "/u01/app/oracle/oradata/SBDB5/sysaux01.dbf";
+   set newname for datafile  4 to 
+ "/u01/app/oracle/oradata/SBDB5/undotbs01.dbf";
+   set newname for datafile  5 to 
+ "/u01/app/oracle/oradata/SBDB5/example01.dbf";
+   set newname for datafile  6 to 
+ "/u01/app/oracle/oradata/SBDB5/users01.dbf";
+   restore
+   from service  'prod5h1'   clone database
+   ;
+   sql 'alter system archive log current';
+}
+executing Memory Script
+
+executing command: SET NEWNAME
+
+renamed tempfile 1 to /u01/app/oracle/oradata/SBDB5/temp01.dbf in control file
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+Starting restore at 03-APR-17
+using channel ORA_AUX_DISK_1
+using channel ORA_AUX_DISK_2
+
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service prod5h1
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00001 to /u01/app/oracle/oradata/SBDB5/system01.dbf
+channel ORA_AUX_DISK_2: starting datafile backup set restore
+channel ORA_AUX_DISK_2: using network backup set from service prod5h1
+channel ORA_AUX_DISK_2: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_2: restoring datafile 00003 to /u01/app/oracle/oradata/SBDB5/sysaux01.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:46
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service prod5h1
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00004 to /u01/app/oracle/oradata/SBDB5/undotbs01.dbf
+channel ORA_AUX_DISK_2: restore complete, elapsed time: 00:00:46
+channel ORA_AUX_DISK_2: starting datafile backup set restore
+channel ORA_AUX_DISK_2: using network backup set from service prod5h1
+channel ORA_AUX_DISK_2: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_2: restoring datafile 00005 to /u01/app/oracle/oradata/SBDB5/example01.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:07
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service prod5h1
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00006 to /u01/app/oracle/oradata/SBDB5/users01.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:15
+channel ORA_AUX_DISK_2: restore complete, elapsed time: 00:00:42
+Finished restore at 03-APR-17
+
+sql statement: alter system archive log current
+
+contents of Memory Script:
+{
+   switch clone datafile all;
+}
+executing Memory Script
+
+datafile 1 switched to datafile copy
+input datafile copy RECID=1 STAMP=940332676 file name=/u01/app/oracle/oradata/SBDB5/system01.dbf
+datafile 3 switched to datafile copy
+input datafile copy RECID=2 STAMP=940332676 file name=/u01/app/oracle/oradata/SBDB5/sysaux01.dbf
+datafile 4 switched to datafile copy
+input datafile copy RECID=3 STAMP=940332676 file name=/u01/app/oracle/oradata/SBDB5/undotbs01.dbf
+datafile 5 switched to datafile copy
+input datafile copy RECID=4 STAMP=940332676 file name=/u01/app/oracle/oradata/SBDB5/example01.dbf
+datafile 6 switched to datafile copy
+input datafile copy RECID=5 STAMP=940332676 file name=/u01/app/oracle/oradata/SBDB5/users01.dbf
+Finished Duplicate Db at 03-APR-17
+
+RMAN> 
+
+Host01:
+
+SYS@PROD5> select name,database_role,open_mode from v$database;
+
+NAME	  DATABASE_ROLE    OPEN_MODE
+--------- ---------------- --------------------
+PROD5	  PRIMARY	   READ WRITE
+
+SYS@PROD5> 
+
+
+Host02:
+
+SQL> select name,database_role,open_mode from v$database;
+
+NAME	  DATABASE_ROLE    OPEN_MODE
+--------- ---------------- --------------------
+PROD5	  PHYSICAL STANDBY MOUNTED
+
+SQL> 
+
+
+
+SQL> show parameter temp
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+sec_max_failed_login_attempts	     integer	 3
+temp_undo_enabled		     boolean	 FALSE
+SQL> alter system set temp_undo_enabled=true;
+
+System altered.
+
+SQL> show parameter temp
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+sec_max_failed_login_attempts	     integer	 3
+temp_undo_enabled		     boolean	 TRUE
+SQL> 
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+3.0
+
+
+SQL> SELECT CLIENT_PROCESS, PROCESS, THREAD#, SEQUENCE#, STATUS FROM 
+V$MANAGED_STANDBY WHERE CLIENT_PROCESS='LGWR' OR PROCESS='MRP0';  2  
+
+CLIENT_P PROCESS      THREAD#  SEQUENCE# STATUS
+-------- --------- ---------- ---------- ------------
+LGWR	 RFS		    1	      19 IDLE
+
+SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT FROM SESSION;
+
+Database altered.
+
+SQL> SELECT CLIENT_PROCESS, PROCESS, THREAD#, SEQUENCE#, STATUS FROM 
+V$MANAGED_STANDBY WHERE CLIENT_PROCESS='LGWR' OR PROCESS='MRP0';  2  
+
+CLIENT_P PROCESS      THREAD#  SEQUENCE# STATUS
+-------- --------- ---------- ---------- ------------
+LGWR	 RFS		    1	      19 IDLE
+N/A	 MRP0		    1	      19 APPLYING_LOG
+
+SQL> 
+
+SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE CANCEL;
+
+Database altered.
+
+SQL> ALTER DATABASE OPEN;
+
+Database altered.
+
+SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT;
+
+Database altered.
+
+SQL> 
+
+SQL> SELECT open_mode FROM V$DATABASE;
+
+OPEN_MODE
+--------------------
+READ ONLY WITH APPLY
+
+SQL> 
+
++++++++++++++++++++++++++++
+SYS@PROD5> create table t1 (id int);
+
+Table created.
+
+SYS@PROD5> insert into t1 values(1);
+
+1 row created.
+
+SYS@PROD5> insert into t1 values(2);
+
+1 row created.
+
+SYS@PROD5> commit;
+
+Commit complete.
+
+SYS@PROD5> select * from t1;
+
+	ID
+----------
+	 1
+	 2
+
+SYS@PROD5> 
+
+
+host02:
+
+SQL> select * from t1;
+
+	ID
+----------
+	 1
+	 2
+
+SQL> 
+
+++++++++++++++++++++++++++++++++
+
+
+SQL> select * from v$block_change_tracking;
+
+STATUS
+----------
+FILENAME
+--------------------------------------------------------------------------------
+     BYTES     CON_ID
+---------- ----------
+DISABLED
+
+
+
+
+SQL> alter database block change tracking using file '/u01/app/oracle/oradata/SBDB5/tracking.f';
+alter database block change tracking using file '/u01/app/oracle/oradata/SBDB5/tracking.f'
+                     *
+ERROR at line 1:
+ORA-02231: missing or invalid option to ALTER DATABASE
+
+
+SQL> alter database enable block change tracking using file '/u01/app/oracle/oradata/SBDB5/tracking.f';
+
+Database altered.
+
+SQL> select * from v$block_change_tracking;
+
+STATUS
+----------
+FILENAME
+--------------------------------------------------------------------------------
+     BYTES     CON_ID
+---------- ----------
+ENABLED
+/u01/app/oracle/oradata/SBDB5/tracking.f
+  11599872	    0
+
+
+SQL> 
+
+
+
+[oracle@host01 dbs]$ export ORACLE_SID_PROD5;rman target /
+
+Recovery Manager: Release 12.1.0.2.0 - Production on Mon Apr 3 11:50:00 2017
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: PROD5 (DBID=1606298904)
+
+RMAN> show all;
+
+using target database control file instead of recovery catalog
+RMAN configuration parameters for database with db_unique_name PROD5H1 are:
+CONFIGURE RETENTION POLICY TO REDUNDANCY 1; # default
+CONFIGURE BACKUP OPTIMIZATION ON;
+CONFIGURE DEFAULT DEVICE TYPE TO DISK;
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO '%F'; # default
+CONFIGURE DEVICE TYPE DISK PARALLELISM 2 BACKUP TYPE TO BACKUPSET;
+CONFIGURE DATAFILE BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE ARCHIVELOG BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE MAXSETSIZE TO UNLIMITED; # default
+CONFIGURE ENCRYPTION FOR DATABASE OFF; # default
+CONFIGURE ENCRYPTION ALGORITHM 'AES128'; # default
+CONFIGURE COMPRESSION ALGORITHM 'BASIC' AS OF RELEASE 'DEFAULT' OPTIMIZE FOR LOAD TRUE ; # default
+CONFIGURE RMAN OUTPUT TO KEEP FOR 7 DAYS; # default
+CONFIGURE ARCHIVELOG DELETION POLICY TO NONE; # default
+CONFIGURE SNAPSHOT CONTROLFILE NAME TO '/u01/app/oracle/product/12.1.0/dbhome_1/dbs/snapcf_PROD5.f'; # default
+
+RMAN> CONFIGURE ARCHIVELOG DELETION POLICY TO applied on all standby;
+
+new RMAN configuration parameters:
+CONFIGURE ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY;
+new RMAN configuration parameters are successfully stored
+
+RMAN> show all;
+
+RMAN configuration parameters for database with db_unique_name PROD5H1 are:
+CONFIGURE RETENTION POLICY TO REDUNDANCY 1; # default
+CONFIGURE BACKUP OPTIMIZATION ON;
+CONFIGURE DEFAULT DEVICE TYPE TO DISK;
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO '%F'; # default
+CONFIGURE DEVICE TYPE DISK PARALLELISM 2 BACKUP TYPE TO BACKUPSET;
+CONFIGURE DATAFILE BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE ARCHIVELOG BACKUP COPIES FOR DEVICE TYPE DISK TO 1; # default
+CONFIGURE MAXSETSIZE TO UNLIMITED; # default
+CONFIGURE ENCRYPTION FOR DATABASE OFF; # default
+CONFIGURE ENCRYPTION ALGORITHM 'AES128'; # default
+CONFIGURE COMPRESSION ALGORITHM 'BASIC' AS OF RELEASE 'DEFAULT' OPTIMIZE FOR LOAD TRUE ; # default
+CONFIGURE RMAN OUTPUT TO KEEP FOR 7 DAYS; # default
+CONFIGURE ARCHIVELOG DELETION POLICY TO APPLIED ON ALL STANDBY;
+CONFIGURE SNAPSHOT CONTROLFILE NAME TO '/u01/app/oracle/product/12.1.0/dbhome_1/dbs/snapcf_PROD5.f'; # default
+
+RMAN> 
+
+
+++++++++++++++++++++++++++++++++++
+
+SYS@PROD5> alter system set dg_broker_start=true;
+
+System altered.
+
+SYS@PROD5> show parameter dg_broker_start
+
+NAME				     TYPE	 VALUE
+------------------------------------ ----------- ------------------------------
+dg_broker_start 		     boolean	 TRUE
+SYS@PROD5>
+
+
+
+
+SQL> alter system set dg_broker_start=true;
+
+System altered.
+
+SQL> alter database flashback on;
+alter database flashback on
+*
+ERROR at line 1:
+ORA-01153: an incompatible media recovery is active
+
+
+SQL> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> startup mount;
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  608176880 bytes
+Database Buffers	  222298112 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+SQL> alter database flashback on;
+
+Database altered.
+
+SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT FROM SESSION;
+
+Database altered.
+
+SQL> select database_role from v$database;
+
+DATABASE_ROLE
+----------------
+PHYSICAL STANDBY
+
+SQL> select open_mode from v$database;
+
+OPEN_MODE
+--------------------
+MOUNTED
+
+SQL> 
+
+
+
+
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+SYS@prod5h1> alter system set log_archive_dest_1='';
+alter system set log_archive_dest_1=''
+*
+ERROR at line 1:
+ORA-02097: parameter cannot be modified because specified value is invalid
+ORA-16028: new LOG_ARCHIVE_DEST_1 causes less destinations than
+LOG_ARCHIVE_MIN_SUCCEED_DEST requires
+
+
+SYS@prod5h1> alter system set log_archive_dest_1='' scope=spfile;
+
+System altered.
+
+SYS@prod5h1> alter system set log_archive_dest_2='' scope=spfile;
+
+System altered.
+
+SYS@prod5h1> startup force;
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  608176880 bytes
+Database Buffers	  222298112 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+Database opened.
+SYS@prod5h1> 
+
+
+
+
+SQL> alter system set log_archive_dest_1='' scope=spfile; 
+
+System altered.
+
+SQL> alter system set log_archive_dest_2='' scope=spfile;
+
+System altered.
+
+SQL> shu immediate;
+ORA-01109: database not open
+
+
+Database dismounted.
+ORACLE instance shut down.
+SQL> startup mount;
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  608176880 bytes
+Database Buffers	  222298112 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+SQL> 
+
+
+
+
+
+
+
+
+[oracle@host01 dbs]$ export ORACLE_SID=PROD5;dgmgrl
+DGMGRL for Linux: Version 12.1.0.2.0 - 64bit Production
+
+Copyright (c) 2000, 2013, Oracle. All rights reserved.
+
+Welcome to DGMGRL, type "help" for information.
+DGMGRL> connect sys/oracle@prod5h1 
+Connected as SYSDBA.
+DGMGRL> create configuration 'DRSolution' as primary database is 'PROD5H1' connect identifier is 'PROD5H1';
+Configuration "DRSolution" created with primary database "PROD5H1"
+DGMGRL> show configuration;
+
+Configuration - DRSolution
+
+  Protection Mode: MaxPerformance
+  Members:
+  PROD5H1 - Primary database
+
+Fast-Start Failover: DISABLED
+
+Configuration Status:
+DISABLED
+
+DGMGRL> add database 'PROD5H2' as connect identifier is 'PROD5H2';
+Error: ORA-16698: LOG_ARCHIVE_DEST_n parameter set for object to be added
+
+Failed.
+DGMGRL> add database 'PROD5H2' as connect identifier is 'PROD5H2';
+Database "PROD5H2" added
+DGMGRL> show configuration;
+
+Configuration - DRSolution
+
+  Protection Mode: MaxPerformance
+  Members:
+  PROD5H1 - Primary database
+    PROD5H2 - Physical standby database 
+
+Fast-Start Failover: DISABLED
+
+Configuration Status:
+DISABLED
+
+DGMGRL>  ENABLE CONFIGURATION;
+Enabled.
+DGMGRL> ENABLE DATABASE 'PROD5H2';
+Enabled.
+DGMGRL> show database 'PROD5H2';
+
+Database - PROD5H2
+
+  Role:               PHYSICAL STANDBY
+  Intended State:     APPLY-ON
+  Transport Lag:      0 seconds (computed 1 second ago)
+  Apply Lag:          0 seconds (computed 1 second ago)
+  Average Apply Rate: 23.00 KByte/s
+  Real Time Query:    OFF
+  Instance(s):
+    PROD5
+
+Database Status:
+SUCCESS
+
+DGMGRL> EDIT DATABASE 'PROD5H2' SET PROPERTY 'LogXptMode'='SYNC';
+Property "LogXptMode" updated
+DGMGRL> EDIT CONFIGURATION SET PROTECTION MODE AS MAXAVAILABILITY;
+Succeeded.
+DGMGRL> SHOW CONFIGURATION;
+
+Configuration - DRSolution
+
+  Protection Mode: MaxAvailability
+  Members:
+  PROD5H1 - Primary database
+    PROD5H2 - Physical standby database 
+
+Fast-Start Failover: DISABLED
+
+Configuration Status:
+SUCCESS   (status updated 44 seconds ago)
+
+DGMGRL> 
+
+DGMGRL> EDIT DATABASE 'PROD5H1' SET PROPERTY 'LogXptMode'='SYNC';
+Property "LogXptMode" updated
+DGMGRL> EDIT DATABASE 'PROD5H2' SET PROPERTY 'LogXptMode'='SYNC';
+Property "LogXptMode" updated
+DGMGRL> show database verbose 'PROD5H1';
+
+Database - PROD5H1
+
+  Role:               PRIMARY
+  Intended State:     TRANSPORT-ON
+  Instance(s):
+    PROD5
+
+  Properties:
+    DGConnectIdentifier             = 'PROD5H1'
+    ObserverConnectIdentifier       = ''
+    LogXptMode                      = 'SYNC'
+    RedoRoutes                      = ''
+    DelayMins                       = '0'
+    Binding                         = 'optional'
+    MaxFailure                      = '0'
+    MaxConnections                  = '1'
+    ReopenSecs                      = '300'
+    NetTimeout                      = '30'
+    RedoCompression                 = 'DISABLE'
+    LogShipping                     = 'ON'
+    PreferredApplyInstance          = ''
+    ApplyInstanceTimeout            = '0'
+    ApplyLagThreshold               = '0'
+    TransportLagThreshold           = '0'
+    TransportDisconnectedThreshold  = '30'
+    ApplyParallel                   = 'AUTO'
+    StandbyFileManagement           = 'AUTO'
+    ArchiveLagTarget                = '0'
+    LogArchiveMaxProcesses          = '4'
+    LogArchiveMinSucceedDest        = '1'
+    DbFileNameConvert               = '/SBDB5/, /PROD5/'
+    LogFileNameConvert              = '/SBDB5/, /PROD5/'
+    FastStartFailoverTarget         = ''
+    InconsistentProperties          = '(monitor)'
+    InconsistentLogXptProps         = '(monitor)'
+    SendQEntries                    = '(monitor)'
+    LogXptStatus                    = '(monitor)'
+    RecvQEntries                    = '(monitor)'
+    StaticConnectIdentifier         = '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=PROD5H1_DGMGRL.example.com)(INSTANCE_NAME=PROD5)(SERVER=DEDICATED)))'
+    StandbyArchiveLocation          = 'USE_DB_RECOVERY_FILE_DEST'
+    AlternateLocation               = ''
+    LogArchiveTrace                 = '0'
+    LogArchiveFormat                = '%t_%s_%r.arc'
+    TopWaitEvents                   = '(monitor)'
+
+Database Status:
+SUCCESS
+
+DGMGRL> 
+
+
+
+
+
+DGMGRL> show database verbose 'PROD5H1';
+
+Database - PROD5H1
+
+  Role:               PRIMARY
+  Intended State:     TRANSPORT-ON
+  Instance(s):
+    PROD5
+
+  Properties:
+    DGConnectIdentifier             = 'PROD5H1'
+    ObserverConnectIdentifier       = ''
+    LogXptMode                      = 'SYNC'
+    RedoRoutes                      = ''
+    DelayMins                       = '0'
+    Binding                         = 'optional'
+    MaxFailure                      = '0'
+    MaxConnections                  = '1'
+    ReopenSecs                      = '300'
+    NetTimeout                      = '30'
+    RedoCompression                 = 'DISABLE'
+    LogShipping                     = 'ON'
+    PreferredApplyInstance          = ''
+    ApplyInstanceTimeout            = '0'
+    ApplyLagThreshold               = '0'
+    TransportLagThreshold           = '0'
+    TransportDisconnectedThreshold  = '30'
+    ApplyParallel                   = 'AUTO'
+    StandbyFileManagement           = 'AUTO'
+    ArchiveLagTarget                = '0'
+    LogArchiveMaxProcesses          = '4'
+    LogArchiveMinSucceedDest        = '1'
+    DbFileNameConvert               = '/SBDB5/, /PROD5/'
+    LogFileNameConvert              = '/SBDB5/, /PROD5/'
+    FastStartFailoverTarget         = ''
+    InconsistentProperties          = '(monitor)'
+    InconsistentLogXptProps         = '(monitor)'
+    SendQEntries                    = '(monitor)'
+    LogXptStatus                    = '(monitor)'
+    RecvQEntries                    = '(monitor)'
+    StaticConnectIdentifier         = '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=PROD5H1_DGMGRL.example.com)(INSTANCE_NAME=PROD5)(SERVER=DEDICATED)))'
+    StandbyArchiveLocation          = 'USE_DB_RECOVERY_FILE_DEST'
+    AlternateLocation               = ''
+    LogArchiveTrace                 = '0'
+    LogArchiveFormat                = '%t_%s_%r.arc'
+    TopWaitEvents                   = '(monitor)'
+
+Database Status:
+SUCCESS
+
+DGMGRL> show database verbose 'PROD5H2';
+
+Database - PROD5H2
+
+  Role:               PHYSICAL STANDBY
+  Intended State:     APPLY-ON
+  Transport Lag:      0 seconds (computed 0 seconds ago)
+  Apply Lag:          0 seconds (computed 0 seconds ago)
+  Average Apply Rate: 2.00 KByte/s
+  Active Apply Rate:  0 Byte/s
+  Maximum Apply Rate: 0 Byte/s
+  Real Time Query:    OFF
+  Instance(s):
+    PROD5
+
+  Properties:
+    DGConnectIdentifier             = 'PROD5H2'
+    ObserverConnectIdentifier       = ''
+    LogXptMode                      = 'SYNC'
+    RedoRoutes                      = ''
+    DelayMins                       = '0'
+    Binding                         = 'optional'
+    MaxFailure                      = '0'
+    MaxConnections                  = '1'
+    ReopenSecs                      = '300'
+    NetTimeout                      = '30'
+    RedoCompression                 = 'DISABLE'
+    LogShipping                     = 'ON'
+    PreferredApplyInstance          = ''
+    ApplyInstanceTimeout            = '0'
+    ApplyLagThreshold               = '0'
+    TransportLagThreshold           = '0'
+    TransportDisconnectedThreshold  = '30'
+    ApplyParallel                   = 'AUTO'
+    StandbyFileManagement           = 'AUTO'
+    ArchiveLagTarget                = '0'
+    LogArchiveMaxProcesses          = '4'
+    LogArchiveMinSucceedDest        = '1'
+    DbFileNameConvert               = '/PROD5/, /SBDB5/'
+    LogFileNameConvert              = '/PROD5/, /SBDB5/'
+    FastStartFailoverTarget         = ''
+    InconsistentProperties          = '(monitor)'
+    InconsistentLogXptProps         = '(monitor)'
+    SendQEntries                    = '(monitor)'
+    LogXptStatus                    = '(monitor)'
+    RecvQEntries                    = '(monitor)'
+    StaticConnectIdentifier         = '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host02.example.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=PROD5H2_DGMGRL.example.com)(INSTANCE_NAME=PROD5)(SERVER=DEDICATED)))'
+    StandbyArchiveLocation          = 'USE_DB_RECOVERY_FILE_DEST'
+    AlternateLocation               = ''
+    LogArchiveTrace                 = '0'
+    LogArchiveFormat                = '%t_%s_%r.arc'
+    TopWaitEvents                   = '(monitor)'
+
+Database Status:
+SUCCESS
+
+DGMGRL> switchover to 'PROD5H2';
+Performing switchover NOW, please wait...
+Operation requires a connection to instance "PROD5" on database "PROD5H2"
+Connecting to instance "PROD5"...
+Connected as SYSDBA.
+New primary database "PROD5H2" is opening...
+Operation requires start up of instance "PROD5" on database "PROD5H1"
+Starting instance "PROD5"...
+Unable to connect to database using (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=host01.example.com)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=PROD5H1_DGMGRL.example.com)(INSTANCE_NAME=PROD5)(SERVER=DEDICATED)))
+ORA-12514: TNS:listener does not currently know of service requested in connect descriptor
+
+Failed.
+Warning: You are no longer connected to ORACLE.
+
+Please complete the following steps to finish switchover:
+	start up and mount instance "PROD5" of database "PROD5H1"
+
+DGMGRL> 
+
+
+
+
+
+
+[oracle@host01 ~]$ ps -ef | grep smon
+oracle    10524   3227  0 15:24 pts/0    00:00:00 grep smon
+[oracle@host01 ~]$ export ORACLE_SID=PROD5;sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Mon Apr 3 15:25:11 2017
+
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SYS@PROD5> startup mount;
+ORACLE instance started.
+
+Total System Global Area  838860800 bytes
+Fixed Size		    2929936 bytes
+Variable Size		  608176880 bytes
+Database Buffers	  222298112 bytes
+Redo Buffers		    5455872 bytes
+Database mounted.
+SYS@PROD5> select database_role,open_mode,name from v$database;
+
+DATABASE_ROLE	 OPEN_MODE	      NAME
+---------------- -------------------- ---------
+PHYSICAL STANDBY MOUNTED	      PROD5
+
+SYS@PROD5> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT FROM SESSION;
+ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT FROM SESSION
+*
+ERROR at line 1:
+ORA-01153: an incompatible media recovery is active
+
+
+SYS@PROD5> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE CANCEL;
+
+Database altered.
+
+SYS@PROD5> ALTER DATABASE OPEN;
+
+Database altered.
+
+SYS@PROD5> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT;
+
+Database altered.
+
+SYS@PROD5> select database_role,open_mode,name from v$database;
+
+DATABASE_ROLE	 OPEN_MODE	      NAME
+---------------- -------------------- ---------
+PHYSICAL STANDBY READ ONLY WITH APPLY PROD5
+
+SYS@PROD5> 
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+SQL> create sequence seq1 increment by 1 start with 1 nomaxvalue nocycle cache 10;
+
+Sequence created.
+
+SQL> create sequence seq2 increment by 1 start with 1 nomaxvalue session;
+
+Sequence created.
+
+SQL> 
+
+
+
+
+
+

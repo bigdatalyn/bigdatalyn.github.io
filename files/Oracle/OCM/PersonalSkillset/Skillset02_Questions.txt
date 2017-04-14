@@ -1,0 +1,133 @@
+Section 1：Materialized views
+
+1.Configuration PDBPROD1 database, so that the materialized view query rewrite be supportted, even in the case of constraint is not verified
+
+Section 2：Transport tablespace
+
+1.Use the Transport tablespace method, The TRPDATA tablespace will be transferred to the PDBPROD1 database,the metadata dump is trans3_2.dmp, data file is trpdata_6.
+
+Section 3：Star query optimization
+
+1.Configuring PDBPROD1 database supports star queries to ensure that this change does not affect other PDB in the PRODCDB
+
+Section 4： Configuring parallel execution
+
+1.PDBPROD1 deploy in parallel execution, use the SYS user, do the following:
+
+（1）Setting sh.sales table parallel degree of parallelism is the default;
+
+（2）Configuring PDBPROD1 use automatic parallelism, take effect only when the statement object does not specify the degree of parallelism in the data dictionary.
+
+
+Section 5： Partition Management
+
+1.Create interval partitions using SH user, in PDBPROD1
+
+  Table name: sales_history_2014, according to the 2011, 2012, 2013, 2014 Year to partition
+
+  The partition is named SAL1, SAL2, SAL3, SAL4
+
+  Based time_id partition
+
+
+PROD_ID number not null
+
+CUST_ID number not null
+
+TIME_ID DATE not null
+
+CHANNEL_ID number not null
+
+PROMO_ID number not null
+
+QUANTITY_SOLD number(10,2) not null
+
+AMOUNT_SOLD number(10,2) not null
+
+Loading data using a 5_2_1.sql script
+
+
+Section 6： Configuring Flashback Technology
+
+1.Configuring PDBPROD1 achieve Flashback Archive
+
+  Tablespace name: FLASH_ARC, data files 50M
+
+  User name: FARC_OWNER
+
+  the previous version of SH.PROMOTIONS table , through flasharc1 Flashback Query to Archive
+
+
+Section 7： Use EM Cloud Control Configuration Resource Manager
+
+Configuring Resource Manager to PRODCDB
+
+1.Assign SYSTEM user as a resource administrator privileges
+
+2.Create resource plans to DAYTIMEP for PRODCDB
+
+   PDBPROD1 get 6 parts CDB shared resources
+
+   PDBPROD2 get 3 parts of a shared resource CDB
+
+   PDBPROD3 get 1 share resources CDB
+
+   PDB can not get the extra 75% of available cpu time
+
+   PDB can not get the extra 50% parallel_servers_target
+
+3.Create two consumer group ONLINE_GRP and REPORTING_GRP in the PDBPROD1
+
+Use comments indicated the group used
+
+4.Create a resource management plan in PDBPROD1
+
+（1）Project Title: DAYTIMEC
+
+（2）For ONLINE_GRP group can not be allowed more than 25 active sessions. If 26 users try to log on, wait 90 seconds later, this demand will be terminated.
+
+（3）REPORTING_GRP set the maximum number of active sessions to 8. If you need extra eight sessions ,150 seconds after this request will be terminated.
+
+（4）In ONLINE_GRP group, a conversation longest query execution time is 5 seconds,If the query estimate exceeds 5s, the query should be error
+
+（5）ONLINE_GRP group of maximum undo 350M
+
+（6）cpu ratio, ONLINE_GRP, REPORTING_GRP, OTHER_GROUPS respectively 50,40,10
+
+（7）REPORTING_GRP group should limit the degree of parallelism of 30
+
+（8）If the session exceeds 8000i / o or data transmission over 2000m, and in any PEPORTING_grp Group interaction should be temporary to low_group group. When the call is completed, the session also return to the group.
+
+5.daytime activation
+
+
+Section 8： Tuning sql statement
+
+1. Use the result cache
+
+In PDBPROD1 database, set the result cache size 15m,Hr using a 8_1_1.sql login script so that the statements can be used in result cache
+
+
+2.Multi-column statistics
+
+Login PDBPROD1 SH user database, run the 8_2_1.sql script, the script queries, CUST_CITY, CUST_STATE_PROVINCE, COUNTRY_ID regular column use together. Improve optimizer These statements compute selectable rate
+
+
+    3. Use SQL Performance Analyze
+        (1) run the scripts 2_8_3.sql,create apps user, and password Apps1234
+        (2) From the 11.2 migration to the 12c environment, provides a dump file (the user password: apps/Apps1234),
+
+              Contains the Sql Tuning Set, requires the use of a tool for optimization in STS SQL, and the optimized SQL plan_table write in the execution plan
+        (3) Dump file location for: /home/oracle/scripts,the file :appsstq.dmp.
+
+        (4) Migration from 11.2.0.3 to 12.1.0.2
+
+
+4.Evolution of baseline
+
+In PDBPROD1 the SH user, execute the 8_4_1.sql script, and the evolution of the baseline
+
+
+Section 9: Index Tuning
+
+1. When inserting data into a database sh PDBPROD1 user PROD_INFO table, found a large number of buffer busy waits waiting for the event. PRODUCT_ID column on a sequence is used.Range scan is frequently performed on the PRODUCT_ID columns. Create an index PROD_IDX, On PRODUCT_ID columns do not have a lot of buffer buffer waits wait, and can for a range scan.

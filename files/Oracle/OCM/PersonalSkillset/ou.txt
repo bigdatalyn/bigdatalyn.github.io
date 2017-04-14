@@ -1,0 +1,5 @@
+http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=5001&get_params=p_exam_id:12COCMU&intcmp=WWOUCERTTOPBAN412CPG2&p_org_id=27&lang=US
+
+
+Exam
+http://education.oracle.co.uk/html/oracle/28US/SCHED_SP_OCM11_2.htm
