@@ -8,6 +8,12 @@ tags: Linux Centos Installation
 * content
 {:toc}
 
+Centos7-64bit安装
+
+
+
+
+
 
 ### 下载
 
