@@ -1,0 +1,111 @@
+---
+layout: post
+title: "[原创]Centos7-Python安装"
+category: Unix
+tags: Linux Centos Python
+---
+
+* content
+{:toc}
+
+Centos7-Python安装
+
+
+
+
+
+
+### 默认安装的Python版本Centos7默认安装了python2
+
+Centos7默认安装了python2.7.5 一般yum安装使用的是python2.7.5。
+
+使用python -V命令查看一下是否安装Python：
+
+	[root@bigdatalyn ~]# python -V
+	Python 2.7.5
+	[root@bigdatalyn ~]# which python
+	/usr/bin/python
+	[root@bigdatalyn ~]# ls -ltr /usr/bin/python*
+	-rwxr-xr-x. 1 root root 7136 Nov  6  2016 /usr/bin/python2.7
+	lrwxrwxrwx. 1 root root    9 Jul  3 22:10 /usr/bin/python2 -> python2.7
+	lrwxrwxrwx. 1 root root    7 Jul  3 22:10 /usr/bin/python -> python2
+	[root@bigdatalyn ~]# 
+
+可以看到可执行文件python指向python2，python2又指向python2.7也就是说Python命令执行的系统预装的Python2.7。
+
+### 安装新版本的Python
+
+下载Python新版本https://www.python.org/downloads/source/
+
+最新是：3.6.1(2017/07)
+
+执行wget命令直接下载到服务器
+
+	wget https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tgz
+
+
+	[root@bigdatalyn ~]# mkdir python
+	[root@bigdatalyn ~]# cd python
+	[root@bigdatalyn python]# wget https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tgz
+	--2017-07-03 23:16:02--  https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tgz
+	Resolving www.python.org (www.python.org)... 151.101.72.223, 2a04:4e42:11::223
+	Connecting to www.python.org (www.python.org)|151.101.72.223|:443... connected.
+	HTTP request sent, awaiting response... 200 OK
+	
+解压缩：
+	
+	tar -zxvf Python-3.6.1.tgz
+
+
+执行编译安装。
+
+执行 
+	
+	./configure --prefix=/usr/local/python/python3.6.1 --with-libs=/usr/local/include
+
+	FAQ:如果缺少--with-libs会导致python缺少SSL模块，pip无法安装任何软件
+
+#### Tips:
+	Configure是一个可执行脚本，它有很多选项，在待安装的源码路径下使用命令./configure –help输出详细的选项列表。
+	
+	命令./configure命令执行完毕之后创建一个文件creating Makefile，供下面的make命令使用 执行make install之后就会把程序安装到我们指定的目录中去。
+
+	选项--prefix是配置安装的路径，如果不配置该选项，安装后可执行文件默认放在/usr/local/bin，库文件默认放
+	在/usr/local/lib，配置文件默认放在/usr/local/etc，其它的资源文件放在/usr/local/share。
+
+	如果配置--prefix，如：
+	./configure --prefix=/usr/local/test01
+	可以把所有资源文件放在/usr/local/test01的路径中，容易整理。	而且用了—prefix选项的另一个好处是卸载软件或移植软件。不再需要时，简单删除该安装目录即可。移植软件只需拷贝整个目录到另外一个机器即可（相同的OS版本）。
+
+
+然后执行
+
+	make && make install
+
+安装成功之后执行下面命令创建软连接。
+	
+	ls -ltr /usr/local/python*
+	mv /usr/local/python /usr/local/python.2.7.back
+	ln -s /usr/local/python/python3.6.1/bin/python3  /usr/bin/python
+	
+
+最后执行以下命令查看python
+	
+	python -V
+
+
+3.修改yum配置文件
+
+因为yum使用python2，因此替换为python3后可能无法正常工作，继续使用这个python2.7.5
+
+因此修改yum配置文件(vi /usr/bin/yum)。
+
+把文件头部的#!/usr/bin/python改成#!/usr/bin/python2.7保存退出即可。
+
+因为yum使用python2，因此替换为python3后可能无法正常工作，继续使用这个python2.7.5因此修改yum配置文件(vi /usr/bin/yum)。把文件头部的#!/usr/bin/python改成#!/usr/bin/python2.7保存退出即可
+
+
+
+
+
+

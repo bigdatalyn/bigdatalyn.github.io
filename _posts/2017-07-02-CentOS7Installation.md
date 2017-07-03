@@ -60,3 +60,35 @@ CentOS 与 RHEL 是同源，所以，在 CentOS 文档不足时，可以参考 R
 最后画面是
 
 ![004.InstallCentos7Desktop.png]({{ "/files/Linux/Centos7/004.InstallCentos7Desktop.png"}})
+
+
+### NAT网络中，Host和CentOS7的ssh连接
+
+查看 inet addr : 10.0.2.15
+
+然后到 HostOS 的控制面板，看网络和共享中心的VirtualBox Host-Only Network 的 ipv4 属性ip 地址：192.168.56.1
+
+![005.InstallCentos7NAT_SSH.png]({{ "/files/Linux/Centos7/005.InstallCentos7NAT_SSH.png"}})
+
+
+打开virtualbox 的Settings
+
+-> Network
+
+-> Adapter1 启用 
+
+-> Attached to：NAT
+
+-> Advanced
+
+Port Forwarding 
+
+![006.InstallCentos7NAT_SSH_PortForwarding.png]({{ "/files/Linux/Centos7/006.InstallCentos7NAT_SSH_PortForwarding.png"}})
+
+测试连接：
+
+![007.InstallCentos7NAT_SSH_Test.png]({{ "/files/Linux/Centos7/007.InstallCentos7NAT_SSH_Test.png"}})
+
+
+
+
