@@ -17,13 +17,19 @@ Centos7-64bit安装
 
 ### 下载
 
-地址：http://www.centos.org/download/
+地址：
+	
+	http://www.centos.org/download/
 
-本例为 Minimal ISO 版本：http://isoredirect.centos.org/centos/7/isos/x86_64/
+本例为 Minimal ISO 版本：
 
-CentOS-7-x86_64-DVD-1611.iso
+	http://isoredirect.centos.org/centos/7/isos/x86_64/
 
-CentOS 与 RHEL 是同源，所以，在 CentOS 文档不足时，可以参考 RHEL 的文档。https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Installation_Guide/index.html
+	CentOS-7-x86_64-DVD-1611.iso
+
+CentOS 与 RHEL 是同源，所以，在 CentOS 文档不足时，可以参考 RHEL 的文档。
+
+	https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Installation_Guide/index.html
 
 
 ### 安装系统
@@ -73,16 +79,14 @@ CentOS 与 RHEL 是同源，所以，在 CentOS 文档不足时，可以参考 R
 
 打开virtualbox 的Settings
 
--> Network
+	-> Network
+	-> Adapter1 启用 
+	-> Attached to：NAT
+	-> Advanced
+	Port Forwarding 
 
--> Adapter1 启用 
-
--> Attached to：NAT
-
--> Advanced
-
-Port Forwarding 
-
+端口跳转设置
+	
 ![006.InstallCentos7NAT_SSH_PortForwarding.png]({{ "/files/Linux/Centos7/006.InstallCentos7NAT_SSH_PortForwarding.png"}})
 
 测试连接：
@@ -90,5 +94,5 @@ Port Forwarding
 ![007.InstallCentos7NAT_SSH_Test.png]({{ "/files/Linux/Centos7/007.InstallCentos7NAT_SSH_Test.png"}})
 
 
-
+完工
 

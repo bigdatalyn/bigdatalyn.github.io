@@ -33,6 +33,7 @@ Centos7默认安装了python2.7.5 一般yum安装使用的是python2.7.5。
 
 可以看到可执行文件python指向python2，python2又指向python2.7也就是说Python命令执行的系统预装的Python2.7。
 
+
 ### 安装新版本的Python
 
 下载Python新版本https://www.python.org/downloads/source/
@@ -63,10 +64,11 @@ Centos7默认安装了python2.7.5 一般yum安装使用的是python2.7.5。
 	
 	./configure --prefix=/usr/local/python/python3.6.1 --disable-ipv6
 
-XXXXX	FAQ:如果缺少--with-libs会导致python缺少SSL模块，pip无法安装任何软件
+
 	FAQ:如果缺少--disable-ipv6会有Fatal: You must get working getaddrinfo() function. or you can specify "--disable-ipv6".
 
 #### Tips:
+
 	Configure是一个可执行脚本，它有很多选项，在待安装的源码路径下使用命令./configure –help输出详细的选项列表。
 	
 	命令./configure命令执行完毕之后创建一个文件creating Makefile，供下面的make命令使用 执行make install之后就会把程序安装到我们指定的目录中去。
@@ -133,18 +135,14 @@ XXXXX	FAQ:如果缺少--with-libs会导致python缺少SSL模块，pip无法安�
 
 错误01：
 
-	configure: error: no acceptable C compiler found in $PATH
-	
+	configure: error: no acceptable C compiler found in $PATH	
 	解决：
-	
 	yum -y install gcc
 
 错误02：
 
 	make install时候最后报错：	zipimport.ZipImportError: can't decompress data; zlib not available
-	
 	解决：
-	
 	yum install zlib zlib-devel -y
 
 安装ftp
