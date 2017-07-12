@@ -319,7 +319,80 @@ https://docs.oracle.com/cd/E50790_01/doc/doc.121/e50471/administer.htm#SAGUG2053
 
 	SQL> 
 
+### HCC压缩测试
 
+测试脚本如下：
+
+	create tablespace host_tbs datafile '/etc/oracle/oradata/orcl/host_tbs01.dbf' size 800m;
+
+	create bigfile tablespace cell_hcc_tbs datafile '+DATA' size 1g autoextend on maxsize unlimited default COMPRESS FOR QUERY HIGH extent management local uniform size 4m segment space management auto;
+
+	create table tab01 tablespace host_tbs as select 'Oracle Enterprise Edition' as product, mod(rownum,5) as channel_id,  mod(rownum,1000) as cust_id , 1000 as amount_sold, to_date('01.' || lpad(to_char(mod(rownum,12)+1),2,'0') || '.2017' ,'dd.mm.yyyy') as time_id from dual connect by level<=2e5 ; 
+
+	insert /*+ append */ into tab01 select * from tab01;
+
+	commit;
+
+	insert /*+ append */ into tab01 select * from tab01;
+
+	commit;
+
+	insert /*+ append */ into tab01 select * from tab01;
+
+	commit;
+
+	insert /*+ append */ into tab01 select * from tab01;
+
+	commit;
+
+	insert /*+ append */ into tab01 select * from tab01;
+
+	commit;
+
+	exec dbms_stats.gather_table_stats('USER01','TAB01');
+
+	create table TAB01_HCC_QH tablespace cell_hcc_tbs as select * from tab01;
+
+	exec dbms_stats.gather_table_stats('USER01','TAB01_HCC_QH');
+
+	col segment_name format a20
+
+	select segment_name, bytes/1024/1024 as MB from dba_segments where segment_name = 'TAB01' or segment_name = 'TAB01_HCC_QH';
+
+	select segment_name, bytes from dba_segments where segment_name = 'TAB01' or segment_name = 'TAB01_HCC_QH';
+
+
+测试结果如下：
+
+	USER01@orcl> select segment_name, bytes/1024/1024 as MB from dba_segments where segment_name = 'TAB01' or segment_name = 'TAB01_HCC_QH';
+
+	SEGMENT_NAME                 MB
+	-------------------- ----------
+	TAB01                       792
+	TAB01_HCC_QH                  4
+
+	USER01@orcl>
+
+	USER01@orcl> select segment_name, bytes from dba_segments where segment_name = 'TAB01' or segment_name = 'TAB01_HCC_QH';
+
+	SEGMENT_NAME              BYTES
+	-------------------- ----------
+	TAB01                 830472192
+	TAB01_HCC_QH            4194304
+
+	USER01@orcl> select 830472192/4194304 from dual;
+
+	830472192/4194304
+	-----------------
+				  198
+
+	USER01@orcl>
+
+792M的大小压缩到4M大小，压缩比有198倍！！！！
+
+** 由于表的内容相同内容太多的缘故，之后再找不同测试样例
+
+	
 ### 后期待续
 
 
