@@ -1,14 +1,15 @@
 ---
 layout: post
 title: "[原创]Exadata虚拟机测试SMART SCAN"
-category: Exadata
-tags: Oracle Exadata SmartScan
+category: Oracle
+tags: Exadata Oracle SmartScan
 ---
 
 * content
 {:toc}
 
 [原创]Exadata虚拟机测试SMART SCAN
+
 
 
 
