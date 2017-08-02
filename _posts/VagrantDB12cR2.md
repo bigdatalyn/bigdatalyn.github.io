@@ -1,0 +1,303 @@
+
+
+Windows10: Vagrant + Oracle Linux 7.3 + Oracle Database 12c Release 2 (12.2.0.1) Enterprise Edition
+
+### 0. Virutalbox Install
+
+Download and install the latest VirtualBox software from http://www.virtualbox.org/ for your host. 
+
+### 1. Vagrant
+
+#### Vagrant资料
+
+[Vagrant Getting Started](https://www.vagrantup.com/intro/getting-started/index.html)
+
+[安装配置参考资料](https://github.com/astaxie/go-best-practice/blob/master/ebook/zh/01.2.md)
+
+[Vagrant 快速入门](http://blog.csdn.net/jillliang/article/details/8251242)
+
+[使用vagrant部署开发环境](http://www.cnblogs.com/wangkongming/p/4301021.html)
+
+##### terrywang提供的box：
+
+	https://github.com/terrywang/vagrantboxes/blob/master/oraclelinux-7-x86_64.md
+
+	http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
+
+个人下载有点慢，直接在linux服务器上下载 
+	
+	wget http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box
+
+
+##### Oracle官方提供的vagrant
+
+	http://www.oracle.com/technetwork/server-storage/linux/downloads/index.html
+	
+	http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box
+
+通过vagrant下载的话：
+
+box中的镜像文件被放到了 /Users/XXXXX/.vagrant.d/boxes/，如果在window系统中应该是放到了： C:\Users\XXXXX\.vagrant.d\boxes\目录下
+	
+#### 安装box步骤如下：推荐是下载box后本地安装(国内墙的问题...)
+
+	For example:
+
+	$ vagrant box add --name ol73 http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box
+	$ vagrant init ol73
+	$ vagrant up
+	$ vagrant ssh
+
+	To verify the checksum of the downloaded box:
+	$ vagrant box add --name ol73 --checksum e2bbb85d6d54a1221e4bb2ff07100941 \
+	--checksum-type md5 http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box 
+
+#### 代理设置
+
+公司有代理设置的话，需要配置下：
+
+	SET http_proxy=http://proxy.example.com:80
+	SET https_proxy=http://proxy.example.com:80
+	vagrant plugin install vagrant-proxyconf
+
+	SET VAGRANT_HTTP_PROXY=http://proxy.example.com:80
+	SET VAGRANT_HTTPS_PROXY=http://proxy.example.com:80
+	SET VAGRANT_FTP_PROXY=http://proxy.example.com:80
+	SET VAGRANT_NO_PROXY=localhost,127.0.0.1
+	
+如果是Linux/MacOS的话
+
+	export http_proxy=http://proxy.example.com:80
+	export https_proxy=http://proxy.example.com:80
+	vagrant plugin install vagrant-proxyconf
+
+	export VAGRANT_HTTP_PROXY=http://proxy.example.com:80
+	export VAGRANT_HTTPS_PROXY=http://proxy.example.com:80
+	export VAGRANT_FTP_PROXY=http://proxy.example.com:80
+	export VAGRANT_NO_PROXY=localhost,127.0.0.1
+
+	
+#### 操作过程如下：
+	
+	D:\06_VMs\Box>dir
+	 Volume in drive D is Data
+	 Volume Serial Number is A4C5-9465
+
+	 Directory of D:\06_VMs\Box
+
+	08/02/2017  11:23 AM    <DIR>          .
+	08/02/2017  11:23 AM    <DIR>          ..
+	08/02/2017  11:22 AM    748,906,492 oraclelinux-7-x86_64.box
+               1 File(s)    748,906,492 bytes
+               3 Dir(s)  61,720,305,664 bytes free
+
+	D:\06_VMs\Box>vagrant box add --name "OracleLinux73" oraclelinux-7-x86_64.box
+	==> box: Box file was not detected as metadata. Adding it directly...
+	==> box: Adding box 'OracleLinux73' (v0) for provider:
+		box: Unpacking necessary files from: file://D:/06_VMs/Box/oraclelinux-7-x86_64.box
+		box: Progress: 100% (Rate: 272M/s, Estimated time remaining: --:--:--)
+	==> box: Successfully added box 'OracleLinux73' (v0) for 'virtualbox'!
+
+	D:\06_VMs\Box>
+
+	D:\06_VMs\Box>SET http_proxy=http://cn-proxy.jp.oracle.com:80
+
+	D:\06_VMs\Box>SET https_proxy=http://cn-proxy.jp.oracle.com:80
+
+	D:\06_VMs\Box>vagrant plugin install vagrant-proxyconf
+	Installing the 'vagrant-proxyconf' plugin. This can take a few minutes...
+	Fetching: vagrant-share-1.1.9.gem (100%)
+	Fetching: vagrant-proxyconf-1.5.2.gem (100%)
+	Installed the plugin 'vagrant-proxyconf (1.5.2)'!
+
+	D:\06_VMs\Box>SET VAGRANT_HTTP_PROXY=http://cn-proxy.jp.oracle.com:80
+
+	D:\06_VMs\Box>SET VAGRANT_HTTPS_PROXY=http://cn-proxy.jp.oracle.com:80
+
+	D:\06_VMs\Box>SET VAGRANT_FTP_PROXY=http://cn-proxy.jp.oracle.com:80
+
+	D:\06_VMs\Box>SET VAGRANT_NO_PROXY=localhost,127.0.0.1
+
+	D:\06_VMs\Box>
+	
+	D:\06_VMs\Box>vagrant box list
+	OracleLinux73 (virtualbox, 0)
+
+	D:\06_VMs\Box>vagrant init "OracleLinux73"
+	A `Vagrantfile` has been placed in this directory. You are now
+	ready to `vagrant up` your first virtual environment! Please read
+	the comments in the Vagrantfile as well as documentation on
+	`vagrantup.com` for more information on using Vagrant.
+
+	D:\06_VMs\Box>
+	
+	D:\06_VMs\Box>vagrant up
+	Bringing machine 'default' up with 'virtualbox' provider...
+	==> default: Importing base box 'OracleLinux73'...
+	==> default: Matching MAC address for NAT networking...
+	==> default: Setting the name of the VM: Box_default_1501651305888_99020
+	==> default: Clearing any previously set network interfaces...
+	==> default: Preparing network interfaces based on configuration...
+		default: Adapter 1: nat
+	==> default: Forwarding ports...
+		default: 22 (guest) => 2222 (host) (adapter 1)
+	==> default: Booting VM...
+	==> default: Waiting for machine to boot. This may take a few minutes...
+		default: SSH address: 127.0.0.1:2222
+		default: SSH username: vagrant
+		default: SSH auth method: private key
+		default: Warning: Connection reset. Retrying...
+		default: Warning: Connection aborted. Retrying...
+		default: Warning: Remote connection disconnect. Retrying...
+		default: Warning: Connection reset. Retrying...
+		default: Warning: Connection aborted. Retrying...
+		default: Warning: Connection reset. Retrying...
+		default: Warning: Connection aborted. Retrying...
+		default:
+		default: Vagrant insecure key detected. Vagrant will automatically replace
+		default: this with a newly generated keypair for better security.
+		default:
+		default: Inserting generated public key within guest...
+		default: Removing insecure key from the guest if it's present...
+		default: Key inserted! Disconnecting and reconnecting using new SSH key...
+	==> default: Machine booted and ready!
+	==> default: Checking for guest additions in VM...
+	==> default: Configuring proxy environment variables...
+	==> default: Configuring proxy for Yum...
+	==> default: Mounting shared folders...
+		default: /vagrant => D:/06_VMs/Box
+
+	D:\06_VMs\Box>vagrant box list
+	OracleLinux73 (virtualbox, 0)
+
+	D:\06_VMs\Box>
+
+	D:\06_VMs\Box>vagrant ssh
+	Last login: Tue Jul 18 12:50:23 2017
+										  vagrant@oraclelinux7.vagrant.vm
+		  `-/+++++++++++++++++/-.`        -------------------------------
+	   `/syyyyyyyyyyyyyyyyyyyyyyys/.      OS: Oracle Linux Server 7.3 x86_64
+	  :yyyyo/-...............-/oyyyy/     Model: VirtualBox 1.2
+	 /yyys-                     .oyyy+    Kernel: 4.1.12-94.3.9.el7uek.x86_64
+	.yyyy`                       `syyy-   Uptime: 2 mins
+	:yyyo                         /yyy/   Packages: 499
+	.yyyy`                       `syyy-   Shell: bash 4.2.46
+	 /yyys.                     .oyyyo    Terminal: /dev/pts/0
+	  /yyyyo:-...............-:oyyyy/`    CPU: Intel i5-6300U (4) @ 2.495GHz
+	   `/syyyyyyyyyyyyyyyyyyyyyyys+.      GPU: VirtualBox Graphics Adapter
+		 `.:/+ooooooooooooooo+/:.`        Memory: 88MiB / 486MiB
+
+
+
+
+	vagrant@oraclelinux7:~$
+	vagrant@oraclelinux7:~$ df -h
+	Filesystem              Size  Used Avail Use% Mounted on
+	devtmpfs                225M     0  225M   0% /dev
+	tmpfs                   244M     0  244M   0% /dev/shm
+	tmpfs                   244M  4.4M  240M   2% /run
+	tmpfs                   244M     0  244M   0% /sys/fs/cgroup
+	/dev/mapper/linux-root   16G  1.7G   14G  11% /
+	/dev/sda1               477M  101M  373M  22% /boot
+	/dev/mapper/linux-home  3.8G  292M  3.5G   8% /home
+	vagrant                 134G   76G   58G  57% /vagrant
+	tmpfs                    49M     0   49M   0% /run/user/1001
+	vagrant@oraclelinux7:~$
+
+或者通过其他putty，Poderosa工具ssh连接：127.0.0.1:2222
+	
+#### vagrant一些管理命令：
+
+	启动虚拟机：vagrant up
+	关闭虚拟机：vagrant halt
+	暂停虚拟机：vagrant suspend
+	恢复虚拟机：vagrant resume
+	删除虚拟机：vagrant destroy
+
+	查看vagrant当前拥有的BOX：vagrant box list
+	查看当前vagrant状态：vagrant status
+	查看当前vagrant版本：vagrant version
+
+#### windows 设置 VAGRANT_HOME
+
+>> 永久设置用户的环境变量
+
+setx VAGRANT_HOME "/your/path"
+
+>> 
+    永久设置系统的环境变量
+
+setx VAGRANT_HOME "/your/path" /M
+
+
+### 官方提供的OL7.3安装12cR2
+
+参考：
+
+日语版本，如果熟悉vagrant和对应脚本的话，也很容易理解和使用。
+
+[Vagrant + Oracle Linux 7.3 + Oracle Database 12c Release 2 (12.2.0.1) Enterprise Edition シングル環境の簡易セットアップ](https://github.com/shakiyam/vagrant-oracle12.2)
+
+#### Download 12cR
+
+http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
+
+    linuxx64_12201_database.zip
+
+下载后解压 有多database安装目录文件
+
+
+#### vagrant测试使用
+
+D:\06_VMs\Box>dir
+ Volume in drive D is Data
+ Volume Serial Number is A4C5-9465
+
+ Directory of D:\06_VMs\Box
+
+08/02/2017  02:48 PM    <DIR>          .
+08/02/2017  02:48 PM    <DIR>          ..
+08/02/2017  01:21 PM    <DIR>          .vagrant
+08/02/2017  02:44 PM    <DIR>          database ++++++++++++++++++++++++++++++++下载DB12cR的介质解压后的安装database的目录
+04/18/2017  08:58 AM            25,537 dbca.rsp
+04/18/2017  08:58 AM            22,849 db_install.rsp
+08/02/2017  01:03 PM       748,906,492 oraclelinux-7-x86_64.box
+04/18/2017  08:58 AM                31 provision.sh
+04/18/2017  08:58 AM             1,859 setup.sh
+08/02/2017  02:29 PM    <DIR>          vagrant-oracle12.2-master
+04/18/2017  08:58 AM               278 Vagrantfile
+               6 File(s)    748,957,046 bytes
+               5 Dir(s)  54,418,026,496 bytes free
+
+D:\06_VMs\Box>
+D:\06_VMs\Box>vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Box 'http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box' could not be found. Attempting to find and install...
+    default: Box Provider: virtualbox
+    default: Box Version: >= 0
+==> default: It looks like you attempted to add a box with a URL for the name...
+==> default: Instead, use box_url instead of box for box URLs.
+==> default: Box file was not detected as metadata. Adding it directly...
+==> default: Adding box 'http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box' (v0) for provider: virtualbox
+    default: Downloading: http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box
+~省略~
+
+时间比较久....耐心等待刷屏
+
+
+
+### 其他
+
+共享文件夹问题
+
+[Windows UNC path is crashing with \\\\?\\ prefix](https://github.com/mitchellh/vagrant/issues/8352)
+
+更新到最新版本(目前2017/07 是 VirtualBox 5.1.26)
+
+swap file问题
+
+[19.2.2 Creating and Using a Swap File](https://docs.oracle.com/cd/E52668_01/E54669/html/ol7-s6-storage.html)
+
+
+
+
