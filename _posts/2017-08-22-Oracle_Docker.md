@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "[原创]Vagrant自动构建Oracle12cR2的DB"
-category: Vagrant
-tags: Oracle Vagrant 
+title: "[原创]创建Oracle Database Imange in Docker"
+category: Oracle
+tags: Oracle Docker 
 ---
 
 * content
@@ -12,7 +12,44 @@ tags: Oracle Vagrant
 
 ### vagrant安装OL7.3
 
-参考之前文档
+参考之前文档并扩容50G空间
+
+类似：
+
+	F:\02_VMs\Docker>vagrant up
+	Bringing machine 'default' up with 'virtualbox' provider...
+	==> default: Importing base box 'OL7.3_Docker'...
+	==> default: Matching MAC address for NAT networking...
+	==> default: Setting the name of the VM: Docker_default_1503391732690_93590
+	==> default: Clearing any previously set network interfaces...
+	==> default: Preparing network interfaces based on configuration...
+		default: Adapter 1: nat
+	==> default: Forwarding ports...
+		default: 1521 (guest) => 1521 (host) (adapter 1)
+		default: 22 (guest) => 2222 (host) (adapter 1)
+	==> default: Running 'pre-boot' VM customizations...
+	==> default: Booting VM...
+	==> default: Waiting for machine to boot. This may take a few minutes...
+		default: SSH address: 127.0.0.1:2222
+		default: SSH username: vagrant
+		default: SSH auth method: private key
+		default: Warning: Connection aborted. Retrying...
+		default:
+		default: Vagrant insecure key detected. Vagrant will automatically replace
+		default: this with a newly generated keypair for better security.
+		default:
+		default: Inserting generated public key within guest...
+		default: Removing insecure key from the guest if it's present...
+		default: Key inserted! Disconnecting and reconnecting using new SSH key...
+	==> default: Machine booted and ready!
+	==> default: Checking for guest additions in VM...
+	==> default: Mounting shared folders...
+		default: /vagrant => F:/02_VMs/Docker
+	==> default: Running provisioner: shell...
+		default: Running: C:/Users/honglin/AppData/Local/Temp/vagrant-shell20170822-8728-1wgp647.sh
+
+	F:\02_VMs\Docker>
+
 
 ### 安装docker
 
@@ -24,16 +61,16 @@ tags: Oracle Vagrant
 
 参考命令：
 	
-# yum-config-manager --disable ol7_UEKR3
-# yum-config-manager --enable ol7_UEKR4
+	# yum-config-manager --disable ol7_UEKR3
+	# yum-config-manager --enable ol7_UEKR4
 
-# yum update
-# systemctl reboot
+	# yum update
+	# systemctl reboot
 
-# yum-config-manager --enable ol7_addons
-# yum install docker-engine
+	# yum-config-manager --enable ol7_addons
+	# yum install docker-engine
 
-
+![yum_update]({{ "/files/Images/Oracle/Docker/yum_update.png"}})
 
 ### 安装Oracle Database Image
 
@@ -181,9 +218,17 @@ Docker 代理设置：
 启动docker
 
 
-# systemctl start docker
-# systemctl enable docker
+	# systemctl start docker
+	# systemctl enable docker
 
+	root@oraclelinux7:~# systemctl start docker
+	root@oraclelinux7:~# systemctl enable docker
+	Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+	root@oraclelinux7:~# 
+
+	
+启动后确认
+	
 	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# docker version
 	Client:
 	 Version:      17.03.1-ce
@@ -218,8 +263,18 @@ Docker 代理设置：
 	
 构建脚本
 
-# ./buildDockerImage.sh -v 12.2.0.1 -e
+	# ./buildDockerImage.sh -v 12.2.0.1 -e
 
+	
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# pwd
+	/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# ls 
+	11.2.0.2  12.1.0.2  12.2.0.1  buildDockerImage.sh
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# ./buildDockerImage.sh -v 12.2.0.1 -e
+	Checking if required packages are present and valid...
+	~~~ 省略 ~~~
+	
+	
 
 查看docker的进程
 
