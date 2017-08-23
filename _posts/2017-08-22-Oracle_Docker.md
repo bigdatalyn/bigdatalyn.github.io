@@ -1,0 +1,234 @@
+---
+layout: post
+title: "[原创]Vagrant自动构建Oracle12cR2的DB"
+category: Vagrant
+tags: Oracle Vagrant 
+---
+
+* content
+{:toc}
+
+[原创]创建Oracle Database Imange in Docker
+
+### vagrant安装OL7.3
+
+参考之前文档
+
+### 安装docker
+
+参考文档如下：(备注代理设置自行biadu/google解决，大概需要设置/etc/yum.conf,/etc/resolv.conf, .bashrc代理变量设置等)
+
+	Install Docker in this VM 
+
+	https://docs.oracle.com/cd/E52668_01/E87205/html/docker_install_upgrade_yum_uek.html
+
+参考命令：
+	
+# yum-config-manager --disable ol7_UEKR3
+# yum-config-manager --enable ol7_UEKR4
+
+# yum update
+# systemctl reboot
+
+# yum-config-manager --enable ol7_addons
+# yum install docker-engine
+
+
+
+### 安装Oracle Database Image
+
+https://github.com/oracle/docker-images/tree/master/OracleDatabase
+
+命令：
+
+	yum install wget
+	yum install git
+	git clone https://github.com/oracle/docker-images.git
+
+Log步骤：
+
+	root@oraclelinux7:~# uname -a
+	Linux oraclelinux7.vagrant.vm 4.1.12-94.3.9.el7uek.x86_64 #2 SMP Fri Jul 14 20:09:40 PDT 2017 x86_64 x86_64 x86_64 GNU/Linux
+	root@oraclelinux7:~# which wget
+	/usr/bin/wget
+	root@oraclelinux7:~# which git
+	/usr/bin/git
+	root@oraclelinux7:~# git clone https://github.com/oracle/docker-images.git                                                                                 
+	Cloning into 'docker-images'...
+	remote: Counting objects: 6473, done.                                                                                                                      
+	remote: Compressing objects: 100% (46/46), done.                                                                                                           
+	remote: Total 6473 (delta 17), reused 27 (delta 8), pack-reused 6419                                                                                       
+	Receiving objects: 100% (6473/6473), 4.85 MiB | 321.00 KiB/s, done.
+	Resolving deltas: 100% (3624/3624), done.
+	root@oraclelinux7:~# 
+	root@oraclelinux7:~# ls -ltr docker-images/
+	total 16
+	-rw-r----- 1 root root 4435 Aug 22 12:07 CONTRIBUTING.md
+	-rw-r----- 1 root root  430 Aug 22 12:07 CODEOWNERS
+	drwxr-x--- 4 root root   65 Aug 22 12:07 ContainerCloud
+	drwxr-x--- 3 root root   41 Aug 22 12:07 GraalVM
+	drwxr-x--- 8 root root   94 Aug 22 12:07 GlassFish
+	drwxr-x--- 2 root root    6 Aug 22 12:07 MySQL
+	drwxr-x--- 8 root root  134 Aug 22 12:07 NoSQL
+	drwxr-x--- 3 root root   70 Aug 22 12:07 OracleBI
+	drwxr-x--- 5 root root  127 Aug 22 12:07 OpenJDK
+	drwxr-x--- 4 root root   81 Aug 22 12:07 OracleCoherence
+	drwxr-x--- 3 root root   54 Aug 22 12:07 OracleDataIntegrator
+	drwxr-x--- 5 root root  113 Aug 22 12:07 OracleDatabase
+	drwxr-x--- 3 root root   54 Aug 22 12:07 OracleFMWInfrastructure
+	drwxr-x--- 3 root root   70 Aug 22 12:07 OracleHTTPServer
+	drwxr-x--- 4 root root   56 Aug 22 12:07 OracleJava
+	drwxr-x--- 3 root root   40 Aug 22 12:07 OracleInstantClient
+	drwxr-x--- 4 root root  100 Aug 22 12:07 OracleSOASuite
+	drwxr-x--- 4 root root   74 Aug 22 12:07 OracleTuxedo
+	drwxr-x--- 5 root root  100 Aug 22 12:07 OracleWebLogic
+	-rw-r----- 1 root root 1671 Aug 22 12:07 README.md
+	root@oraclelinux7:~# 
+	
+	
+#### 下载 Oracle Database 12cR2
+
+下载：
+
+	http://www.oracle.com/technetwork/database/enterprise-edition/downloads/oracle12c-linux-12201-3608234.html
+
+#### git 下载docker-images
+
+下载：(备注代理设置自行biadu/google解决，大概需要设置/etc/yum.conf,/etc/resolv.conf,
+.bashrc代理变量设置等)
+
+	root@oraclelinux7:/vagrant# cd workspaces/
+	root@oraclelinux7:/vagrant/workspaces# ls -ltr
+	total 0
+	root@oraclelinux7:/vagrant/workspaces# git clone https://github.com/oracle/docker-images.git                                                           
+	Cloning into 'docker-images'...
+	remote: Counting objects: 6473, done.                                                                                                                      
+	remote: Compressing objects: 100% (46/46), done.                                                                                                           
+	remote: Total 6473 (delta 17), reused 27 (delta 8), pack-reused 6419                                                                                       
+	Receiving objects: 100% (6473/6473), 4.85 MiB | 131.00 KiB/s, done.
+	Resolving deltas: 100% (3624/3624), done.
+	Checking out files: 100% (622/622), done.
+	root@oraclelinux7:/vagrant/workspaces# ls -ltr
+	total 8
+	drwxrwxrwx 1 root root 8192 Aug 22 17:13 docker-images
+	root@oraclelinux7:/vagrant/workspaces# cd docker-images/
+	root@oraclelinux7:/vagrant/workspaces/docker-images# ls -ltr
+	total 43
+	-rwxrwxrwx 1 root root  430 Aug 22 17:13 CODEOWNERS
+	-rwxrwxrwx 1 root root 4435 Aug 22 17:13 CONTRIBUTING.md
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 ContainerCloud
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 GlassFish
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 GraalVM
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 MySQL
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 NoSQL
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OpenJDK
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleBI
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleCoherence
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleDataIntegrator
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleDatabase
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleFMWInfrastructure
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleHTTPServer
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleInstantClient
+	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleJava
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleSOASuite
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleTuxedo
+	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleWebLogic
+	-rwxrwxrwx 1 root root 1671 Aug 22 17:13 README.md
+	root@oraclelinux7:/vagrant/workspaces/docker-images# cd OracleDatabase/
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase# ls 
+	COPYRIGHT  dockerfiles  LICENSE  README.md  samples  tests
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase# cd dockerfiles/
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# pwd
+	/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# ls 
+	11.2.0.2  12.1.0.2  12.2.0.1  buildDockerImage.sh
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# 
+
+拷贝安装文件linuxx64_12201_database.zip 到dockerfiles目录下
+	
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles/12.2.0.1# ls 
+	checkDBStatus.sh  Checksum.ee   createDB.sh    db_inst.rsp    Dockerfile.se2        linuxx64_12201_database.zip  runUserScripts.sh  setupLinuxEnv.sh
+	checkSpace.sh     Checksum.se2  dbca.rsp.tmpl  Dockerfile.ee  installDBBinaries.sh  runOracle.sh                 setPassword.sh     startDB.sh
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles/12.2.0.1# 
+
+Docker 代理设置：
+
+[2.3 Configuring Proxy Requirements](https://docs.oracle.com/cd/E52668_01/E87205/html/docker_install_upgrade_proxy.html)
+	
+脚本使用
+
+	$ ./buildDockerImage.sh -h
+
+	Usage: buildDockerImage.sh -v [version] [-e | -s | -x] [-i] [-o] [Docker build option]
+	Builds a Docker Image for Oracle Database.
+
+	Parameters:
+	   -v: version to build
+		   Choose one of: 11.2.0.2  12.1.0.2  12.2.0.1
+	   -e: creates image based on 'Enterprise Edition'
+	   -s: creates image based on 'Standard Edition 2'
+	   -x: creates image based on 'Express Edition'
+	   -i: ignores the MD5 checksums
+	   -o: passes on Docker build option
+
+	* select one edition only: -e, -s, or -x
+
+	LICENSE CDDL 1.0 + GPL 2.0
+
+	Copyright (c) 2014-2017 Oracle and/or its affiliates. All rights reserved.
+	$ 
+
+启动docker
+
+
+# systemctl start docker
+# systemctl enable docker
+
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# docker version
+	Client:
+	 Version:      17.03.1-ce
+	 API version:  1.27
+	 Go version:   go1.7.5
+	 Git commit:   276fd32
+	 Built:        Fri Jun 23 20:13:39 2017
+	 OS/Arch:      linux/amd64
+	Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# systemctl start docker                                                                                                                                       
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# systemctl enable docker
+	Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /usr/lib/systemd/system/docker.service.
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# docker version
+	Client:
+	 Version:      17.03.1-ce
+	 API version:  1.27
+	 Go version:   go1.7.5
+	 Git commit:   276fd32
+	 Built:        Fri Jun 23 20:13:39 2017
+	 OS/Arch:      linux/amd64
+
+	Server:
+	 Version:      17.03.1-ce
+	 API version:  1.27 (minimum version 1.12)
+	 Go version:   go1.7.5
+	 Git commit:   276fd32
+	 Built:        Fri Jun 23 20:13:39 2017
+	 OS/Arch:      linux/amd64
+	 Experimental: false
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# 
+	
+	
+构建脚本
+
+# ./buildDockerImage.sh -v 12.2.0.1 -e
+
+
+查看docker的进程
+
+# docker ps
+# docker images
+
+
+~~~~ 2017/08/22 LinHong ~~~~
+
+
+
+
