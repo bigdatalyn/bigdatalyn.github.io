@@ -10,6 +10,16 @@ tags: Oracle Docker
 
 [原创]创建Oracle Database Imange in Docker
 
+在Oracle Linux x86-64的虚拟机上安装docker + DB12cR2的步骤
+
+
+
+
+
+
+
+
+
 ### vagrant安装OL7.3
 
 参考之前文档并扩容50G空间
@@ -72,7 +82,7 @@ tags: Oracle Docker
 
 ![yum_update]({{ "/files/Images/Oracle/Docker/yum_update.png"}})
 
-### 安装Oracle Database Image
+### 下载git包
 
 https://github.com/oracle/docker-images/tree/master/OracleDatabase
 
@@ -131,46 +141,8 @@ Log步骤：
 
 #### git 下载docker-images
 
-下载：(备注代理设置自行biadu/google解决，大概需要设置/etc/yum.conf,/etc/resolv.conf,
-.bashrc代理变量设置等)
+下载：(备注代理设置自行biadu/google解决，大概需要设置/etc/yum.conf,/etc/resolv.conf, .bashrc代理变量设置等)
 
-	root@oraclelinux7:/vagrant# cd workspaces/
-	root@oraclelinux7:/vagrant/workspaces# ls -ltr
-	total 0
-	root@oraclelinux7:/vagrant/workspaces# git clone https://github.com/oracle/docker-images.git                                                           
-	Cloning into 'docker-images'...
-	remote: Counting objects: 6473, done.                                                                                                                      
-	remote: Compressing objects: 100% (46/46), done.                                                                                                           
-	remote: Total 6473 (delta 17), reused 27 (delta 8), pack-reused 6419                                                                                       
-	Receiving objects: 100% (6473/6473), 4.85 MiB | 131.00 KiB/s, done.
-	Resolving deltas: 100% (3624/3624), done.
-	Checking out files: 100% (622/622), done.
-	root@oraclelinux7:/vagrant/workspaces# ls -ltr
-	total 8
-	drwxrwxrwx 1 root root 8192 Aug 22 17:13 docker-images
-	root@oraclelinux7:/vagrant/workspaces# cd docker-images/
-	root@oraclelinux7:/vagrant/workspaces/docker-images# ls -ltr
-	total 43
-	-rwxrwxrwx 1 root root  430 Aug 22 17:13 CODEOWNERS
-	-rwxrwxrwx 1 root root 4435 Aug 22 17:13 CONTRIBUTING.md
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 ContainerCloud
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 GlassFish
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 GraalVM
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 MySQL
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 NoSQL
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OpenJDK
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleBI
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleCoherence
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleDataIntegrator
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleDatabase
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleFMWInfrastructure
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleHTTPServer
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleInstantClient
-	drwxrwxrwx 1 root root    0 Aug 22 17:13 OracleJava
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleSOASuite
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleTuxedo
-	drwxrwxrwx 1 root root 4096 Aug 22 17:13 OracleWebLogic
-	-rwxrwxrwx 1 root root 1671 Aug 22 17:13 README.md
 	root@oraclelinux7:/vagrant/workspaces/docker-images# cd OracleDatabase/
 	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase# ls 
 	COPYRIGHT  dockerfiles  LICENSE  README.md  samples  tests
@@ -187,36 +159,16 @@ Log步骤：
 	checkDBStatus.sh  Checksum.ee   createDB.sh    db_inst.rsp    Dockerfile.se2        linuxx64_12201_database.zip  runUserScripts.sh  setupLinuxEnv.sh
 	checkSpace.sh     Checksum.se2  dbca.rsp.tmpl  Dockerfile.ee  installDBBinaries.sh  runOracle.sh                 setPassword.sh     startDB.sh
 	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles/12.2.0.1# 
-
+	
 Docker 代理设置：
 
-[2.3 Configuring Proxy Requirements](https://docs.oracle.com/cd/E52668_01/E87205/html/docker_install_upgrade_proxy.html)
-	
-脚本使用
+> [2.3 Configuring Proxy Requirements](https://docs.oracle.com/cd/E52668_01/E87205/html/docker_install_upgrade_proxy.html)
 
-	$ ./buildDockerImage.sh -h
+### Docker Dtabase 12cR2 Image的安装
 
-	Usage: buildDockerImage.sh -v [version] [-e | -s | -x] [-i] [-o] [Docker build option]
-	Builds a Docker Image for Oracle Database.
+#### 启动docker
 
-	Parameters:
-	   -v: version to build
-		   Choose one of: 11.2.0.2  12.1.0.2  12.2.0.1
-	   -e: creates image based on 'Enterprise Edition'
-	   -s: creates image based on 'Standard Edition 2'
-	   -x: creates image based on 'Express Edition'
-	   -i: ignores the MD5 checksums
-	   -o: passes on Docker build option
-
-	* select one edition only: -e, -s, or -x
-
-	LICENSE CDDL 1.0 + GPL 2.0
-
-	Copyright (c) 2014-2017 Oracle and/or its affiliates. All rights reserved.
-	$ 
-
-启动docker
-
+命令如下
 
 	# systemctl start docker
 	# systemctl enable docker
@@ -227,7 +179,9 @@ Docker 代理设置：
 	root@oraclelinux7:~# 
 
 	
-启动后确认
+#### 启动后确认
+
+命令如下
 	
 	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# docker version
 	Client:
@@ -261,7 +215,33 @@ Docker 代理设置：
 	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# 
 	
 	
-构建脚本
+#### 脚本安装docker images
+
+最耗费时间的一步，通过脚本构建image
+
+	$ ./buildDockerImage.sh -h
+
+	Usage: buildDockerImage.sh -v [version] [-e | -s | -x] [-i] [-o] [Docker build option]
+	Builds a Docker Image for Oracle Database.
+
+	Parameters:
+	   -v: version to build
+		   Choose one of: 11.2.0.2  12.1.0.2  12.2.0.1
+	   -e: creates image based on 'Enterprise Edition'
+	   -s: creates image based on 'Standard Edition 2'
+	   -x: creates image based on 'Express Edition'
+	   -i: ignores the MD5 checksums
+	   -o: passes on Docker build option
+
+	* select one edition only: -e, -s, or -x
+
+	LICENSE CDDL 1.0 + GPL 2.0
+
+	Copyright (c) 2014-2017 Oracle and/or its affiliates. All rights reserved.
+	$ 
+
+	
+##### 构建脚本
 
 	# ./buildDockerImage.sh -v 12.2.0.1 -e
 
@@ -274,14 +254,128 @@ Docker 代理设置：
 	Checking if required packages are present and valid...
 	~~~ 省略 ~~~
 	
+
+	Checking Temp space: must be greater than 500 MB.   Actual 21595 MB    Passed
+	Checking swap space: must be greater than 150 MB.   Actual 2047 MB    Passed
+	Preparing to launch Oracle Universal Installer from /tmp/OraInstall2017-08-23_04-01-24AM. Please wait ...[WARNING] [INS-32055] The Central Inventory is located in the Oracle base.
+	   ACTION: Oracle recommends placing this Central Inventory in a location outside the Oracle base directory.
+	You can find the log of this install session at:
+	 /opt/oracle/oraInventory/logs/installActions2017-08-23_04-01-24AM.log
+
+	The installation of Oracle Database 12c was successful.
+	Please check '/opt/oracle/oraInventory/logs/silentInstall2017-08-23_04-01-24AM.log' for more details.
+
+	As a root user, execute the following script(s):
+			1. /opt/oracle/oraInventory/orainstRoot.sh
+			2. /opt/oracle/product/12.2.0.1/dbhome_1/root.sh
+
+
+
+	Successfully Setup Software.
+
+	~~~ 省略 ~~~
+	
+	Changing groupname of /opt/oracle/oraInventory to dba.
+	The execution of the script is complete.
+	Check /opt/oracle/product/12.2.0.1/dbhome_1/install/root_fd6fa6fd2f2c_2017-08-23_04-28-53-658776916.log for the output of root script
+	 ---> 230ba7344d6c
+	Removing intermediate container 94a6ddcf3aff
+	Step 12/16 : USER oracle
+	 ---> Running in a0b8e4160c59
+	 ---> 9af4532c49e2
+	Removing intermediate container a0b8e4160c59
+	Step 13/16 : WORKDIR /home/oracle
+	 ---> ef531098bd27
+	Removing intermediate container 6cacb5abbd0d
+	Step 14/16 : VOLUME $ORACLE_BASE/oradata
+	 ---> Running in d96237ff953d
+	 ---> c47b4fd44b85
+	Removing intermediate container d96237ff953d
+	Step 15/16 : EXPOSE 1521 5500
+	 ---> Running in 13b230c3e215
+	 ---> 8f34299ce96a
+	Removing intermediate container 13b230c3e215
+	Step 16/16 : CMD exec $ORACLE_BASE/$RUN_FILE
+	 ---> Running in 0c933b7d4990
+	 ---> ffd588858327
+	Removing intermediate container 0c933b7d4990
+	Successfully built ffd588858327
+
+	  Oracle Database Docker Image for 'ee' version 12.2.0.1 is ready to be extended: 
+		
+		--> oracle/database:12.2.0.1-ee
+
+	  Build completed in 3071 seconds.
+	  
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles#
 	
 
-查看docker的进程
+	时间比较久，我这次花了 3071 秒。
+	
 
-# docker ps
-# docker images
+#### 查看docker的image
+
+命令如下：
+
+	# docker ps
+	# docker images
+
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# docker ps
+	CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles# docker images
+	REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+	oracle/database     12.2.0.1-ee         ffd588858327        About a minute ago   13.2 GB
+	oraclelinux         7-slim              c0feb50f7527        13 days ago          118 MB
+	root@oraclelinux7:/vagrant/workspaces/docker-images/OracleDatabase/dockerfiles#	
+
+如上可以看到image是13.2G，构建之前要充足考虑文件系统大小，另外安装过程也提示了swap的空间大小限制
+
+	Checking Temp space: must be greater than 500 MB.
+	Checking swap space: must be greater than 150 MB.	
+
+#### 启动docker的DB
+
+命令如下
+
+> docker run -d -it --name dockerDB -p 1528:1521 -p 5508:5500 -e ORACLE_PWD=password oracle/database:12.2.0.1-ee
+
+	root@oraclelinux7:~# docker run -d -it --name dockerDB -p 1528:1521 -p 5508:5500 -e ORACLE_PWD=password oracle/database:12.2.0.1-ee
+	f334268950da74247ec21333ff18b93e6e1c7d23d205840a5bd3ce4fabe9cc27
+	root@oraclelinux7:~# docker ps
+	CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                                            NAMES
+	f334268950da        oracle/database:12.2.0.1-ee   "/bin/sh -c 'exec ..."   8 seconds ago       Up 3 seconds        0.0.0.0:1528->1521/tcp, 0.0.0.0:5508->5500/tcp   dockerDB
+	root@oraclelinux7:~# 
+
+连接到dockerDB上
+
+	root@oraclelinux7:~# docker exec -it dockerDB /bin/bash
+	[oracle@f334268950da ~]$ ps -ef | grep smon
+	oracle     485     1  0 04:43 ?        00:00:00 ora_smon_ORCLCDB                                                                                                                             
+	oracle     556   533  0 04:44 ?        00:00:00 grep --color=auto smon                                                                                                                       
+	[oracle@f334268950da ~]$
+	[oracle@f334268950da ~]$ export ORACLE_SID=ORCLCDB
+	[oracle@f334268950da ~]$ sqlplus / as sysdba
+
+	SQL*Plus: Release 12.2.0.1.0 Production on Wed Aug 23 04:46:09 2017
+
+	Copyright (c) 1982, 2016, Oracle.  All rights reserved.
 
 
+	Connected to:
+	Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+	SQL>
+
+如果ORCLCDB没启动的话通过设置变量之后，启动实例
+
+
+	export ORACLE_HOME=/opt/oracle/product/12.2.0.1/dbhome_1
+	export ORACLE_SID=ORCLCDB
+	export PATH=$ORACLE_HOME/bin:$PATH
+
+
+完工！docker操作命令参考其他文档。
+	
 ~~~~ 2017/08/22 LinHong ~~~~
 
 
