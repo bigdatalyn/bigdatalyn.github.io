@@ -133,7 +133,7 @@ Log步骤：
 	root@oraclelinux7:~# 
 	
 	
-#### 下载 Oracle Database 12cR2
+#### 下载DB12cR2
 
 下载：
 
