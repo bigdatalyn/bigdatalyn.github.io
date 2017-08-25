@@ -1,0 +1,69 @@
+
+
+启动容器，并绑定在ternial
+docker run -it xxxxx/yyyy /bin/bash
+
+使用daemon模式建立容器启动
+docker run -it -d xxxxx/yyyy tail -f /dev/null
+
+启动容器，并挂载本机目录(local 在前 container 在后)
+docker run -it -v ~/Downloads:/data xxxxx/yyyy /bin/bash
+
+查看启动的ps
+
+docker ps
+
+docker ps -a
+docker ps --all
+
+停止容器：
+docker stop XXXXXXX
+
+启动容器：
+docker start xxxxxx
+
+进入容器：
+
+docker exec -it XXXX /bin/bash
+
+**** run是打完之后进入，exec是需要时候连接进去
+
+docker commit -m 'ver1.0' -a "whoami" XXXXXX dockername
+
+版本名称修改
+docker tag 4axdasdfasdf my_docker:1.0
+docker image
+
+删除容器
+docker images
+docker rmi xxxxx (remove image)
+
+rm是删除容器
+docker rm xxxxxx
+
+docker images
+docker tag asdfasdf lin/test01
+docker push my/test01
+
+
+
++++++++++++++++++++++++++++++++
+
+cgroups提供：
+
+    资源限制：组可以被设置不超过设定的内存限制；这也包括虚拟内存。
+    优先级：一些组可能会得到大量的CPU[5] 或磁盘IO吞吐量。
+    结算：用来衡量系统确实把多少资源用到适合的目的上。
+    控制：冻结组或检查点和重启动。
+	
+
+Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux 内核的 cgroup，namespace，以及 AUFS 类的 Union FS 等技术，对进程进行封装隔离， 属于操作系统层面的虚拟化技术。由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容器。最初实现是基于 LXC，从 0.7 以后开始去除 LXC，转而使用自行开发的 libcontainer，从 1.11 开始，则进一步演进为使用 runC 和containerd。	
+	
+传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；
+而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。
+
+
+
+
+
+
