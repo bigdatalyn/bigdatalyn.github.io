@@ -14,6 +14,28 @@ tags: Oracle Docker Linux
 
 
 
+#### Docker 
+
+
+运作方式：
+
+	1. 从 Registry 下载 image
+
+	2. 使用 image 构建 container
+
+	3. 构筑 infrastructure
+
+	4. 将构建好的 container 储存成 image 
+
+	5. 上传 image 到 Registry
+
+	5 -> 1 循环更新
+
+
+操作命令:
+
+![docker_commands]({{ "/files/Images/Oracle/Docker/docker_commands_diag.png"}})
+
 
 #### 参考资料
 
@@ -73,7 +95,9 @@ tags: Oracle Docker Linux
 安装服务
 
 > yum clean all
+
 > yum install -y curl which tar sudo openssh-server openssh-clients net-tools rsync	
+
 > yum install openssh-server net-tools -y
 	
 报错：
@@ -189,5 +213,5 @@ container启动方式：/sbin/init
 	container-registry.oracle.com/os/oraclelinux   latest              25e592d7eec7        2 months ago        225 MB
 	root@oraclelinux7:~# 
 	
-	
+~~~~~ Lin Hong 2017/08/23 待续 ~~~~~
 	
