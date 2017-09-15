@@ -1,0 +1,72 @@
+Please note that as of Aug 2017, I have observed that though instance comes up, database startup experiences 
+issue while using Docker image for Oracle database 12.1.0. It is expected that as 12.2 image would be release
+that would provide much better experience. For now preferred approach should be to use dockerfiles available
+at Github to build the image and run in docker container.
+============================================================================================================
+
+sudo vi /etc/yum.repos.d/public-yum-ol7.repo   
+sudo yum install docker-engine
+sudo docker version
+sudo systemctl start docker 
+sudo systemctl enable docker
+sudo docker ps
+sudo docker images
+
+
+sudo docker login
+
+ [opc@a4445c ~]$ cat db_env.dat
+####################################################################
+## Copyright(c) Oracle Corporation 1998,2016. All rights reserved.##
+##                                                                ##
+##                   Docker OL7 db12c dat file                    ##
+##                                                                ##
+####################################################################
+##------------------------------------------------------------------
+## Specify the basic DB parameters
+##------------------------------------------------------------------
+
+## db sid (name)
+## default : ORCL
+## cannot be longer than 8 characters
+DB_SID=OraDoc
+
+## db passwd
+## default : Oracle
+DB_PASSWD=MyPasswd123
+
+## db domain
+## default : localdomain
+DB_DOMAIN=localdomain
+
+## db bundle
+## default : basic
+## valid : basic / high / extreme
+## (high and extreme are only available for enterprise edition)
+DB_BUNDLE=basic
+
+## end
+[opc@a4445c ~]$
+
+
+
+sudo docker run -d --env-file db_env.dat -p 1527:1521 -p 5507:5500 -it --name dockerDB --shm-size="6g" store/oracle/database-enterprise:12.1.0.2
+
+
+sudo docker ps
+sudo docker images
+docker exec -it dockerDB /bin/bash
+
+
+id
+
+su - oracle
+
+cat /etc/oratab
+
+export ORACLE_HOME=/u01/app/oracle/product/12.1.0/dbhome_1
+export ORACLE_SID=OraDoc
+export PATH=$ORACLE_HOME/bin:$PATH
+
+select instance_name from v$instance;
+

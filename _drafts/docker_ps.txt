@@ -45,7 +45,10 @@ docker images
 docker tag asdfasdf lin/test01
 docker push my/test01
 
+无标签镜像也被称为 虚悬镜像(dangling image)
+$ docker images -f dangling=true
 
+$ docker rmi $(docker images -q -f dangling=true)
 
 +++++++++++++++++++++++++++++++
 
@@ -62,7 +65,7 @@ Docker 使用 Google 公司推出的 Go 语言 进行开发实现，基于 Linux
 传统虚拟机技术是虚拟出一套硬件后，在其上运行一个完整操作系统，在该系统上再运行所需应用进程；
 而容器内的应用进程直接运行于宿主的内核，容器内没有自己的内核，而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便。
 
-
+$ docker images -f dangling=true
 
 
 

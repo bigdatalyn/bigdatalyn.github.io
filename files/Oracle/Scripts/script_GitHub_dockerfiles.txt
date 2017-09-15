@@ -1,0 +1,69 @@
+sudo vi /etc/yum.repos.d/public-yum-ol7.repo
+sudo yum install docker-engine
+suod docker version
+sudo systemctl start docker 
+sudo systemctl enable docker
+sudo docker ps
+sudo docker images
+
+
+sudo yum install wget
+
+sudo yum install git
+
+sudo git clone https://github.com/oracle/docker-images.git
+
+pwd
+
+cd docker-images/OracleDatabase/dockerfiles
+
+
+http://download.oracle.com/otn/linux/oracle12c/122010/linuxx64_12201_database.zip
+
+
+sudo ./buildDockerImage.sh -v 12.2.0.1 -e
+
+sudo docker images
+
+
+sudo groupadd -g 54322 dba
+sudo useradd -G dba -u 54321 oracle
+
+sudo passwd oracle
+
+sudo mkdir /opt/oracle/
+sudo mkdir /opt/oracle/oradata
+sudo chown oracle:dba /opt/oracle/oradata
+
+
+
+sudo docker run -it --name dockerfilesDB -p 1528:1521 -p 5508:5500 -e ORACLE_PWD=Welcome123 -v /opt/oracle/oradata:/opt/oracle/oradata oracle/database:12.2.0.1-ee
+
+sudo docker ps
+sudo docker images
+sudo docker exec -it dockerfilesDB /bin/bash
+
+id
+cat /etc/oratab
+
+export ORACLE_HOME=/opt/oracle/product/12.2.0.1/dbhome_1
+export ORACLE_SID=ORCLCDB
+export PATH=$ORACLE_HOME/bin:$PATH
+
+
+
+create table test_table as select * from user_users;
+
+select count(*) from test_table;
+
+select instance_name from v$instance;
+
+
+shutdown immediate;
+
+sudo docker stop dockerfilesDB
+
+sudo docker ps
+sudo docker ps -a
+
+sudo docker rm  dockerfilesDB
