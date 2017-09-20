@@ -2,7 +2,7 @@
 layout: post
 title: "[转]Oracle Trace Level Event Numbers"
 category: Oracle
-tags: Oracle Index 
+tags: Oracle Trace Number 
 ---
 
 * content
