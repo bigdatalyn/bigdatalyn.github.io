@@ -85,7 +85,7 @@ tags: Oracle 12c CDB controlfile
 其中Default Trace File的为地址是：Default Trace File
 	
 	
-###　查看Trace文件 
+### 查看Trace文件 
 
 内容如下：
 
