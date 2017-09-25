@@ -23,11 +23,108 @@ tags: Oracle 12c CDB user
 
 
 
-### 
+创建公有用户，公有用户名必须是以C##或者c##(大小写C和两个#)开头的用户名，但这前缀是可以更改的，通过 common_user_prefix 参数控制。
+
+默认的前缀名称如下所示，默认CDB中，common_user_prefix 的值是 C##。
+
+	SQL> show con_name
+
+	CON_NAME
+	------------------------------
+	CDB$ROOT
+	SQL> show parameter COMMON_USER_PREFIX
+
+	NAME                                 TYPE        VALUE
+	------------------------------------ ----------- ------------------------------
+	common_user_prefix                   string      C##
+	SQL>
 
 
 
+演示创建一个 c##lyn 的用户，之后需要赋予相应的权限，另外需要注意使用grant语句中的container指定容器。
 
 
+	SQL> show user;
+	USER is "SYS"
+	SQL> create user c##lyn identified by oracle;
+
+	User created.
+
+	SQL> show pdbs
+
+		CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+	---------- ------------------------------ ---------- ----------
+			 2 PDB$SEED                       READ ONLY  NO
+			 3 PDB1                           READ WRITE NO
+			 4 PDB3                           READ WRITE NO
+			 5 PDB2                           READ ONLY  NO
+	SQL> 
+	SQL> grant connect,resource to c##lyn;
+
+	Grant succeeded.
+
+	SQL> conn c##lyn/oracle@pdb1;
+	ERROR:
+	ORA-01045: user C##LYN lacks CREATE SESSION privilege; logon denied
+
+	Warning: You are no longer connected to ORACLE.
+	SQL> conn / as sysdba
+	Connected.
+	SQL> grant connect,resource to c##lyn container=all;
+
+	Grant succeeded.
+
+	SQL> conn c##lyn/oracle@pdb1;
+	Connected.                                                                                                                       
+	SQL>    
+
+
+当创建公用用户时，Oracle会向每个PDB中同时创建该用户，如果PDB未打开，则创建工作会以任务的方式延后。
+
+如下所示，pdb2是read only状态，所以创建c##lyn用户时候，对pdb2是没有创建成功的。
+
+SQL> show con_name
+
+CON_NAME
+------------------------------
+CDB$ROOT
+SQL> show pdbs;
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 PDB1                           READ WRITE NO
+         4 PDB3                           READ WRITE NO
+         5 PDB2                           READ ONLY  NO
+SQL>
+SQL> conn c##lyn/oracle@pdb1;
+Connected.
+SQL> conn c##lyn/oracle@pdb3;
+Connected.
+SQL> conn c##lyn/oracle@pdb2;
+ERROR:                                                                                                                           
+ORA-01017: invalid username/password; logon denied
+
+Warning: You are no longer connected to ORACLE.
+SQL>
+
+通过重启pdb2，之后可以用c##lyn的公共用户连接了。
+
+SQL> conn / as sysdba
+Connected.
+SQL> 
+SQL> alter pluggable database pdb2 close immediate;
+
+Pluggable database altered.
+
+SQL> alter pluggable database pdb2 open;
+
+Pluggable database altered.
+
+SQL> 
+SQL> conn c##lyn/oracle@pdb2;
+Connected.                                                                                                                       
+SQL> 
+	
 	
 ~~~ LinHong 2017/09/15 ~~~~
