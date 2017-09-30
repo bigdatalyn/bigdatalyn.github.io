@@ -75,7 +75,7 @@ tags: Oracle 12c CDB common_user
 	Grant succeeded.
 
 	SQL> conn c##lyn/oracle@pdb1;
-	Connected.                                                                                                                       
+	Connected.        
 	SQL>    
 
 
@@ -102,7 +102,7 @@ tags: Oracle 12c CDB common_user
 	SQL> conn c##lyn/oracle@pdb3;
 	Connected.
 	SQL> conn c##lyn/oracle@pdb2;
-	ERROR:                                                                                                                           
+	ERROR:            
 	ORA-01017: invalid username/password; logon denied
 
 	Warning: You are no longer connected to ORACLE.
@@ -123,7 +123,7 @@ tags: Oracle 12c CDB common_user
 
 	SQL> 
 	SQL> conn c##lyn/oracle@pdb2;
-	Connected.                                                                                                                       
+	Connected.        
 	SQL> 
 		
 
@@ -131,12 +131,12 @@ tags: Oracle 12c CDB common_user
 
 cdb/pdb数据文件的路径清晰可见。如果要创建的公有用户指定表空间的话，需要每个容器都事前存在，不然会报错。参考如下实验：
 
-	SQL> show con_name                                                                                                               
+	SQL> show con_name
 
 	CON_NAME
 	------------------------------
 	CDB$ROOT
-	SQL> select file_name from dba_data_files;                                                                                       
+	SQL> select file_name from dba_data_files;             
 
 	FILE_NAME
 	------------------------------------------------------------
@@ -146,10 +146,10 @@ cdb/pdb数据文件的路径清晰可见。如果要创建的公有用户指定�
 	/opt/oracle/oradata/PRODCDB/deftbs01.dbf
 
 	SQL> create tablespace users datafile '/opt/oracle/oradata/PRODCDB/user01.dbf' size 100m autoextend on uniform size 1m;          
-																																	 
+
 	Tablespace created.
 
-	SQL> select file_name from dba_data_files;                                                                                       
+	SQL> select file_name from dba_data_files;             
 
 	FILE_NAME
 	------------------------------------------------------------
@@ -186,7 +186,7 @@ cdb/pdb数据文件的路径清晰可见。如果要创建的公有用户指定�
 
 测试链接：
 
-	SQL> grant connect,resource to c##user01;                                                                                        
+	SQL> grant connect,resource to c##user01;              
 
 	Grant succeeded.
 
@@ -200,24 +200,24 @@ cdb/pdb数据文件的路径清晰可见。如果要创建的公有用户指定�
 
 	Copyright (c) 1982, 2016, Oracle.  All rights reserved.
 
-																																	 
+
 	Connected to:
 	Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
 
-	SQL> conn c##user01/oracle@pdb1;                                                                                                 
-	ERROR:                                                                                                                           
+	SQL> conn c##user01/oracle@pdb1;
+	ERROR:            
 	ORA-01045: user C##USER01 lacks CREATE SESSION privilege; logon denied
 
 
 	Warning: You are no longer connected to ORACLE.
-	SQL> conn / as sysdba                                                                                                            
+	SQL> conn / as sysdba           
 	Connected.
-	SQL> grant connect,resource to c##user01 container=all;                                                                          
-																																	 
+	SQL> grant connect,resource to c##user01 container=all;
+
 	Grant succeeded.
 
-	SQL> conn c##user01/oracle@pdb1;                                                                                                 
-	Connected.                                                                                                                       
+	SQL> conn c##user01/oracle@pdb1;
+	Connected.        
 	SQL>            
 
 	
