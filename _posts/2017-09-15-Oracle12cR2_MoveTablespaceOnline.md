@@ -23,11 +23,11 @@ Oracle 12cR2 之后 通过
 
 	Moving a table changes the rowids of the rows in the table. If you move a table and include the ONLINE keyword and the UPDATE INDEXES clause, then the indexes remain usable during the move operation. If you include the UPDATE INDEXES clause but not the ONLINE keyword, then the indexes are usable immediately after the move operation. The UPDATE INDEXES clause can only change the storage properties for the global indexes on the table or storage properties for the index partitions of any global partitioned index on the table. If you do not include the UPDATE INDEXES clause, then the changes to the rowids cause the indexes on the table to be marked UNUSABLE, and DML accessing the table using these indexes receive an ORA-01502 error. In this case, the indexes on the table must be dropped or rebuilt. 
 
-	
 
 
-	
-	
+
+
+
 	
 
 测试：
