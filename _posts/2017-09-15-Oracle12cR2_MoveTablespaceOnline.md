@@ -194,7 +194,7 @@ Oracle 12cR2 之后 通过
 	PL/SQL procedure successfully completed.
 
 	Elapsed: 00:00:01.86
-	SQL> select count(*) from test01;                                                                                                
+	SQL> select count(*) from test01;           
 
 	  COUNT(*)
 	----------
@@ -237,8 +237,8 @@ Oracle 12cR2 之后 通过
 数据量不大200m左右，下面是440m的测试
 
 
-	SQL> select SEGMENT_NAME,TABLESPACE_NAME,BYTES/1024/1024 SIZE_M from user_segments;                                              
-																																	 
+	SQL> select SEGMENT_NAME,TABLESPACE_NAME,BYTES/1024/1024 SIZE_M from user_segments;
+
 	SEGMENT_NAME                   TABLESPACE_NAME                    SIZE_M
 	------------------------------ ------------------------------ ----------
 	TEST01                         DEFTBS                              .0625
@@ -268,8 +268,8 @@ Oracle 12cR2 之后 通过
 
 	Elapsed: 00:00:00.42
 	SQL>      
-																														   
-	SQL> select SEGMENT_NAME,TABLESPACE_NAME,BYTES/1024/1024 SIZE_M from user_segments;                                              
+
+	SQL> select SEGMENT_NAME,TABLESPACE_NAME,BYTES/1024/1024 SIZE_M from user_segments;
 
 	SEGMENT_NAME                   TABLESPACE_NAME                    SIZE_M
 	------------------------------ ------------------------------ ----------
@@ -280,7 +280,7 @@ Oracle 12cR2 之后 通过
 
 	Elapsed: 00:00:00.22
 	SQL> 
-	SQL> alter table test02 move online;                                                                                             
+	SQL> alter table test02 move online;                                            
 
 	Table altered.
 
@@ -296,7 +296,7 @@ Oracle 12cR2 之后 通过
 
 	Elapsed: 00:00:00.11
 	SQL> 
-	SQL> select count(*) from test02;                                                                                                
+	SQL> select count(*) from test02; 
 
 	  COUNT(*)
 	----------
@@ -309,7 +309,7 @@ Oracle 12cR2 之后 通过
 	
 > 结论：大量删除数据更新数据之后，需要收集统计信息，而12cR2之后 alter table ... move online. 在线移动表，可以不影响业务。如果不加online的话，move之后，如下index状态是 unusable，需要rebuild index。12cR2之后添加 online之后是不需要rebuild index,方便很多。
 
-	SQL> select status,index_name from user_indexes;                                                                              
+	SQL> select status,index_name from user_indexes;                             
 
 	STATUS                         INDEX_NAME
 	------------------------------ ------------------------------
