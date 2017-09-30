@@ -28,7 +28,7 @@ Oracle 12cR2 之后 通过
 
 
 
-	
+
 
 测试：
 
@@ -42,7 +42,7 @@ Oracle 12cR2 之后 通过
 
 过程：
 
-	SQL> create user c##lyn identified by oracle default tablespace deftbs temporary tablespace tempts1;                                                                                                                                         
+	SQL> create user c##lyn identified by oracle default tablespace deftbs temporary tablespace tempts1;                          
 
 	User created.
 
@@ -52,7 +52,7 @@ Oracle 12cR2 之后 通过
 
 	SQL> conn c##lyn/oracle@pdb1
 
-	Connected.                                                                                                                                                                                                                                   
+	Connected.     
 	SQL>
 
 	SQL> select tablespace_name from user_tablespaces;
@@ -165,7 +165,7 @@ Oracle 12cR2 之后 通过
 
 	SQL>  
 
-	SQL> set timing on                                                                                                               
+	SQL> set timing on
 	SQL> select count(*) from test01;
 
 	  COUNT(*)
@@ -246,7 +246,7 @@ Oracle 12cR2 之后 通过
 	TEST02_INDX                    DEFTBS                                 56
 	TEST_INDX                      DEFTBS                              .0625
 
-	SQL> set timing on                                                                                                               
+	SQL> set timing on
 	SQL> select count(*) from test02;
 
 	  COUNT(*)
@@ -309,7 +309,7 @@ Oracle 12cR2 之后 通过
 	
 > 结论：大量删除数据更新数据之后，需要收集统计信息，而12cR2之后 alter table ... move online. 在线移动表，可以不影响业务。如果不加online的话，move之后，如下index状态是 unusable，需要rebuild index。12cR2之后添加 online之后是不需要rebuild index,方便很多。
 
-	SQL> select status,index_name from user_indexes;                                                                                                                                                                                             
+	SQL> select status,index_name from user_indexes;                                                                              
 
 	STATUS                         INDEX_NAME
 	------------------------------ ------------------------------
