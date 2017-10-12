@@ -18,6 +18,13 @@ The Oracle Database Security Assessment Tool (DBSAT) is a command line tool focu
 The DBSAT has two components: the Collector and the Reporter. The Collector is responsible to collect raw data from the target database by executing SQL queries and OS commands. The Reporter will read the collected data, analyze it and produce reports with the findings. The Reporter outputs three reports in Text, HTML, and XLS formats.
 
 
+
+
+
+
+
+
+
 ### 怎么使用以及有什么版本限制
 
 
@@ -28,7 +35,7 @@ The DBSAT has two components: the Collector and the Reporter. The Collector is r
 
 ### 演示操作
 
-测试命令过程如下：
+测试命令过程如下：(过程中有密码的输入，即zip文件的解密密码)
 
 
 	#### 生成json文件
@@ -112,6 +119,12 @@ The DBSAT has two components: the Collector and the Reporter. The Collector is r
 	-rw-------. 1 oracle oracle  66899 Oct 12 12:38 outputfile01_report.zip
 	[oracle@databasevm dbsat]$
 
+
+[测试报告样例_HTML](/files/Oracle/DBSTAT/SampleReports/outputfile01.html)
+
+[测试报告样例_TXT](/files/Oracle/DBSTAT/SampleReports/outputfile01.txt)
+
+[测试报告样例_EXCEL](/files/Oracle/DBSTAT/SampleReports/outputfile01.xlsx)
 
 
 

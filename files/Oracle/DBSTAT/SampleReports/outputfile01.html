@@ -1,0 +1,3241 @@
+<!DOCTYPE html><html lang="en"><head>
+<title> outputfile01 - Oracle Database Security Risk Assessment </title></head>
+<style>
+td.sev0 {
+    background-color:#00ff00;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+}
+td.sev1 {
+    background-color:#cccccc;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+}
+td.sev2 {
+    background-color:#00bfff;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+}
+td.sev3 {
+    background-color:#ffff00;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+}
+td.sev4 {
+    background-color:#ffa500;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+}
+td.sev5 {
+    background-color:#f80000;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+}
+</style>
+
+<style>
+
+table {
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+    font-size:14px;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+thead {
+    background-color: #eeeeee;
+    font-weight:normal;
+    color:black;
+    border-bottom:3px double grey;
+    padding:12px 17px
+}
+
+tfoot {
+    background-color: #eeeeee;
+}
+
+h1 {
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+    text-align: center;
+}
+h2 {
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+    text-decoration: underline;
+}
+h3 {
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+}
+p {
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+}
+p.footnote {
+    font-size: 12px
+}
+
+table.finding {
+    font-family:Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+    font-size:14px;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+    width:800px;
+}
+
+tr.ruleid {
+    font-size:10px;
+    background-color: #eeeeee;
+    border-collapse:collapse;
+    border:1px solid #8DA6B1;
+    margin:20px;
+    text-align:left;
+    font-weight:bold;
+}
+
+td.number {
+    text-align: right;
+}
+td.total {
+    text-align: right;
+    font-weight: bold;
+}
+td.finding_head {
+    text-align: left;
+    vertical-align: top;
+    font-weight: bold;
+}
+td.finding_cell {
+    text-align: left;
+    vertical-align: top;
+}
+
+a.home {
+    width: 30px;
+    height: 22px;
+    line-height:20px;
+    position: fixed;
+    text-indent: 7px;
+    z-index: 999;
+    right: 50px;
+    bottom: 25px;
+    background: #dddddd no-repeat center 43%;
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+    font-size:10px;
+    color: black;
+    cursor:pointer;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+a.up {
+    width: 30px;
+    height: 22px;
+    position: fixed;
+    text-indent: 7px;
+    z-index: 999;
+    right: 80px;
+    bottom: 25px;
+    background: #dddddd no-repeat center 43%;
+    font-weight:bold;
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+    font-size:16px;
+    color: black;
+    cursor:pointer;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+a.down {
+    width: 30px;
+    height: 22px;
+    position: fixed;
+    text-indent: 7px;
+    z-index: 999;
+    right: 20px;
+    bottom: 25px;
+    background: #dddddd no-repeat center 43%;
+    font-weight:bold;
+    font-family: Lucida Sans Unicode, Lucida Grande, Sans-Serif;
+    font-size:16px;
+    color: black;
+    cursor:pointer;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+</style>
+<script>
+var sectionStart = [0];
+
+// find offset
+function findPos(obj) {
+    var curtop = 0;
+
+    do {
+        curtop += obj.offsetTop;
+    } while (obj = obj.offsetParent);
+    return curtop;
+}
+
+// navigate the array
+function go(p_action) {
+    var epsilon = 20; // considered at section start if within a few pixels
+    var curpos = window.pageYOffset;
+
+    if (p_action == "up") {
+        for (var i = sectionStart.length-1; i >= 0; i--) {
+            if (sectionStart[i] < curpos-epsilon) {
+                window.scroll(0, sectionStart[i]);
+                break;
+            }
+        }
+    } else if (p_action == "down") {
+        for (var i = 0; i < sectionStart.length; i++) {
+            if (sectionStart[i] > curpos+epsilon) {
+                window.scroll(0, sectionStart[i]);
+                break;
+            }
+        }
+    } else if (p_action == "top") {
+        window.scroll(0, 0);
+    }
+}
+
+var beforePrint = function() {
+    document.getElementById("up").style.visibility = "hidden";
+    document.getElementById("down").style.visibility = "hidden";
+    document.getElementById("home").style.visibility = "hidden";
+};
+var afterPrint = function() {
+    document.getElementById("up").style.visibility = "";
+    document.getElementById("down").style.visibility = "";
+    document.getElementById("home").style.visibility = "";
+};
+
+function init() {
+    // populate array with H2 elements
+    var elements = document.getElementsByTagName("h2");
+    for (var i = 0; i < elements.length; i++) {
+        sectionStart.push(findPos(elements[i]));
+    }
+
+    // prevent navigation buttons from printing
+    if (window.matchMedia) {
+        var mediaQueryList = window.matchMedia('print');
+        mediaQueryList.addListener(function(mql) {
+            if (mql.matches) {
+                beforePrint();
+            } else {
+                afterPrint();
+            }
+        });
+    }
+    window.onbeforeprint = beforePrint;
+    window.onafterprint = afterPrint;
+}
+</script>
+
+<body onload="init();">
+<a id="up" class="up" onclick="go('up');">&#8679;</a>
+<a id="home" class="home" onclick="go('top');">Top</a>
+<a id="down" class="down" onclick="go('down');">&#8681;</a>
+<h1>Oracle Database Security Risk Assessment</h1>
+<h3><center>Highly Confidential</center></h3>
+<h3> Assessment Date & Time </h3>
+<table cellpadding="4" border="1" rules="cols" summary="Data table for Assessment Date & Time">
+<thead><tr>
+<th align="left" scope="col"> Date of Data Collection </th>
+<th align="left" scope="col"> Date of Report </th>
+<th align="left" scope="col"> Reporter Version </th>
+</tr>
+</thead>
+<tr>
+<td align="left"> Thu Oct 12 2017 12:32:00 </td>
+<td align="left"> Thu Oct 12 2017 12:38:21 </td>
+<td align="left"> 1.0.2 (October 2016) - 7409 </td>
+</tr>
+</table>
+<h3> Database Identity </h3>
+<table cellpadding="4" border="1" rules="cols" summary="Data table for Database Identity">
+<thead><tr>
+<th align="left" scope="col"> Name </th>
+<th align="left" scope="col"> Platform </th>
+<th align="left" scope="col"> Database Role </th>
+<th align="left" scope="col"> Log Mode </th>
+<th align="left" scope="col"> Created </th>
+<th align="left" scope="col"> Container Database </th>
+<th align="left" scope="col"> Container ID </th>
+<th align="left" scope="col"> Container Name </th>
+</tr>
+</thead>
+<tr>
+<td align="left"> ORCLCDB </td>
+<td align="left"> Linux x86 64-bit </td>
+<td align="left"> PRIMARY </td>
+<td align="left"> NOARCHIVELOG </td>
+<td align="left"> Sat Apr 01 2017 23:18:00 </td>
+<td align="left"> True </td>
+<td align="left"> 1 </td>
+<td align="left"> CDB$ROOT </td>
+</tr>
+</table>
+<h2>Summary</h2>
+<table border="1" cellpadding="4" rules="cols" summary="Summary of report sections">
+<thead><tr>
+<th align="left" scope="col"> Section </th>
+<th align="left" scope="col">Pass</th>
+<th align="left" scope="col">Evaluate</th>
+<th align="left" scope="col">Opportunity</th>
+<th align="left" scope="col">Some Risk</th>
+<th align="left" scope="col">Significant Risk</th>
+<th align="left" scope="col">Severe Risk</th>
+<th align="left" scope="col"> Total Findings </th>
+</tr></thead>
+<tr>
+<td align="left"><a href="#Basic_Information"> Basic Information </a></td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 1 </td>
+<td class="total"> 1 </td>
+</tr>
+<tr>
+<td align="left"><a href="#User_Accounts"> User Accounts </a></td>
+<td class="number"> 6 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 2 </td>
+<td class="number"> 1 </td>
+<td class="number"> 1 </td>
+<td class="total"> 10 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Privileges_and_Roles"> Privileges and Roles </a></td>
+<td class="number"> 6 </td>
+<td class="number"> 12 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="total"> 18 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Authorization_Control"> Authorization Control </a></td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 2 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="total"> 2 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Data_Encryption"> Data Encryption </a></td>
+<td class="number"> 0 </td>
+<td class="number"> 1 </td>
+<td class="number"> 1 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="total"> 2 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Fine-Grained_Access_Control"> Fine-Grained Access Control </a></td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 5 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="total"> 5 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Auditing"> Auditing </a></td>
+<td class="number"> 3 </td>
+<td class="number"> 4 </td>
+<td class="number"> 1 </td>
+<td class="number"> 0 </td>
+<td class="number"> 3 </td>
+<td class="number"> 1 </td>
+<td class="total"> 12 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Database_Configuration"> Database Configuration </a></td>
+<td class="number"> 6 </td>
+<td class="number"> 4 </td>
+<td class="number"> 0 </td>
+<td class="number"> 1 </td>
+<td class="number"> 1 </td>
+<td class="number"> 0 </td>
+<td class="total"> 12 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Network_Configuration"> Network Configuration </a></td>
+<td class="number"> 1 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="number"> 1 </td>
+<td class="number"> 0 </td>
+<td class="total"> 2 </td>
+</tr>
+<tr>
+<td align="left"><a href="#Operating_System"> Operating System </a></td>
+<td class="number"> 2 </td>
+<td class="number"> 1 </td>
+<td class="number"> 0 </td>
+<td class="number"> 1 </td>
+<td class="number"> 0 </td>
+<td class="number"> 0 </td>
+<td class="total"> 4 </td>
+</tr>
+<tfoot><tr>
+<th align="left" scope="row">Total</th>
+<td class="total"> 24 </td>
+<td class="total"> 22 </td>
+<td class="total"> 9 </td>
+<td class="total"> 4 </td>
+<td class="total"> 6 </td>
+<td class="total"> 3 </td>
+<td class="total"> 68 </td>
+</tr></tfoot>
+</table>
+<h2><a name="Basic_Information">Basic Information</a></h2>
+<h3> Database Version </h3>
+<table cellpadding="4" border="1" rules="cols">
+<tr>
+<td align="left"> Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production </td>
+</tr>
+<tr>
+<td align="left"> Security options used: (none) </td>
+</tr>
+</table>
+<h3> Security Features </h3>
+<table cellpadding="4" border="1" rules="cols" summary="Data table for Security Features">
+<thead><tr>
+<th align="left" scope="col"> Feature </th>
+<th align="left" scope="col"> Currently Used </th>
+</tr>
+</thead>
+<tr>
+<td align="left"> AUTHORIZATION CONTROL </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> Database Vault </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Privilege Analysis </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left">  </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> DATA ENCRYPTION </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> Column Encryption </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Tablespace Encryption </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Network Encryption </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left">  </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> FINE-GRAINED ACCESS CONTROL </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> Data Redaction </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Virtual Private Database </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Real Application Security </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Label Security </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Transparent Sensitive Data Protection </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left">  </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> AUDITING </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> Traditional Audit </td>
+<td align="center"> Yes </td>
+</tr>
+<tr>
+<td align="left"> Fine Grained Audit </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Unified Audit </td>
+<td align="center"> Yes </td>
+</tr>
+<tr>
+<td align="left">  </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> USER AUTHENTICATION </td>
+<td align="center">  </td>
+</tr>
+<tr>
+<td align="left"> External Authentication </td>
+<td align="center"> No </td>
+</tr>
+<tr>
+<td align="left"> Global Authentication </td>
+<td align="center"> No </td>
+</tr>
+</table>
+<h3> Patch Check </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> INFO.PATCH </td>
+</tr><tr>
+<td class="sev5" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Severe Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Latest Oracle Database PSU not found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Patch Inventory:
+(none)
+
+Patch History:
+(none)
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> It is vital to keep the database software up-to-date with security fixes as they are released. Oracle issues Patch Set Updates (PSU) on a regular quarterly schedule. These updates should be applied as soon as they are available. For releases prior to Oracle Database 12c, quarterly updates may be delivered by patches not marked as PSUs. </td><td></td></tr>
+</table>
+<h2><a name="User_Accounts">User Accounts</a></h2>
+<p>
+Note: Predefined Oracle accounts which are locked are not included in this report. To include all user accounts, run the report with the -a option.
+<h3> User Accounts </h3>
+<table cellpadding="4" border="1" rules="cols" summary="Data table for User Accounts">
+<thead><tr>
+<th align="left" scope="col"> User Name </th>
+<th align="left" scope="col"> Status </th>
+<th align="left" scope="col"> Profile </th>
+<th align="left" scope="col"> Tablespace </th>
+<th align="left" scope="col"> Predefined </th>
+<th align="left" scope="col"> Type </th>
+</tr>
+</thead>
+<tr>
+<td align="left"> SYS </td>
+<td align="left"> OPEN </td>
+<td align="left"> DEFAULT </td>
+<td align="left"> SYSTEM </td>
+<td align="center"> Yes </td>
+<td align="left"> PASSWORD </td>
+</tr>
+<tr>
+<td align="left"> SYSTEM </td>
+<td align="left"> OPEN </td>
+<td align="left"> DEFAULT </td>
+<td align="left"> SYSTEM </td>
+<td align="center"> Yes </td>
+<td align="left"> PASSWORD </td>
+</tr>
+</table>
+<h3> User Accounts in SYSTEM or SYSAUX Tablespace </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.TBLSPACE </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No user uses SYSTEM or SYSAUX tablespace. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> The SYSTEM and SYSAUX tablespaces are reserved for Oracle-supplied user accounts. To avoid a possible denial of service caused by exhausting these resources, regular user accounts should not use these tablespaces. Prior to Oracle Database 12.2, the SYSTEM tablespace cannot be encrypted, and this is another reason to avoid user schemas in this tablespace. </td><td></td></tr>
+</table>
+<h3> Sample Schemas </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.SAMPLE </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No sample schemas found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Sample schemas are well-known accounts provided by Oracle to serve as simple examples for developers. They generally serve no purpose in a production database and should be removed because they unnecessarily increase the attack surface of the database. </td><td></td></tr>
+</table>
+<h3> Inactive Users </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.INACTIVE </td>
+</tr><tr>
+<td class="sev3" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Some Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 1 unlocked user inactive for more than 30 days. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Inactive users: SYS
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> If a user account is no longer in use, it increases the attack surface of the system unnecessarily while providing no corresponding benefit. Furthermore, unauthorized use is less likely to be noticed when no one is regularly using the account. Accounts that have been unused for more than 30 days should be investigated to determine whether they should remain active. </td><td></td></tr>
+</table>
+<h3> Case-Sensitive Passwords </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.CASE </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Case-sensitive passwords are used. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Initialization parameter SEC_CASE_SENSITIVE_LOGON is set to TRUE.
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Case-sensitive passwords are recommended because including both upper and lower-case letters greatly increases the set of possible passwords that must be searched by an attacker who is attempting to guess a password by exhaustive search. Setting SEC_CASE_SENSITIVE_LOGON to TRUE ensures that the database distinguishes between upper and lower-case letters in passwords. </td><td></td></tr>
+</table>
+<h3> Users with Expired Passwords </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.EXPIRED </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No unlocked users with password expired for more than 30 days found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Password expiration is used to ensure that users change their passwords on a regular basis. If a user's password has been expired for more than 30 days, it indicates that the user has not logged in for at least that long. Accounts that have been unused for an extended period of time should be investigated to determine whether they should remain active. </td><td></td></tr>
+</table>
+<h3> Users with Default Passwords </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.DEFPWD </td>
+</tr><tr>
+<td class="sev5" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Severe Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 2 unlocked user accounts with default password. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Users with default password: SYS, SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Default account passwords for predefined Oracle accounts are well known. Open accounts with default passwords provide a trivial means of entry for attackers, but well-known passwords should be changed for locked accounts as well. </td><td></td></tr>
+</table>
+<h3> Password Verifiers </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.VERIFIER </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> All user accounts support the latest password version.  No user accounts have HTTP verifiers.  </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Database supports password versions up to 12C.
+Users requiring updated password verifiers: (none)
+
+Users with HTTP verifiers: (none)
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> For each user account, the database may store multiple verifiers, which are hashes of the user password. Each verifier supports a different version of the password authentication algorithm. Every user account should include a verifier for the latest password version supported by the database so that the user can be authenticated using the latest algorithm supported by the client. When all clients have been updated, the security of user accounts can be improved by removing the obsolete verifiers. HTTP password verifiers are used for XML Database authentication. Use the ALTER USER command to remove these verifiers from user accounts that do not require this access. </td><td></td></tr>
+</table>
+<h3> User Profiles </h3>
+<table cellpadding="4" border="1" rules="cols" summary="Data table for User Profiles">
+<thead><tr>
+<th align="left" scope="col"> Profile Name </th>
+<th align="left" scope="col"> Resource </th>
+<th align="left" scope="col"> Value </th>
+</tr>
+</thead>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> (Number of Users) </td>
+<td align="left"> 2 </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> CONNECT_TIME </td>
+<td align="left"> UNLIMITED </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> FAILED_LOGIN_ATTEMPTS </td>
+<td align="left"> 10 </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> IDLE_TIME </td>
+<td align="left"> UNLIMITED </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> PASSWORD_GRACE_TIME </td>
+<td align="left"> 7 </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> PASSWORD_LIFE_TIME </td>
+<td align="left"> UNLIMITED </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> PASSWORD_LOCK_TIME </td>
+<td align="left"> 1 </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> PASSWORD_REUSE_MAX </td>
+<td align="left"> UNLIMITED </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> PASSWORD_REUSE_TIME </td>
+<td align="left"> UNLIMITED </td>
+</tr>
+<tr>
+<td align="left"> DEFAULT </td>
+<td align="left"> PASSWORD_VERIFY_FUNCTION </td>
+<td align="left"> NULL </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> (Number of Users) </td>
+<td align="left"> 0 </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> CONNECT_TIME </td>
+<td align="left"> UNLIMITED (DEFAULT) </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> FAILED_LOGIN_ATTEMPTS </td>
+<td align="left"> 3 </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> IDLE_TIME </td>
+<td align="left"> 15 </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> PASSWORD_GRACE_TIME </td>
+<td align="left"> 5 </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> PASSWORD_LIFE_TIME </td>
+<td align="left"> 60 </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> PASSWORD_LOCK_TIME </td>
+<td align="left"> UNLIMITED </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> PASSWORD_REUSE_MAX </td>
+<td align="left"> 10 </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> PASSWORD_REUSE_TIME </td>
+<td align="left"> 365 </td>
+</tr>
+<tr>
+<td align="left"> ORA_STIG_PROFILE </td>
+<td align="left"> PASSWORD_VERIFY_FUNCTION </td>
+<td align="left"> ORA12C_STIG_VERIFY_FUNCTION </td>
+</tr>
+</table>
+<h3> Users with Unlimited Password Lifetime </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.NOEXPIRE </td>
+</tr><tr>
+<td class="sev3" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Some Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 2 users with passwords that never expire. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Profiles with unlimited password lifetime: DEFAULT
+Profiles with limited password lifetime: ORA_STIG_PROFILE
+Users using profiles with unlimited password lifetime: SYS, SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Password expiration is used to ensure that users change their passwords on a regular basis. Passwords that never expire may remain unchanged for an extended period of time. When passwords do not have to be changed regularly, users are also more likely to use the same passwords for multiple accounts. </td><td></td></tr>
+</table>
+<h3> Users with Unlimited Failed Login Attempts </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.NOLOCK </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No users have unlimited failed login attempts. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Attackers sometimes attempt to guess a user's password by simply trying all possibilities from a set of common passwords. To defend against this attack, it is advisable to lock a user account when there are multiple failed login attempts without a successful login. </td><td></td></tr>
+</table>
+<h3> Password Verification Functions </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> USER.PASSWD </td>
+</tr><tr>
+<td class="sev4" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Significant Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 2 users not using password verification function. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Profiles with password verification function: ORA_STIG_PROFILE
+Profiles without password verification function: DEFAULT
+Users using profiles without password verification function: SYS, SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Password verification functions are used to ensure that user passwords meet minimum requirements for complexity, which may include factors such as length, use of numbers or punctuation characters, difference from previous passwords, etc. Oracle supplies several predefined functions, or a custom PL/SQL function can be used. Every user profile should include a password verification function. </td><td></td></tr>
+</table>
+<h2><a name="Privileges_and_Roles">Privileges and Roles</a></h2>
+<h3> All System Privileges </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.SYSTEM </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 239 grants of system privileges </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Users directly or indirectly granted each system privilege:
+
+ADMINISTER ANY SQL TUNING SET: SYSTEM
+ADMINISTER DATABASE TRIGGER: SYSTEM
+ADMINISTER KEY MANAGEMENT: (none)
+ADMINISTER RESOURCE MANAGER: SYSTEM
+ADMINISTER SQL MANAGEMENT OBJECT: SYSTEM
+ADMINISTER SQL TUNING SET: SYSTEM
+ADVISOR: SYSTEM
+ALTER ANY ANALYTIC VIEW: SYSTEM
+ALTER ANY ASSEMBLY: SYSTEM
+ALTER ANY ATTRIBUTE DIMENSION: SYSTEM
+ALTER ANY CLUSTER: SYSTEM
+ALTER ANY CUBE: SYSTEM
+ALTER ANY CUBE BUILD PROCESS: SYSTEM
+ALTER ANY CUBE DIMENSION: SYSTEM
+ALTER ANY DIMENSION: SYSTEM
+ALTER ANY EDITION: SYSTEM
+ALTER ANY EVALUATION CONTEXT: SYSTEM
+ALTER ANY HIERARCHY: SYSTEM
+ALTER ANY INDEX: SYSTEM
+ALTER ANY INDEXTYPE: SYSTEM
+ALTER ANY LIBRARY: SYSTEM
+ALTER ANY MATERIALIZED VIEW: SYSTEM
+ALTER ANY MEASURE FOLDER: SYSTEM
+ALTER ANY MINING MODEL: SYSTEM
+ALTER ANY OPERATOR: SYSTEM
+ALTER ANY OUTLINE: SYSTEM
+ALTER ANY PROCEDURE: SYSTEM
+ALTER ANY ROLE: SYSTEM
+ALTER ANY RULE: SYSTEM
+ALTER ANY RULE SET: SYSTEM
+ALTER ANY SEQUENCE: SYSTEM
+ALTER ANY SQL PROFILE: SYSTEM
+ALTER ANY SQL TRANSLATION PROFILE: SYSTEM
+ALTER ANY TABLE: SYSTEM
+ALTER ANY TRIGGER: SYSTEM
+ALTER ANY TYPE: SYSTEM
+ALTER DATABASE: SYSTEM
+ALTER LOCKDOWN PROFILE: SYSTEM
+ALTER PROFILE: SYSTEM
+ALTER RESOURCE COST: SYSTEM
+ALTER ROLLBACK SEGMENT: SYSTEM
+ALTER SESSION: SYSTEM
+ALTER SYSTEM: SYSTEM
+ALTER TABLESPACE: SYSTEM
+ALTER USER: SYSTEM
+ANALYZE ANY: SYSTEM
+ANALYZE ANY DICTIONARY: SYSTEM
+AUDIT ANY: SYSTEM
+AUDIT SYSTEM: SYSTEM
+BACKUP ANY TABLE: SYSTEM
+BECOME USER: SYSTEM
+CHANGE NOTIFICATION: SYSTEM
+COMMENT ANY MINING MODEL: SYSTEM
+COMMENT ANY TABLE: SYSTEM
+CREATE ANALYTIC VIEW: SYSTEM
+CREATE ANY ANALYTIC VIEW: SYSTEM
+CREATE ANY ASSEMBLY: SYSTEM
+CREATE ANY ATTRIBUTE DIMENSION: SYSTEM
+CREATE ANY CLUSTER: SYSTEM
+CREATE ANY CONTEXT: SYSTEM
+CREATE ANY CREDENTIAL: SYSTEM
+CREATE ANY CUBE: SYSTEM
+CREATE ANY CUBE BUILD PROCESS: SYSTEM
+CREATE ANY CUBE DIMENSION: SYSTEM
+CREATE ANY DIMENSION: SYSTEM
+CREATE ANY DIRECTORY: SYSTEM
+CREATE ANY EDITION: SYSTEM
+CREATE ANY EVALUATION CONTEXT: SYSTEM
+CREATE ANY HIERARCHY: SYSTEM
+CREATE ANY INDEX: SYSTEM
+CREATE ANY INDEXTYPE: SYSTEM
+CREATE ANY JOB: SYSTEM
+CREATE ANY LIBRARY: SYSTEM
+CREATE ANY MATERIALIZED VIEW: SYSTEM
+CREATE ANY MEASURE FOLDER: SYSTEM
+CREATE ANY MINING MODEL: SYSTEM
+CREATE ANY OPERATOR: SYSTEM
+CREATE ANY OUTLINE: SYSTEM
+CREATE ANY PROCEDURE: SYSTEM
+CREATE ANY RULE: SYSTEM
+CREATE ANY RULE SET: SYSTEM
+CREATE ANY SEQUENCE: SYSTEM
+CREATE ANY SQL PROFILE: SYSTEM
+CREATE ANY SQL TRANSLATION PROFILE: SYSTEM
+CREATE ANY SYNONYM: SYSTEM
+CREATE ANY TABLE: SYSTEM
+CREATE ANY TRIGGER: SYSTEM
+CREATE ANY TYPE: SYSTEM
+CREATE ANY VIEW: SYSTEM
+CREATE ASSEMBLY: SYSTEM
+CREATE ATTRIBUTE DIMENSION: SYSTEM
+CREATE CLUSTER: SYSTEM
+CREATE CREDENTIAL: SYSTEM
+CREATE CUBE: SYSTEM
+CREATE CUBE BUILD PROCESS: SYSTEM
+CREATE CUBE DIMENSION: SYSTEM
+CREATE DATABASE LINK: SYSTEM
+CREATE DIMENSION: SYSTEM
+CREATE EVALUATION CONTEXT: SYSTEM
+CREATE EXTERNAL JOB: SYSTEM
+CREATE HIERARCHY: SYSTEM
+CREATE INDEXTYPE: SYSTEM
+CREATE JOB: SYSTEM
+CREATE LIBRARY: SYSTEM
+CREATE LOCKDOWN PROFILE: SYSTEM
+CREATE MATERIALIZED VIEW: SYSTEM
+CREATE MEASURE FOLDER: SYSTEM
+CREATE MINING MODEL: SYSTEM
+CREATE OPERATOR: SYSTEM
+CREATE PLUGGABLE DATABASE: SYSTEM
+CREATE PROCEDURE: SYSTEM
+CREATE PROFILE: SYSTEM
+CREATE PUBLIC DATABASE LINK: SYSTEM
+CREATE PUBLIC SYNONYM: SYSTEM
+CREATE ROLE: SYSTEM
+CREATE ROLLBACK SEGMENT: SYSTEM
+CREATE RULE: SYSTEM
+CREATE RULE SET: SYSTEM
+CREATE SEQUENCE: SYSTEM
+CREATE SESSION: SYSTEM
+CREATE SQL TRANSLATION PROFILE: SYSTEM
+CREATE SYNONYM: SYSTEM
+CREATE TABLE: SYSTEM
+CREATE TABLESPACE: SYSTEM
+CREATE TRIGGER: SYSTEM
+CREATE TYPE: SYSTEM
+CREATE USER: SYSTEM
+CREATE VIEW: SYSTEM
+DEBUG ANY PROCEDURE: SYSTEM
+DEBUG CONNECT ANY: SYSTEM
+DEBUG CONNECT SESSION: SYSTEM
+DELETE ANY CUBE DIMENSION: SYSTEM
+DELETE ANY MEASURE FOLDER: SYSTEM
+DELETE ANY TABLE: SYSTEM
+DEQUEUE ANY QUEUE: SYSTEM
+DROP ANY ANALYTIC VIEW: SYSTEM
+DROP ANY ASSEMBLY: SYSTEM
+DROP ANY ATTRIBUTE DIMENSION: SYSTEM
+DROP ANY CLUSTER: SYSTEM
+DROP ANY CONTEXT: SYSTEM
+DROP ANY CUBE: SYSTEM
+DROP ANY CUBE BUILD PROCESS: SYSTEM
+DROP ANY CUBE DIMENSION: SYSTEM
+DROP ANY DIMENSION: SYSTEM
+DROP ANY DIRECTORY: SYSTEM
+DROP ANY EDITION: SYSTEM
+DROP ANY EVALUATION CONTEXT: SYSTEM
+DROP ANY HIERARCHY: SYSTEM
+DROP ANY INDEX: SYSTEM
+DROP ANY INDEXTYPE: SYSTEM
+DROP ANY LIBRARY: SYSTEM
+DROP ANY MATERIALIZED VIEW: SYSTEM
+DROP ANY MEASURE FOLDER: SYSTEM
+DROP ANY MINING MODEL: SYSTEM
+DROP ANY OPERATOR: SYSTEM
+DROP ANY OUTLINE: SYSTEM
+DROP ANY PROCEDURE: SYSTEM
+DROP ANY ROLE: SYSTEM
+DROP ANY RULE: SYSTEM
+DROP ANY RULE SET: SYSTEM
+DROP ANY SEQUENCE: SYSTEM
+DROP ANY SQL PROFILE: SYSTEM
+DROP ANY SQL TRANSLATION PROFILE: SYSTEM
+DROP ANY SYNONYM: SYSTEM
+DROP ANY TABLE: SYSTEM
+DROP ANY TRIGGER: SYSTEM
+DROP ANY TYPE: SYSTEM
+DROP ANY VIEW: SYSTEM
+DROP LOCKDOWN PROFILE: SYSTEM
+DROP PROFILE: SYSTEM
+DROP PUBLIC DATABASE LINK: SYSTEM
+DROP PUBLIC SYNONYM: SYSTEM
+DROP ROLLBACK SEGMENT: SYSTEM
+DROP TABLESPACE: SYSTEM
+DROP USER: SYSTEM
+EM EXPRESS CONNECT: SYSTEM
+ENQUEUE ANY QUEUE: SYSTEM
+EXECUTE ANY ASSEMBLY: SYSTEM
+EXECUTE ANY CLASS: SYSTEM
+EXECUTE ANY EVALUATION CONTEXT: SYSTEM
+EXECUTE ANY INDEXTYPE: SYSTEM
+EXECUTE ANY LIBRARY: SYSTEM
+EXECUTE ANY OPERATOR: SYSTEM
+EXECUTE ANY PROCEDURE: SYSTEM
+EXECUTE ANY PROGRAM: SYSTEM
+EXECUTE ANY RULE: SYSTEM
+EXECUTE ANY RULE SET: SYSTEM
+EXECUTE ANY TYPE: SYSTEM
+EXECUTE ASSEMBLY: SYSTEM
+EXEMPT ACCESS POLICY: (none)
+EXEMPT DDL REDACTION POLICY: SYSTEM
+EXEMPT DML REDACTION POLICY: SYSTEM
+EXEMPT REDACTION POLICY: SYSTEM
+EXPORT FULL DATABASE: SYSTEM
+FLASHBACK ANY TABLE: SYSTEM
+FLASHBACK ARCHIVE ADMINISTER: SYSTEM
+FORCE ANY TRANSACTION: SYSTEM
+FORCE TRANSACTION: SYSTEM
+GLOBAL QUERY REWRITE: SYSTEM
+GRANT ANY OBJECT PRIVILEGE: SYSTEM
+GRANT ANY PRIVILEGE: SYSTEM
+GRANT ANY ROLE: SYSTEM
+IMPORT FULL DATABASE: SYSTEM
+INHERIT ANY PRIVILEGES: (none)
+INSERT ANY CUBE DIMENSION: SYSTEM
+INSERT ANY MEASURE FOLDER: SYSTEM
+INSERT ANY TABLE: SYSTEM
+LOCK ANY TABLE: SYSTEM
+LOGMINING: SYSTEM
+MANAGE ANY FILE GROUP: SYSTEM
+MANAGE ANY QUEUE: SYSTEM
+MANAGE FILE GROUP: SYSTEM
+MANAGE SCHEDULER: SYSTEM
+MANAGE TABLESPACE: SYSTEM
+MERGE ANY VIEW: SYSTEM
+ON COMMIT REFRESH: SYSTEM
+QUERY REWRITE: SYSTEM
+READ ANY FILE GROUP: SYSTEM
+READ ANY TABLE: SYSTEM
+REDEFINE ANY TABLE: SYSTEM
+RESTRICTED SESSION: SYSTEM
+RESUMABLE: SYSTEM
+SELECT ANY CUBE: SYSTEM
+SELECT ANY CUBE BUILD PROCESS: SYSTEM
+SELECT ANY CUBE DIMENSION: SYSTEM
+SELECT ANY DICTIONARY: SYSTEM
+SELECT ANY MEASURE FOLDER: SYSTEM
+SELECT ANY MINING MODEL: SYSTEM
+SELECT ANY SEQUENCE: SYSTEM
+SELECT ANY TABLE: SYSTEM
+SELECT ANY TRANSACTION: SYSTEM
+SET CONTAINER: SYSTEM
+UNDER ANY TABLE: SYSTEM
+UNDER ANY TYPE: SYSTEM
+UNDER ANY VIEW: SYSTEM
+UNLIMITED TABLESPACE: SYSTEM
+UPDATE ANY CUBE: SYSTEM
+UPDATE ANY CUBE BUILD PROCESS: SYSTEM
+UPDATE ANY CUBE DIMENSION: SYSTEM
+UPDATE ANY TABLE: SYSTEM
+USE ANY JOB RESOURCE: SYSTEM
+USE ANY SQL TRANSLATION PROFILE: SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> System privileges provide the ability to access data or perform administrative operations for the entire database. Consistent with the principle of least privilege, these privileges should be granted sparingly. The Privilege Analysis feature of Database Vault may be helpful to determine the minimum set of privileges required by a user or role. In some cases, it may be possible to substitute a more limited object privilege grant in place of a system privilege grant that applies to all objects. System privileges should be granted with admin option only when the recipient needs the ability to grant the privilege to others. </td><td></td></tr>
+</table>
+<h3> All Roles </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.ROLES </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 23 grants of roles </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Users directly or indirectly granted each role:
+
+AQ_ADMINISTRATOR_ROLE: SYSTEM
+CAPTURE_ADMIN: SYSTEM
+CDB_DBA: (none)
+CONNECT: (none)
+CTXAPP: (none)
+DATAPUMP_EXP_FULL_DATABASE: SYSTEM
+DATAPUMP_IMP_FULL_DATABASE: SYSTEM
+DBA: SYSTEM
+DBFS_ROLE: (none)
+DV_ADMIN: (none)
+DV_AUDIT_CLEANUP: (none)
+DV_DATAPUMP_NETWORK_LINK: (none)
+DV_GOLDENGATE_ADMIN: (none)
+DV_GOLDENGATE_REDO_ACCESS: (none)
+DV_MONITOR: (none)
+DV_PATCH_ADMIN: (none)
+DV_POLICY_OWNER: (none)
+DV_PUBLIC: (none)
+DV_SECANALYST: (none)
+DV_STREAMS_ADMIN: (none)
+DV_XSTREAM_ADMIN: (none)
+EM_EXPRESS_ALL: SYSTEM
+EM_EXPRESS_BASIC: SYSTEM
+EXECUTE_CATALOG_ROLE: SYSTEM
+EXP_FULL_DATABASE: SYSTEM
+GATHER_SYSTEM_STATISTICS: SYSTEM
+GSMADMIN_ROLE: (none)
+GSMUSER_ROLE: (none)
+GSM_POOLADMIN_ROLE: (none)
+HS_ADMIN_EXECUTE_ROLE: SYSTEM
+HS_ADMIN_SELECT_ROLE: SYSTEM
+IMP_FULL_DATABASE: SYSTEM
+JAVAUSERPRIV: (none)
+JAVA_ADMIN: SYSTEM
+JAVA_DEPLOY: SYSTEM
+LBAC_DBA: (none)
+OEM_MONITOR: (none)
+OLAP_DBA: SYSTEM
+OLAP_XS_ADMIN: SYSTEM
+OPTIMIZER_PROCESSING_RATE: SYSTEM
+RECOVERY_CATALOG_OWNER: (none)
+RECOVERY_CATALOG_USER: (none)
+RESOURCE: (none)
+SCHEDULER_ADMIN: SYSTEM
+SELECT_CATALOG_ROLE: SYSTEM
+SODA_APP: (none)
+SPATIAL_CSW_ADMIN: (none)
+SYSUMF_ROLE: (none)
+WM_ADMIN_ROLE: SYSTEM
+XDBADMIN: SYSTEM
+XDB_SET_INVOKER: SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Roles are a convenient way to manage groups of related privileges, especially when the privileges are required for a particular task or job function. Beware of broadly defined roles, which may confer more privileges than an individual recipient requires. Roles should be granted with admin option only when the recipient needs the ability to modify the role or grant it to others. </td><td></td></tr>
+</table>
+<h3> Account Management Privileges </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.ACCT </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 16 grants of account management privileges </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of ALTER USER, CREATE USER, DROP USER:
+
+SYSTEM &lt;- DBA: ALTER USER, CREATE USER, DROP USER
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE: ALTER USER
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- IMP_FULL_DATABASE:
+    ALTER USER, CREATE USER, DROP USER
+SYSTEM &lt;- DBA &lt;- EM_EXPRESS_ALL: ALTER USER, CREATE USER, DROP USER
+SYSTEM &lt;- DBA &lt;- IMP_FULL_DATABASE: ALTER USER, CREATE USER, DROP
+    USER
+
+(no users) &lt;- DV_ACCTMGR: ALTER USER, CREATE USER, DROP USER
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> User management privileges (ALTER USER, CREATE USER, DROP USER) can be used to create and modify other user accounts, including changing passwords. This power can be abused to gain access to another user's account, which may have greater privileges. </td><td></td></tr>
+</table>
+<h3> Privilege Management Privileges </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.MGMT </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 31 grants of privilege management privileges </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of ALTER ANY ROLE, CREATE ROLE, DROP ANY ROLE, GRANT ANY OBJECT
+    PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY ROLE:
+
+SYSTEM &lt;- DBA: ALTER ANY ROLE, CREATE ROLE, DROP ANY ROLE, GRANT ANY
+    OBJECT PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY ROLE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE: GRANT ANY OBJECT
+    PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY ROLE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- IMP_FULL_DATABASE:
+    CREATE ROLE, DROP ANY ROLE, GRANT ANY OBJECT PRIVILEGE, GRANT ANY
+    PRIVILEGE, GRANT ANY ROLE
+SYSTEM &lt;- DBA &lt;- EM_EXPRESS_ALL: ALTER ANY ROLE, CREATE ROLE, DROP
+    ANY ROLE, GRANT ANY OBJECT PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY
+    ROLE
+SYSTEM &lt;- DBA &lt;- IMP_FULL_DATABASE: CREATE ROLE, DROP ANY ROLE, GRANT
+    ANY OBJECT PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY ROLE
+
+(no users) &lt;- DV_REALM_OWNER: ALTER ANY ROLE, CREATE ROLE, DROP ANY
+    ROLE, GRANT ANY OBJECT PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY ROLE
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Users with privilege management privileges (ALTER ANY ROLE, CREATE ROLE, DROP ANY ROLE, GRANT ANY OBJECT PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY ROLE) can change the set of privileges granted to themselves and other users. This ability should be granted sparingly, since it can be used to circumvent many security controls in the database. </td><td></td></tr>
+</table>
+<h3> Audit Management Privileges </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.AUDIT </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 10 grants of audit privilege </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of AUDIT ANY, AUDIT SYSTEM:
+
+SYSTEM &lt;- DBA: AUDIT ANY, AUDIT SYSTEM
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE: AUDIT ANY, AUDIT SYSTEM
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- IMP_FULL_DATABASE:
+    AUDIT ANY, AUDIT SYSTEM
+SYSTEM &lt;- DBA &lt;- IMP_FULL_DATABASE: AUDIT ANY, AUDIT SYSTEM
+
+(no users) &lt;- AUDIT_ADMIN: AUDIT ANY, AUDIT SYSTEM
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Audit management privileges (AUDIT ANY, AUDIT SYSTEM) can be used to change the audit policies for the database. This ability should be granted sparingly, since it may be used to hide malicious activity. </td><td></td></tr>
+</table>
+<h3> Data Access Privileges </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.DATA </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 49 grants of data access privileges </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of ALTER ANY TABLE, ALTER ANY TRIGGER, CREATE ANY INDEX, CREATE ANY
+    PROCEDURE, CREATE ANY TRIGGER, DELETE ANY TABLE, INSERT ANY TABLE, READ
+    ANY TABLE, SELECT ANY DICTIONARY, SELECT ANY TABLE, UPDATE ANY TABLE:
+
+SYSTEM: SELECT ANY TABLE
+SYSTEM &lt;- DBA: ALTER ANY TABLE, ALTER ANY TRIGGER, CREATE ANY INDEX,
+    CREATE ANY PROCEDURE, CREATE ANY TRIGGER, DELETE ANY TABLE, INSERT ANY
+    TABLE, READ ANY TABLE, SELECT ANY DICTIONARY, SELECT ANY TABLE, UPDATE
+    ANY TABLE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_EXP_FULL_DATABASE &lt;- EXP_FULL_DATABASE:
+    SELECT ANY TABLE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE: DELETE ANY TABLE, SELECT
+    ANY TABLE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- EXP_FULL_DATABASE:
+    SELECT ANY TABLE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- IMP_FULL_DATABASE:
+    ALTER ANY TABLE, ALTER ANY TRIGGER, CREATE ANY INDEX, CREATE ANY
+    PROCEDURE, CREATE ANY TRIGGER, DELETE ANY TABLE, INSERT ANY TABLE,
+    SELECT ANY TABLE, UPDATE ANY TABLE
+SYSTEM &lt;- DBA &lt;- EXP_FULL_DATABASE: SELECT ANY TABLE
+SYSTEM &lt;- DBA &lt;- IMP_FULL_DATABASE: ALTER ANY TABLE, ALTER ANY
+    TRIGGER, CREATE ANY INDEX, CREATE ANY PROCEDURE, CREATE ANY TRIGGER,
+    DELETE ANY TABLE, INSERT ANY TABLE, SELECT ANY TABLE, UPDATE ANY TABLE
+SYSTEM &lt;- DBA &lt;- OLAP_DBA: DELETE ANY TABLE, INSERT ANY TABLE, SELECT
+    ANY TABLE, UPDATE ANY TABLE
+
+(no users) &lt;- DV_REALM_OWNER: ALTER ANY TABLE, ALTER ANY TRIGGER, CREATE
+    ANY INDEX, CREATE ANY PROCEDURE, CREATE ANY TRIGGER, DELETE ANY TABLE,
+    INSERT ANY TABLE, SELECT ANY TABLE, UPDATE ANY TABLE
+
+(no users) &lt;- OEM_MONITOR: SELECT ANY DICTIONARY
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Users with data access privileges (ALTER ANY TABLE, ALTER ANY TRIGGER, CREATE ANY INDEX, CREATE ANY PROCEDURE, CREATE ANY TRIGGER, DELETE ANY TABLE, INSERT ANY TABLE, READ ANY TABLE, SELECT ANY DICTIONARY, SELECT ANY TABLE, UPDATE ANY TABLE) can override various access controls on data. Most administrative tasks do not require access to the data itself, so these privileges should be granted rarely even to administrators. In addition to minimizing grants of these privileges, consider the use of Database Vault realms to limit the use of these privileges to access sensitive data. </td><td></td></tr>
+</table>
+<h3> Access Control Exemption Privileges </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.EXEMPT </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 3 grants of access control exemption privileges </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of EXEMPT ACCESS POLICY, EXEMPT REDACTION POLICY:
+
+SYSTEM &lt;- DBA &lt;- DATAPUMP_EXP_FULL_DATABASE &lt;- EXP_FULL_DATABASE:
+    EXEMPT REDACTION POLICY
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- EXP_FULL_DATABASE:
+    EXEMPT REDACTION POLICY
+SYSTEM &lt;- DBA &lt;- EXP_FULL_DATABASE: EXEMPT REDACTION POLICY
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Users with exemption privileges (EXEMPT ACCESS POLICY, EXEMPT REDACTION POLICY) can bypass the access control policies created using Virtual Private Database and Data Redaction. Most administrative tasks do not require access to the data itself, so these privileges should be granted rarely even to administrators. </td><td></td></tr>
+</table>
+<h3> Access to Password Verifier Tables </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.PASSWD </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No grants of object privileges on restricted objects </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Users with these privileges can access objects that contain user password verifiers. The verifiers can be used in offline attacks to discover user passwords. </td><td></td></tr>
+</table>
+<h3> Access to Restricted Objects </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.OBJ </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 665 grants of object privileges on restricted objects </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of DELETE, INSERT, UPDATE on SYS, DVSYS, or LBACSYS objects:
+
+SYSTEM &lt;- DBA: DELETE on SYS.MAP_OBJECT, INSERT on SYS.MAP_OBJECT,
+    INSERT on SYS.XSDB$SCHEMA_ACL, UPDATE on SYS.MAP_OBJECT, UPDATE on
+    SYS.XSDB$SCHEMA_ACL
+SYSTEM &lt;- DBA &lt;- DATAPUMP_EXP_FULL_DATABASE &lt;- EXP_FULL_DATABASE:
+    DELETE on SYS.INCEXP, DELETE on SYS.INCFIL, DELETE on SYS.INCVID,
+    INSERT on SYS.INCEXP, INSERT on SYS.INCFIL, INSERT on SYS.INCVID,
+    UPDATE on SYS.INCEXP, UPDATE on SYS.INCFIL, UPDATE on SYS.INCVID
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- EXP_FULL_DATABASE:
+    DELETE on SYS.INCEXP, DELETE on SYS.INCFIL, DELETE on SYS.INCVID,
+    INSERT on SYS.INCEXP, INSERT on SYS.INCFIL, INSERT on SYS.INCVID,
+    UPDATE on SYS.INCEXP, UPDATE on SYS.INCFIL, UPDATE on SYS.INCVID
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE &lt;- IMP_FULL_DATABASE:
+    DELETE on SYS.EXPIMP_TTS_CT$, DELETE on SYS.RADM_FPTM$, INSERT on
+    SYS.EXPIMP_TTS_CT$, INSERT on SYS.RADM_FPTM$, UPDATE on
+    SYS.EXPIMP_TTS_CT$
+SYSTEM &lt;- DBA &lt;- EXP_FULL_DATABASE: DELETE on SYS.INCEXP, DELETE on
+    SYS.INCFIL, DELETE on SYS.INCVID, INSERT on SYS.INCEXP, INSERT on
+    SYS.INCFIL, INSERT on SYS.INCVID, UPDATE on SYS.INCEXP, UPDATE on
+    SYS.INCFIL, UPDATE on SYS.INCVID
+SYSTEM &lt;- DBA &lt;- GATHER_SYSTEM_STATISTICS: DELETE on SYS.AUX_STATS$,
+    DELETE on SYS.WRI$_OPTSTAT_AUX_HISTORY, INSERT on SYS.AUX_STATS$,
+    INSERT on SYS.WRI$_OPTSTAT_AUX_HISTORY, UPDATE on SYS.AUX_STATS$,
+    UPDATE on SYS.WRI$_OPTSTAT_AUX_HISTORY
+SYSTEM &lt;- DBA &lt;- IMP_FULL_DATABASE: DELETE on SYS.EXPIMP_TTS_CT$,
+    DELETE on SYS.RADM_FPTM$, INSERT on SYS.EXPIMP_TTS_CT$, INSERT on
+    SYS.RADM_FPTM$, UPDATE on SYS.EXPIMP_TTS_CT$
+SYSTEM &lt;- DBA &lt;- OPTIMIZER_PROCESSING_RATE: DELETE on
+    SYS.OPT_CALIBRATION_STATS$, INSERT on SYS.OPT_CALIBRATION_STATS$,
+    UPDATE on SYS.OPT_CALIBRATION_STATS$
+
+(no users) &lt;- DATAPATCH_ROLE: DELETE on SYS.DBA_REGISTRY_SQLPATCH,
+    INSERT on SYS.DBA_REGISTRY_SQLPATCH, UPDATE on
+    SYS.DBA_REGISTRY_SQLPATCH
+
+(no users) &lt;- DV_ADMIN: DELETE on DVSYS.SIMULATION_LOG$
+
+(no users) &lt;- DV_AUDIT_CLEANUP: DELETE on DVSYS.AUDIT_TRAIL$, DELETE on
+    DVSYS.DV$CONFIGURATION_AUDIT, DELETE on DVSYS.DV$ENFORCEMENT_AUDIT
+
+(no users) &lt;- DV_OWNER &lt;- DV_ADMIN: DELETE on DVSYS.SIMULATION_LOG$
+(no users) &lt;- DV_OWNER &lt;- DV_AUDIT_CLEANUP: DELETE on
+    DVSYS.AUDIT_TRAIL$, DELETE on DVSYS.DV$CONFIGURATION_AUDIT, DELETE on
+    DVSYS.DV$ENFORCEMENT_AUDIT
+
+(no users) &lt;- SYSUMF_ROLE: DELETE on SYS.UMF$_LINK, DELETE on
+    SYS.UMF$_REGISTRATION, DELETE on SYS.UMF$_SERVICE, DELETE on
+    SYS.UMF$_TOPOLOGY, DELETE on SYS.WRH$_ACTIVE_SESSION_HISTORY, DELETE on
+    SYS.WRH$_ASM_BAD_DISK, DELETE on SYS.WRH$_ASM_DISKGROUP, DELETE on
+    SYS.WRH$_ASM_DISKGROUP_STAT, DELETE on SYS.WRH$_BG_EVENT_SUMMARY,
+    DELETE on SYS.WRH$_BUFFERED_QUEUES, DELETE on
+    SYS.WRH$_BUFFERED_SUBSCRIBERS, DELETE on
+    SYS.WRH$_BUFFER_POOL_STATISTICS, DELETE on SYS.WRH$_CELL_CONFIG, DELETE
+    on SYS.WRH$_CELL_CONFIG_DETAIL, DELETE on SYS.WRH$_CELL_DB, DELETE on
+    SYS.WRH$_CELL_DISK_SUMMARY, DELETE on SYS.WRH$_CELL_GLOBAL, DELETE on
+    SYS.WRH$_CELL_GLOBAL_SUMMARY, DELETE on SYS.WRH$_CELL_IOREASON, DELETE
+    on SYS.WRH$_CELL_IOREASON_NAME, DELETE on SYS.WRH$_CELL_METRIC_DESC,
+    DELETE on SYS.WRH$_CELL_OPEN_ALERTS, DELETE on SYS.WRH$_CHANNEL_WAITS,
+    DELETE on SYS.WRH$_CLUSTER_INTERCON, DELETE on SYS.WRH$_COMP_IOSTAT,
+    DELETE on SYS.WRH$_CON_SYSMETRIC_HISTORY, DELETE on
+    SYS.WRH$_CON_SYSMETRIC_SUMMARY, DELETE on SYS.WRH$_CON_SYSSTAT, DELETE
+    on SYS.WRH$_CON_SYSTEM_EVENT, DELETE on SYS.WRH$_CON_SYS_TIME_MODEL,
+    DELETE on SYS.WRH$_CR_BLOCK_SERVER, DELETE on
+    SYS.WRH$_CURRENT_BLOCK_SERVER, DELETE on SYS.WRH$_DATAFILE, DELETE on
+    SYS.WRH$_DB_CACHE_ADVICE, DELETE on SYS.WRH$_DISPATCHER, DELETE on
+    SYS.WRH$_DLM_MISC, DELETE on SYS.WRH$_DYN_REMASTER_STATS, DELETE on
+    SYS.WRH$_ENQUEUE_STAT, DELETE on SYS.WRH$_EVENT_HISTOGRAM, DELETE on
+    SYS.WRH$_EVENT_NAME, DELETE on SYS.WRH$_FILEMETRIC_HISTORY, DELETE on
+    SYS.WRH$_FILESTATXS, DELETE on SYS.WRH$_IC_CLIENT_STATS, DELETE on
+    SYS.WRH$_IC_DEVICE_STATS, DELETE on SYS.WRH$_IM_SEG_STAT, DELETE on
+    SYS.WRH$_IM_SEG_STAT_OBJ, DELETE on SYS.WRH$_INSTANCE_RECOVERY, DELETE
+    on SYS.WRH$_INST_CACHE_TRANSFER, DELETE on SYS.WRH$_INTERCONNECT_PINGS,
+    DELETE on SYS.WRH$_IOSTAT_DETAIL, DELETE on SYS.WRH$_IOSTAT_FILETYPE,
+    DELETE on SYS.WRH$_IOSTAT_FILETYPE_NAME, DELETE on
+    SYS.WRH$_IOSTAT_FUNCTION, DELETE on SYS.WRH$_IOSTAT_FUNCTION_NAME,
+    DELETE on SYS.WRH$_JAVA_POOL_ADVICE, DELETE on SYS.WRH$_LATCH, DELETE
+    on SYS.WRH$_LATCH_CHILDREN, DELETE on SYS.WRH$_LATCH_MISSES_SUMMARY,
+    DELETE on SYS.WRH$_LATCH_NAME, DELETE on SYS.WRH$_LATCH_PARENT, DELETE
+    on SYS.WRH$_LIBRARYCACHE, DELETE on SYS.WRH$_LMS_STATS, DELETE on
+    SYS.WRH$_LOG, DELETE on SYS.WRH$_MEMORY_RESIZE_OPS, DELETE on
+    SYS.WRH$_MEMORY_TARGET_ADVICE, DELETE on SYS.WRH$_MEM_DYNAMIC_COMP,
+    DELETE on SYS.WRH$_METRIC_NAME, DELETE on SYS.WRH$_MTTR_TARGET_ADVICE,
+    DELETE on SYS.WRH$_MUTEX_SLEEP, DELETE on SYS.WRH$_MVPARAMETER, DELETE
+    on SYS.WRH$_OPTIMIZER_ENV, DELETE on SYS.WRH$_OSSTAT, DELETE on
+    SYS.WRH$_OSSTAT_NAME, DELETE on SYS.WRH$_PARAMETER, DELETE on
+    SYS.WRH$_PARAMETER_NAME, DELETE on SYS.WRH$_PERSISTENT_QMN_CACHE,
+    DELETE on SYS.WRH$_PERSISTENT_QUEUES, DELETE on
+    SYS.WRH$_PERSISTENT_SUBSCRIBERS, DELETE on SYS.WRH$_PGASTAT, DELETE on
+    SYS.WRH$_PGA_TARGET_ADVICE, DELETE on SYS.WRH$_PLAN_OPERATION_NAME,
+    DELETE on SYS.WRH$_PLAN_OPTION_NAME, DELETE on
+    SYS.WRH$_PROCESS_MEMORY_SUMMARY, DELETE on SYS.WRH$_RECOVERY_PROGRESS,
+    DELETE on SYS.WRH$_REPLICATION_TBL_STATS, DELETE on
+    SYS.WRH$_REPLICATION_TXN_STATS, DELETE on SYS.WRH$_RESOURCE_LIMIT,
+    DELETE on SYS.WRH$_ROWCACHE_SUMMARY, DELETE on
+    SYS.WRH$_RSRC_CONSUMER_GROUP, DELETE on SYS.WRH$_RSRC_METRIC, DELETE on
+    SYS.WRH$_RSRC_PDB_METRIC, DELETE on SYS.WRH$_RSRC_PLAN, DELETE on
+    SYS.WRH$_RULE_SET, DELETE on SYS.WRH$_SEG_STAT, DELETE on
+    SYS.WRH$_SEG_STAT_OBJ, DELETE on SYS.WRH$_SERVICE_NAME, DELETE on
+    SYS.WRH$_SERVICE_STAT, DELETE on SYS.WRH$_SERVICE_WAIT_CLASS, DELETE on
+    SYS.WRH$_SESSMETRIC_HISTORY, DELETE on SYS.WRH$_SESS_SGA_STATS, DELETE
+    on SYS.WRH$_SESS_TIME_STATS, DELETE on SYS.WRH$_SGA, DELETE on
+    SYS.WRH$_SGASTAT, DELETE on SYS.WRH$_SGA_TARGET_ADVICE, DELETE on
+    SYS.WRH$_SHARED_POOL_ADVICE, DELETE on SYS.WRH$_SHARED_SERVER_SUMMARY,
+    DELETE on SYS.WRH$_SQLCOMMAND_NAME, DELETE on SYS.WRH$_SQLSTAT, DELETE
+    on SYS.WRH$_SQLTEXT, DELETE on SYS.WRH$_SQL_BIND_METADATA, DELETE on
+    SYS.WRH$_SQL_PLAN, DELETE on SYS.WRH$_SQL_SUMMARY, DELETE on
+    SYS.WRH$_SQL_WORKAREA_HISTOGRAM, DELETE on SYS.WRH$_STAT_NAME, DELETE
+    on SYS.WRH$_STREAMS_APPLY_SUM, DELETE on SYS.WRH$_STREAMS_CAPTURE,
+    DELETE on SYS.WRH$_STREAMS_POOL_ADVICE, DELETE on
+    SYS.WRH$_SYSMETRIC_HISTORY, DELETE on SYS.WRH$_SYSMETRIC_SUMMARY,
+    DELETE on SYS.WRH$_SYSSTAT, DELETE on SYS.WRH$_SYSTEM_EVENT, DELETE on
+    SYS.WRH$_SYS_TIME_MODEL, DELETE on SYS.WRH$_TABLESPACE, DELETE on
+    SYS.WRH$_TABLESPACE_SPACE_USAGE, DELETE on SYS.WRH$_TABLESPACE_STAT,
+    DELETE on SYS.WRH$_TEMPFILE, DELETE on SYS.WRH$_TEMPSTATXS, DELETE on
+    SYS.WRH$_THREAD, DELETE on SYS.WRH$_TOPLEVELCALL_NAME, DELETE on
+    SYS.WRH$_UNDOSTAT, DELETE on SYS.WRH$_WAITCLASSMETRIC_HISTORY, DELETE
+    on SYS.WRH$_WAITSTAT, DELETE on SYS.WRHS$_CELL_IOREASON_NAME, DELETE on
+    SYS.WRHS$_CELL_METRIC_DESC, DELETE on SYS.WRHS$_DATAFILE, DELETE on
+    SYS.WRHS$_EVENT_NAME, DELETE on SYS.WRHS$_IM_SEG_STAT_OBJ, DELETE on
+    SYS.WRHS$_IOSTAT_FILETYPE_NAME, DELETE on
+    SYS.WRHS$_IOSTAT_FUNCTION_NAME, DELETE on SYS.WRHS$_LATCH_NAME, DELETE
+    on SYS.WRHS$_METRIC_NAME, DELETE on SYS.WRHS$_OPTIMIZER_ENV, DELETE on
+    SYS.WRHS$_OSSTAT_NAME, DELETE on SYS.WRHS$_PARAMETER_NAME, DELETE on
+    SYS.WRHS$_PLAN_OPERATION_NAME, DELETE on SYS.WRHS$_PLAN_OPTION_NAME,
+    DELETE on SYS.WRHS$_SEG_STAT_OBJ, DELETE on SYS.WRHS$_SERVICE_NAME,
+    DELETE on SYS.WRHS$_SQLCOMMAND_NAME, DELETE on SYS.WRHS$_SQLTEXT,
+    DELETE on SYS.WRHS$_SQL_BIND_METADATA, DELETE on SYS.WRHS$_SQL_PLAN,
+    DELETE on SYS.WRHS$_STAT_NAME, DELETE on SYS.WRHS$_TABLESPACE, DELETE
+    on SYS.WRHS$_TEMPFILE, DELETE on SYS.WRHS$_TOPLEVELCALL_NAME, DELETE on
+    SYS.WRI$_ADV_ACTIONS, DELETE on SYS.WRI$_ADV_DEF_PARAMETERS, DELETE on
+    SYS.WRI$_ADV_DIRECTIVE_DEFS, DELETE on
+    SYS.WRI$_ADV_DIRECTIVE_INSTANCES, DELETE on SYS.WRI$_ADV_EXECUTIONS,
+    DELETE on SYS.WRI$_ADV_EXEC_PARAMETERS, DELETE on
+    SYS.WRI$_ADV_FINDINGS, DELETE on SYS.WRI$_ADV_INST_FDG, DELETE on
+    SYS.WRI$_ADV_JOURNAL, DELETE on SYS.WRI$_ADV_MESSAGE_GROUPS, DELETE on
+    SYS.WRI$_ADV_OBJECTS, DELETE on SYS.WRI$_ADV_PARAMETERS, DELETE on
+    SYS.WRI$_ADV_RATIONALE, DELETE on SYS.WRI$_ADV_RECOMMENDATIONS, DELETE
+    on SYS.WRI$_ADV_REC_ACTIONS, DELETE on SYS.WRI$_ADV_SQLT_BINDS, DELETE
+    on SYS.WRI$_ADV_SQLT_PLANS, DELETE on SYS.WRI$_ADV_SQLT_PLAN_HASH,
+    DELETE on SYS.WRI$_ADV_SQLT_PLAN_STATS, DELETE on
+    SYS.WRI$_ADV_SQLT_RTN_PLAN, DELETE on SYS.WRI$_ADV_SQLT_STATISTICS,
+    DELETE on SYS.WRI$_ADV_TASKS, DELETE on SYS.WRI$_ADV_USAGE, DELETE on
+    SYS.WRI$_ALERT_HISTORY, DELETE on SYS.WRI$_OPTSTAT_OPR, DELETE on
+    SYS.WRI$_SEGADV_CNTRLTAB, DELETE on SYS.WRI$_SEGADV_OBJLIST, DELETE on
+    SYS.WRI$_SQLSET_DEFINITIONS, DELETE on SYS.WRI$_SQLSET_REFERENCES,
+    DELETE on SYS.WRI$_SQLTEXT_REFCOUNT, DELETE on SYS.WRM$_ACTIVE_PDBS,
+    DELETE on SYS.WRM$_BASELINE, DELETE on SYS.WRM$_BASELINE_DETAILS,
+    DELETE on SYS.WRM$_BASELINE_TEMPLATE, DELETE on SYS.WRM$_COLORED_SQL,
+    DELETE on SYS.WRM$_DATABASE_INSTANCE, DELETE on SYS.WRM$_PDB_INSTANCE,
+    DELETE on SYS.WRM$_PDB_IN_SNAP, DELETE on SYS.WRM$_SNAPSHOT, DELETE on
+    SYS.WRM$_SNAPSHOT_DETAILS, DELETE on SYS.WRM$_SNAP_ERROR, DELETE on
+    SYS.WRM$_WR_CONTROL, DELETE on SYS.WRM$_WR_SETTINGS, DELETE on
+    SYS.WRM$_WR_USAGE, DELETE on SYS.WRMS$_SNAPSHOT, INSERT on
+    SYS.UMF$_LINK, INSERT on SYS.UMF$_REGISTRATION, INSERT on
+    SYS.UMF$_SERVICE, INSERT on SYS.UMF$_TOPOLOGY, INSERT on
+    SYS.WRH$_ACTIVE_SESSION_HISTORY, INSERT on SYS.WRH$_ASM_BAD_DISK,
+    INSERT on SYS.WRH$_ASM_DISKGROUP, INSERT on
+    SYS.WRH$_ASM_DISKGROUP_STAT, INSERT on SYS.WRH$_BG_EVENT_SUMMARY,
+    INSERT on SYS.WRH$_BUFFERED_QUEUES, INSERT on
+    SYS.WRH$_BUFFERED_SUBSCRIBERS, INSERT on
+    SYS.WRH$_BUFFER_POOL_STATISTICS, INSERT on SYS.WRH$_CELL_CONFIG, INSERT
+    on SYS.WRH$_CELL_CONFIG_DETAIL, INSERT on SYS.WRH$_CELL_DB, INSERT on
+    SYS.WRH$_CELL_DISK_SUMMARY, INSERT on SYS.WRH$_CELL_GLOBAL, INSERT on
+    SYS.WRH$_CELL_GLOBAL_SUMMARY, INSERT on SYS.WRH$_CELL_IOREASON, INSERT
+    on SYS.WRH$_CELL_IOREASON_NAME, INSERT on SYS.WRH$_CELL_METRIC_DESC,
+    INSERT on SYS.WRH$_CELL_OPEN_ALERTS, INSERT on SYS.WRH$_CHANNEL_WAITS,
+    INSERT on SYS.WRH$_CLUSTER_INTERCON, INSERT on SYS.WRH$_COMP_IOSTAT,
+    INSERT on SYS.WRH$_CON_SYSMETRIC_HISTORY, INSERT on
+    SYS.WRH$_CON_SYSMETRIC_SUMMARY, INSERT on SYS.WRH$_CON_SYSSTAT, INSERT
+    on SYS.WRH$_CON_SYSTEM_EVENT, INSERT on SYS.WRH$_CON_SYS_TIME_MODEL,
+    INSERT on SYS.WRH$_CR_BLOCK_SERVER, INSERT on
+    SYS.WRH$_CURRENT_BLOCK_SERVER, INSERT on SYS.WRH$_DATAFILE, INSERT on
+    SYS.WRH$_DB_CACHE_ADVICE, INSERT on SYS.WRH$_DISPATCHER, INSERT on
+    SYS.WRH$_DLM_MISC, INSERT on SYS.WRH$_DYN_REMASTER_STATS, INSERT on
+    SYS.WRH$_ENQUEUE_STAT, INSERT on SYS.WRH$_EVENT_HISTOGRAM, INSERT on
+    SYS.WRH$_EVENT_NAME, INSERT on SYS.WRH$_FILEMETRIC_HISTORY, INSERT on
+    SYS.WRH$_FILESTATXS, INSERT on SYS.WRH$_IC_CLIENT_STATS, INSERT on
+    SYS.WRH$_IC_DEVICE_STATS, INSERT on SYS.WRH$_IM_SEG_STAT, INSERT on
+    SYS.WRH$_IM_SEG_STAT_OBJ, INSERT on SYS.WRH$_INSTANCE_RECOVERY, INSERT
+    on SYS.WRH$_INST_CACHE_TRANSFER, INSERT on SYS.WRH$_INTERCONNECT_PINGS,
+    INSERT on SYS.WRH$_IOSTAT_DETAIL, INSERT on SYS.WRH$_IOSTAT_FILETYPE,
+    INSERT on SYS.WRH$_IOSTAT_FILETYPE_NAME, INSERT on
+    SYS.WRH$_IOSTAT_FUNCTION, INSERT on SYS.WRH$_IOSTAT_FUNCTION_NAME,
+    INSERT on SYS.WRH$_JAVA_POOL_ADVICE, INSERT on SYS.WRH$_LATCH, INSERT
+    on SYS.WRH$_LATCH_CHILDREN, INSERT on SYS.WRH$_LATCH_MISSES_SUMMARY,
+    INSERT on SYS.WRH$_LATCH_NAME, INSERT on SYS.WRH$_LATCH_PARENT, INSERT
+    on SYS.WRH$_LIBRARYCACHE, INSERT on SYS.WRH$_LMS_STATS, INSERT on
+    SYS.WRH$_LOG, INSERT on SYS.WRH$_MEMORY_RESIZE_OPS, INSERT on
+    SYS.WRH$_MEMORY_TARGET_ADVICE, INSERT on SYS.WRH$_MEM_DYNAMIC_COMP,
+    INSERT on SYS.WRH$_METRIC_NAME, INSERT on SYS.WRH$_MTTR_TARGET_ADVICE,
+    INSERT on SYS.WRH$_MUTEX_SLEEP, INSERT on SYS.WRH$_MVPARAMETER, INSERT
+    on SYS.WRH$_OPTIMIZER_ENV, INSERT on SYS.WRH$_OSSTAT, INSERT on
+    SYS.WRH$_OSSTAT_NAME, INSERT on SYS.WRH$_PARAMETER, INSERT on
+    SYS.WRH$_PARAMETER_NAME, INSERT on SYS.WRH$_PERSISTENT_QMN_CACHE,
+    INSERT on SYS.WRH$_PERSISTENT_QUEUES, INSERT on
+    SYS.WRH$_PERSISTENT_SUBSCRIBERS, INSERT on SYS.WRH$_PGASTAT, INSERT on
+    SYS.WRH$_PGA_TARGET_ADVICE, INSERT on SYS.WRH$_PLAN_OPERATION_NAME,
+    INSERT on SYS.WRH$_PLAN_OPTION_NAME, INSERT on
+    SYS.WRH$_PROCESS_MEMORY_SUMMARY, INSERT on SYS.WRH$_RECOVERY_PROGRESS,
+    INSERT on SYS.WRH$_REPLICATION_TBL_STATS, INSERT on
+    SYS.WRH$_REPLICATION_TXN_STATS, INSERT on SYS.WRH$_RESOURCE_LIMIT,
+    INSERT on SYS.WRH$_ROWCACHE_SUMMARY, INSERT on
+    SYS.WRH$_RSRC_CONSUMER_GROUP, INSERT on SYS.WRH$_RSRC_METRIC, INSERT on
+    SYS.WRH$_RSRC_PDB_METRIC, INSERT on SYS.WRH$_RSRC_PLAN, INSERT on
+    SYS.WRH$_RULE_SET, INSERT on SYS.WRH$_SEG_STAT, INSERT on
+    SYS.WRH$_SEG_STAT_OBJ, INSERT on SYS.WRH$_SERVICE_NAME, INSERT on
+    SYS.WRH$_SERVICE_STAT, INSERT on SYS.WRH$_SERVICE_WAIT_CLASS, INSERT on
+    SYS.WRH$_SESSMETRIC_HISTORY, INSERT on SYS.WRH$_SESS_SGA_STATS, INSERT
+    on SYS.WRH$_SESS_TIME_STATS, INSERT on SYS.WRH$_SGA, INSERT on
+    SYS.WRH$_SGASTAT, INSERT on SYS.WRH$_SGA_TARGET_ADVICE, INSERT on
+    SYS.WRH$_SHARED_POOL_ADVICE, INSERT on SYS.WRH$_SHARED_SERVER_SUMMARY,
+    INSERT on SYS.WRH$_SQLCOMMAND_NAME, INSERT on SYS.WRH$_SQLSTAT, INSERT
+    on SYS.WRH$_SQLTEXT, INSERT on SYS.WRH$_SQL_BIND_METADATA, INSERT on
+    SYS.WRH$_SQL_PLAN, INSERT on SYS.WRH$_SQL_SUMMARY, INSERT on
+    SYS.WRH$_SQL_WORKAREA_HISTOGRAM, INSERT on SYS.WRH$_STAT_NAME, INSERT
+    on SYS.WRH$_STREAMS_APPLY_SUM, INSERT on SYS.WRH$_STREAMS_CAPTURE,
+    INSERT on SYS.WRH$_STREAMS_POOL_ADVICE, INSERT on
+    SYS.WRH$_SYSMETRIC_HISTORY, INSERT on SYS.WRH$_SYSMETRIC_SUMMARY,
+    INSERT on SYS.WRH$_SYSSTAT, INSERT on SYS.WRH$_SYSTEM_EVENT, INSERT on
+    SYS.WRH$_SYS_TIME_MODEL, INSERT on SYS.WRH$_TABLESPACE, INSERT on
+    SYS.WRH$_TABLESPACE_SPACE_USAGE, INSERT on SYS.WRH$_TABLESPACE_STAT,
+    INSERT on SYS.WRH$_TEMPFILE, INSERT on SYS.WRH$_TEMPSTATXS, INSERT on
+    SYS.WRH$_THREAD, INSERT on SYS.WRH$_TOPLEVELCALL_NAME, INSERT on
+    SYS.WRH$_UNDOSTAT, INSERT on SYS.WRH$_WAITCLASSMETRIC_HISTORY, INSERT
+    on SYS.WRH$_WAITSTAT, INSERT on SYS.WRHS$_CELL_IOREASON_NAME, INSERT on
+    SYS.WRHS$_CELL_METRIC_DESC, INSERT on SYS.WRHS$_DATAFILE, INSERT on
+    SYS.WRHS$_EVENT_NAME, INSERT on SYS.WRHS$_IM_SEG_STAT_OBJ, INSERT on
+    SYS.WRHS$_IOSTAT_FILETYPE_NAME, INSERT on
+    SYS.WRHS$_IOSTAT_FUNCTION_NAME, INSERT on SYS.WRHS$_LATCH_NAME, INSERT
+    on SYS.WRHS$_METRIC_NAME, INSERT on SYS.WRHS$_OPTIMIZER_ENV, INSERT on
+    SYS.WRHS$_OSSTAT_NAME, INSERT on SYS.WRHS$_PARAMETER_NAME, INSERT on
+    SYS.WRHS$_PLAN_OPERATION_NAME, INSERT on SYS.WRHS$_PLAN_OPTION_NAME,
+    INSERT on SYS.WRHS$_SEG_STAT_OBJ, INSERT on SYS.WRHS$_SERVICE_NAME,
+    INSERT on SYS.WRHS$_SQLCOMMAND_NAME, INSERT on SYS.WRHS$_SQLTEXT,
+    INSERT on SYS.WRHS$_SQL_BIND_METADATA, INSERT on SYS.WRHS$_SQL_PLAN,
+    INSERT on SYS.WRHS$_STAT_NAME, INSERT on SYS.WRHS$_TABLESPACE, INSERT
+    on SYS.WRHS$_TEMPFILE, INSERT on SYS.WRHS$_TOPLEVELCALL_NAME, INSERT on
+    SYS.WRI$_ADV_ACTIONS, INSERT on SYS.WRI$_ADV_DEF_PARAMETERS, INSERT on
+    SYS.WRI$_ADV_DIRECTIVE_DEFS, INSERT on
+    SYS.WRI$_ADV_DIRECTIVE_INSTANCES, INSERT on SYS.WRI$_ADV_EXECUTIONS,
+    INSERT on SYS.WRI$_ADV_EXEC_PARAMETERS, INSERT on
+    SYS.WRI$_ADV_FINDINGS, INSERT on SYS.WRI$_ADV_INST_FDG, INSERT on
+    SYS.WRI$_ADV_JOURNAL, INSERT on SYS.WRI$_ADV_MESSAGE_GROUPS, INSERT on
+    SYS.WRI$_ADV_OBJECTS, INSERT on SYS.WRI$_ADV_PARAMETERS, INSERT on
+    SYS.WRI$_ADV_RATIONALE, INSERT on SYS.WRI$_ADV_RECOMMENDATIONS, INSERT
+    on SYS.WRI$_ADV_REC_ACTIONS, INSERT on SYS.WRI$_ADV_SQLT_BINDS, INSERT
+    on SYS.WRI$_ADV_SQLT_PLANS, INSERT on SYS.WRI$_ADV_SQLT_PLAN_HASH,
+    INSERT on SYS.WRI$_ADV_SQLT_PLAN_STATS, INSERT on
+    SYS.WRI$_ADV_SQLT_RTN_PLAN, INSERT on SYS.WRI$_ADV_SQLT_STATISTICS,
+    INSERT on SYS.WRI$_ADV_TASKS, INSERT on SYS.WRI$_ADV_USAGE, INSERT on
+    SYS.WRI$_ALERT_HISTORY, INSERT on SYS.WRI$_OPTSTAT_OPR, INSERT on
+    SYS.WRI$_SEGADV_CNTRLTAB, INSERT on SYS.WRI$_SEGADV_OBJLIST, INSERT on
+    SYS.WRI$_SQLSET_DEFINITIONS, INSERT on SYS.WRI$_SQLSET_REFERENCES,
+    INSERT on SYS.WRI$_SQLTEXT_REFCOUNT, INSERT on SYS.WRM$_ACTIVE_PDBS,
+    INSERT on SYS.WRM$_BASELINE, INSERT on SYS.WRM$_BASELINE_DETAILS,
+    INSERT on SYS.WRM$_BASELINE_TEMPLATE, INSERT on SYS.WRM$_COLORED_SQL,
+    INSERT on SYS.WRM$_DATABASE_INSTANCE, INSERT on SYS.WRM$_PDB_INSTANCE,
+    INSERT on SYS.WRM$_PDB_IN_SNAP, INSERT on SYS.WRM$_SNAPSHOT, INSERT on
+    SYS.WRM$_SNAPSHOT_DETAILS, INSERT on SYS.WRM$_SNAP_ERROR, INSERT on
+    SYS.WRM$_WR_CONTROL, INSERT on SYS.WRM$_WR_SETTINGS, INSERT on
+    SYS.WRM$_WR_USAGE, INSERT on SYS.WRMS$_SNAPSHOT, UPDATE on
+    SYS.UMF$_LINK, UPDATE on SYS.UMF$_REGISTRATION, UPDATE on
+    SYS.UMF$_SERVICE, UPDATE on SYS.UMF$_TOPOLOGY, UPDATE on
+    SYS.WRH$_ACTIVE_SESSION_HISTORY, UPDATE on SYS.WRH$_ASM_BAD_DISK,
+    UPDATE on SYS.WRH$_ASM_DISKGROUP, UPDATE on
+    SYS.WRH$_ASM_DISKGROUP_STAT, UPDATE on SYS.WRH$_BG_EVENT_SUMMARY,
+    UPDATE on SYS.WRH$_BUFFERED_QUEUES, UPDATE on
+    SYS.WRH$_BUFFERED_SUBSCRIBERS, UPDATE on
+    SYS.WRH$_BUFFER_POOL_STATISTICS, UPDATE on SYS.WRH$_CELL_CONFIG, UPDATE
+    on SYS.WRH$_CELL_CONFIG_DETAIL, UPDATE on SYS.WRH$_CELL_DB, UPDATE on
+    SYS.WRH$_CELL_DISK_SUMMARY, UPDATE on SYS.WRH$_CELL_GLOBAL, UPDATE on
+    SYS.WRH$_CELL_GLOBAL_SUMMARY, UPDATE on SYS.WRH$_CELL_IOREASON, UPDATE
+    on SYS.WRH$_CELL_IOREASON_NAME, UPDATE on SYS.WRH$_CELL_METRIC_DESC,
+    UPDATE on SYS.WRH$_CELL_OPEN_ALERTS, UPDATE on SYS.WRH$_CHANNEL_WAITS,
+    UPDATE on SYS.WRH$_CLUSTER_INTERCON, UPDATE on SYS.WRH$_COMP_IOSTAT,
+    UPDATE on SYS.WRH$_CON_SYSMETRIC_HISTORY, UPDATE on
+    SYS.WRH$_CON_SYSMETRIC_SUMMARY, UPDATE on SYS.WRH$_CON_SYSSTAT, UPDATE
+    on SYS.WRH$_CON_SYSTEM_EVENT, UPDATE on SYS.WRH$_CON_SYS_TIME_MODEL,
+    UPDATE on SYS.WRH$_CR_BLOCK_SERVER, UPDATE on
+    SYS.WRH$_CURRENT_BLOCK_SERVER, UPDATE on SYS.WRH$_DATAFILE, UPDATE on
+    SYS.WRH$_DB_CACHE_ADVICE, UPDATE on SYS.WRH$_DISPATCHER, UPDATE on
+    SYS.WRH$_DLM_MISC, UPDATE on SYS.WRH$_DYN_REMASTER_STATS, UPDATE on
+    SYS.WRH$_ENQUEUE_STAT, UPDATE on SYS.WRH$_EVENT_HISTOGRAM, UPDATE on
+    SYS.WRH$_EVENT_NAME, UPDATE on SYS.WRH$_FILEMETRIC_HISTORY, UPDATE on
+    SYS.WRH$_FILESTATXS, UPDATE on SYS.WRH$_IC_CLIENT_STATS, UPDATE on
+    SYS.WRH$_IC_DEVICE_STATS, UPDATE on SYS.WRH$_IM_SEG_STAT, UPDATE on
+    SYS.WRH$_IM_SEG_STAT_OBJ, UPDATE on SYS.WRH$_INSTANCE_RECOVERY, UPDATE
+    on SYS.WRH$_INST_CACHE_TRANSFER, UPDATE on SYS.WRH$_INTERCONNECT_PINGS,
+    UPDATE on SYS.WRH$_IOSTAT_DETAIL, UPDATE on SYS.WRH$_IOSTAT_FILETYPE,
+    UPDATE on SYS.WRH$_IOSTAT_FILETYPE_NAME, UPDATE on
+    SYS.WRH$_IOSTAT_FUNCTION, UPDATE on SYS.WRH$_IOSTAT_FUNCTION_NAME,
+    UPDATE on SYS.WRH$_JAVA_POOL_ADVICE, UPDATE on SYS.WRH$_LATCH, UPDATE
+    on SYS.WRH$_LATCH_CHILDREN, UPDATE on SYS.WRH$_LATCH_MISSES_SUMMARY,
+    UPDATE on SYS.WRH$_LATCH_NAME, UPDATE on SYS.WRH$_LATCH_PARENT, UPDATE
+    on SYS.WRH$_LIBRARYCACHE, UPDATE on SYS.WRH$_LMS_STATS, UPDATE on
+    SYS.WRH$_LOG, UPDATE on SYS.WRH$_MEMORY_RESIZE_OPS, UPDATE on
+    SYS.WRH$_MEMORY_TARGET_ADVICE, UPDATE on SYS.WRH$_MEM_DYNAMIC_COMP,
+    UPDATE on SYS.WRH$_METRIC_NAME, UPDATE on SYS.WRH$_MTTR_TARGET_ADVICE,
+    UPDATE on SYS.WRH$_MUTEX_SLEEP, UPDATE on SYS.WRH$_MVPARAMETER, UPDATE
+    on SYS.WRH$_OPTIMIZER_ENV, UPDATE on SYS.WRH$_OSSTAT, UPDATE on
+    SYS.WRH$_OSSTAT_NAME, UPDATE on SYS.WRH$_PARAMETER, UPDATE on
+    SYS.WRH$_PARAMETER_NAME, UPDATE on SYS.WRH$_PERSISTENT_QMN_CACHE,
+    UPDATE on SYS.WRH$_PERSISTENT_QUEUES, UPDATE on
+    SYS.WRH$_PERSISTENT_SUBSCRIBERS, UPDATE on SYS.WRH$_PGASTAT, UPDATE on
+    SYS.WRH$_PGA_TARGET_ADVICE, UPDATE on SYS.WRH$_PLAN_OPERATION_NAME,
+    UPDATE on SYS.WRH$_PLAN_OPTION_NAME, UPDATE on
+    SYS.WRH$_PROCESS_MEMORY_SUMMARY, UPDATE on SYS.WRH$_RECOVERY_PROGRESS,
+    UPDATE on SYS.WRH$_REPLICATION_TBL_STATS, UPDATE on
+    SYS.WRH$_REPLICATION_TXN_STATS, UPDATE on SYS.WRH$_RESOURCE_LIMIT,
+    UPDATE on SYS.WRH$_ROWCACHE_SUMMARY, UPDATE on
+    SYS.WRH$_RSRC_CONSUMER_GROUP, UPDATE on SYS.WRH$_RSRC_METRIC, UPDATE on
+    SYS.WRH$_RSRC_PDB_METRIC, UPDATE on SYS.WRH$_RSRC_PLAN, UPDATE on
+    SYS.WRH$_RULE_SET, UPDATE on SYS.WRH$_SEG_STAT, UPDATE on
+    SYS.WRH$_SEG_STAT_OBJ, UPDATE on SYS.WRH$_SERVICE_NAME, UPDATE on
+    SYS.WRH$_SERVICE_STAT, UPDATE on SYS.WRH$_SERVICE_WAIT_CLASS, UPDATE on
+    SYS.WRH$_SESSMETRIC_HISTORY, UPDATE on SYS.WRH$_SESS_SGA_STATS, UPDATE
+    on SYS.WRH$_SESS_TIME_STATS, UPDATE on SYS.WRH$_SGA, UPDATE on
+    SYS.WRH$_SGASTAT, UPDATE on SYS.WRH$_SGA_TARGET_ADVICE, UPDATE on
+    SYS.WRH$_SHARED_POOL_ADVICE, UPDATE on SYS.WRH$_SHARED_SERVER_SUMMARY,
+    UPDATE on SYS.WRH$_SQLCOMMAND_NAME, UPDATE on SYS.WRH$_SQLSTAT, UPDATE
+    on SYS.WRH$_SQLTEXT, UPDATE on SYS.WRH$_SQL_BIND_METADATA, UPDATE on
+    SYS.WRH$_SQL_PLAN, UPDATE on SYS.WRH$_SQL_SUMMARY, UPDATE on
+    SYS.WRH$_SQL_WORKAREA_HISTOGRAM, UPDATE on SYS.WRH$_STAT_NAME, UPDATE
+    on SYS.WRH$_STREAMS_APPLY_SUM, UPDATE on SYS.WRH$_STREAMS_CAPTURE,
+    UPDATE on SYS.WRH$_STREAMS_POOL_ADVICE, UPDATE on
+    SYS.WRH$_SYSMETRIC_HISTORY, UPDATE on SYS.WRH$_SYSMETRIC_SUMMARY,
+    UPDATE on SYS.WRH$_SYSSTAT, UPDATE on SYS.WRH$_SYSTEM_EVENT, UPDATE on
+    SYS.WRH$_SYS_TIME_MODEL, UPDATE on SYS.WRH$_TABLESPACE, UPDATE on
+    SYS.WRH$_TABLESPACE_SPACE_USAGE, UPDATE on SYS.WRH$_TABLESPACE_STAT,
+    UPDATE on SYS.WRH$_TEMPFILE, UPDATE on SYS.WRH$_TEMPSTATXS, UPDATE on
+    SYS.WRH$_THREAD, UPDATE on SYS.WRH$_TOPLEVELCALL_NAME, UPDATE on
+    SYS.WRH$_UNDOSTAT, UPDATE on SYS.WRH$_WAITCLASSMETRIC_HISTORY, UPDATE
+    on SYS.WRH$_WAITSTAT, UPDATE on SYS.WRHS$_CELL_IOREASON_NAME, UPDATE on
+    SYS.WRHS$_CELL_METRIC_DESC, UPDATE on SYS.WRHS$_DATAFILE, UPDATE on
+    SYS.WRHS$_EVENT_NAME, UPDATE on SYS.WRHS$_IM_SEG_STAT_OBJ, UPDATE on
+    SYS.WRHS$_IOSTAT_FILETYPE_NAME, UPDATE on
+    SYS.WRHS$_IOSTAT_FUNCTION_NAME, UPDATE on SYS.WRHS$_LATCH_NAME, UPDATE
+    on SYS.WRHS$_METRIC_NAME, UPDATE on SYS.WRHS$_OPTIMIZER_ENV, UPDATE on
+    SYS.WRHS$_OSSTAT_NAME, UPDATE on SYS.WRHS$_PARAMETER_NAME, UPDATE on
+    SYS.WRHS$_PLAN_OPERATION_NAME, UPDATE on SYS.WRHS$_PLAN_OPTION_NAME,
+    UPDATE on SYS.WRHS$_SEG_STAT_OBJ, UPDATE on SYS.WRHS$_SERVICE_NAME,
+    UPDATE on SYS.WRHS$_SQLCOMMAND_NAME, UPDATE on SYS.WRHS$_SQLTEXT,
+    UPDATE on SYS.WRHS$_SQL_BIND_METADATA, UPDATE on SYS.WRHS$_SQL_PLAN,
+    UPDATE on SYS.WRHS$_STAT_NAME, UPDATE on SYS.WRHS$_TABLESPACE, UPDATE
+    on SYS.WRHS$_TEMPFILE, UPDATE on SYS.WRHS$_TOPLEVELCALL_NAME, UPDATE on
+    SYS.WRI$_ADV_ACTIONS, UPDATE on SYS.WRI$_ADV_DEF_PARAMETERS, UPDATE on
+    SYS.WRI$_ADV_DIRECTIVE_DEFS, UPDATE on
+    SYS.WRI$_ADV_DIRECTIVE_INSTANCES, UPDATE on SYS.WRI$_ADV_EXECUTIONS,
+    UPDATE on SYS.WRI$_ADV_EXEC_PARAMETERS, UPDATE on
+    SYS.WRI$_ADV_FINDINGS, UPDATE on SYS.WRI$_ADV_INST_FDG, UPDATE on
+    SYS.WRI$_ADV_JOURNAL, UPDATE on SYS.WRI$_ADV_MESSAGE_GROUPS, UPDATE on
+    SYS.WRI$_ADV_OBJECTS, UPDATE on SYS.WRI$_ADV_PARAMETERS, UPDATE on
+    SYS.WRI$_ADV_RATIONALE, UPDATE on SYS.WRI$_ADV_RECOMMENDATIONS, UPDATE
+    on SYS.WRI$_ADV_REC_ACTIONS, UPDATE on SYS.WRI$_ADV_SQLT_BINDS, UPDATE
+    on SYS.WRI$_ADV_SQLT_PLANS, UPDATE on SYS.WRI$_ADV_SQLT_PLAN_HASH,
+    UPDATE on SYS.WRI$_ADV_SQLT_PLAN_STATS, UPDATE on
+    SYS.WRI$_ADV_SQLT_RTN_PLAN, UPDATE on SYS.WRI$_ADV_SQLT_STATISTICS,
+    UPDATE on SYS.WRI$_ADV_TASKS, UPDATE on SYS.WRI$_ADV_USAGE, UPDATE on
+    SYS.WRI$_ALERT_HISTORY, UPDATE on SYS.WRI$_OPTSTAT_OPR, UPDATE on
+    SYS.WRI$_SEGADV_CNTRLTAB, UPDATE on SYS.WRI$_SEGADV_OBJLIST, UPDATE on
+    SYS.WRI$_SQLSET_DEFINITIONS, UPDATE on SYS.WRI$_SQLSET_REFERENCES,
+    UPDATE on SYS.WRI$_SQLTEXT_REFCOUNT, UPDATE on SYS.WRM$_ACTIVE_PDBS,
+    UPDATE on SYS.WRM$_BASELINE, UPDATE on SYS.WRM$_BASELINE_DETAILS,
+    UPDATE on SYS.WRM$_BASELINE_TEMPLATE, UPDATE on SYS.WRM$_COLORED_SQL,
+    UPDATE on SYS.WRM$_DATABASE_INSTANCE, UPDATE on SYS.WRM$_PDB_INSTANCE,
+    UPDATE on SYS.WRM$_PDB_IN_SNAP, UPDATE on SYS.WRM$_SNAPSHOT, UPDATE on
+    SYS.WRM$_SNAPSHOT_DETAILS, UPDATE on SYS.WRM$_SNAP_ERROR, UPDATE on
+    SYS.WRM$_WR_CONTROL, UPDATE on SYS.WRM$_WR_SETTINGS, UPDATE on
+    SYS.WRM$_WR_USAGE, UPDATE on SYS.WRMS$_SNAPSHOT
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Users with these privileges can directly modify objects in the SYS, DVSYS, or LBACSYS schemas. Manipulating these system objects may allow security protections to be circumvented or otherwise interfere with normal operation of the database. </td><td></td></tr>
+</table>
+<h3> User Impersonation </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.USER </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No grants of EXECUTE on restricted packages </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> These PL/SQL packages (DBMS_SCHEDULER, DBMS_SYS_SQL) allow for execution of SQL code or external jobs using the identity of a different user. Access should be strictly limited and granted only to users with a legitimate need for this functionality. </td><td></td></tr>
+</table>
+<h3> Data Exfiltration </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.EXFIL </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No grants of EXECUTE on restricted packages </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> These PL/SQL packages (DBMS_BACKUP_RESTORE) can send data from the database using the network or file system. Access should be granted only to users with a legitimate need for this functionality. </td><td></td></tr>
+</table>
+<h3> System Privileges Granted to PUBLIC </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.SYSPUB </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No grants of system privileges to PUBLIC </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Privileges granted to PUBLIC are available to all users. This generally should include few, if any, system privileges since these will not be needed by ordinary users who are not administrators. </td><td></td></tr>
+</table>
+<h3> Roles Granted to PUBLIC </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.ROLEPUB </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No grants of roles to PUBLIC </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Roles granted to PUBLIC are available to all users. Most roles contain privileges that are not appropriate for all users. </td><td></td></tr>
+</table>
+<h3> Column Privileges Granted to PUBLIC </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.COLPUB </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No grants of column privileges to PUBLIC </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Privileges granted to PUBLIC are available to all users. This should include column privileges only for data that is intended to be accessible to everyone. </td><td></td></tr>
+</table>
+<h3> DBA Role </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.DBA </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 1 grant of DBA role </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of DBA role:
+
+SYSTEM: DBA
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> The DBA role is very powerful and can be used to bypass many security protections. It should be granted to only a small number of trusted administrators. Furthermore, each trusted user should have an individual account for accountability reasons. As with any powerful role, avoid granting the DBA role with admin option unless absolutely necessary. </td><td></td></tr>
+</table>
+<h3> Other Powerful Roles </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.BIGROLES </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 8 grants of powerful roles (1 with admin option) </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grants of AQ_ADMINISTRATOR_ROLE, EM_EXPRESS_ALL, EXP_FULL_DATABASE,
+    IMP_FULL_DATABASE, OEM_MONITOR roles:
+
+SYSTEM: AQ_ADMINISTRATOR_ROLE(*)
+SYSTEM &lt;- DBA: EM_EXPRESS_ALL, EXP_FULL_DATABASE, IMP_FULL_DATABASE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_EXP_FULL_DATABASE: EXP_FULL_DATABASE
+SYSTEM &lt;- DBA &lt;- DATAPUMP_IMP_FULL_DATABASE: EXP_FULL_DATABASE,
+    IMP_FULL_DATABASE
+
+(no users) &lt;- GSMADMIN_ROLE: AQ_ADMINISTRATOR_ROLE
+
+(*) = granted with admin option
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Like the DBA role, these roles (AQ_ADMINISTRATOR_ROLE, EM_EXPRESS_ALL, EXP_FULL_DATABASE, IMP_FULL_DATABASE, OEM_MONITOR) contain powerful privileges that can be used to bypass security protections. They should be granted only to a small number of trusted administrators. </td><td></td></tr>
+</table>
+<h3> Java Permissions </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.JAVA </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 5 users or roles with Java permission. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Grantee: DBJAVASCRIPT
+GRANT, Name: oracle.DbmsJavaScriptUser, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+
+Grantee: EJBCLIENT
+GRANT, Name: *, Type Schema: SYS, Type Name: java.net.SocketPermission,
+    Action: connect,resolve
+GRANT, Name: createClassLoader, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: getClassLoader, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+
+Grantee: JMXSERVER
+GRANT, Name: *, Type Schema: SYS, Type Name: java.net.SocketPermission,
+    Action: accept,connect,listen,resolve
+GRANT, Name: control, Type Schema: SYS, Type Name:
+    java.util.logging.LoggingPermission
+GRANT, Name: monitor, Type Schema: SYS, Type Name:
+    java.lang.management.ManagementPermission
+GRANT, Name: setContextClassLoader, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: createMBeanServer, Type Schema: SYS, Type Name:
+    javax.management.MBeanServerPermission
+GRANT, Name: control, Type Schema: SYS, Type Name:
+    java.lang.management.ManagementPermission
+GRANT, Name: javax.net.ssl.*, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: read,write
+GRANT, Name: https.proxyHost, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: read,write
+GRANT, Name: javax.net.debug, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: read,write
+GRANT, Name: java.rmi.server.randomIDs, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: read,write
+GRANT, Name: com.sun.jmx.*, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: read,write
+GRANT, Name: com.sun.management.*, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: read,write
+GRANT, Name: *, Type Schema: SYS, Type Name:
+    javax.management.MBeanPermission, Action: *
+GRANT, Name: javavm/lib/management/*, Type Schema: SYS, Type Name:
+    java.io.FilePermission, Action: read
+GRANT, Name: javavm/lib/management/jmxremote.access, Type Schema: SYS, Type
+    Name: java.io.FilePermission, Action: read
+GRANT, Name: javavm/lib/management/management.properties, Type Schema: SYS,
+    Type Name: java.io.FilePermission, Action: read
+GRANT, Name: createAccessControlContext, Type Schema: SYS, Type Name:
+    java.security.SecurityPermission
+GRANT, Name: accessClassInPackage.sun.management.*, Type Schema: SYS, Type
+    Name: java.lang.RuntimePermission
+
+Grantee: PUBLIC
+GRANT, Name: DUMMY, Type Schema: SYS, Type Name:
+    oracle.aurora.security.JServerPermission
+GRANT, Name: *, Type Schema: SYS, Type Name: java.util.PropertyPermission,
+    Action: read
+GRANT, Name: user.language, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: write
+GRANT, Name: exitVM, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: createSecurityManager, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: modifyThread, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: modifyThreadGroup, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: getenv.TNS_ADMIN, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: preferences, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+GRANT, Name: LoadClassInPackage.*, Type Schema: SYS, Type Name:
+    oracle.aurora.security.JServerPermission
+GRANT, Name: oracle.net.tns_admin, Type Schema: SYS, Type Name:
+    java.util.PropertyPermission, Action: write
+GRANT, Name: getenv.ORACLE_HOME, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+RESTRICT, Name: LoadClassInPackage.oracle.jdbc.*, Type Schema: SYS, Type
+    Name: oracle.aurora.security.JServerPermission
+RESTRICT, Name: LoadClassInPackage.oracle.aurora.*, Type Schema: SYS, Type
+    Name: oracle.aurora.security.JServerPermission
+RESTRICT, Name: LoadClassInPackage.java.*, Type Schema: SYS, Type Name:
+    oracle.aurora.security.JServerPermission
+RESTRICT, Name: loadLibrary.*, Type Schema: SYS, Type Name:
+    java.lang.RuntimePermission
+RESTRICT, Name: 0:java.lang.RuntimePermission#loadLibrary.*, Type Schema:
+    SYS, Type Name: oracle.aurora.rdbms.security.PolicyTablePermission
+RESTRICT, Name: LoadClassInPackage.oracle.ord.*, Type Schema: SYS, Type
+    Name: oracle.aurora.security.JServerPermission
+
+Grantee: SYSTEM
+GRANT, Name: &lt;&lt;ALL FILES&gt;&gt;, Type Schema: SYS, Type Name:
+    java.io.FilePermission, Action: read
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Java permission grants control the ability of database users to execute Java classes within the database server. A database user executing Java code must have both Java security permissions and database privileges to access resources within the database. These resources include database resources, such as tables and PL/SQL packages, operating system resources, such as files and sockets, Oracle JVM classes, and user-loaded classes. Make sure that these permissions are limited to the minimum required by each user. </td><td></td></tr>
+</table>
+<h3> Users with Administrative Privileges </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> PRIV.ADMIN </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 4 users granted administrative privileges. Found 0 administrative privileges not granted to any user. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+SYSDBA    (1): SYS
+SYSOPER   (1): SYS
+SYSBACKUP (1): SYSBACKUP
+SYSDG     (1): SYSDG
+SYSKM     (1): SYSKM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Administrative privileges allow a user to perform maintenance operations, including some that may occur while the database is not open. The SYSDBA privilege allows the user to run as SYS and perform virtually all privileged operations. Starting with Oracle Database 12.1, less powerful administrative privileges were introduced to allow users to perform common administrative tasks with less than full SYSDBA privileges. To achieve the benefit of this separation of duty, each of these administrative privileges should be granted to at least one user account. </td><td></td></tr>
+</table>
+<h2><a name="Authorization_Control">Authorization Control</a></h2>
+<h3> Database Vault </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUTH.DV </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Database Vault is not enabled. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Database Vault provides for configurable policies to control the actions of privileged administrative users, in order to protect against insider threats, stolen credentials, and human error. Data realms prevent unauthorized access to sensitive data objects, even by users with system privileges. Command rules limit the SQL commands and options that administrators can execute. </td><td></td></tr>
+</table>
+<h3> Privilege Analysis </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUTH.PRIV </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No privilege analysis policies found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+
+Users with EXECUTE on SYS.DBMS_PRIVILEGE_CAPTURE: SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Privilege Analysis records the privileges used during a real or simulated workload. After collecting data about the privileges that are actually used, this information can be used to revoke privilege grants that are no longer needed. </td><td></td></tr>
+</table>
+<h2><a name="Data_Encryption">Data Encryption</a></h2>
+<h3> Transparent Data Encryption </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CRYPT.TDE </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No encrypted tablespaces found. No encrypted columns found. Examined 1 initialization parameter. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+ENCRYPT_NEW_TABLESPACES=CLOUD_ONLY. Recommended value is ALWAYS.
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Encryption of some sensitive data is a requirement in certain regulated environments. Transparent Data Encryption automatically encrypts data as it is stored and decrypts it upon retrieval. This protects sensitive data from attacks that bypass the database to read data files directly. Encryption keys may be stored in wallets on the database server itself, or stored remotely in Oracle Key Vault for improved security. The ENCRYPT_NEW_TABLESPACES parameter ensures that TDE tablespace encryption is applied to all newly created tablespaces. Setting this parameter to ALWAYS is recommended in order to protect all data regardless of the options specified when the tablespace is created. </td><td></td></tr>
+</table>
+<h3> Encryption Key Wallet </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CRYPT.WALLET </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 1 wallet. No wallets are stored in the data file directory. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Wallet location: /opt/oracle/admin/ORCLCDB/wallet
+Wallet type: FILE
+Status: NOT_AVAILABLE
+Keystore type: UNKNOWN
+Wallet order: SINGLE
+
+Data file directory: /opt/oracle/product/12.2.0.1/db_1/dbs
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Wallets are encrypted files used to store encryption keys, passwords, and other sensitive data. Wallet files should not be stored in the same directory with database data files, to avoid accidentally creating backups that include both encrypted data files and the wallet containing the master key protecting those files. For maximum separation of keys and data, consider storing encryption keys in Oracle Key Vault instead of wallet files. </td><td></td></tr>
+</table>
+<h2><a name="Fine-Grained_Access_Control">Fine-Grained Access Control</a></h2>
+<h3> Data Redaction </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> ACCESS.REDACT </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No data redaction policies found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+
+Users with EXEMPT REDACTION POLICY privilege: SYSTEM
+Users with EXECUTE on SYS.DBMS_REDACT: SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Data Redaction automatically masks sensitive data found in the results of a database query. The data is masked immediately before it is returned as part of the result set, so it does not interfere with any conditions specified as part of the query. Access by users with the EXEMPT REDACTION POLICY privilege will not be affected by the redaction policy. Users who can execute the DBMS_REDACT package are able to create and modify redaction policies. Also consider the use of Oracle Data Masking and Subsetting to permanently mask sensitive data when making copies for test or development use. </td><td></td></tr>
+</table>
+<h3> Virtual Private Database </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> ACCESS.VPD </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No VPD policies found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+
+Users with EXEMPT ACCESS POLICY privilege: (none)
+Users with EXECUTE on SYS.DBMS_RLS: SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Virtual Private Database (VPD) allows for fine-grained control over which rows and columns of a table are visible to a SQL statement. Access control using VPD limits each database session to only the specific data it should be able to access. Access by users with the EXEMPT ACCESS POLICY privilege will not be affected by VPD policies. Users who can execute the DBMS_RLS package are able to create and modify these policies. </td><td></td></tr>
+</table>
+<h3> Real Application Security </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> ACCESS.RAS </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No RAS policies found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+
+Users with EXEMPT ACCESS POLICY privilege: (none)
+Users with ADMIN_ANY_SEC_POLICY privilege: SYSTEM
+Users with ADMIN_SEC_POLICY privilege: DBSFWUSER, SYSTEM
+Users with APPLY_SEC_POLICY privilege: (none)
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Like Virtual Private Database, Real Application Security (RAS) provides fine-grained control over the rows and columns of a table that are visible to a SQL statement. Specification of RAS data access policies uses a declarative syntax based on access control lists. Access by users with the EXEMPT ACCESS POLICY privilege will not be affected by RAS access policies. Users with ADMIN_SEC_POLICY and APPLY_SEC_POLICY privileges are able to create and modify these policies. </td><td></td></tr>
+</table>
+<h3> Label Security </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> ACCESS.OLS </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Label Security is not enabled. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Oracle Label Security provides the ability to tag data with a data label or a data classification. Access to sensitive data is controlled by comparing the data label with the requesting user's label or security clearance. A user label or security clearance can be thought of as an extension to standard database privileges and roles. Access by users with the EXEMPT ACCESS POLICY privilege will not be affected by the Label Security policies. Each policy has a corresponding role; users who have this role are able to administer the policy. </td><td></td></tr>
+</table>
+<h3> Transparent Sensitive Data Protection </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> ACCESS.TSDP </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No sensitive types and columns found.  Found 0 TSDP policies. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Policies: (none)
+
+Users with EXECUTE on SYS.DBMS_TSDP_MANAGE: (none)
+Users with EXECUTE on SYS.DBMS_TSDP_PROTECT: (none)
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Transparent Sensitive Data Protection (TSDP), introduced in Oracle Database 12.1, allows a data type to be associated with each column that contains sensitive data. TSDP can then apply various data security features to all instances of a particular type so that protection is uniform and consistent. Data from columns marked as sensitive is also automatically redacted in the database audit trail and trace logs. Users who can execute the DBMS_TSDP_MANAGE and DBMS_TSDP_PROTECT packages are able to manage sensitive data types and the protection actions that are applied to them. </td><td></td></tr>
+</table>
+<h2><a name="Auditing">Auditing</a></h2>
+<h3> Audit Records </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.RECORDS </td>
+</tr><tr>
+<td class="sev5" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Severe Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Examined 3 audit trails. Found no audit records. Found 1 error in audit initialization parameters. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Traditional Audit Trail: No records found
+FGA Audit Trail: No records found
+Unified Audit Trail: No records found
+
+AUDIT_FILE_DEST=/opt/oracle/admin/ORCLCDB/adump
+AUDIT_SYSLOG_LEVEL is not set.
+AUDIT_TRAIL=NONE. Recommended value is OS, DB, DB,EXTENDED, XML, or
+    XML,EXTENDED.
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Auditing is an essential component for securing any system. The audit trail allows for monitoring the activities of highly privileged users. For any attack that exploits gaps in other security policies, auditing cannot prevent the attack but it forms the critical last line of defense by detecting the malicious activity. Sending audit data to a remote system is recommended in order to prevent any possible tampering with the audit records. The AUDIT_SYSLOG_LEVEL parameter can be set to send an abbreviated version of some audit records to a remote syslog collector. A better solution is to use Oracle Audit Vault and Database Firewall to centrally collect full audit records from multiple databases. </td><td></td></tr>
+</table>
+<h3> Statement Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.STMT </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Auditing enabled for 17 statements. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Unified Audit (17): ALTER DATABASE LINK, ALTER PLUGGABLE DATABASE, ALTER
+    PROFILE, ALTER ROLE, ALTER USER, CREATE DATABASE LINK, CREATE
+    DIRECTORY, CREATE PLUGGABLE DATABASE, CREATE PROFILE, CREATE ROLE, DROP
+    DATABASE LINK, DROP DIRECTORY, DROP PLUGGABLE DATABASE, DROP PROFILE,
+    DROP ROLE, LOGON, SET ROLE
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> This finding shows the SQL statements that are audited by enabled audit policies. </td><td></td></tr>
+</table>
+<h3> Object Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.OBJ </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Auditing enabled for 214 objects. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Traditional Audit:
+Schema DVF (1): DBMS_MACSEC_FUNCTION
+Schema DVSYS (91): AUDIT_TRAIL$, AUDIT_TRAIL$_SEQ, CODE$, CODE$_SEQ,
+    COMMAND_RULE$, COMMAND_RULE$_SEQ, DBA_DV_CODE, DBA_DV_COMMAND_RULE,
+    DBA_DV_FACTOR, DBA_DV_FACTOR_LINK, DBA_DV_FACTOR_TYPE, DBA_DV_IDENTITY,
+    DBA_DV_IDENTITY_MAP, DBA_DV_MAC_POLICY, DBA_DV_MAC_POLICY_FACTOR,
+    DBA_DV_POLICY_LABEL, DBA_DV_REALM, DBA_DV_REALM_AUTH,
+    DBA_DV_REALM_OBJECT, DBA_DV_ROLE, DBA_DV_RULE, DBA_DV_RULE_SET,
+    DBA_DV_RULE_SET_RULE, DBMS_MACADM, DBMS_MACAUD, DBMS_MACOLS,
+    DBMS_MACOLS_SESSION, DBMS_MACSEC, DBMS_MACSEC_ROLES, DBMS_MACSEC_RULES,
+    DBMS_MACUTL, DV$CODE, DV$COMMAND_RULE, DV$FACTOR, DV$FACTOR_LINK,
+    DV$FACTOR_TYPE, DV$IDENTITY, DV$IDENTITY_MAP, DV$MAC_POLICY,
+    DV$MAC_POLICY_FACTOR, DV$OLS_POLICY, DV$OLS_POLICY_LABEL,
+    DV$POLICY_LABEL, DV$REALM, DV$REALM_AUTH, DV$REALM_OBJECT, DV$ROLE,
+    DV$RULE, DV$RULE_SET, DV$RULE_SET_RULE, DV$SYS_GRANTEE, DV$SYS_OBJECT,
+    DV$SYS_OBJECT_OWNER, EVALUATE_RULE_SET, FACTOR$, FACTOR$_SEQ,
+    FACTOR_LINK$, FACTOR_LINK$_SEQ, FACTOR_TYPE$, FACTOR_TYPE$_SEQ,
+    GET_FACTOR, GET_TRUST_LEVEL, GET_TRUST_LEVEL_FOR_IDENTITY, IDENTITY$,
+    IDENTITY$_SEQ, IDENTITY_MAP$, IDENTITY_MAP$_SEQ, MACOLS_INIT_SESSION,
+    MAC_POLICY$, MAC_POLICY$_SEQ, MAC_POLICY_FACTOR$,
+    MAC_POLICY_FACTOR$_SEQ, POLICY_LABEL$, POLICY_LABEL$_SEQ,
+    PREDICATE_TRUE, REALM$, REALM$_SEQ, REALM_AUTH$, REALM_AUTH$_SEQ,
+    REALM_OBJECT$, REALM_OBJECT$_SEQ, ROLE$, ROLE$_SEQ, ROLE_IS_ENABLED,
+    RULE$, RULE$_SEQ, RULE_SET$, RULE_SET$_SEQ, RULE_SET_RULE$,
+    RULE_SET_RULE$_SEQ, SET_FACTOR
+Schema LBACSYS (122): ALL_SA_AUDIT_OPTIONS, ALL_SA_COMPARTMENTS,
+    ALL_SA_DATA_LABELS, ALL_SA_GROUPS, ALL_SA_GROUP_HIERARCHY,
+    ALL_SA_LABELS, ALL_SA_LEVELS, ALL_SA_POLICIES, ALL_SA_PROGRAMS,
+    ALL_SA_PROG_PRIVS, ALL_SA_SCHEMA_POLICIES, ALL_SA_TABLE_POLICIES,
+    ALL_SA_USERS, ALL_SA_USER_COMPARTMENTS, ALL_SA_USER_GROUPS,
+    ALL_SA_USER_LABELS, ALL_SA_USER_LEVELS, ALL_SA_USER_PRIVS,
+    DBA_LBAC_DATA_LABELS, DBA_LBAC_LABELS, DBA_LBAC_LABEL_TAGS,
+    DBA_LBAC_POLICIES, DBA_LBAC_SCHEMA_POLICIES, DBA_LBAC_TABLE_POLICIES,
+    DBA_OLS_AUDIT_OPTIONS, DBA_SA_AUDIT_OPTIONS, DBA_SA_COMPARTMENTS,
+    DBA_SA_DATA_LABELS, DBA_SA_GROUPS, DBA_SA_GROUP_HIERARCHY,
+    DBA_SA_LABELS, DBA_SA_LEVELS, DBA_SA_POLICIES, DBA_SA_PROGRAMS,
+    DBA_SA_PROG_PRIVS, DBA_SA_SCHEMA_POLICIES, DBA_SA_TABLE_POLICIES,
+    DBA_SA_USERS, DBA_SA_USER_COMPARTMENTS, DBA_SA_USER_GROUPS,
+    DBA_SA_USER_LABELS, DBA_SA_USER_LEVELS, DBA_SA_USER_PRIVS,
+    LBAC$CACHE_LIBT, LBAC$EVENT_LIBT, LBAC$LABEL_LIBT, LBAC$LABLT_LIBT,
+    LBAC$PRIVS_LIBT, LBAC$SA, LBAC$SA_LABELS, LBAC$STD_LIBT,
+    LBAC$TYPE_LIBT, LBAC$USER_LIBT, LBAC_BIN_LABEL, LBAC_CACHE,
+    LBAC_ERRORS, LBAC_EVENTS, LBAC_FRAME_GRANT, LBAC_LABEL,
+    LBAC_LABEL_LIST, LBAC_NAME_LIST, LBAC_POLICY_ADMIN, LBAC_PRIVS,
+    LBAC_RLS, LBAC_SERVICES, LBAC_SESSION, LBAC_STANDARD, LBAC_SYSDBA,
+    LBAC_UTL, LDAP_ATTR, LDAP_ATTR_LIST, LDAP_EVENT, LDAP_EVENT_STATUS,
+    NUMERIC_DOMINATED_BY, NUMERIC_DOMINATES, NUMERIC_GREATEST_LBOUND,
+    NUMERIC_LABEL_TO_CHAR, NUMERIC_LEAST_UBOUND, NUMERIC_MERGE_LABEL,
+    NUMERIC_STRICTLY_DOMINATED_BY, NUMERIC_STRICTLY_DOMINATES, OLS$AUDIT,
+    OLS$AUDIT_ACTIONS, OLS$COMPARTMENTS, OLS$DIP_DEBUG, OLS$DIP_EVENTS,
+    OLS$GROUPS, OLS$INSTALLATIONS, OLS$LAB, OLS$LAB_SEQUENCE, OLS$LEVELS,
+    OLS$POL, OLS$POLICY_ADMIN, OLS$POLICY_COLUMNS, OLS$POLS, OLS$POLT,
+    OLS$PROFILES, OLS$PROG, OLS$PROPS, OLS$TAG_SEQUENCE, OLS$TRUSTED_PROGS,
+    OLS$USER, OLS$USER_COMPARTMENTS, OLS$USER_GROUPS, OLS$USER_LEVELS,
+    OLS_DIP_NTFY, PRIVS_TO_CHAR, SA$ADMIN, SA$POL, SA_AUDIT_ADMIN,
+    SA_COMPONENTS, SA_LABEL_ADMIN, SA_POLICY_GRANT, SA_SESSION, SA_SYSDBA,
+    SA_USER_ADMIN, SA_UTL, TO_LBAC_DATA_LABEL, TO_LBAC_LABEL,
+    TO_NUMERIC_DATA_LABEL, TO_NUMERIC_LABEL, USER_SA_SESSION
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> This finding shows the object accesses that are audited by enabled audit policies. </td><td></td></tr>
+</table>
+<h3> Privilege Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.PRIV </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Auditing enabled for 30 privileges. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Unified Audit (30): ADMINISTER KEY MANAGEMENT, ALTER ANY PROCEDURE, ALTER
+    ANY SQL TRANSLATION PROFILE, ALTER ANY TABLE, ALTER DATABASE, ALTER
+    SYSTEM, AUDIT SYSTEM, BECOME USER, CREATE ANY JOB, CREATE ANY LIBRARY,
+    CREATE ANY PROCEDURE, CREATE ANY SQL TRANSLATION PROFILE, CREATE ANY
+    TABLE, CREATE EXTERNAL JOB, CREATE PUBLIC SYNONYM, CREATE SQL
+    TRANSLATION PROFILE, CREATE USER, DROP ANY PROCEDURE, DROP ANY SQL
+    TRANSLATION PROFILE, DROP ANY TABLE, DROP PUBLIC SYNONYM, DROP USER,
+    EXEMPT ACCESS POLICY, EXEMPT REDACTION POLICY, GRANT ANY OBJECT
+    PRIVILEGE, GRANT ANY PRIVILEGE, GRANT ANY ROLE, LOGMINING, PURGE
+    DBA_RECYCLEBIN, TRANSLATE ANY SQL
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> This finding shows the privileges that are audited by enabled audit policies. </td><td></td></tr>
+</table>
+<h3> Administrative User Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.ADMIN </td>
+</tr><tr>
+<td class="sev4" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Significant Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Actions of the SYS user are not audited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Traditional Audit: AUDIT_SYS_OPERATIONS is set to FALSE.
+
+Unified Audit policies enabled for administrators: (none)
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> It is important to audit administrative actions performed by the SYS user. Traditional audit policies do not apply to SYS, so the AUDIT_SYS_OPERATIONS parameter must be set to record SYS actions to a separate audit trail. Beginning with Oracle 12c, the same Unified Audit policies can be applied to SYS that are used to monitor other users. </td><td></td></tr>
+</table>
+<h3> Privilege Management Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.PRIVMGMT </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Actions related to privilege management are sufficiently audited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Traditional audit - auditing enabled: (none)
+Unified audit - auditing enabled: GRANT ANY OBJECT PRIVILEGE, GRANT ANY
+    PRIVILEGE, GRANT ANY ROLE
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Granting additional privileges to users or roles potentially affects most security protections and should be audited. Each action or privilege listed here should be included in at least one enabled audit policy. </td><td></td></tr>
+</table>
+<h3> Account Management Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.ACCTMGMT </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Actions related to account management are sufficiently audited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Traditional audit - auditing enabled: (none)
+Unified audit - auditing enabled: ALTER PROFILE, ALTER USER, CREATE
+    PROFILE, CREATE USER, DROP PROFILE, DROP USER
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Creation of new user accounts or modification of existing accounts can be used to gain access to the privileges of those accounts and should be audited. Each action or privilege listed here should be included in at least one enabled audit policy. </td><td></td></tr>
+</table>
+<h3> Database Management Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.DBMGMT </td>
+</tr><tr>
+<td class="sev4" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Significant Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Actions related to database management are not sufficiently audited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Auditing not enabled: ALTER PUBLIC DATABASE LINK, AUDIT ANY, CREATE ANY
+    DIRECTORY, CREATE PUBLIC DATABASE LINK, CREATE SPFILE, DROP ANY
+    DIRECTORY, DROP PUBLIC DATABASE LINK, SYSTEM AUDIT
+
+Traditional audit - auditing enabled: (none)
+Unified audit - auditing enabled: ADMINISTER KEY MANAGEMENT, ALTER
+    DATABASE, ALTER DATABASE LINK, ALTER PLUGGABLE DATABASE, ALTER SYSTEM,
+    CREATE ANY LIBRARY, CREATE DATABASE LINK, CREATE EXTERNAL JOB, CREATE
+    PLUGGABLE DATABASE, CREATE PUBLIC SYNONYM, DROP DATABASE LINK, DROP
+    PLUGGABLE DATABASE, DROP PUBLIC SYNONYM, EXECUTE ON SYS.DBMS_RLS
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Actions that affect the management of database features should always be audited. Each action or privilege listed here should be included in at least one enabled audit policy. </td><td></td></tr>
+</table>
+<h3> Privilege Usage Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.PRIVUSE </td>
+</tr><tr>
+<td class="sev4" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Significant Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Usages of powerful system privileges are not sufficiently audited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Auditing not enabled: CREATE ANY TRIGGER
+
+Traditional audit - auditing enabled: (none)
+Unified audit - auditing enabled: ALTER ANY SQL TRANSLATION PROFILE, BECOME
+    USER, CREATE ANY JOB, CREATE ANY PROCEDURE, CREATE ANY SQL TRANSLATION
+    PROFILE, EXEMPT ACCESS POLICY, EXEMPT REDACTION POLICY, LOGMINING,
+    TRANSLATE ANY SQL
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Usage of powerful system privileges should always be audited. Each privilege listed here should be included in at least one enabled audit policy. </td><td></td></tr>
+</table>
+<h3> Database Connection Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.CONN </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Database connections are sufficiently audited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Traditional audit - auditing enabled: (none)
+Unified audit - auditing enabled: LOGON
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Successful user connections to the database should be audited to assist with future forensic analysis. Unsuccessful connection attempts can provide early warning of an attacker's attempt to gain access to the database. </td><td></td></tr>
+</table>
+<h3> Fine Grained Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.FGA </td>
+</tr><tr>
+<td class="sev2" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Opportunity </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No fine grained audit policies found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+
+Users with EXECUTE on SYS.DBMS_FGA: SYSTEM
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Fine Grained Audit policies can record highly specific activity, such as access to particular table columns or access that occurs under specified conditions. This is a useful way to monitor unexpected data access while avoiding unnecessary audit records that correspond to normal activity. </td><td></td></tr>
+</table>
+<h3> Unified Audit </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> AUDIT.UNIFIED </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 9 unified audit policies. Found 49 objects or statements being audited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Policy ORA_ACCOUNT_MGMT (Disabled): Audits 9 objects/statements
+Policy ORA_CIS_RECOMMENDATIONS (Disabled): Audits 26 objects/statements
+Policy ORA_DATABASE_PARAMETER (Disabled): Audits 3 objects/statements
+Policy ORA_DV_AUDPOL (Disabled): Audits 2096 objects/statements
+Policy ORA_DV_AUDPOL2 (Disabled): Audits 19 objects/statements
+Policy ORA_LOGON_FAILURES (Enabled): Audits 1 objects/statements
+Policy ORA_RAS_POLICY_MGMT (Disabled): Audits 35 objects/statements
+Policy ORA_RAS_SESSION_MGMT (Disabled): Audits 14 objects/statements
+Policy ORA_SECURECONFIG (Enabled): Audits 48 objects/statements
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Unified Audit, available in Oracle Database 12.1 and later releases, combines multiple audit trails into a single unified view. It also introduces new syntax for specifying effective audit policies. </td><td></td></tr>
+</table>
+<h2><a name="Database_Configuration">Database Configuration</a></h2>
+<h3> Initialization Parameters for Security </h3>
+<table cellpadding="4" border="1" rules="cols" summary="Data table for Initialization Parameters for Security">
+<thead><tr>
+<th align="left" scope="col"> Name </th>
+<th align="left" scope="col"> Value </th>
+</tr>
+</thead>
+<tr>
+<td align="left"> AUDIT_FILE_DEST </td>
+<td align="left"> /opt/oracle/admin/ORCLCDB/adump </td>
+</tr>
+<tr>
+<td align="left"> AUDIT_SYSLOG_LEVEL </td>
+<td align="left">  </td>
+</tr>
+<tr>
+<td align="left"> AUDIT_SYS_OPERATIONS </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> AUDIT_TRAIL </td>
+<td align="left"> NONE </td>
+</tr>
+<tr>
+<td align="left"> COMPATIBLE </td>
+<td align="left"> 12.2.0 </td>
+</tr>
+<tr>
+<td align="left"> DBFIPS_140 </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> DISPATCHERS </td>
+<td align="left"> (PROTOCOL=TCP) (SERVICE=ORCLCDBXDB) </td>
+</tr>
+<tr>
+<td align="left"> ENCRYPT_NEW_TABLESPACES </td>
+<td align="left"> CLOUD_ONLY </td>
+</tr>
+<tr>
+<td align="left"> GLOBAL_NAMES </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> LDAP_DIRECTORY_ACCESS </td>
+<td align="left"> NONE </td>
+</tr>
+<tr>
+<td align="left"> LDAP_DIRECTORY_SYSAUTH </td>
+<td align="left"> no </td>
+</tr>
+<tr>
+<td align="left"> O7_DICTIONARY_ACCESSIBILITY </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> OS_AUTHENT_PREFIX </td>
+<td align="left"> ops$ </td>
+</tr>
+<tr>
+<td align="left"> OS_ROLES </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> PDB_LOCKDOWN </td>
+<td align="left">  </td>
+</tr>
+<tr>
+<td align="left"> PDB_OS_CREDENTIAL </td>
+<td align="left">  </td>
+</tr>
+<tr>
+<td align="left"> REMOTE_LISTENER </td>
+<td align="left">  </td>
+</tr>
+<tr>
+<td align="left"> REMOTE_LOGIN_PASSWORDFILE </td>
+<td align="left"> EXCLUSIVE </td>
+</tr>
+<tr>
+<td align="left"> REMOTE_OS_AUTHENT </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> REMOTE_OS_ROLES </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> RESOURCE_LIMIT </td>
+<td align="left"> TRUE </td>
+</tr>
+<tr>
+<td align="left"> SEC_CASE_SENSITIVE_LOGON </td>
+<td align="left"> TRUE </td>
+</tr>
+<tr>
+<td align="left"> SEC_MAX_FAILED_LOGIN_ATTEMPTS </td>
+<td align="left"> 3 </td>
+</tr>
+<tr>
+<td align="left"> SEC_PROTOCOL_ERROR_FURTHER_ACTION </td>
+<td align="left"> (DROP,3) </td>
+</tr>
+<tr>
+<td align="left"> SEC_PROTOCOL_ERROR_TRACE_ACTION </td>
+<td align="left"> TRACE </td>
+</tr>
+<tr>
+<td align="left"> SEC_RETURN_SERVER_RELEASE_BANNER </td>
+<td align="left"> FALSE </td>
+</tr>
+<tr>
+<td align="left"> SQL92_SECURITY </td>
+<td align="left"> TRUE </td>
+</tr>
+<tr>
+<td align="left"> UNIFIED_AUDIT_SGA_QUEUE_SIZE </td>
+<td align="left"> 1048576 </td>
+</tr>
+<tr>
+<td align="left"> UTL_FILE_DIR </td>
+<td align="left">  </td>
+</tr>
+</table>
+<h3> Access to Dictionary Objects </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.SYSOBJ </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Access to dictionary objects is properly limited. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+O7_DICTIONARY_ACCESSIBILITY=FALSE
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> When O7_DICTIONARY_ACCESSIBILITY is set to FALSE, tables owned by SYS are not affected by the ANY TABLE system privileges. This parameter should always be set to FALSE because tables owned by SYS control the overall state of the database and should not be subject to manipulation by users with ANY TABLE privileges. </td><td></td></tr>
+</table>
+<h3> Inference of Table Data </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.INFER </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Data inference attacks are properly blocked. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+SQL92_SECURITY=TRUE
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> When SQL92_SECURITY is set to TRUE, UPDATE and DELETE statements that refer to a column in their WHERE clauses will succeed only when the user has the privilege to SELECT from the same column. This parameter should be set to TRUE so that this requirement is enforced in order to prevent users from inferring the value of a column which they do not have the privilege to view.
+ </td><td></td></tr>
+</table>
+<h3> Network Communications </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.NETCOM </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Examined 3 initialization parameters. No issues found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+SEC_PROTOCOL_ERROR_FURTHER_ACTION=(DROP,3)
+SEC_PROTOCOL_ERROR_TRACE_ACTION=TRACE
+SEC_RETURN_SERVER_RELEASE_BANNER=FALSE
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> The SEC_PROTOCOL_ERROR parameters control the database server's response when it receives malformed network packets from a client. Because these malformed packets may indicate an attempted attack by a malicious client, the parameters should be set to log the incident and terminate the connection. SEC_RETURN_SERVER_RELEASE_BANNER should be set to FALSE to limit the information that is returned to an unauthenticated client, which could be used to help determine the server's vulnerability to a remote attack. </td><td></td></tr>
+</table>
+<h3> External Authorization </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.EXTAUTH </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Examined 2 initialization parameters. No issues found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+REMOTE_OS_ROLES=FALSE
+OS_ROLES=FALSE
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> The OS_ROLES and REMOTE_OS_ROLES parameters determine whether roles granted to users are controlled by GRANT statements in the database or by the operating system environment. Both parameters should be set to FALSE so that the authorizations of database users are managed by the database itself. </td><td></td></tr>
+</table>
+<h3> File System Access </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.FILESYS </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Examined 1 initialization parameter. No issues found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+UTL_FILE_DIR=''
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> The UTL_FILE_DIR parameter controls which part of the server's file system can be accessed by PL/SQL code. Note that as the directories specified in the UTL_FILE_DIR parameter may be accessed by any database user, it should be set to specify one or more safe directories that do not contain restricted files such as the configuration or data files for the database. For maximum security, use directory objects which allow finer grained control of access, rather than relying on this parameter. </td><td></td></tr>
+</table>
+<h3> Triggers </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.TRIG </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No logon triggers found.  No disabled triggers found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> A trigger is code that executes whenever a specific event occurs, such as inserting data in a table or connecting to the database. Disabled triggers are a potential cause for concern because whatever protection or monitoring they may be expected to provide is not active. </td><td></td></tr>
+</table>
+<h3> Disabled Constraints </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.CONST </td>
+</tr><tr>
+<td class="sev3" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Some Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 1 disabled constraint. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Disabled constraints: STS_CHUNKS on GSMADMIN_INTERNAL.SHARD_TS
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Constraints are used to enforce and guarantee specific relationships between data items stored in the database. Disabled constraints are a potential cause for concern because the conditions they ensure are not enforced. </td><td></td></tr>
+</table>
+<h3> External Procedures </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.EXTPROC </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 5 external procedures. No external services found. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+External procedures: ORDSYS.ORDIMLIBS, SYS.DBMSHADOOPLIB,
+    SYS.DBMS_SUMADV_LIB, SYS.DM$RQEXTLIB, SYS.KUBSAGT_LIB
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> External procedures allow code written in other languages to be executed from PL/SQL. Note that modifications to external code cannot be controlled by the database. Be careful to ensure that only trusted code libraries are available to be executed. Although the database can spawn its own process to execute the external procedure, it is advisable to configure a listener service for this purpose so that the external code can run as a less-privileged OS user. The listener configuration should set EXTPROC_DLLS to identify the specific shared library code that can be executed rather than using the default value ANY. </td><td></td></tr>
+</table>
+<h3> Directory Objects </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.DIR </td>
+</tr><tr>
+<td class="sev4" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Significant Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 12 directory objects. Found 1 directory object allowing access to restricted Oracle directory paths. No directory objects allow both write and execute access. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Directory Name: DATA_PUMP_DIR
+Path = /opt/oracle/admin/ORCLCDB/dpdump/
+Users or roles with access: EXP_FULL_DATABASE(READ),
+    EXP_FULL_DATABASE(READ), EXP_FULL_DATABASE(WRITE),
+    EXP_FULL_DATABASE(WRITE), IMP_FULL_DATABASE(READ),
+    IMP_FULL_DATABASE(READ), IMP_FULL_DATABASE(WRITE),
+    IMP_FULL_DATABASE(WRITE)
+
+Directory Name: OPATCH_INST_DIR
+Path = /opt/oracle/product/12.2.0.1/db_1/OPatch/
+
+Directory Name: OPATCH_LOG_DIR
+Path = /opt/oracle/product/12.2.0.1/db_1/rdbms/log/
+
+Directory Name: OPATCH_SCRIPT_DIR
+Path = /opt/oracle/product/12.2.0.1/db_1/QOpatch/
+
+Directory Name: ORACLE_BASE
+Path = /opt/oracle/
+
+Directory Name: ORACLE_HOME
+Path = /opt/oracle/product/12.2.0.1/db_1/
+
+Directory Name: ORACLE_OCM_CONFIG_DIR
+Path = /opt/oracle/product/12.2.0.1/db_1/ccr/state/
+Users or roles with access: ORACLE_OCM(READ), ORACLE_OCM(WRITE)
+
+Directory Name: ORACLE_OCM_CONFIG_DIR2
+Path = /opt/oracle/product/12.2.0.1/db_1/ccr/state/
+Users or roles with access: ORACLE_OCM(READ), ORACLE_OCM(WRITE)
+
+Directory Name: ORA_DBMS_FCP_ADMINDIR
+Path = /opt/oracle/product/12.2.0.1/db_1/rdbms/admin/
+
+Directory Name: ORA_DBMS_FCP_LOGDIR
+Path = /opt/oracle/product/12.2.0.1/db_1/cfgtoollogs/
+
+Directory Name: XMLDIR
+Path = /opt/oracle/product/12.2.0.1/db_1/rdbms/xml/
+
+Directory Name: XSDDIR
+Path = /opt/oracle/product/12.2.0.1/db_1/rdbms/xml/schema/
+
+
+$ORACLE_HOME: ORACLE_HOME
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Directory objects allow access to the server's file system from PL/SQL code within the database. Access to files that are used by the database kernel itself should not be permitted, as this may alter the operation of the database and bypass its access controls. </td><td></td></tr>
+</table>
+<h3> Database Links </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.LINKS </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 1 database link. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Users with CREATE DATABASE LINK privilege: SYSTEM
+Users with CREATE PUBLIC DATABASE LINK privilege: SYSTEM
+
+Private links:
+SYS: SYS_HUB
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Database links allow users to execute SQL statements that access tables in other databases. This allows for both querying and storing data on the remote database. </td><td></td></tr>
+</table>
+<h3> Network Access Control </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.NETACL </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 2 network ACLs. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+NETWORK_ACL_4700D20FF5FF557EE05387E5E50A8899 (Host: *, Ports: Min - Max)
+Principal: ORACLE_OCM, Action: deny, Privilege: resolve
+Principal: GGSYS, Action: deny, Privilege: resolve
+Principal: GSMADMIN_INTERNAL, Action: deny, Privilege: resolve
+
+/sys/acls/oracle-sysman-ocm-Resolve-Access.xml (Host: localhost, Ports: Min
+    - Max)
+Principal: ORACLE_OCM, Action: deny, Privilege: resolve
+Principal: GGSYS, Action: deny, Privilege: resolve
+Principal: GSMADMIN_INTERNAL, Action: deny, Privilege: resolve
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Network ACLs control the external servers that database users can access using network packages such as UTL_TCP and UTL_HTTP. Specifically, a database user needs the connect privilege to an external network host computer if he or she is connecting using the UTL_TCP, UTL_HTTP, UTL_SMTP, and UTL_MAIL utility packages. To convert between a host name and its IP address using the UTL_INADDR package, the resolve privilege is required. Make sure that these permissions are limited to the minimum required by each user. </td><td></td></tr>
+</table>
+<h3> XML Database Access Control </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> CONF.XMLACL </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 9 XML Database ACLs. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Protected:Readable by PUBLIC and all privileges to OWNER
+Principal: dav:owner, Action: grant, Privileges: all
+Principal: XDBADMIN, Action: grant, Privileges: all
+Principal: PUBLIC, Action: grant, Privileges: read-properties, read-
+    contents, read-acl, resolve
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Public:All privileges to PUBLIC
+Principal: PUBLIC, Action: grant, Privileges: all
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Private:All privileges to OWNER only and not accessible to
+    others
+Principal: dav:owner, Action: grant, Privileges: all
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Read-Only:Readable by all and writeable by none
+Principal: PUBLIC, Action: grant, Privileges: read-properties, read-
+    contents, read-acl, resolve
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Protected:Readable by PUBLIC and all privileges to OWNER
+Principal: dav:owner, Action: grant, Privileges: all
+Principal: XDBADMIN, Action: grant, Privileges: all
+Principal: PUBLIC, Action: grant, Privileges: read-properties, read-
+    contents, read-acl, resolve
+Principal: OLAP_XS_ADMIN, Action: grant, Privileges: all
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Protected:Readable by PUBLIC and all privileges to OWNER
+Principal: dav:owner, Action: grant, Privileges: all
+Principal: XDBADMIN, Action: grant, Privileges: all
+Principal: PUBLIC, Action: grant, Privileges: read-properties, read-
+    contents, read-acl, resolve
+Principal: OLAP_XS_ADMIN, Action: grant, Privileges: all
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Protected:Readable by PUBLIC and all privileges to OWNER
+Principal: dav:owner, Action: grant, Privileges: all
+Principal: XDBADMIN, Action: grant, Privileges: all
+Principal: PUBLIC, Action: grant, Privileges: read-properties, read-
+    contents, read-acl, resolve
+Principal: OLAP_XS_ADMIN, Action: grant, Privileges: all
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Protected:Readable by PUBLIC and all privileges to OWNER
+Principal: dav:owner, Action: grant, Privileges: all
+Principal: XDBADMIN, Action: grant, Privileges: all
+Principal: PUBLIC, Action: grant, Privileges: read-properties, read-
+    contents, read-acl, resolve
+Principal: OLAP_XS_ADMIN, Action: grant, Privileges: all
+
+Namespace: {http://xmlns.oracle.com/xdb/acl.xsd}
+Description: Protected:Readable by PUBLIC and all privileges to OWNER
+Principal: dav:owner, Action: grant, Privileges: all
+Principal: XDBADMIN, Action: grant, Privileges: all
+Principal: PUBLIC, Action: grant, Privileges: read-properties, read-
+    contents, read-acl, resolve
+Principal: OLAP_XS_ADMIN, Action: grant, Privileges: all
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> XML ACLs control access to database resources using the XML DB feature. Every resource in the Oracle XML DB Repository hierarchy has an associated ACL. The ACL mechanism specifies a privilege-based access control for resources to principals, which are database users or roles. Whenever a resource is accessed, a security check is performed, and the ACL determines if the requesting user has sufficient privileges to access the resource. Make sure that these privileges are limited to the minimum required by each user. </td><td></td></tr>
+</table>
+<h2><a name="Network_Configuration">Network Configuration</a></h2>
+<h3> Network Listener Configuration </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> NET.COST </td>
+</tr><tr>
+<td class="sev4" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Significant Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Examined 1 listener. Found 1 listener not configured properly. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Listeners not configured properly: LISTENER
+
+Parameter setting for LISTENER:
+DYNAMIC_REGISTRATION_LISTENER is not set (default value = ON). Recommended
+    value is OFF.
+VALID_NODE_CHECKING_REGISTRATION_LISTENER is not set (default value = OFF).
+    Should not be set to OFF.
+SECURE_PROTOCOL_LISTENER is not set.
+SECURE_CONTROL_LISTENER is not set.
+SECURE_REGISTER_LISTENER is not set.
+
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> These parameters are used to limit changes to the network listener configuration. One of the following restrictions should be implemented: (a) prevent changes by disabling DYNAMIC_REGISTRATION, (b) limit the nodes that can make changes by enabling VALID_NODE_CHECKING_REGISTRATION, or (c) limit the network sources for changes using the COST parameters SECURE_PROTOCOL, SECURE_CONTROL, and SECURE_REGISTER. </td><td></td></tr>
+</table>
+<h3> Listener Logging Control </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> NET.LISTENLOG </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Examined 1 listener. Found 0 listeners not configured properly. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Listeners configured properly: LISTENER
+
+Parameter setting for LISTENER:
+LOGGING_LISTENER is not set (default value = ON).
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> This parameter enables logging of listener activity. Log information can be useful for troubleshooting and to provide early warning of attempted attacks. </td><td></td></tr>
+</table>
+<h2><a name="Operating_System">Operating System</a></h2>
+<h3> OS Authentication </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> OS.AUTH </td>
+</tr><tr>
+<td class="sev1" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Evaluate </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> 1 OS user can connect to the database via OS authentication. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+SYSDBA [dba group]: oracle
+SYSOPER [dba group]: oracle
+SYSBACKUP [dba group]: oracle
+SYSKM [dba group]: oracle
+SYSDG [dba group]: oracle
+SYSRAC [dba group]: oracle
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> OS authentication allows operating system users within the specified user group to connect to the database with administrative privileges. This shows the OS group names and users that can exercise each administrative privilege. </td><td></td></tr>
+</table>
+<h3> Process Monitor Process </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> OS.PMON </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 1 PMON process. The owner of the PMON process matches the ORACLE_HOME owner. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+PMON process: ora_pmon_ORCLCDB, Owner: oracle
+ORACLE_HOME owner: oracle
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> The PMON process monitors user processes and frees resources when they terminate. This process should run with the user ID of the ORACLE_HOME owner. </td><td></td></tr>
+</table>
+<h3> Agent Processes </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> OS.AGENT </td>
+</tr><tr>
+<td class="sev0" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Pass </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> No Agent processes found. Agent process owners do not overlap with Listener or PMON process owners. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Agent processes are used by Oracle Enterprise Manager to monitor and manage the database. These processes should run with a user ID separate from the database and listener processes. </td><td></td></tr>
+</table>
+<h3> Listener Processes </h3>
+<table class="finding" cellpadding="4" border="0" role="presentation">
+<tr class="ruleid"><td></td>
+<td colspan="3"> OS.LISTEN </td>
+</tr><tr>
+<td class="sev3" colspan="4"></td>
+</tr>
+<tr><td></td>
+<td class="finding_head">Status</td> <td class="finding_cell"> Some Risk </td><td></td></tr>
+<tr><td></td><td class="finding_head">Summary</td>
+<td class="finding_cell"> Found 1 Listener process. Some Listener process owners overlap with Agent or PMON process owners. </td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Details</td>
+<td class="finding_cell"><pre>
+Owner: oracle
+Command: /opt/oracle/product/12.2.0.1/db_1/bin/tnslsnr LISTENER -inherit
+</pre></td><td></td></tr>
+<tr><td></td>
+<td class="finding_head">Remarks</td>
+<td class="finding_cell"> Listener processes accept incoming network connections and connect them to the appropriate database server process. These processes should run with a user ID separate from the database and agent processes. </td><td></td></tr>
+</table>
+<h2>Diagnostics</h2>
+<p> Failed to parse sqlnet.ora: expected =, found EZCONNECT </p>
+<p> Failed to parse sqlnet.ora: expected =, found EZCONNECT </p>
+<p> Skip Allowed Logon Version check </p>
+<p> Failed to parse sqlnet.ora: expected =, found EZCONNECT </p>
+<p> Skipped SQLNET Parameters </p>
+<hr>
+<p class="footnote">
+This report is focused on detecting areas of potential security vulnerabilities or misconfigurations and providing recommendations on how to mitigate those potential vulnerabilities.
+</p>
+<p class="footnote">
+The report provides a view on the current status. These recommendations are provided for informational purposes only and should not be used as a substitute for a thorough analysis or interpreted to contain any legal or regulatory advice or guidance.
+</p>
+<p class="footnote">
+You are solely responsible for your system, and the data and information gathered during the production of this report. You are also solely responsible for the execution of software to produce this report, and for the effect and results of the execution of any mitigating actions identified herein.
+</p>
+<p class="footnote">
+Oracle provides this analysis on an "as is" basis without warranty of any kind and Oracle hereby disclaims all warranties and conditions whether express, implied or statutory.
+</p>
+</body></html>
