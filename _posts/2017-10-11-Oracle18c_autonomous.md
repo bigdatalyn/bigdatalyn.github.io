@@ -11,6 +11,18 @@ tags: Oracle Autonomous Databas
 
 [原创]Oracle Autonomous Databas 简单介绍
 
+什么是Oracle Autonomous Databas？自治数据库？全球首款自治数据库？
+
+
+
+
+
+
+
+
+
+
+
 ### Oracle Autonomous Database 
 
 今年oow2017 - Announcing the First Autonomous Database
