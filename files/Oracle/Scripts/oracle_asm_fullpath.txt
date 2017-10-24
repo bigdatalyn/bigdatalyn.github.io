@@ -1,0 +1,60 @@
+#### ASM full path display
+
+$ export ORACLE_SID=+ASM1
+SQL> connect / as sysasm
+set linesize 150 pages 50000
+col FULL_PATH for a70
+select * from (
+select CONCAT('+'||GNAME, SYS_CONNECT_BY_PATH(ANAME, '/'))
+       FULL_PATH, 
+       SYSTEM_CREATED,
+       ALIAS_DIRECTORY,
+       FNO
+  from ( select B.NAME            GNAME,
+                A.PARENT_INDEX    PINDEX,
+                A.NAME            ANAME,
+                A.REFERENCE_INDEX RINDEX,
+                A.FILE_NUMBER     FNO,
+                A.SYSTEM_CREATED,
+                A.ALIAS_DIRECTORY,
+                C.TYPE            FILE_TYPE
+           from V$ASM_ALIAS     A,
+                V$ASM_DISKGROUP B,
+                V$ASM_FILE      C
+          where A.GROUP_NUMBER     = B.GROUP_NUMBER
+            and A.GROUP_NUMBER     = C.GROUP_NUMBER(+)
+            and A.FILE_NUMBER      = C.FILE_NUMBER(+)
+            and A.FILE_INCARNATION = C.INCARNATION(+)
+        )
+ START WITH (MOD(PINDEX, POWER(2, 24))) = 0
+ CONNECT BY PRIOR RINDEX = PINDEX)
+ where ALIAS_DIRECTORY = 'N' ;
+
+FULL_PATH                                                              SYS ALI        FNO
+---------------------------------------------------------------------- --- --- ----------
++DATA_H/ORCL/CONTROLFILE/Current.273.894979807                         Y   N          273
++DATA_H/ORCL/ONLINELOG/group_4.277.894980565                           Y   N          277
++DATA_H/ORCL/ONLINELOG/group_3.276.894980553                           Y   N          276
++DATA_H/ORCL/ONLINELOG/group_2.275.894979825                           Y   N          275
++DATA_H/ORCL/ONLINELOG/group_1.274.894979813                           Y   N          274
++DATA_H/ORCL/ARCHIVELOG/2015_11_05/thread_2_seq_120.279.895008045      Y   N          279
++DATA_H/ORCL/ARCHIVELOG/2015_11_05/thread_1_seq_115.352.895007109      Y   N          352
++DATA_H/ORCL/DATAFILE/JPET.286.894997201                               Y   N          286
++DATA_H/ORCL/DATAFILE/JPET2.348.895000921                              Y   N          348
++DATA_L/ORCL/CONTROLFILE/Current.261.894979807                         Y   N          261
++DATA_L/ORCL/ONLINELOG/group_3.270.894980547                           Y   N          270
++DATA_L/ORCL/ONLINELOG/group_4.271.894980561                           Y   N          271
++DATA_L/ORCL/ONLINELOG/group_1.262.894979807                           Y   N          262
++DATA_L/ORCL/ONLINELOG/group_2.263.894979819                           Y   N          263
++DATA_L/ORCL/DATAFILE/SYSTEM.264.894979831                             Y   N          264
++DATA_L/ORCL/DATAFILE/UNDOTBS2.268.894979865                           Y   N          268
++DATA_L/ORCL/DATAFILE/SYSAUX.265.894979833                             Y   N          265
++DATA_L/ORCL/DATAFILE/USERS.269.894979877                              Y   N          269
++DATA_L/ORCL/DATAFILE/UNDOTBS1.266.894979847                           Y   N          266
++DATA_L/ORCL/TEMPFILE/TEMP.267.894979859                               Y   N          267
++DATA_L/ORCL/PARAMETERFILE/spfile.272.894980571                        Y   N          272
++DATA_L/ORCL/spfileorcl.ora                                            N   N          272
++DBFS_DG/cluster-jojo1/ASMPARAMETERFILE/REGISTRY.253.894942483         Y   N          253
++DBFS_DG/cluster-jojo1/OCRFILE/REGISTRY.255.894942485                  Y   N          255
+
+# ASM File Alias Directory 

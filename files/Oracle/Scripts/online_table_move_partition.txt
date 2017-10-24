@@ -1,0 +1,709 @@
+﻿$ sqlplus /nolog
+SQL>
+connect / as sysdba
+-- TBS27表領域と、この表領域をデフォルト表領域とするTRYユーザーの作成
+create tablespace TBS27 datafile '+FRA(DATAFILE)' size 2g ;
+create user TRY identified by TRY12345 default tablespace TBS27 ;
+grant CONNECT, RESOURCE, DBA to TRY ;
+
+connect TRY/TRY12345
+-- パーティション表と索引の作成
+drop table TAB27_BASE purge ;
+drop table TAB27_PART purge ;
+create table TAB27_PART (COL1 number not null, COL2 date, COL3 number, COL4 number, COL5 char(1000))
+  partition by range(COL2) interval(NUMTOYMINTERVAL(1, 'month'))
+    (partition P201401 values less than (to_date('2014/02/01', 'YYYY/MM/DD'))) ;
+    
+create unique index PK_TAB27_PART on TAB27_PART(COL1, COL2) local ;
+alter table TAB27_PART add primary key (COL1, COL2) using index ;
+-- create index IDX_TAB27_PART_COL3 on TAB27_PART(COL3, COL2) ;
+create index IDX_TAB27_PART_COL4 on TAB27_PART(COL4, COL2) local ;
+
+-- 約400MB（2014年1月の一ヵ月分）のレコードを保持するベース表を作成
+create table TAB27_BASE as select * from TAB27_PART where 1=2 ;
+insert /*+append */ into TAB27_BASE
+  select LEVEL, 
+         to_date('2014/01/01','YYYY/MM/DD') + mod(LEVEL, 28), 
+         dbms_random.value(1,100), 
+         dbms_random.value(1,100), 
+         'hoge' || mod(LEVEL, 5)
+   from DUAL connect by LEVEL <= 6 * 128 * 400 ;
+commit;
+
+-- TAB27表とTAB27_PART表へ3ヶ月分（1月～3月）のレコードをINSERT
+insert /*+append */ into TAB27_PART -- 2つの表へ同時INSERT
+  select * from TAB27_BASE
+    union all
+  select COL1, COL2 + 31, COL3, COL4, COl5 from TAB27_BASE
+    union all
+  select COL1, COL2 + 59, COL3, COL4, COl5 from TAB27_BASE ;
+commit ;
+
+set linesize 150 pagesize 50000
+col SEGMENT_NAME for a12
+col PARTITION_NAME for a16
+col TABLESPACE_NAME for a16
+select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  from USER_SEGMENTS 
+ where SEGMENT_TYPE like 'TABLE%' 
+   and SEGMENT_NAME != 'TAB27_BASE';
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+TAB27_PART   P201401          TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+
+
+##########################################################################################################
+| ALTER TABLE MOVE PARTITIONの実行（ONLINE句無し/UPDATE INDEXES無し）
+##########################################################################################################
+
+### 次の3つのセッションを同時実行
+sqlplus /nolog
+SQL> -- sessionA
+connect TRY/TRY12345
+set timing on
+alter table TAB27_PART move partition P201401 compress for oltp;
+
+
+sqlplus /nolog
+SQL> -- sessionB
+connect TRY/TRY12345
+set timing on
+insert into TAB27_PART values(0,to_date('2014/01/01','YYYY/MM/DD'),0,0,'sibacho');
+
+
+sqlplus /nolog
+SQL> -- sessionC
+connect TRY/TRY12345
+set timing on
+update TAB27_PART set COL5='sibacho' where COL1=1 and COL2=to_date('2014/01/02','YYYY/MM/DD');
+
+
+### 結果
+[sessionA] : alter table move partition
+		Table altered.
+		Elapsed: 00:00:06.46
+
+[sessionB] : insert
+		*
+		ERROR at line 1:
+		ORA-01502: index 'TRY.PK_TAB27_PART' or partition of such index is in unusable state
+		Elapsed: 00:00:05.71
+
+[sessionC] : update
+		1 row updated.
+		Elapsed: 00:00:06.08
+
+==> INSERT文もUpdate文もMOVE処理が終わるまで待機させられる
+　　INSERT側で索引のRebuildが終わっていないのでエラーが起きる
+　　これって11gR2と同じやん・・・
+　　■謎(1) 本当に出来るの？
+
+
+-- sessionB/Cで次のQueryを実行しSIDを特定
+select sys_context('USERENV','SID') from DUAL;
+
+connect / as sysdba
+set linesize 200
+set pages 5000
+col EVENT for a24
+select SAMPLE_TIME, SESSION_ID, EVENT, TIME_WAITED, BLOCKING_SESSION
+  from V$ACTIVE_SESSION_HISTORY
+ where SESSION_ID in (&1,&2)
+   and SAMPLE_TIME > SYSTIMESTAMP - 20/60/24
+ order by 1;
+
+SAMPLE_TIME                                                                 SESSION_ID EVENT                    TIME_WAITED BLOCKING_SESSION
+--------------------------------------------------------------------------- ---------- ------------------------ ----------- ----------------
+03-JUL-15 10.16.39.375 AM                                                           15 enq: TM - contention               0               18
+03-JUL-15 10.16.40.385 AM                                                           16 enq: TM - contention               0               18
+03-JUL-15 10.16.40.385 AM                                                           15 enq: TM - contention               0               18
+03-JUL-15 10.16.41.385 AM                                                           16 enq: TM - contention               0               18
+03-JUL-15 10.16.41.385 AM                                                           15 enq: TM - contention               0               18
+03-JUL-15 10.16.42.385 AM                                                           15 enq: TM - contention               0               18
+03-JUL-15 10.16.42.385 AM                                                           16 enq: TM - contention               0               18
+03-JUL-15 10.16.43.385 AM                                                           15 enq: TM - contention               0               18
+03-JUL-15 10.16.43.385 AM                                                           16 enq: TM - contention               0               18
+03-JUL-15 10.16.44.395 AM                                                           16 enq: TM - contention         5091480               18
+03-JUL-15 10.16.44.395 AM                                                           15 enq: TM - contention         5513348               18
+03-JUL-15 10.16.45.395 AM                                                           16 direct path read               16423
+
+
+
+
+##########################################################################################################
+| ALTER TABLE MOVE PARTITIONの実行（ONLINE句有り/UPDATE INDEXES無し）
+##########################################################################################################
+
+-- 準備
+alter table TAB27_PART move partition P201401 nocompress ;
+col INDEX_NAME for a24
+select INDEX_NAME, PARTITION_NAME, STATUS from USER_IND_PARTITIONS ;
+select 'alter index ' || INDEX_NAME || ' rebuild partition ' || PARTITION_NAME || ' ;'
+  from USER_IND_PARTITIONS
+ where STATUS = 'UNUSABLE' ;
+select INDEX_NAME, PARTITION_NAME, STATUS from USER_IND_PARTITIONS ;
+
+
+-- 次の3つのセッションを同時実行
+sqlplus /nolog
+SQL> -- sessionA
+connect TRY/TRY12345
+set timing on
+set time on
+alter table TAB27_PART move partition P201401 compress for oltp online ;
+
+
+sqlplus /nolog
+SQL> -- sessionB
+connect TRY/TRY12345
+set timing on
+set time on
+insert into TAB27_PART values(0,to_date('2014/01/01','YYYY/MM/DD'),0,0,'sibacho');
+
+
+sqlplus /nolog
+SQL> -- sessionC
+connect TRY/TRY12345
+set timing on
+set time on
+update TAB27_PART set COL5='sibacho' where COL1=1 and COL2=to_date('2014/01/02','YYYY/MM/DD');
+
+
+### 結果
+[sessionA] : alter table move partition ONLINE
+		（待機・・・）
+
+[sessionB] : insert
+		1 row created.
+		Elapsed: 00:00:00.12
+
+[sessionC] : update
+		1 row updated.
+		Elapsed: 00:00:00.11
+
+==> ■答(1) alter table move partition文にONLINE句を付けることで、INSERT文とUPDATE文が即時実行されることを確認。
+　　■謎(2)　alter table move partition online文が終了しない。何故？
+
+
+-- sessionB
+SQL> commit ;
+Commit complete.
+Elapsed: 00:00:00.02
+
+-- sessionC
+SQL> commit ;
+Commit complete.
+Elapsed: 00:00:00.02
+10:39:58 SQL>
+
+-- sessionA
+Table altered.
+Elapsed: 00:07:05.50
+10:39:58 SQL>
+
+==> ■答(2) DML文のcommitを実行することで、alter table move partition online文の処理が終了
+        ==> commitと同時なので、move処理は最後まで進んでいたが完了出来ないで待っていたっぽい動き。
+        ==> alter table文側が、DML処理を待つように見える
+
+
+-- sessionB/Cで次のQueryを実行しSIDを特定
+select sys_context('USERENV','SID') from DUAL;
+ ==> sessionA=18, B=15, C=16
+
+connect / as sysdba
+set linesize 200
+set pages 5000
+col EVENT for a32
+select SAMPLE_TIME, SESSION_ID, EVENT, TIME_WAITED, BLOCKING_SESSION
+  from V$ACTIVE_SESSION_HISTORY
+ where SESSION_ID in (15,16,18)
+   and SAMPLE_TIME > SYSTIMESTAMP - 20/60/24
+ order by 1;
+
+SAMPLE_TIME                                                                 SESSION_ID EVENT                            TIME_WAITED BLOCKING_SESSION
+--------------------------------------------------------------------------- ---------- -------------------------------- ----------- ----------------
+03-JUL-15 10.26.32.420 AM                                                           18                                            0
+03-JUL-15 10.26.33.420 AM                                                           16 direct path read                       38131
+03-JUL-15 10.26.33.420 AM                                                           18 direct path read                       28069
+03-JUL-15 10.26.34.420 AM                                                           18                                            0
+03-JUL-15 10.26.34.420 AM                                                           16 direct path read                       26932
+03-JUL-15 10.26.35.430 AM                                                           18 direct path read                       25406
+03-JUL-15 10.26.35.430 AM                                                           16 direct path read                       40480
+03-JUL-15 10.26.36.430 AM                                                           18                                            0
+03-JUL-15 10.26.36.430 AM                                                           16 direct path read                       23304
+03-JUL-15 10.26.37.430 AM                                                           16 direct path read                       39366
+03-JUL-15 10.26.37.430 AM                                                           18                                            0
+03-JUL-15 10.26.38.430 AM                                                           18 direct path read                       11739
+03-JUL-15 10.26.39.430 AM                                                           18                                            0
+03-JUL-15 10.26.40.440 AM                                                           18                                            0
+03-JUL-15 10.26.41.440 AM                                                           18 db file scattered read                  9752
+03-JUL-15 10.26.42.440 AM                                                           18                                            0
+03-JUL-15 10.26.43.450 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 10.26.44.450 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 10.26.45.450 AM                                                           18 enq: TX - row lock contention              0               16
+...(省略)
+03-JUL-15 10.27.25.560 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 10.27.26.570 AM                                                           18 enq: TX - row lock contention       44073270               16
+03-JUL-15 10.27.27.570 AM                                                           18                                            0
+03-JUL-15 10.27.38.624 AM                                                           18                                            0
+03-JUL-15 10.27.39.624 AM                                                           18                                            0
+03-JUL-15 10.27.40.634 AM                                                           18                                            0
+03-JUL-15 10.27.41.634 AM                                                           18                                            0
+03-JUL-15 10.27.42.634 AM                                                           18                                            0
+03-JUL-15 10.32.09.463 AM                                                           18 direct path read                       23217
+03-JUL-15 10.32.10.463 AM                                                           18                                            0
+03-JUL-15 10.32.11.463 AM                                                           18                                            0
+03-JUL-15 10.32.12.473 AM                                                           18 direct path read                       15815
+03-JUL-15 10.32.13.473 AM                                                           18 direct path read                       19776
+03-JUL-15 10.32.14.473 AM                                                           18 direct path read                       13413
+03-JUL-15 10.32.15.483 AM                                                           18 direct path read                       17309
+03-JUL-15 10.32.16.483 AM                                                           18 direct path read                       18914
+03-JUL-15 10.32.53.603 AM                                                           18 direct path read                       12137
+03-JUL-15 10.32.54.603 AM                                                           18                                            0
+03-JUL-15 10.32.55.603 AM                                                           18 direct path read                       11806
+03-JUL-15 10.32.56.603 AM                                                           18                                            0
+03-JUL-15 10.32.57.613 AM                                                           18 direct path read                       12965
+03-JUL-15 10.32.58.613 AM                                                           18                                            0
+03-JUL-15 10.32.59.613 AM                                                           18                                            0
+03-JUL-15 10.33.00.623 AM                                                           18                                            0
+03-JUL-15 10.33.01.623 AM                                                           18                                            0
+03-JUL-15 10.33.02.623 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 10.33.03.633 AM                                                           18 enq: TX - row lock contention              0               15
+...(省略)
+03-JUL-15 10.38.29.681 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 10.38.30.681 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 10.38.31.681 AM                                                           18 enq: TX - row lock contention      329912361               15
+03-JUL-15 10.38.32.701 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 10.38.33.701 AM                                                           18 enq: TX - row lock contention              0               16
+...(省略)
+03-JUL-15 10.39.56.019 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 10.39.57.019 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 10.39.58.019 AM                                                           18 enq: TX - row lock contention       85566928               16
+
+
+
+■謎(3) INSERT文がエラーにならないのは何故？索引がRebuildされてる？
+
+$ sqlplus /nolog
+SQL>
+connect TRY/TRY12345
+col INDEX_NAME for a24
+select INDEX_NAME, PARTITION_NAME, STATUS from USER_IND_PARTITIONS ;
+
+INDEX_NAME               PARTITION_NAME   STATUS
+------------------------ ---------------- --------
+PK_TAB27_PART            SYS_P357         USABLE
+PK_TAB27_PART            SYS_P356         USABLE
+PK_TAB27_PART            P201401          USABLE
+IDX_TAB27_PART_COL4      SYS_P357         USABLE
+IDX_TAB27_PART_COL4      SYS_P356         USABLE
+IDX_TAB27_PART_COL4      P201401          USABLE
+
+==> 答(3) Update Indexes句を付けていないのに、自動的にRebuildされちゃってる！！
+    ==> update indexes句の欠点（moveとrebuileの間にupdate文が入っちゃう問題）が解決しちゃう！！凄い！
+
+
+
+##########################################################################################################
+| ALTER TABLE MOVE PARTITIONの実行（ONLINE句有り/UPDATE INDEXES無し）のevent10046トレースを取る
+##########################################################################################################
+
+-- 準備
+alter table TAB27_PART move partition P201401 nocompress online;
+col INDEX_NAME for a24
+select INDEX_NAME, PARTITION_NAME, STATUS from USER_IND_PARTITIONS ;
+
+INDEX_NAME               PARTITION_NAME   STATUS
+------------------------ ---------------- --------
+PK_TAB27_PART            SYS_P357         USABLE
+PK_TAB27_PART            SYS_P356         USABLE
+PK_TAB27_PART            P201401          USABLE
+IDX_TAB27_PART_COL4      SYS_P357         USABLE
+IDX_TAB27_PART_COL4      SYS_P356         USABLE
+IDX_TAB27_PART_COL4      P201401          USABLE
+
+delete TAB27_PART where COL1=0 ;
+commit ;
+
+
+-- 次の3つのセッションを同時実行
+sqlplus /nolog
+SQL> -- sessionA
+connect TRY/TRY12345
+set timing on
+set time on
+alter session set events '10046 trace name context forever, level 12' ;
+alter table TAB27_PART move partition P201401 compress for oltp online ;
+
+
+sqlplus /nolog
+SQL> -- sessionB
+connect TRY/TRY12345
+set timing on
+set time on
+alter session set events '10046 trace name context forever, level 12' ;
+insert into TAB27_PART values(0,to_date('2014/01/01','YYYY/MM/DD'),0,0,'sibacho');
+
+
+sqlplus /nolog
+SQL> -- sessionC
+connect TRY/TRY12345
+set timing on
+set time on
+alter session set events '10046 trace name context forever, level 12' ;
+update TAB27_PART set COL5='sibacho' where COL1=1 and COL2=to_date('2014/01/02','YYYY/MM/DD');
+
+
+### 結果
+[sessionA] : alter table move partition ONLINE
+		（待機...）
+
+[sessionB] : insert
+		1 row created.
+		Elapsed: 00:00:00.08
+
+[sessionC] : update
+		1 row updated.
+		Elapsed: 00:00:00.09
+
+-- sessionB/C
+commit ;
+
+[sessionA] : alter table move partition ONLINE
+		Table altered.
+		Elapsed: 00:00:36.71
+
+-- sessionA/B/C
+alter session set events '10046 trace name context off' ;
+!ps | grep sqlplus | grep -v grep
+!ps -ef|grep <***> | grep DESCRIPTION | grep -v grep
+
+oracle    7572  3556  4 11:04 ?        00:00:07 oracleorcl (DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq))) : sessionA
+oracle    7592  3623  0 11:04 ?        00:00:00 oracleorcl (DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq))) : sessionB
+oracle    7607  3670  0 11:04 ?        00:00:00 oracleorcl (DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq))) : sessionC
+
+
+connect / as sysdba
+set linesize 200
+set pages 5000
+col EVENT for a32
+select SAMPLE_TIME, SESSION_ID, EVENT, TIME_WAITED, BLOCKING_SESSION
+  from V$ACTIVE_SESSION_HISTORY
+ where SESSION_ID in (15,16,18)
+   and SAMPLE_TIME > SYSTIMESTAMP - 20/60/24
+ order by 1;
+
+SAMPLE_TIME                                                                 SESSION_ID EVENT                            TIME_WAITED BLOCKING_SESSION
+--------------------------------------------------------------------------- ---------- -------------------------------- ----------- ----------------
+03-JUL-15 11.04.45.926 AM                                                           18                                            0
+03-JUL-15 11.04.46.926 AM                                                           18                                            0
+03-JUL-15 11.04.47.936 AM                                                           18                                            0
+03-JUL-15 11.04.48.936 AM                                                           18                                            0
+03-JUL-15 11.04.49.946 AM                                                           18                                            0
+03-JUL-15 11.04.50.946 AM                                                           18                                            0
+03-JUL-15 11.04.51.946 AM                                                           18                                            0
+03-JUL-15 11.04.52.956 AM                                                           18                                            0
+03-JUL-15 11.04.53.956 AM                                                           18                                            0
+03-JUL-15 11.04.54.956 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.04.55.956 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.04.56.966 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.04.57.966 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.04.58.966 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.04.59.966 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.00.976 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.01.976 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.02.986 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.03.986 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.04.986 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.05.996 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.06.996 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.07.996 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.09.006 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.10.006 AM                                                           18 enq: TX - row lock contention              0               15
+03-JUL-15 11.05.11.006 AM                                                           18 enq: TX - row lock contention       17185845               15
+03-JUL-15 11.05.12.016 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.13.016 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.14.016 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.15.016 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.16.026 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.17.026 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.18.026 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.19.036 AM                                                           18 enq: TX - row lock contention              0               16
+03-JUL-15 11.05.20.046 AM                                                           18 enq: TX - row lock contention        8497857               16
+03-JUL-15 11.05.21.046 AM                                                           18 enq: RO - fast object reuse           298923                7
+
+
+
+
+move   : orcl_ora_7572.trc
+insert : orcl_ora_7592.trc
+update : orcl_ora_7607.trc
+
+
+
+$ cat orcl_ora_7572.trc | grep -1 PARSING | more | grep -1 alter
+PARSING IN CURSOR #140002460551200 len=71 dep=0 uid=72 oct=1 lid=72 tim=5465193118 hv=1081719720 ad='a1a437c8' sqlid='74d979507mfx8'
+alter table TAB27_PART mo
+--
+--
+PARSING IN CURSOR #140002458086624 len=73 dep=1 uid=72 oct=9 lid=0 tim=5472384475 hv=472577876 ad='9bcba2c8' sqlid='586gn3nf2pxun'
+alter index "TRY"."PK_TAB27_PART" rebuild partition "SYS_P361" NOPARALLEL
+--
+--
+PARSING IN CURSOR #140002461381272 len=79 dep=1 uid=72 oct=9 lid=0 tim=5473927898 hv=3253280962 ad='9d4e7690' sqlid='5fxj1km0yk862'
+alter index "TRY"."IDX_TAB27_PART_COL4" rebuild partition "SYS_P361" NOPARALLEL
+--
+--
+PARSING IN CURSOR #140002458167192 len=71 dep=1 uid=72 oct=15 lid=0 tim=5500959694 hv=1812066334 ad='9d293360' sqlid='85cq5wpq03w0y'
+alter table "TRY"."TAB27_
+--
+==> 確かに、索引のRebuildが実行されている
+
+
+最後のalter文が切れてしまっているので、表名をTへ変更しトレースを取ってみた結果、
+何と、Drop Partitionが実行されちゃっているじゃーあーりませんか。そりゃ、V$SQLに出ないわけだ。
+=====
+$ cat orcl_ora_8421.trc | grep -1 PARSING | more | grep -1 alter
+PARSING IN CURSOR #140661237855576 len=62 dep=1 uid=72 oct=15 lid=0 tim=7169585231 hv=3658786806 ad='a2ec3570' sqlid='6kp2xgmd199zq'
+alter table "TRY"."T" dro
+=====
+
+
+もう少し分析
+=====
+$ cat orcl_ora_7572.trc | grep -1 PARSING | more | grep -1 -E 'TRY|alter'
+PARSING IN CURSOR #140002460551200 len=71 dep=0 uid=72 oct=1 lid=72 tim=5465193118 hv=1081719720 ad='a1a437c8' sqlid='74d979507mfx8'
+alter table TAB27_PART mo
+--
+PARSING IN CURSOR #140002459467440 len=145 dep=1 uid=72 oct=1 lid=0 tim=5465314968 hv=1293075755 ad='9df03cb8' sqlid='ajgvr556j5j9b'
+create table  "TRY"."SYS_RMTAB$$_H21369
+--
+PARSING IN CURSOR #140002459465344 len=122 dep=1 uid=72 oct=1 lid=0 tim=5465445698 hv=1205413604 ad='9d5f5708' sqlid='2xy9jm53xk9r4'
+create table "TRY"."SYS_JOURNAL_21369
+--
+PARSING IN CURSOR #140002460405952 len=206 dep=2 uid=72 oct=9 lid=0 tim=5465457886 hv=3492239454 ad='9db7f998' sqlid='4kmjc3v82fq2y'
+CREATE UNIQUE INDEX "TRY"."SYS_IOT_TOP_21384" on "TRY"."SYS_JOURNAL_21369"("RID") INDEX ONLY TOPLEVEL TABLESPACE "TBS27" STORAGE( BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) NOPARALLEL
+--
+PARSING IN CURSOR #140002461376448 len=271 dep=1 uid=72 oct=1 lid=0 tim=5470820974 hv=3525734927 ad='9d52f7e0' sqlid='48hwx1m92cwhg'
+create table  "TRY"."SYS_RMTAB$$_I21369
+--
+PARSING IN CURSOR #140002460444520 len=294 dep=2 uid=72 oct=9 lid=0 tim=5470836664 hv=2723144076 ad='9d9112a8' sqlid='g9mysxuj4zscc'
+CREATE UNIQUE INDEX "TRY"."PK_SYS_RMTAB$$_I21369" on "TRY"."SYS_RMTAB$$_I21369"("SRC_ROWID") INDEX ONLY TOPLEVEL TABLESPACE "TBS27" STORAGE( BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) NOLOGGING NOPARALLEL as (select src_rowid, tgt_rowid from  "TRY"."SYS_RMTAB$$_H21369" )
+--
+PARSING IN CURSOR #140002461401384 len=44 dep=1 uid=72 oct=12 lid=0 tim=5471638769 hv=2178595357 ad='7f54dcf5a9b8' sqlid='aq5xfwq0xpfhx'
+drop table  "TRY"."SYS_RMTAB$$_H21369" purge
+--
+PARSING IN CURSOR #140002458086624 len=73 dep=1 uid=72 oct=9 lid=0 tim=5472384475 hv=472577876 ad='9bcba2c8' sqlid='586gn3nf2pxun'
+alter index "TRY"."PK_TAB27_PART" rebuild partition "SYS_P361" NOPARALLEL
+--
+PARSING IN CURSOR #140002461381272 len=79 dep=1 uid=72 oct=9 lid=0 tim=5473927898 hv=3253280962 ad='9d4e7690' sqlid='5fxj1km0yk862'
+alter index "TRY"."IDX_TAB27_PART_COL4" rebuild partition "SYS_P361" NOPARALLEL
+--
+PARSING IN CURSOR #140002458437224 len=484 dep=2 uid=72 oct=3 lid=72 tim=5474827316 hv=2762843680 ad='9f41b030' sqlid='gbqrt4ykav9j0'
+SELECT /* OPT_DYN_SAMP */ /*+ ALL_ROWS IGNORE_WHERE_CLAUSE NO_PARALLEL(SAMPLESUB) opt_param('parallel_execution_enabled', 'false') NO_PARALLEL_INDEX(SAMPLESUB) NO_SQL_TUNE */ NVL(SUM(C1),:"SYS_B_0"), NVL(SUM(C2),:"SYS_B_1") FROM (SELECT /*+ NO_PARALLEL("TAB27_PART") FULL("TAB27_PART") NO_PARALLEL_INDEX("TAB27_PART") */ :"SYS_B_2" AS C1, :"SYS_B_3" AS C2 FROM "TRY"."TAB27_PART" PARTITION ("SYS_P361")  SAMPLE BLOCK (:"SYS_B_4" , :"SYS_B_5") SEED (:"SYS_B_6") "TAB27_PART") SAMPLESUB
+--
+PARSING IN CURSOR #140002458113216 len=308 dep=1 uid=72 oct=2 lid=72 tim=5474833644 hv=3201683530 ad='9dd0f678' sqlid='1sfvhkkzdbn2a'
+insert /*+ RELATIONAL("TAB27_PART") PARALLEL("TAB27_PART",0) APPEND NESTED_TABLE_SET_SETID NO_REF_CASCADE */   into "TRY"."TAB27_PART"  partition ("SYS_P361") select /*+ RELATIONAL("TAB27_PART") PARALLEL("TAB27_PART",0)  */  *  from "TRY"."TAB27_PART" partition ("SYS_P361")  insert not unique global indexes
+--
+PARSING IN CURSOR #140002458437176 len=81 dep=1 uid=72 oct=7 lid=72 tim=5500536416 hv=3011867302 ad='9d153298' sqlid='25r3ct6tsawp6'
+delete /*+ USE_HIDDEN_PARTITIONS */ from "TRY"."TAB27_PART" where rowid = :tgtrid
+--
+PARSING IN CURSOR #140002458921280 len=266 dep=1 uid=72 oct=2 lid=72 tim=5500550275 hv=822581377 ad='9d4efde8' sqlid='248ar4cshg641'
+insert /*+  USE_HIDDEN_PARTITIONS RELATIONAL("TAB27_PART") PARALLEL("TAB27_PART",1)  NESTED_TABLE_SET_SETID NO_REF_CASCADE */   into "TRY"."TAB27_PART" select /*+ RELATIONAL("TAB27_PART") PARALLEL("TAB27_PART",1)  */  *  from "TRY"."TAB27_PART" where rowid = :srcrid
+--
+PARSING IN CURSOR #140002458167192 len=71 dep=1 uid=72 oct=15 lid=0 tim=5500959694 hv=1812066334 ad='9d293360' sqlid='85cq5wpq03w0y'
+alter table "TRY"."TAB27_
+--
+PARSING IN CURSOR #140002458332936 len=42 dep=1 uid=72 oct=12 lid=0 tim=5501549770 hv=3763707401 ad='7f54dcf5a9b8' sqlid='8wvvkkzh5b7h9'
+drop table "TRY"."SYS_JOURNAL_21369" purge
+--
+PARSING IN CURSOR #140002460402936 len=44 dep=1 uid=72 oct=12 lid=0 tim=5501659557 hv=3689638601 ad='7f54dcf5a9b8' sqlid='bxncvjmdyquq9'
+drop table  "TRY"."SYS_RMTAB$$_I21369" purge
+--
+PARSING IN CURSOR #140002460551200 len=56 dep=0 uid=72 oct=42 lid=72 tim=5509071000 hv=3517064084 ad='0' sqlid='79xup178u48wn'
+alter session set events '10046 trace name context off'=====
+=====
+
+
+
+   27 *** 2015-07-03 11:04:44.957
+   
+  538 alter table TAB27_PART mo
+
+ 8404 *** 2015-07-03 11:04:46.173
+ 8510 *** 2015-07-03 11:04:50.391
+
+16367 CREATE UNIQUE INDEX "TRY"."PK_SYS_RMTAB$$_I21369" on "TRY"."SYS_RMTAB$$_I21369"("SRC_ROWID") INDEX ONLY TOPLEVEL TABLESPACE "TBS27" STORAGE( BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_C      ACHE DEFAULT) NOLOGGING NOPARALLEL as (select src_rowid, tgt_rowid from  "TRY"."SYS_RMTAB$$_H21369" )
+
+16682 *** 2015-07-03 11:04:50.851
+24438 *** 2015-07-03 11:04:51.848
+
+33278 alter index "TRY"."PK_TAB27_PART" rebuild partition "SYS_P361" NOPARALLEL
+
+33366 *** 2015-07-03 11:04:52.857
+
+
+34798 alter index "TRY"."IDX_TAB27_PART_COL4" rebuild partition "SYS_P361" NOPARALLEL
+
+34833 *** 2015-07-03 11:04:53.928
+
+36023 insert /*+ RELATIONAL("TAB27_PART") PARALLEL("TAB27_PART",0) APPEND NESTED_TABLE_SET_SETID NO_REF_CASCADE */   into "TRY"."TAB27_PART"  partition ("SYS_P361") select /*+ RELATIONAL("TAB27_PART"      ) PARALLEL("TAB27_PART",0)  */  *  from "TRY"."TAB27_PART" partition ("SYS_P361")  insert not unique global indexes
+
+36237 *** 2015-07-03 11:05:11.916
+36238 WAIT #140002460551200: nam='enq: TX - row lock contention' ela= 17185845 name|mode=1415053316 usn<<16 | slot=131092 sequence=748 obj#=21369 tim=5492022500
+36239
+36240 *** 2015-07-03 11:05:20.417
+36241 WAIT #140002460551200: nam='enq: TX - row lock contention' ela= 8497857 name|mode=1415053316 usn<<16 | slot=65568 sequence=754 obj#=21369 tim=5500521938
+36242 WAIT #140002460551200: nam='db file sequential read' ela= 1741 file#=5 block#=228091 blocks=1 obj#=21389 tim=5500529822
+36243 WAIT #140002460551200: nam='db file sequential read' ela= 1210 file#=5 block#=228090 blocks=1 obj#=21389 tim=5500531510
+...
+46445 alter table "TRY"."TAB27_
+
+==>
+■疑(4)
+移動先のパーティションSYS_P361を作成して、そこに索引を作っている。
+その後、データを移動して、最後に元をDROP Partitionして、Renameか？
+
+
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+TAB27_PART   P201401          TABLE PARTITION    TBS27                         72
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+
+==> 既存は3パーティションで、P201401をMOVE PARTITION NOCOMPRESS ONLINE
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+SYS_RMTAB$$_                  TABLE              TBS27                       .875
+H21408
+
+TAB27_PART   P201401          TABLE PARTITION    TBS27                         72
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+
+==> SYS_RMTAB$$_H21408という表が生成された
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+SYS_RMTAB$$_                  TABLE              TBS27                          7
+H21408
+
+TAB27_PART   P201401          TABLE PARTITION    TBS27                         72
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+SYS_RMTAB$$_                  TABLE              TBS27                          9
+H21408
+
+TAB27_PART   P201401          TABLE PARTITION    TBS27                         72
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+TAB27_PART   P201401          TABLE PARTITION    TBS27                         72
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P364         TABLE PARTITION    TBS27                        408
+
+==> うわ。SYS_RMTAB$$_H21408表が消えて、TAB27_PART表にパーティションSYS_P364が追加されている。しかもサイズが非圧縮のもの。
+
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+TAB27_PART   P201401          TABLE PARTITION    TBS27                         72
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P364         TABLE PARTITION    TBS27                        408
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+TAB27_PART   P201401          TABLE PARTITION    TBS27                         72
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P364         TABLE PARTITION    TBS27                        408
+
+SQL> r
+  1  select SEGMENT_NAME, PARTITION_NAME, SEGMENT_TYPE, TABLESPACE_NAME, BYTES/1024/1024
+  2    from USER_SEGMENTS
+  3   where SEGMENT_TYPE like 'TABLE%'
+  4*    and SEGMENT_NAME != 'TAB27_BASE'
+
+SEGMENT_NAME PARTITION_NAME   SEGMENT_TYPE       TABLESPACE_NAME  BYTES/1024/1024
+------------ ---------------- ------------------ ---------------- ---------------
+TAB27_PART   P201401          TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P356         TABLE PARTITION    TBS27                        408
+TAB27_PART   SYS_P357         TABLE PARTITION    TBS27                        408
+
+==> ■答(4) SYS_P364が消えて、P201401のサイズが大きくなっている。
+　　確実に、元のP201401がDROP PARTITIONされて、SYS_P364がP201401にRenameされていることが分かる。
+　　凄い。Exchange Partition並の事をやっている。。。
+
+
+
+select count(FA#) from SYS_FBA_TRACKEDTABLES where OBJ# = 21214 and bitand(FLAGS, 128)=0
+LOCK TABLE "TAB27_PART" PARTITION ("P201401")  IN ROW EXCLUSIVE MODE  NOWAIT 
+
+
+
+set linesize 120 pages 500
+col OWNER for a8
+col OBJECT_NAME for a16
+col SUBOBJECT_NAME for a16
+select object_name,object_id,data_object_id from dba_objects where owner='TRY' and object_name='TAB27_PART';
+
+OBJECT_NAME       OBJECT_ID DATA_OBJECT_ID
+---------------- ---------- --------------
+TAB27_PART            21334          21334
+TAB27_PART            21331          21331
+TAB27_PART            21382          21382
+TAB27_PART            21214

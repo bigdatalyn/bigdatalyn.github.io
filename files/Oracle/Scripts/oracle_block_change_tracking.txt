@@ -1,0 +1,46 @@
+
+SQL> connect / as sysdba
+set linesize 150 pages 5000
+col TABLESPACE_NAME for a16
+col FILE_NAME for a48
+col ALL_BLKS  for 999,999,999,999
+col FILE_MB   for 999,999,999
+col READ_BLKS for 999,999,999,999
+col READ_MB   for 999,999,999
+
+variable B0 number -- Database Block size(KB)
+variable B1 number -- ASM AU size(MB)
+execute :B0 := 8
+execute :B1 := 1
+select T1.FNO, T2.TABLESPACE_NAME, T2.FILE_NAME, 
+       T1.READ_BLKS, T1.READ_BLKS*:B0/1024 "READ_MB",
+       T2.BLOCKS             "ALL_BLKS",
+       T2.MAXBYTES/1024/1024 "FILE_MB"
+  from (
+        select FNO, sum(MAX_BNO-MIN_BNO) "READ_BLKS"
+          from (
+                select FNO, IORANGE, min(FIRST_BNO) "MIN_BNO", max(END_BNO) "MAX_BNO"
+                  from (
+                        select B.FNO, B.BNO "FIRST_BNO", B.BNO+B.BCT "END_BNO",
+                               trunc((B.BNO+B.BCT)/(:B1*1024/:B0)) "IORANGE"
+                          from X$KRCFDE A, X$KRCBIT B
+                         where A.FNO = B.FNO
+                           and A.CURR_VERCNT = B.VERCNT
+                           and A.INST_ID = B.INST_ID
+                           and A.CSNO = B.CSNO
+                        )
+                 group by FNO, IORANGE
+                )
+         group by FNO
+        ) T1, DBA_DATA_FILES T2
+ where T1.FNO = T2.FILE_ID
+ order by 1 ;
+
+  FNO TABLESPACE_NAME  FILE_NAME                                   READ_BLKS   READ_MB    ALL_BLKS FILE_MB
+----- ---------------- ------------------------------------------- --------- --------- ----------- -------
+    1 SYSTEM           +DATA/orcl/datafile/system.270.829133047        8,976        70     107,520  32,768
+    2 SYSAUX           +DATA/orcl/datafile/sysaux.260.829133049      438,092     3,423   1,383,680  32,768
+    3 UNDOTBS1         +FRA/orcl/datafile/undotbs1.363.831559001     130,948     1,023     131,072       0
+    4 USERS            +DATA/orcl/datafile/users.279.829133051           140         1     156,960  32,768
+
+# DB Backup Recovery Block Change Tracking  
