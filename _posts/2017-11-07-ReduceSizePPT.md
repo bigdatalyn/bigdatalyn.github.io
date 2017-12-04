@@ -22,4 +22,10 @@ tags: PPT Tools
 ![PPT_Tools]({{ "/files/tools/PPT/ReducePPTfilesize.pdf"}})
 
 
+[PPT_Tools](/files/tools/PPT/ReducePPTfilesize.pdf)
+
+
+
+
+
 ++++++++++++++++ EOF LinHong ++++++++++++++++	
