@@ -48,7 +48,7 @@ Linux默认版本2.6，更新2.7版本的简单汇总
 #### Step 4 – 检查版本
 
 	# /usr/local/bin/python2.7 -V
-										 
+
 	# python -V
 
 #### Step 5 – 安装pip
