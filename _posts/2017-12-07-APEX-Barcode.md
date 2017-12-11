@@ -98,5 +98,9 @@ https://apex.oracle.com/pls/apex/f?p=29110:1:2214956191348:::::
 </video>
 
 
+参考:
+
+[Oracle Application Express Barcode Scanner Example](https://community.oracle.com/people/Valentin+Leonard+Tabacaru+-Oracle/blog/2017/12/05/oracle-application-express-barcode-scanner-example?customTheme=ougc)
+
 
 ++++++++++++++++ EOF LinHong ++++++++++++++++	
