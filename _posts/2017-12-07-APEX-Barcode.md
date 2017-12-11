@@ -17,7 +17,7 @@ APEX Barcode扫描小程序
 
 
 
-Step 1. Apex账号申请
+### Step 1. Apex账号申请
 
 很简单,点击注册，邮箱注册，确认,下一步....
 
@@ -25,7 +25,7 @@ https://apex.oracle.com/en/
 
 测试版本:  Oracle Application Express 5
 
-Step 2. 下载代码包
+### Step 2. 下载代码包
  
 
 下载Apex代码
@@ -39,7 +39,7 @@ Step 2. 下载代码包
 [serratus-quaggaJS-v0.12.1](/files/Oracle/Apex/serratus-quaggaJS-v0.12.1-0-geff0c5a.zip)
  
 
-Step 3. 创建SQL Workshop项目并导入Application Builder
+### Step 3. 创建SQL Workshop项目并导入Application Builder
 
 创建SQL Workshop项目，创建新表CODE_PRODUCTS:
 
@@ -50,11 +50,9 @@ Step 3. 创建SQL Workshop项目并导入Application Builder
 列:
 
 	ID NUMBER(10,0) Not NULL NAME VARCHAR2(50)
-
 	CODE VARCHAR2(40)
-
 	TYPE VARCHAR2(12)
-
+	
 	Primary Key: Populated from a new sequence
 
 	Primary Key Constraint Name: CODE_PRODUCTS_PK
@@ -67,7 +65,7 @@ Step 3. 创建SQL Workshop项目并导入Application Builder
 
 	No Constraints.
  
-在Application Builder上导入之前下载的Apex代码下的  f101.sql 
+在Application Builder上导入之前下载的Apex代码下的<font face=“#9932CC”>f101.sql </font>
 
 步骤:
 
@@ -81,7 +79,7 @@ Step 3. 创建SQL Workshop项目并导入Application Builder
 	stylesheets/styles.css
 
 
-Step 4.测试
+### Step 4.测试
  
 我用个人pc的摄像头扫描，效果视频如下： 
 
@@ -98,7 +96,7 @@ https://apex.oracle.com/pls/apex/f?p=29110:1:2214956191348:::::
 </video>
 
 
-参考:
+### 参考资料
 
 [Oracle Application Express Barcode Scanner Example](https://community.oracle.com/people/Valentin+Leonard+Tabacaru+-Oracle/blog/2017/12/05/oracle-application-express-barcode-scanner-example?customTheme=ougc)
 
