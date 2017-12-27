@@ -32,17 +32,11 @@ If have already installed the example schema, Please skip this step.
 [Oracle Database 11g Release 2 Examples ](http://www.oracle.com/technetwork/database/enterprise-edition/downloads/112010-linx8664soft-100572.html)
 
 	ls -ltr $ORACLE_HOME/demo/schema/human_resources
-
 	ls -ltr $ORACLE_HOME/demo/schema/bus_intelligence
-
 	ls -ltr $ORACLE_HOME/demo/schema/shipping
-
 	ls -ltr $ORACLE_HOME/demo/schema/info_exchange
-
 	ls -ltr $ORACLE_HOME/demo/schema/sales_history
-
 	ls -ltr $ORACLE_HOME/demo/schema/product_media
-
 	ls -ltr $ORACLE_HOME/demo/schema/order_entry
 
 #### Install guild
