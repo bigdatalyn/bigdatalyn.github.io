@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Import Oracle Sample schema and create Test data"
+title: "[Original]Import Oracle Sample schema and create big test table"
 category: Oracle
 tags: Oracle Schema
 ---
@@ -9,9 +9,11 @@ tags: Oracle Schema
 {:toc}
 
 
-Import Oracle Sample schema and create Test data
+[Original]Import Oracle Sample schema and create big test table
 
 How to import the sample schema if you did not install the sample schema while installed the Database product?
+
+How to create big table for test?
 
 Simple to describe the steps...
 
