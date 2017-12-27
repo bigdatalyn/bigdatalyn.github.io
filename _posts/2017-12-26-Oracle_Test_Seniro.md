@@ -9,7 +9,7 @@ tags: Oracle Schema
 {:toc}
 
 
-[Original]Import Oracle Sample schema and create big test table
+### [Original]Import Oracle Sample schema and create big test table
 
 How to import the sample schema if you did not install the sample schema while installed the Database product?
 
@@ -45,7 +45,7 @@ If have already installed the example schema, Please skip this step.
 
 	ls -ltr $ORACLE_HOME/demo/schema/order_entry
 
-#### Install guild:
+#### Install guild
 
 [11g Database Examples Installation Guide](https://docs.oracle.com/cd/E11882_01/server.112/e10831/installation.htm#COMSC001)
 
@@ -59,7 +59,7 @@ Figure 3-3 Sample Schema SH
 
 ![Sample Schema SH]({{ "https://docs.oracle.com/cd/E82638_01/COMSC/img/GUID-E29B836C-9576-40D4-9F71-1B463E8947D0-default.gif"}})	
 
-#### Simple Install Guild
+#### Simply Install Guild
 
 Use the response file to install sample schema.
 
@@ -136,34 +136,26 @@ Sample steps for install sh schema:
 	With the Partitioning, OLAP, Data Mining and Real Application Testing options
 
 	SQL> @sh_main.sql                                                                                                                
-
 	specify password for SH as parameter 1:
 	Enter value for 1: sh                                                                                                            
-
 	specify default tablespace for SH as parameter 2:
 	Enter value for 2: users                                                                                                         
-
 	specify temporary tablespace for SH as parameter 3:
 	Enter value for 3: temp                                                                                                          
-
 	specify password for SYS as parameter 4:
 	Enter value for 4: oracle                                                                                                        
-
 	specify directory path for the data files as parameter 5:
 	Enter value for 5: $ORACLE_HOME/demo/schema/sales_history/                                                                       
-
 	writeable directory path for the log files as parameter 6:
 	Enter value for 6: $ORACLE_HOME/demo/schema/log/                                                                                 
-
 	specify version as parameter 7:
 	Enter value for 7: v3                                                                                                            
-
 
 	Session altered.
 
 	~~~~~~
 
-##### d. Tar packages and copy other server to execute the example schema now.
+##### d. Tar packages and copy the file to other server for executing the example schema now.
 	
 	[oracle@databasevm001 schema]$ tar -zcvf /u01/app/oracle/product/11.2.0.4/dbhome_1/demo/schema/sales_history.tar.gz /u01/app/oracle/product/11.2.0.4/dbhome_1/demo/schema/sales_history/
 	[oracle@databasevm001 schema]$ du -sm sales_history.tar.gz                                                                       
@@ -176,7 +168,6 @@ Sample steps for install sh schema:
 	12:36:13 SH@dbpoc1> set pagesize 1000 linesize 1000
 	12:36:24 SH@dbpoc1> col table_name for a40
 	12:36:37 SH@dbpoc1> select table_name from user_tables;
-
 	TABLE_NAME
 	----------------------------------------
 	DIMENSION_EXCEPTIONS
@@ -192,9 +183,7 @@ Sample steps for install sh schema:
 	SALES_TRANSACTIONS_EXT
 	COSTS
 	SALES
-
 	13 rows selected.
-
 	12:36:39 SH@dbpoc1> 
 
 
@@ -229,11 +218,9 @@ We use the RAC to test.
 The Sh schema use the DATA tablespace.
 	
 	12:42:04 SYS@dbpoc1> select USERNAME,DEFAULT_TABLESPACE from dba_users where username = 'SH';
-
 	USERNAME		       DEFAULT_TABLESPACE
 	------------------------------ ------------------------------
 	SH			       DATA
-
 	12:42:25 SYS@dbpoc1> 
 
 #### Create the sales table_name
@@ -241,9 +228,7 @@ The Sh schema use the DATA tablespace.
 Rename the sales to sales_org and create the new sales table.
 
 	SH@dbpoc1> rename SALES to SALES_ORG;
-
 	Table renamed.
-
 	CREATE TABLE "SH"."SALES"
 	   (    "PROD_ID" NUMBER NOT NULL ENABLE,
 			"CUST_ID" NUMBER NOT NULL ENABLE,
@@ -271,100 +256,59 @@ Rename the sales to sales_org and create the new sales table.
 			   rpad(to_char(mod(CUST_ID,30)),110,'dummy2')
 		  from SH.SALES_ORG;
 	commit;
-
 	918843 rows created.
-
 	SH@dbpoc1> 
 	Commit complete.
-
 	SH@dbpoc1> col segment_name for a32
 	SH@dbpoc1> select SEGMENT_NAME, BYTES/1024/1024 from USER_SEGMENTS where SEGMENT_NAME='SALES' ;
-
 	SEGMENT_NAME			 BYTES/1024/1024
 	-------------------------------- ---------------
 	SALES					     252
-
 	SH@dbpoc1> 
 
 Insert 32g data via insert append.	
 	
 	SH@dbpoc1> show parameter cpu_count
-
 	NAME				     TYPE			       VALUE
 	------------------------------------ --------------------------------- ------------------------------
 	cpu_count			     integer			       28
 	SH@dbpoc1> alter session force parallel dml parallel 28 ;
-
 	Session altered.
-
 	SH@dbpoc1> alter session force parallel query parallel 28 ;
-
 	Session altered.
-
 	SH@dbpoc1> insert /*+append */ into SH.SALES nologging select * from SH.SALES;
-
 	918843 rows created.
-
 	SH@dbpoc1> commit;
-
 	Commit complete.
-
 	SH@dbpoc1> insert /*+append */ into SH.SALES nologging select * from SH.SALES;
-
 	1837686 rows created.
-
 	SH@dbpoc1> commit;
-
 	Commit complete.
-
 	SH@dbpoc1> insert /*+append */ into SH.SALES nologging select * from SH.SALES;
-
 	3675372 rows created.
-
 	SH@dbpoc1> commit;
-
 	Commit complete.
-
 	SH@dbpoc1> insert /*+append */ into SH.SALES nologging select * from SH.SALES;
-
 	7350744 rows created.
-
 	SH@dbpoc1> commit;
-
 	Commit complete.
-
 	SH@dbpoc1> insert /*+append */ into SH.SALES nologging select * from SH.SALES;
-
 	14701488 rows created.
-
 	SH@dbpoc1> commit;
-
 	Commit complete.
-
 	SH@dbpoc1> insert /*+append */ into SH.SALES nologging select * from SH.SALES;
-
 	29402976 rows created.
-
 	SH@dbpoc1> commit;
-
 	Commit complete.
-
 	SH@dbpoc1> insert /*+append */ into SH.SALES nologging select * from SH.SALES;
-
 	58805952 rows created.
-
 	SH@dbpoc1> commit;
-
 	Commit complete.
-
 	SH@dbpoc1> 
-	
 	SH@dbpoc1> select SEGMENT_NAME, BYTES/1024/1024 from USER_SEGMENTS where SEGMENT_NAME='SALES' ;
-
 	SEGMENT_NAME			 BYTES/1024/1024
 	-------------------------------- ---------------
 	SALES					   32352
-
 	SH@dbpoc1> 
 
 
@@ -428,9 +372,9 @@ We can use sql monitor to check the execution for these sql.
 	
 Sql monitor:
 
-a.sql have been executeed by parallel.
+> a.sql have been executeed by parallel.
 
-b.the execution time have over 5 seconds.
+> b.the execution time have over 5 seconds.
 
 Usually, we use the following sql to spool the sql monitor html file with sql_id.
 
