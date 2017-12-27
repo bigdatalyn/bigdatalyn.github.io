@@ -389,6 +389,82 @@ Terminal 02: Spool the output html file sql_id.
 
 To be continue...
 
+### Other
+
+#### Check current setting regarding Tuning Advisor
+
+	COLUMN parameter_value FORMAT A30 
+	SELECT parameter_name, parameter_value FROM dba_advisor_parameters  WHERE task_name = 'SYS_AUTO_SQL_TUNING_TASK'  AND parameter_name IN ('TIME_LIMIT', 'DEFAULT_EXECUTION_TYPE',  'LOCAL_TIME_LIMIT');
+
+#### Increate the limited time to 7200 seconds.
+
+	BEGIN 
+	  DBMS_SQLTUNE.SET_TUNING_TASK_PARAMETER(task_name => 'SYS_AUTO_SQL_TUNING_TASK', parameter => 'TIME_LIMIT', value => 7200); 
+	END;
+	/
+
+#### Check current setting.
+
+	select client_name,status from DBA_AUTOTASK_CLIENT;
+
+#### Disable Tuning Advisor
+
+	BEGIN 
+
+	dbms_auto_task_admin.disable(
+		client_name => 'sql tuning advisor',
+		operation   => NULL,
+		window_name => NULL);
+	END;
+	/	
+	
+#### Enable Tuning Advisor
+
+	BEGIN
+	dbms_auto_task_admin.enable(
+		client_name => 'sql tuning advisor',
+		operation   => NULL,
+		window_name => NULL);
+	END;
+	/
+
+#### Get the Tuning Advisor via sql_id:f1f014xz59nu9
+
+a. Create Tuning Task
+	
+	DECLARE
+	  l_sql_tune_task_id  VARCHAR2(100);
+	BEGIN
+	  l_sql_tune_task_id := DBMS_SQLTUNE.create_tuning_task (
+							  sql_id      => 'f1f014xz59nu9',
+							  scope       => DBMS_SQLTUNE.scope_comprehensive,
+							  time_limit  => 500,
+							  task_name   => 'f1f014xz59nu9_tuning_task11',
+							  description => 'Tuning task1 for query io statement f1f014xz59nu9');
+	  DBMS_OUTPUT.put_line('l_sql_tune_task_id: ' || l_sql_tune_task_id);
+	END;
+	/
+
+
+b. Execute Tuning task:
+
+	EXEC DBMS_SQLTUNE.execute_tuning_task(task_name => 'f1f014xz59nu9_tuning_task11'); 
+
+c. Output the Tuning advisor report.(Maybe it will take some time due to the executed sql)
+
+	set long 60000
+	set longchunksize 60000
+	set linesize 1000
+	select dbms_sqltune.report_tuning_task('f1f014xz59nu9_tuning_task11') from dual;
+
+d. Check list of tuning task present in database:
+
+	SELECT TASK_NAME, STATUS FROM DBA_ADVISOR_LOG WHERE TASK_NAME = 'f1f014xz59nu9_tuning_task11' ;
+
+e. Drop tuning task
+
+	execute dbms_sqltune.drop_tuning_task('f1f014xz59nu9_tuning_task11');
+
 
 ++++++++++++++++ EOF LinHong ++++++++++++++++	
 
