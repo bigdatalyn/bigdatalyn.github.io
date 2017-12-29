@@ -389,6 +389,292 @@ Terminal 02: Spool the output html file sql_id.
 
 To be continue...
 
+#### Personal PC's virtual box
+
+Test table sh.sales:
+
+	| USERS | SALES[Tab] | 3980MB
+
+#### Execute Time:
+
+	SH@orcl11g> @query_io.sql                                                                                                        
+	no rows selected
+	Elapsed: 00:01:08.56
+	SH@orcl11g> 
+	SH@orcl11g> @query_cpu.sql                                                                                                       
+	no rows selected
+	Elapsed: 00:01:02.10
+	SH@orcl11g> 
+
+	
+	Execute the step[Online Redefine DBMS_REDEFINITION change normal table to partition table.]
+	
+	SH@orcl11g> alter session force parallel query parallel 8; 
+	SH@orcl11g> @query_io.sql                                                                                                        
+	no rows selected
+	Elapsed: 00:00:00.54
+	SH@orcl11g> @query_cpu.sql                                                                                                       
+	no rows selected
+	Elapsed: 00:00:00.04
+	SH@orcl11g> 
+	
+	
+	
+	
+### User STS/SPA/SAA to advisor partition table
+
+#### Create STS via sql_id and plan_hash_value
+
+The sh user should have the privilege as following.
+
+	grant ADMINISTER SQL TUNING SET to sh; 
+	grant advisor to sh;
+
+The Simple Steps are as below.
+
+#### a. Confirm the sql_id, child_number, plan_hash_value from lib cache and check the execute plan in detail. 
+	
+	SH@orcl11g> SELECT sql_id,child_number,a.plan_hash_value FROM v$sql a WHERE sql_text LIKE 'WITH %' AND a.parsing_schema_name='SH';
+	SQL_ID        CHILD_NUMBER PLAN_HASH_VALUE
+	------------- ------------ ---------------
+	f1f014xz59nu9            0      3264974486
+	78z4mjy4xrdvg            0      4097097465
+	SH@orcl11g> 
+
+	SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY_CURSOR('f1f014xz59nu9',0,'ALL'));
+	
+#### b. Create SQL Tuning Set(STS) and load the sql_id into the STS. 
+	
+	SH@orcl11g> EXEC DBMS_SQLTUNE.CREATE_SQLSET(sqlset_name => 'STS_SALES', description => 'STS for sql_id f1f014xz59nu9');          
+	PL/SQL procedure successfully completed.
+	SH@orcl11g> 
+
+	SYS@orcl11g>                                                                                        
+	DECLARE                                                                                                                          
+	  cursor1 DBMS_SQLTUNE.SQLSET_CURSOR;                                                                                            
+	BEGIN                                                                                                                            
+	  OPEN cursor1 FOR SELECT VALUE(p)                                                                                               
+	  FROM TABLE(DBMS_SQLTUNE.SELECT_CURSOR_CACHE('sql_id = ''f1f014xz59nu9'' and plan_hash_value=''3264974486''')) p;                 
+	  DBMS_SQLTUNE.LOAD_SQLSET(sqlset_name => 'STS_SALES', populate_cursor => cursor1);                                              
+	  CLOSE cursor1;                                                                                                                 
+	END;                                                                                                                             
+	/          
+	
+	PL/SQL procedure successfully completed.
+	SYS@orcl11g>    
+	
+	SH@orcl11g> SELECT sql_id, plan_hash_value FROM TABLE(DBMS_SQLTUNE.SELECT_SQLSET('STS_SALES'));                                  
+	SQL_ID        PLAN_HASH_VALUE
+	------------- ---------------
+	f1f014xz59nu9      3264974486
+	SH@orcl11g>   
+	
+#### c. Create SQL Tuning Advisor task for the STS we have just created and then execute the task. 
+	(It will take some time.)
+		
+	SH@orcl11g> 
+	DECLARE                                                                                                                          
+	  stmt_task VARCHAR2(64);                                                                                                        
+	BEGIN                                                                                                                            
+	  stmt_task:=dbms_sqltune.create_tuning_task(sqlset_name => 'STS_SALES', time_limit => 3600, task_name => 'STA_SALES', description => 'Task to tune sql_id f1f014xz59nu9');
+	END;                                                                                                                        
+	/  
+	
+	PL/SQL procedure successfully completed.
+	SH@orcl11g>  
+	
+	SH@orcl11g> EXECUTE dbms_sqltune.execute_tuning_task('STA_SALES');
+	PL/SQL procedure successfully completed.
+	SH@orcl11g>
+	
+#### d. Check the Output result via SQL Tuning Advisor(STA).
+	
+	SH@orcl11g> SET linesize 150 LONG 999999 pages 1000 longchunksize 999999
+	SH@orcl11g> SELECT dbms_sqltune.report_tuning_task('STA_SALES') FROM dual;       
+	
+	~More Detail~
+	
+	Or use show_recm procedure to simply show the advisor contents.
+	
+	[Referent the link for the show_recm procedure](https://docs.oracle.com/cd/B28359_01/server.111/b28274/advisor.htm#PFGRF008)
+
+	SH@orcl11g> EXEC show_recm('STA_SALES');                                                                                         
+	=========================================
+	Task_name = STA_SALES
+	Action ID: 1
+	Command : ACCEPT SQL PROFILE
+	Attr1 (name)      : STA_SALES
+	Attr2 (tablespace): 2
+	Attr3             : SQL PROFILE
+	Attr4             :
+	Attr5             :
+	----------------------------------------
+	Action ID: 2
+	Command : CREATE INDEX
+	Attr1 (name)      : SH.IDX$$_005E0001
+	Attr2 (tablespace):
+	Attr3             : SH.SALES
+	Attr4             : BTREE
+	Attr5             :
+	----------------------------------------
+	Action ID: 3
+	Command : CREATE SQL PLAN BASELINE
+	Attr1 (name)      : STA_SALES
+	Attr2 (tablespace): 2
+	Attr3             : 15426410
+	Attr4             :
+	Attr5             :
+	----------------------------------------
+	=========END RECOMMENDATIONS============
+
+	PL/SQL procedure successfully completed.
+
+	SH@orcl11g> 
+	
+#### e. Use the DBMS_ADVISOR.QUICK_TUNE procedure to show the SQL Access Advisor (SAA) output.
+
+	SH@orcl11g>
+	DECLARE                                                                                                                          
+	  task_id NUMBER;                                                                                                                
+	  task_name VARCHAR2(30);                                                                                                        
+	  sts_name VARCHAR2(30);                                                                                                         
+	BEGIN                                                                                                                            
+	  task_name := 'SAA_SALES';                                                                                                      
+	  sts_name:='STS_SALES';                                                                                                         
+	  DBMS_ADVISOR.CREATE_TASK('SQL Access Advisor', task_id, task_name, 'Task for sql_id f1f014xz59nu9');                           
+	  DBMS_ADVISOR.ADD_STS_REF(task_name, 'SH', sts_name);                                                                           
+	  DBMS_ADVISOR.EXECUTE_TASK(task_name);                                                                                          
+	END;                                                                                                                             
+	/
+	SH@orcl11g>  
+	SH@orcl11g> EXEC show_recm('SAA_SALES');                                                                                         
+	=========================================
+	Task_name = SAA_SALES
+	Action ID: 1
+	Command : RETAIN INDEX
+	Attr1 (name)      : "SH"."PRODUCTS_PK"
+	Attr2 (tablespace):
+	Attr3             : "SH"."PRODUCTS"
+	Attr4             : BTREE
+	Attr5             :
+	----------------------------------------
+	Action ID: 2
+	Command : RETAIN INDEX
+	Attr1 (name)      : "SH"."CHANNELS_PK"
+	Attr2 (tablespace):
+	Attr3             : "SH"."CHANNELS"
+	Attr4             : BTREE
+	Attr5             :
+	----------------------------------------
+	Action ID: 3
+	Command : CREATE INDEX
+	Attr1 (name)      : "SH"."SALES_IDX$$_00640000"
+	Attr2 (tablespace):
+	Attr3             : "SH"."SALES"
+	Attr4             : BITMAP
+	Attr5             :
+	----------------------------------------
+	=========END RECOMMENDATIONS============
+
+	PL/SQL procedure successfully completed.
+
+	SH@orcl11g>
+	
+We can reset the task parameter for index/table/partition/mview etc. and re-execute the task.
+
+	EXEC DBMS_ADVISOR.RESET_TASK('SAA_SALES');
+	EXEC DBMS_ADVISOR.SET_TASK_PARAMETER('SAA_SALES','ANALYSIS_SCOPE','TABLE, PARTITION');
+	or
+	EXEC DBMS_ADVISOR.RESET_TASK('SAA_SALES');
+	EXEC DBMS_ADVISOR.SET_TASK_PARAMETER('SAA_SALES','ANALYSIS_SCOPE','INDEX, TABLE, PARTITION');
+	EXEC DBMS_ADVISOR.EXECUTE_TASK('SAA_SALES');
+
+
+	SH@orcl11g> EXEC DBMS_ADVISOR.RESET_TASK('SAA_SALES');                                                                           
+	PL/SQL procedure successfully completed.
+	SH@orcl11g> EXEC DBMS_ADVISOR.SET_TASK_PARAMETER('SAA_SALES','ANALYSIS_SCOPE','TABLE, PARTITION');                               
+	PL/SQL procedure successfully completed.
+	SH@orcl11g> 
+	
+	SH@orcl11g> SET serveroutput ON SIZE 999999                                                                                      
+	SH@orcl11g> EXEC show_recm('SAA_SALES');                                                                                         
+	=========================================
+	Task_name = SAA_SALES
+	Action ID: 1
+	Command : PARTITION TABLE
+	Attr1 (name)      : "SH"."SALES"
+	Attr2 (tablespace):
+	Attr3             : ("TIME_ID")
+	Attr4             : INTERVAL
+	Attr5             :
+	----------------------------------------
+	Action ID: 2
+	Command : RETAIN INDEX
+	Attr1 (name)      : "SH"."PRODUCTS_PK"
+	Attr2 (tablespace):
+	Attr3             : "SH"."PRODUCTS"
+	Attr4             : BTREE
+	Attr5             :
+	----------------------------------------
+	Action ID: 3
+	Command : RETAIN INDEX
+	Attr1 (name)      : "SH"."PRODUCTS_PROD_CAT_IX"
+	Attr2 (tablespace):
+	Attr3             : "SH"."PRODUCTS"
+	Attr4             : BTREE
+	Attr5             :
+	----------------------------------------
+	=========END RECOMMENDATIONS============
+
+	PL/SQL procedure successfully completed.
+
+	SH@orcl11g>          
+	
+#### f. Drop the STS/STA/SAA
+	
+	EXEC DBMS_SQLTUNE.DROP_TUNING_TASK('STA_SALES');
+	EXEC DBMS_ADVISOR.DELETE_TASK('SAA_SALES');
+	EXEC DBMS_SQLTUNE.DROP_SQLSET('STS_SALES');
+
+### Online Redefine DBMS_REDEFINITION change normal table to partition table.
+
+#### Check whether the table can be redefined or not.
+
+	SYS@orcl11g> EXEC DBMS_REDEFINITION.CAN_REDEF_TABLE('SH','SALES');                                                               
+	BEGIN DBMS_REDEFINITION.CAN_REDEF_TABLE('SH','SALES'); END;
+	*
+	ERROR at line 1:
+	ORA-12089: cannot online redefine table "SH"."SALES" with no primary key
+	ORA-06512: at "SYS.DBMS_REDEFINITION", line 143
+	ORA-06512: at "SYS.DBMS_REDEFINITION", line 1635
+	ORA-06512: at line 1
+	SYS@orcl11g> EXEC DBMS_REDEFINITION.CAN_REDEF_TABLE('SH','SALES',2);                                                             
+	PL/SQL procedure successfully completed.
+	SYS@orcl11g>   
+
+Due to there is NOT primary key in the sales table, the table can onlybe redefined via Rowid 
+
+
+	SYS@orcl11g> exec DBMS_REDEFINITION.ABORT_REDEF_TABLE ('SH','SALES','SALES_TEMP');
+	PL/SQL procedure successfully completed.
+	SYS@orcl11g> exec DBMS_REDEFINITION.START_REDEF_TABLE('SH','SALES','SALES_TEMP',null,2);
+	PL/SQL procedure successfully completed.
+	SYS@orcl11g> SYS@orcl11g> exec DBMS_REDEFINITION.SYNC_INTERIM_TABLE (uname => 'sh',orig_table  => 'sales',int_table  => 'sales_temp');
+	PL/SQL procedure successfully completed.
+	SYS@orcl11g> EXEC DBMS_STATS.gather_table_stats('sh', 'sales_temp', cascade => TRUE);
+	PL/SQL procedure successfully completed.
+	SYS@orcl11g> EXEC DBMS_REDEFINITION.FINISH_REDEF_TABLE(uname => 'sh',orig_table => 'sales',int_table => 'sales_temp');
+	PL/SQL procedure successfully completed.
+	SYS@orcl11g>
+
+Check the results:
+
+	SH@orcl11g> SELECT table_name, partition_name, high_value, num_rows FROM   user_tab_partitions where table_name = 'SALES' ORDER BY table_name, partition_name ; 	
+	~~ ....  ~~
+		49 rows selected.
+	SH@orcl11g>    
+
+	
 ### Other
 
 #### Check current setting regarding Tuning Advisor
@@ -465,7 +751,44 @@ e. Drop tuning task
 
 	execute dbms_sqltune.drop_tuning_task('f1f014xz59nu9_tuning_task11');
 
+### Error
 
+
+#### Error: ORA-23539: table "SH"."SALES" currently being redefined
+
+There is ORA-23539 while starting redefine table just like the following error.
+
+	SYS@orcl11g> exec DBMS_REDEFINITION.START_REDEF_TABLE('sh','sales','sales_temp',null,2);                                         
+	BEGIN DBMS_REDEFINITION.START_REDEF_TABLE('sh','sales','sales_temp',null,2); END;
+
+	*
+	ERROR at line 1:
+	ORA-23539: table "SH"."SALES" currently being redefined
+	ORA-06512: at "SYS.DBMS_REDEFINITION", line 56
+	ORA-06512: at "SYS.DBMS_REDEFINITION", line 1498
+	ORA-06512: at line 1
+
+Solution： for test enviroment-----> Do Not use the solution in Production enviroment!
+
+1. Abort 
+
+	exec DBMS_REDEFINITION.ABORT_REDEF_TABLE ('SH','SALES','SALES_TEMP');
+
+2. Table Re Org ORA-32422: Commit SCN-based Materialized View Log Cannot Be Created On Table (Doc ID 2300652.1)
+
+	conn as sys as sysdba
+	create table sumdelta_backup as select * from sumdelta$;
+	select * from sys.sumdelta$ where TABLEOBJ# in (select OBJ# from sys.obj$ where name IN ('SALES' ) );
+	delete from sys.sumdelta$ where TABLEOBJ# in (select OBJ# from sys.obj$ where name IN ('SALES' ) )
+	make sure that same number of rows deleted as per the query above. If not rollback.
+	commit;
+
+	exec DBMS_REDEFINITION.ABORT_REDEF_TABLE ('SH','SALES','SALES_TEMP');
+	
+Use the reference document.
+
+[Oracle在线重定义DBMS_REDEFINITION 普通表—>分区表](http://www.cnblogs.com/jyzhao/p/3876634.html)	
+	
 ++++++++++++++++ EOF LinHong ++++++++++++++++	
 
 
