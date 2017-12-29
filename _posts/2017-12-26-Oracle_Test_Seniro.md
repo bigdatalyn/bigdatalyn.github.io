@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[Original]Import Oracle Sample schema and create big test table"
+title: "[Original]Import Oracle Sample schema and create big test table and Test"
 category: Oracle
 tags: Oracle Schema
 ---
@@ -9,11 +9,13 @@ tags: Oracle Schema
 {:toc}
 
 
-### [Original]Import Oracle Sample schema and create big test table
+### [Original]Import Oracle Sample schema and create big test table and Test
 
 How to import the sample schema if you did not install the sample schema while installed the Database product?
 
 How to create big table for test?
+
+How to use STS/SPA/SAA to get the partition advisor and use Online re-defined to change table type(interval partition)?
 
 Simple to describe the steps...
 
@@ -26,6 +28,26 @@ Simple to describe the steps...
 
 
 ### Step 1. Download Sample Schema&Data file and Install
+
+The OS and database are as the following version.
+
+	SYS@orcl11g> !cat /etc/redhat-release
+	Red Hat Enterprise Linux Server release 7.3 (Maipo)
+	SYS@orcl11g> select * from v$version;
+	BANNER
+	--------------------------------------------------------------------------------
+	Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - Production
+	PL/SQL Release 11.2.0.4.0 - Production
+	CORE    11.2.0.4.0      Production
+	TNS for Linux: Version 11.2.0.4.0 - Production
+	NLSRTL Version 11.2.0.4.0 - Production
+	SYS@orcl11g> !uname -n
+	databasevm001                                                                                                                    
+	SYS@orcl11g> !uname -a
+	Linux databasevm001 4.1.12-61.1.28.el7uek.x86_64 #2 SMP Thu Feb 23 19:55:12 PST 2017 x86_64 x86_64 x86_64 GNU/Linux
+	SYS@orcl11g>
+
+
 
 If have already installed the example schema, Please skip this step.
 
@@ -407,7 +429,9 @@ Test table sh.sales:
 	SH@orcl11g> 
 
 	
-	Execute the step[Online Redefine DBMS_REDEFINITION change normal table to partition table.]
+Use STS/SPA/SAA to advise which type partition to use to improve performance.
+
+Execute the step[Online Redefine DBMS_REDEFINITION change normal table to partition table.] 
 	
 	SH@orcl11g> alter session force parallel query parallel 8; 
 	SH@orcl11g> @query_io.sql                                                                                                        
@@ -770,20 +794,20 @@ There is ORA-23539 while starting redefine table just like the following error.
 
 Solution： for test enviroment-----> Do Not use the solution in Production enviroment!
 
-1. Abort 
+	1. Abort 
 
-	exec DBMS_REDEFINITION.ABORT_REDEF_TABLE ('SH','SALES','SALES_TEMP');
+		exec DBMS_REDEFINITION.ABORT_REDEF_TABLE ('SH','SALES','SALES_TEMP');
 
-2. Table Re Org ORA-32422: Commit SCN-based Materialized View Log Cannot Be Created On Table (Doc ID 2300652.1)
+	2. Table Re Org ORA-32422: Commit SCN-based Materialized View Log Cannot Be Created On Table (Doc ID 2300652.1)
 
-	conn as sys as sysdba
-	create table sumdelta_backup as select * from sumdelta$;
-	select * from sys.sumdelta$ where TABLEOBJ# in (select OBJ# from sys.obj$ where name IN ('SALES' ) );
-	delete from sys.sumdelta$ where TABLEOBJ# in (select OBJ# from sys.obj$ where name IN ('SALES' ) )
-	make sure that same number of rows deleted as per the query above. If not rollback.
-	commit;
+		conn as sys as sysdba
+		create table sumdelta_backup as select * from sumdelta$;
+		select * from sys.sumdelta$ where TABLEOBJ# in (select OBJ# from sys.obj$ where name IN ('SALES' ) );
+		delete from sys.sumdelta$ where TABLEOBJ# in (select OBJ# from sys.obj$ where name IN ('SALES' ) )
+		make sure that same number of rows deleted as per the query above. If not rollback.
+		commit;
 
-	exec DBMS_REDEFINITION.ABORT_REDEF_TABLE ('SH','SALES','SALES_TEMP');
+		exec DBMS_REDEFINITION.ABORT_REDEF_TABLE ('SH','SALES','SALES_TEMP');
 	
 Use the reference document.
 
