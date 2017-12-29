@@ -17,7 +17,7 @@ How to create big table for test?
 
 How to use STS/SPA/SAA to get the partition advisor and use Online re-defined to change table type(interval partition)?
 
-Simple to describe the steps...
+Simply describe the steps...
 
 
 
