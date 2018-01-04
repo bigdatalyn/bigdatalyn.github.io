@@ -93,6 +93,10 @@ Rebuild control file:
 
 ** You should know the archivelog mode and know the datafile is NOT damaged.(all datafiles are good, just the control file is uncorrect.)
 
+Use strings command with old controlfile to list the redo logfiles and datafiles, 
+
+Use create controlfile command to rebuild controlfile.
+
 ![CREATE CONTROLFILE ]({{ "https://docs.oracle.com/database/121/SQLRF/img/create_controlfile.gif"}})	
 
 Sample:
