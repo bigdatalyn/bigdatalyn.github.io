@@ -16,13 +16,13 @@ We can use service_names to name or add service for database.
 However we can NOT use service_names to name or add service for PDB container.
 So How to create new service name for PDB?
 
-SYS> show parameter service_name
+	SYS> show parameter service_name
 
-NAME				     TYPE	 VALUE
------------------------------------- ----------- ------------------------------
-service_names			     string	 PROD.example.com
-SYS> 
-
+	NAME				     TYPE	 VALUE
+	------------------------------------ ----------- ------------------------------
+	service_names			     string	 PROD.example.com
+	SYS> 
+-
 
 
 
@@ -35,21 +35,21 @@ SYS>
 
 ### Showing the Services Associated with PDBs
 
-SYS@PRODCDB> select service_id,name,pdb,con_id from cdb_services order by con_id;
+	SYS@PRODCDB> select service_id,name,pdb,con_id from cdb_services order by con_id;
 
-SERVICE_ID NAME 		PDB			 CON_ID
----------- -------------------- -------------------- ----------
-	 1 SYS$BACKGROUND	CDB$ROOT		      1
-	 4 PRODCDB		CDB$ROOT		      1
-	 3 PRODCDBXDB		CDB$ROOT		      1
-	 2 SYS$USERS		CDB$ROOT		      1
-	 6 pdbprod1.example.com PDBPROD1		      3
-	 7 pdbprod2.example.com PDBPROD2		      4
-	 8 pdbprod3.example.com PDBPROD3		      5
+	SERVICE_ID NAME 		PDB			 CON_ID
+	---------- -------------------- -------------------- ----------
+		 1 SYS$BACKGROUND	CDB$ROOT		      1
+		 4 PRODCDB		CDB$ROOT		      1
+		 3 PRODCDBXDB		CDB$ROOT		      1
+		 2 SYS$USERS		CDB$ROOT		      1
+		 6 pdbprod1.example.com PDBPROD1		      3
+		 7 pdbprod2.example.com PDBPROD2		      4
+		 8 pdbprod3.example.com PDBPROD3		      5
 
-7 rows selected.
+	7 rows selected.
 
-SYS@PRODCDB>
+	SYS@PRODCDB>
 
 ### Creating a Service for a PDB
 
