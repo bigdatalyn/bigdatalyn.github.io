@@ -30,7 +30,8 @@ icon: heart
 
 * email：[88322511@qq.com](mailto:{{ site.email }})
 * QQ：88322511 / Tel:13168741899
-* Tweet / <a href="https://twitter.com/linhong_cn" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a> 
+* Tweet / <a href="https://twitter.com/{{site.twitter_username}}" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a> 
+
 
 <script src="//platform.linkedin.com/in.js" type="text/javascript"></script>
 <script type="IN/MemberProfile" data-id="    https://cn.linkedin.com/in/lin-hong-79a392100" data-format="inline" data-related="false"></script>

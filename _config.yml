@@ -14,7 +14,7 @@ url: "http://bigdatalyn.github.io" # the base hostname & protocol for your site
 permalink: /:year/:month/:day/:title/
 
 # other links
-twitter_username: bigdatalyn
+twitter_username: linhong_cn
 facebook_username: bigdatalyn
 github_username:  bigdatalyn
 email: bigdatalyn_126@126.com
@@ -22,6 +22,7 @@ weibo_username: bigdatalyn
 zhihu_username: bigdatalyn
 linkedIn_username: bigdatalyn
 dribbble_username:
+# other links
 
 description_footer:  刀不磨要生锈,人不学习要落后 
 
