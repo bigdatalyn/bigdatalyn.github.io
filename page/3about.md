@@ -24,6 +24,8 @@ icon: heart
 
 <p class="rss-subscribe">订阅 <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 
+<a href="https://info.flagcounter.com/72Ss"><img src="https://s04.flagcounter.com/count2/72Ss/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_12/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
 ---
 
 ### 联系我
