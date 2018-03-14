@@ -23,8 +23,6 @@ Wget the file and make
 
 	root@oraclelinux7:~# wget http://download.redis.io/releases/redis-3.0.6.tar.gz
 	--2018-03-07 14:34:46--  http://download.redis.io/releases/redis-3.0.6.tar.gz
-	Resolving cn-proxy.jp.oracle.com (cn-proxy.jp.oracle.com)... 10.188.53.53
-	Connecting to cn-proxy.jp.oracle.com (cn-proxy.jp.oracle.com)|10.188.53.53|:80... connected.
 	Proxy request sent, awaiting response... 200 OK
 	Length: 1372648 (1.3M) [application/x-gzip]
 	Saving to: redis-3.0.6.tar.gz
