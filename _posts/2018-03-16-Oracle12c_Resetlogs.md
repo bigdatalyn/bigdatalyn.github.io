@@ -177,7 +177,11 @@ Regarding the recover commands, please check the following documents.
 	 
 	2. recover database until cancel
 	redo都丢失，会先去自动应用归档日志,可以实现最大的恢复；
-	 
+	
+	3. recover database using backup controlfile until cancel;
+ 
+	如果丢失当前controlfile并且current/active redo都丢失，会先去自动应用归档日志,可以实现最大的恢复；
+ 
 	4. recover database until cancel using backup controlfile;
 	如果丢失当前controlfile并且current/active redo都丢失，以旧的redo中的scn为恢复终点。因为没有应用归档日志，所有会丢失数据。 
 	要理解recover database using backup controlfile，先理解 recover database，也就是说，不加using backup controlfile的情况。
