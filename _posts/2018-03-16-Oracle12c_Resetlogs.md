@@ -16,6 +16,15 @@ Oracle 12c - Study Resetlogs
 
 Backup and recover is the important toipc in Database area. the resetlogs knowledge is important in Backup&Recover.
 
+
+
+
+
+
+
+
+
+
 Resetlogs means that reset the online redolog.
 
 We know that the instance need redologs while the instance startup, we can use resetlogs to startup instance while the redolog is deleted or unusable.
