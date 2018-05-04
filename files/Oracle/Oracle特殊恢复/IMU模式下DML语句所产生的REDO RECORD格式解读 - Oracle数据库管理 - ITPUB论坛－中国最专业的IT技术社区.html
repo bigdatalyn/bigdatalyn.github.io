@@ -1,0 +1,1913 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" class=" widthauto"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk">
+<title>IMU模式下DML语句所产生的REDO RECORD格式解读 - Oracle数据库管理 - ITPUB论坛－中国最专业的IT技术社区 </title>
+<link href="http://www.itpub.net/thread-1839930-1-1.html" rel="canonical">
+<meta name="keywords" content="IMU模式下DML语句所产生的REDO RECORD格式解读">
+<meta name="description" content=" IMU模式下DML语句所产生的REDO RECORD格式解读 ,ITPUB论坛－中国最专业的IT技术社区">
+<meta name="generator" content="Discuz! X3.2">
+<meta name="author" content="Discuz! Team and Comsenz UI Team">
+<meta name="copyright" content="2001-2013 Comsenz Inc.">
+<meta name="MSSmartTagsPreventParsing" content="True">
+<meta http-equiv="MSThemeCompatible" content="Yes">
+<!-- base href="http://www.itpub.net/" --><link rel="stylesheet" type="text/css" href="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/style_3_common.css"><link rel="stylesheet" type="text/css" href="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/style_3_forum_viewthread.css"><script type="text/javascript">var STYLEID = '3', STATICURL = 'static/', IMGDIR = 'template/itpub/image', VERHASH = 'Ybl', charset = 'gbk', discuz_uid = '0', cookiepre = 'Nxkw_2132_', cookiedomain = '', cookiepath = '/', showusercard = '0', attackevasive = '0', disallowfloat = 'newthread', creditnotice = '', defaultstyle = '', REPORTURL = 'aHR0cDovL3d3dy5pdHB1Yi5uZXQvdGhyZWFkLTE4Mzk5MzAtMS0yLmh0bWw=', SITEURL = 'http://www.itpub.net/', JSPATH = 'data/cache/', CSSPATH = 'data/cache/style_', DYNAMICURL = '';</script>
+<script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/common.js" type="text/javascript"></script>
+        
+<script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/jquery.js" type="text/javascript"></script>
+<script type="text/javascript"> 
+var jq = jQuery.noConflict();
+</script><meta name="application-name" content="ITPUB论坛－中国最专业的IT技术社区">
+<meta name="msapplication-tooltip" content="ITPUB论坛－中国最专业的IT技术社区">
+<meta name="msapplication-task" content="name=门户;action-uri=http://www.itpub.net/portal.php;icon-uri=http://www.itpub.net/template/itpub/image/portal.ico"><meta name="msapplication-task" content="name=论坛;action-uri=http://www.itpub.net/forum.php;icon-uri=http://www.itpub.net/template/itpub/image/bbs.ico">
+<link rel="archives" title="ITPUB论坛－中国最专业的IT技术社区" href="http://www.itpub.net/archiver/">
+<link rel="stylesheet" id="css_widthauto" type="text/css" href="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/style_3_widthauto.css">
+<script type="text/javascript">HTMLNODE.className += ' widthauto'</script>
+<script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/forum.js" type="text/javascript"></script>
+<script type="text/javascript" id="ZXljeZWYDaYYKIIKJUanPNWXFOOuXHQJ" charset="gbk" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/common_extra.js"></script></head>
+
+<body id="nv_forum" class="pg_viewthread" onkeydown="if(event.keyCode==27) return false;" _adv_already_used="true">
+<div id="append_parent"><div id="ls_fastloginfield_ctrl_menu" class="sltm" style="display: none; width: 40px;"><ul><li class="current">用户名</li><li>Email</li></ul></div></div><div id="ajaxwaitid"></div>
+        <div id="qmenu_menu" class="p_pop blk" style="display: none;">
+<div class="ptm pbw hm">
+请 <a href="javascript:;" class="xi2" onclick="lsSubmit()"><strong>登录</strong></a> 后使用快捷导航<br>没有帐号？<a href="http://www.itpub.net/member.php?mod=register" class="xi2 xw1">注册</a>
+</div>
+</div><div id="hd">
+<div class="wp">
+<div class="hdc cl"><h2><a href="http://www.itpub.net/" title="ITPUB论坛－中国最专业的IT技术社区"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/logo.png" alt="ITPUB论坛－中国最专业的IT技术社区" border="0"></a></h2><script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/logging.js" type="text/javascript"></script>
+<form method="post" autocomplete="off" id="lsform" action="member.php?mod=logging&amp;action=login&amp;loginsubmit=yes&amp;infloat=yes&amp;lssubmit=yes" onsubmit="return lsSubmit();">
+<div class="fastlg cl">
+<span id="return_ls" style="display:none"></span>
+<div class="y pns">
+<table cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td>
+<span class="ftid">
+<select name="fastloginfield" id="ls_fastloginfield" width="40" tabindex="900" selecti="0" style="display: none;">
+
+
+<option value="username" selected="selected"></option></select><a href="javascript:;" id="ls_fastloginfield_ctrl" style="width:40px" tabindex="900">用户名</a>
+</span>
+<script type="text/javascript">simulateSelect('ls_fastloginfield')</script>
+</td>
+<td><input name="username" id="ls_username" autocomplete="off" class="px vm" tabindex="901" type="text"></td>
+<td class="fastlg_l">
+<!--                                            <label for="ls_cookietime"><input type="checkbox" name="cookietime" id="ls_cookietime" class="pc" value="2592000" tabindex="903" />自动登录</label>    -->
+                                                &nbsp;<a href="http://u.it168.com/Login?returnUrl=http%3A%2F%2Fwww.itpub.net/forum.php" target="_blank" style="color:blue">手机号登录</a>
+                                        </td>
+<!--					<td>&nbsp;<a href="javascript:;" onclick="showWindow('login', 'member.php?mod=logging&action=login&viewlostpw=1')">找回密码</a></td>-->
+                                        <!--//ITPUB 修改itpub找回密码链接-->
+<td>&nbsp;<a href="http://u.it168.com/findPassword?returnUrl=http%3A%2F%2Fwww.itpub.net%2Fhome.php%3Fmod%3Dspacecp" target="_blank">找回密码</a></td>
+</tr>
+<tr>
+<td><label for="ls_password" class="z psw_w">密码</label></td>
+<td><input name="password" id="ls_password" class="px vm" autocomplete="off" tabindex="902" type="password"></td>
+<td class="fastlg_l"><button type="submit" class="pn vm" tabindex="904" style="width: 75px;"><em>登录</em></button></td>
+<td>&nbsp;<a href="http://www.itpub.net/member.php?mod=register" class="xi2 xw1">注册</a></td>
+</tr>
+</tbody></table>
+<input name="quickforward" value="yes" type="hidden">
+<input name="handlekey" value="ls" type="hidden">
+</div>
+</div>
+</form>
+
+</div>
+
+<div id="nv" style="top: 0px; left: 15.2px; z-index: 199;">
+<a href="javascript:;" id="qmenu" onmouseover="delayShow(this, function () {showMenu({'ctrlid':'qmenu','pos':'34!','ctrlclass':'a','duration':2});showForummenu(2);})">快捷导航</a>
+<ul><li class="a" id="mn_N012d"><a href="http://www.itpub.net/" hidefocus="true" target="_blank">首页</a></li><li id="mn_forum"><a href="http://www.itpub.net/forum.php" hidefocus="true" title="BBS">论坛<span>BBS</span></a></li><li id="mn_N7ffe"><a href="http://blog.itpub.net/" hidefocus="true" target="_blank">博客</a></li><li id="mn_N668e"><a href="http://wenku.it168.com/" hidefocus="true" target="_blank">文库</a></li><li id="mn_N66b7"><a href="http://www.itpub.net/portal.php?mod=topic&amp;topicid=1" hidefocus="true" target="_blank">版主团</a></li></ul>
+</div>
+<div class="p_pop h_pop" id="mn_userapp_menu" style="display: none"></div><div id="mu" class="cl">
+</div><div id="scbar" class="scbar_narrow cl">
+<form id="scbar_form" method="get" autocomplete="off" onsubmit="searchFocus($('scbar_txt'))" action="http://so.itpub.net/cse/search" target="_blank">
+<!--
+        <input type="hidden" name="mod" id="scbar_mod" value="search" />
+<input type="hidden" name="formhash" value="04b55cd3" />
+<input type="hidden" name="srchtype" value="title" />
+<input type="hidden" name="srhfid" value="2" />
+<input type="hidden" name="srhlocality" value="forum::viewthread" />
+        -->
+
+<table cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="scbar_icon_td"></td>
+<td class="scbar_txt_td">
+                <input name="q" id="scbar_txt" autocomplete="off" class=" xg1" placeholder="请输入搜索内容" type="text">                
+                <input name="s" value="669057586085329241" type="hidden">
+                <input name="click" value="1" type="hidden">
+                <input name="nsid" value="" type="hidden"></td>
+<!--<td class="scbar_type_td"><a href="javascript:;" id="scbar_type" class="xg1" onclick="showMenu(this.id)" hidefocus="true">搜索</a></td>-->
+<td class="scbar_btn_td"><button type="submit" name="searchsubmit" id="scbar_btn" sc="1" class="pn pnc" value="true"><strong class="xi2">搜索</strong></button></td>
+                <td class="scbar_btn_td_gj"><a target="_blank" href="http://so.itpub.net/" class="xi2">高级搜索</a></td>
+<td class="scbar_hot_td">
+<div id="scbar_hot">
+<strong class="xw1">热搜: </strong>										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=oracle&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">oracle</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=oracle&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">oracle</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=SAP&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">SAP</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=SAP&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">SAP</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=sap&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">sap</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=sap&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">sap</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=%B6%FE%CE%AC%C2%EB&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">二维码</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=%B6%FE%CE%AC%C2%EB&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">二维码</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=dba&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">dba</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=dba&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">dba</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=Oracle&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">Oracle</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=Oracle&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">Oracle</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=c%2B%2B&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">c++</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=c%2B%2B&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">c++</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=C%2B%2B&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">C++</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=C%2B%2B&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">C++</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=CRM&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">CRM</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=CRM&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">CRM</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=%D2%F8%C1%AA%D0%C5%CF%A2%D6%D0%D0%C4&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">银联信息中心</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=%D2%F8%C1%AA%D0%C5%CF%A2%D6%D0%D0%C4&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">银联信息中心</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=%B1%C8%CC%D8%B1%D2&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">比特币</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=%B1%C8%CC%D8%B1%D2&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">比特币</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=%D0%A1%B6%EE%B4%FB%BF%EE&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">小额贷款</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=%D0%A1%B6%EE%B4%FB%BF%EE&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">小额贷款</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=%B4%FB%BF%EE&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">贷款</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=%B4%FB%BF%EE&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">贷款</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=crm&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">crm</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=crm&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">crm</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=ORACLE&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">ORACLE</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=ORACLE&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">ORACLE</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=%CF%EE%C4%BF%B9%DC%C0%ED%CF%B5%CD%B3&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">项目管理系统</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=%CF%EE%C4%BF%B9%DC%C0%ED%CF%B5%CD%B3&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">项目管理系统</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=thread&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">thread</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=thread&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">thread</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=android&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">android</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=android&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">android</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=python&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">python</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=python&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">python</a>
+										
+<!--									<a href="search.php?mod=forum&amp;srchtxt=java&amp;formhash=04b55cd3&amp;searchsubmit=true&amp;source=hotsearch" target="_blank" class="xi2" sc="1">java</a>										--> 
+                                                                        <a href="http://so.itpub.net/cse/search?q=java&amp;s=669057586085329241" target="_blank" class="xi2" sc="1">java</a>
+</div>
+</td>
+</tr>
+</tbody></table>
+</form>
+</div>
+<ul id="scbar_type_menu" class="p_pop" style="display: none;"><li><a href="javascript:;" rel="curforum" fid="2">本版</a></li><li><a href="javascript:;" rel="article">文章</a></li><li><a href="javascript:;" rel="forum" class="curtype">帖子</a></li><li><a href="javascript:;" rel="user">用户</a></li></ul>
+<script type="text/javascript">
+initSearchmenu('scbar');
+</script>
+</div>
+</div>
+
+
+<div id="wp" class="wp">
+<script type="text/javascript">var fid = parseInt('2'), tid = parseInt('1839930');</script>
+
+<script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/forum_viewthread.js" type="text/javascript"></script>
+<script type="text/javascript">zoomstatus = parseInt(1);var imagemaxwidth = '600';var aimgcount = new Array();</script>
+
+<style id="diy_style" type="text/css"></style>
+<!--[diy=diynavtop]--><div id="diynavtop" class="area"></div><!--[/diy]-->
+<div id="pt" class="bm cl">
+<div class="z">
+<a href="http://www.itpub.net/" class="nvhm" title="首页">ITPUB论坛－中国最专业的IT技术社区</a><em>&#187;</em><a href="http://www.itpub.net/forum.php">论坛</a> <em>&#8250;</em> <a href="http://www.itpub.net/forum.php?gid=1"> ≡ 大数据与数据库 ≡</a> <em>&#8250;</em> <a href="http://www.itpub.net/forum-2-2.html">Oracle数据库管理</a> <em>&#8250;</em> <a href="http://www.itpub.net/thread-1839930-1-1.html">IMU模式下DML语句所产生的REDO RECORD格式解读</a>
+</div>
+</div>
+
+<style id="diy_style" type="text/css"></style>
+<div class="wp">
+<!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+</div>
+
+<div id="ct" class="wp cl">
+<div id="pgt" class="pgs mbm cl ">
+<div class="pgt"></div>
+<span class="y pgb"><a href="http://www.itpub.net/forum-2-2.html">返回列表</a></span>
+
+<a id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&amp;action=newthread&amp;fid=2')" href="javascript:;" title="发新帖"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pn_post.png" alt="发新帖"></a></div>
+
+
+
+<div id="postlist" class="pl bm">
+<table class="view_tt" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls ptn pbn">
+<div class="hm" style="padding-top:2px;">
+<span>查看:</span> <span>1771</span><span class="pipe">|</span><span>回复:</span> <span>4</span>
+</div>
+</td>
+<td class="plc ptn pbn vwthd">
+<div class="y">
+                                            <a href="http://www.itpub.net/home.php?mod=spacecp&amp;ac=favorite&amp;type=thread&amp;id=1839930" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' 人收藏'"><i>收藏 </i></a> |
+<a href="http://www.itpub.net/forum.php?mod=viewthread&amp;action=printable&amp;tid=1839930" title="打印" target="_blank"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/print.png" alt="打印" class="vm"></a>
+<a href="http://www.itpub.net/forum.php?mod=redirect&amp;goto=nextoldset&amp;tid=1839930" title="上一主题"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/thread-prev.png" alt="上一主题" class="vm"></a>
+<a href="http://www.itpub.net/forum.php?mod=redirect&amp;goto=nextnewset&amp;tid=1839930" title="下一主题"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/thread-next.png" alt="下一主题" class="vm"></a>
+</div>
+<h1 class="ts">
+<a href="http://www.itpub.net/forum.php?mod=forumdisplay&amp;fid=2&amp;filter=typeid&amp;typeid=5">[原创]</a>
+<span id="thread_subject">IMU模式下DML语句所产生的REDO RECORD格式解读</span>
+</h1>
+<span class="xg1">
+<a href="http://www.itpub.net/thread-1839930-1-1.html" onclick="return copyThreadUrl(this, 'ITPUB论坛－中国最专业的IT技术社区')">[复制链接]</a>
+</span>
+</td>
+</tr>
+</tbody></table>
+
+<div id="post_22052351"><table id="pid22052351" class="plhin o_bg" summary="pid22052351" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2">
+<div id="favatar22052351" class="pls favatar" style="top: 33px;">
+<a name="newpost"></a> <div class="pi">
+<div class="authi"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=26160446" target="_blank" class="xw1">还不算晕</a>
+</div>
+</div>
+<div class="p_pop blk bui card_gender_" id="userinfo22052351" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo22052351_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://www.itpub.net/home.php?mod=space&amp;uid=26160446" target="_blank" class="xi2">还不算晕</a></strong>
+<em>当前离线</em>
+</div><dl class="cl">
+<dt>积分</dt><dd><a href="http://www.itpub.net/home.php?mod=space&amp;uid=26160446&amp;do=profile" target="_blank" class="xi2">101</a></dd>
+</dl><div class="imicn">
+<a href="http://www.itpub.net/home.php?mod=space&amp;uid=26160446&amp;do=profile" target="_blank" title="查看详细资料"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/userinfo.gif" alt="查看详细资料"></a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=showip&amp;idtype=user&amp;id=%BB%B9%B2%BB%CB%E3%D4%CE" id="a_showip_li_22052351" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/showip.gif" alt=""> IP卡</a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=checkonline&amp;idtype=user&amp;id=%BB%B9%B2%BB%CB%E3%D4%CE" id="a_repent_22052351" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/checkonline.gif" alt=""> 狗仔卡</a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=26160446" class="avtm" target="_blank"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/46_avatar_middle.jpg" onerror="this.onerror=null;this.src='http://passport.ixpub.net/images/noavatar_middle.gif'"></a></div>
+</div>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>10</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"><img id="1194" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/fu2013-small.gif" style="margin:2px;cursor: hand;" alt="2013年新春福章
+日期:2013-02-25 14:51:24" title="2013年新春福章
+日期:2013-02-25 14:51:24" width="24px"><img id="1232" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/fu2014-small.gif" style="margin:2px;cursor: hand;" alt="2014年新春福章
+日期:2014-02-18 16:44:08" title="2014年新春福章
+日期:2014-02-18 16:44:08" width="24px"><img id="1197" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/book1-small.gif" style="margin:2px;cursor: hand;" alt="技术图书徽章
+日期:2014-01-24 09:42:21" title="技术图书徽章
+日期:2014-01-24 09:42:21" width="24px"><img id="1226" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/youxiu1-small.gif" style="margin:2px;cursor: hand;" alt="优秀写手
+日期:2013-12-18 09:29:08" title="优秀写手
+日期:2013-12-18 09:29:08" width="24px"><img id="1206" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car8-small.gif" style="margin:2px;cursor: hand;" alt="宝马
+日期:2013-11-25 20:45:12" title="宝马
+日期:2013-11-25 20:45:12" width="24px"><img id="1219" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car22-small.gif" style="margin:2px;cursor: hand;" alt="阿斯顿马丁
+日期:2013-11-13 22:54:13" title="阿斯顿马丁
+日期:2013-11-13 22:54:13" width="24px"><img id="1215" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car18-small.gif" style="margin:2px;cursor: hand;" alt="兰博基尼
+日期:2013-08-31 23:11:36" title="兰博基尼
+日期:2013-08-31 23:11:36" width="24px"><img id="1207" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car9-small.gif" style="margin:2px;cursor: hand;" alt="夏利
+日期:2013-08-26 13:30:20" title="夏利
+日期:2013-08-26 13:30:20" width="24px"><img id="1162" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/cd2s.gif" style="margin:2px;cursor: hand;" alt="双黄蛋
+日期:2013-06-14 21:55:42" title="双黄蛋
+日期:2013-06-14 21:55:42" width="24px"><img id="1236" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/mayi-small.gif" style="margin:2px;cursor: hand;" alt="马上有对象
+日期:2014-02-18 16:44:08" title="马上有对象
+日期:2014-02-18 16:44:08" width="24px"></div></div>
+</td>
+<td class="plc">
+<div class="pi">
+<div id="fj" class="y">
+<label class="z">电梯直达</label>
+<input class="px p_fre z" size="2" onkeyup="$('fj_btn').href='forum.php?mod=redirect&amp;ptid=1839930&amp;authorid=0&amp;postno='+this.value" onkeydown="if(event.keyCode==13) {window.location=$('fj_btn').href;return false;}" title="跳转到指定楼层" type="text">
+<a href="javascript:;" id="fj_btn" class="z" title="跳转到指定楼层"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/fj_btn.png" alt="跳转到指定楼层" class="vm"></a>
+</div>
+<strong>
+<a href="http://www.itpub.net/thread-1839930-1-1.html" id="postnum22052351" onclick="setCopy(this.href, '帖子地址复制成功');return false;">
+<em>1</em><sup>#</sup></a>
+</strong>
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon22052351" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/online_member.gif">
+<em id="authorposton22052351">发表于 2014-1-9 12:45</em>
+<span class="pipe">|</span>
+<a href="http://www.itpub.net/forum.php?mod=viewthread&amp;tid=1839930&amp;page=1&amp;authorid=26160446" rel="nofollow">只看该作者</a>
+                                        
+                                                                                             
+<span class="none"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/arw_r.gif" class="vm" alt="回帖奖励"></span>
+<span class="pipe show">|</span><a href="http://www.itpub.net/forum.php?mod=viewthread&amp;tid=1839930&amp;extra=page%3D2&amp;ordertype=1" class="show">倒序浏览</a>
+<span class="pipe show">|</span><a href="javascript:;" onclick="readmode($('thread_subject').innerHTML, 22052351);" class="show">阅读模式</a>
+</div>
+</div>
+</div><div class="pct"><style type="text/css">.pcb{margin-right:0}</style><div class="pcb">
+ 
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_22052351"><strong><font color="#FF0000"></font></strong>
+<i class="pstatus"> 本帖最后由 还不算晕 于 2014-1-9 13:56 编辑 </i><br>
+<br>
+<strong>原文：<a href="http://blog.csdn.net/haibusuanyun/article/details/18010883" target="_blank">http://blog.csdn.net/haibusuanyun/article/details/18010883</a><br>
+更多精彩回复，可以去围观老郭的帖子：<a href="http://www.itpub.net/thread-1838538-1-1.html" target="_blank">http://www.itpub.net/thread-1838538-1-1.html</a><br>
+</strong><strong>总结：IMU模式下DML语句所产生的REDO RECORD格式，是先有操作的 change 
+rector，再有向向UNDO段头的事务表写事务信息的change rector，再提交操作的change 
+rector后，才进行把数据修改前值放到UNDO的change rector。<br>
+注意：实验中INSERT和DELETE是先后做的，UPDATE操作是其它时间做的，UPDATE实验时的表数据和另两步不一样。<br>
+</strong><strong><font color="#FF0000">DML操作的change rector产生顺序汇总如下：&nbsp;&nbsp;--DML实验及DUMP的REDO日志见下面具体实验步骤。</font></strong><font color="#FF0000"><strong>INSERT --涉及有索引的字段</strong></font>--操作加提交只产生一条REDO RECORD<br>
+CHANGE #1&nbsp; &nbsp;OP:11.2&nbsp; &nbsp;--插入操作<br>
+CHANGE #2&nbsp; &nbsp;OP:5.2&nbsp; &nbsp; --operation code 向UNDO段头的事务表写事务信息-事务开始<br>
+CHANGE #3&nbsp; &nbsp;OP:10.2&nbsp; &nbsp;--10.2 是插入索引叶子块<br>
+CHANGE #4&nbsp; &nbsp;OP:5.4&nbsp; &nbsp; ----提交<br>
+CHANGE #5&nbsp; &nbsp;OP:5.1&nbsp; &nbsp; --把表内数据修改前值放到UNDO--objn: 22327，插入的表的对象ID。<br>
+CHANGE #6&nbsp; &nbsp;OP:5.1&nbsp; &nbsp; --把索引数据修改前值放到UNDO--objn: 22818，索引对象ID。<br>
+一条INSERT语句为什么写了两次OP:5.1操作，是因为存在索引。<br>
+#################<br>
+<font color="#FF0000"><strong>UPDATE：--这个操作没涉及索引的字段</strong></font>--操作加提交只产生一条REDO RECORD<br>
+CHANGE#1&nbsp;&nbsp;OP:11.19&nbsp;&nbsp;--或者OP:11.5都是--UPDATE语句，开始修改数据，<br>
+CHANGE#2&nbsp;&nbsp;OP:5.2&nbsp; &nbsp; --operation code 向UNDO段头的事务表写事务信息-事务开始<br>
+CHANGE#3&nbsp;&nbsp;OP:11.19&nbsp;&nbsp;--或者OP:11.5都是--UPDATE语句，开始修改数据，<br>
+CHANGE #4 OP:5.4&nbsp; &nbsp; --提交<br>
+CHANGE #5 OP:5.1&nbsp; &nbsp; --把表内数据修改前值放到UNDO<br>
+CHANGE #6 OP:5.1&nbsp; &nbsp; --把表内数据修改前值放到UNDO<br>
+################<br>
+<font color="#FF0000"><strong>DELETE: --涉及有索引的字段</strong></font>--操作加提交只产生一条REDO RECORD<br>
+CHANGE #1 OP:11.3 --DELETE语句的操作<br>
+CHANGE #2 OP:5.2&nbsp;&nbsp;--operation code 向UNDO段头的事务表写事务信息-事务开始<br>
+CHANGE #3 OP:10.4 --删除索引叶子块<br>
+CHANGE #4 OP:5.4&nbsp;&nbsp;--提交<br>
+CHANGE #5 OP:5.1&nbsp;&nbsp;--把表内数据修改前值放到UNDO<br>
+CHANGE #6 OP:5.1&nbsp;&nbsp;--把索引数据修改前值放到UNDO<br>
+一条DELETE语句为什么写了两次OP:5.1操作，是因为存在索引。<br>
+<font color="#FF0000">以上INSERT及DELETE时涉及的对索引的操作，如表上无索引，将涉及索引的CHANGE #条目去除，就是正常的CHANGE 产生顺序。</font><br>
+<br>
+具体实验详情如下：--确保环境已经改为使用IMU。alter system set "_in_memory_undo"=true;<br>
+<strong><font color="#FF0000">insert操作实验过程：</font></strong>SYS@ bys3&gt;alter system switch logfile;<br>
+System altered.<br>
+SYS@ bys3&gt;col&nbsp;&nbsp;MEMBER for a30<br>
+SYS@ bys3&gt;select a.group#,a.sequence#,a.archived,a.status,b.type,b.member from v$log a,v$logfile b where a.group#=b.group#;<br>
+&nbsp; &nbsp; GROUP#&nbsp;&nbsp;SEQUENCE# ARC STATUS&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;TYPE&nbsp; &nbsp; MEMBER<br>
+---------- ---------- --- ---------------- ------- ------------------------------<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;1&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;322 YES INACTIVE&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo01.log<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;2&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;323 YES ACTIVE&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo02.log<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;3&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;324 NO&nbsp;&nbsp;<font color="#FF0000">CURRENT&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo03.log</font><br>
+SYS@ bys3&gt;conn bys/bys<br>
+Connected.<br>
+BYS@ bys3&gt;select * from dept;<br>
+&nbsp; &nbsp; DEPTNO DNAME&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; LOC<br>
+---------- -------------- -------------<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;10 ACCOUNTING&nbsp; &nbsp;&nbsp;&nbsp;NEW YORK<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;20 RESEARCH&nbsp; &nbsp;&nbsp; &nbsp; DALLAS<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;40 OPERATIONS&nbsp; &nbsp;&nbsp;&nbsp;BOSTON<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;11 database&nbsp; &nbsp;&nbsp; &nbsp; bj<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;22 data<a href="http://www.itpub.net/tree/index_1/" target="_blank" class="relatedlink">oracle</a>&nbsp; &nbsp;&nbsp;&nbsp;sh<br>
+BYS@ bys3&gt;select 
+a.index_owner,a.index_name,b.object_id,a.table_owner,a.table_name,a.column_name
+ from all_ind_columns a,dba_objects b 
+where&nbsp;&nbsp;a.index_owner='BYS' and a.index_name=b.object_name;<br>
+INDEX_OWNE INDEX_NAME&nbsp;&nbsp;OBJECT_ID TABLE_OWNE TABLE_NAME&nbsp; 
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp;COLUMN_NAM<br>
+---------- ---------- ---------- ---------- ------------------------------ ----------<br>
+BYS&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;INDTEXT&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<font color="#FF0000"><strong>
+ 22818 BYS&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;DEPT&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;DEPTNO</strong></font><br>
+BYS@ bys3&gt;set time on<br>
+<font color="#FF0000">19:35:01 BYS@ bys3&gt;insert into dept values(66,'imutest2','zhengzhou');<br>
+1 row created.<br>
+19:35:33 BYS@ bys3&gt;commit;<br>
+Commit complete.<br>
+19:35:40 BYS@ bys3&gt;</font><br>
+另一会话：<br>
+BYS@ bys3&gt;alter system dump logfile '/u01/oradata/bys3/redo03.log';<br>
+System altered.<br>
+BYS@ bys3&gt;select value from v$diag_info where name like 'De%' ;<br>
+VALUE<br>
+----------------------------------------------------------------------------------------------------<br>
+/u01/diag/rdbms/bys3/bys3/trace/bys3_ora_28763.trc<br>
+BYS@ bys3&gt;select chr(to_number(substr(replace('c1 43',' 
+'),rownum*2-1,2),'xxxxxxxx')),chr(to_number(substr(replace('69 6d 75 74 
+65 73 74 32',' 
+'),rownum*2-1,2),'xxxxxxxx')),chr(to_number(substr(replace('7a 68 65 6e 
+67 7a 68 6f 75',' '),rownum*2-1,2),'xxxxxxxx')) from v$bh where 
+rownum&lt;9;<br>
+CHR( CHR( CHR(<br>
+---- ---- ----<br>
+?&nbsp; &nbsp; i&nbsp; &nbsp; z<br>
+C&nbsp; &nbsp; m&nbsp; &nbsp; h<br>
+&nbsp; &nbsp;&nbsp;&nbsp;u&nbsp; &nbsp; e<br>
+&nbsp; &nbsp;&nbsp;&nbsp;t&nbsp; &nbsp; n<br>
+&nbsp; &nbsp;&nbsp;&nbsp;e&nbsp; &nbsp; g<br>
+&nbsp; &nbsp;&nbsp;&nbsp;s&nbsp; &nbsp; z<br>
+&nbsp; &nbsp;&nbsp;&nbsp;t&nbsp; &nbsp; h<br>
+&nbsp; &nbsp;&nbsp;&nbsp;2&nbsp; &nbsp; o<br>
+#####################################<br>
+<strong><font color="#FF0000">INSERT操作DUMP REDO 内容</font></strong><font color="#FF0000"><strong>REDO RECORD</strong></font> - Thread:1 RBA: 0x000144.0000000e.0010 LEN: 0x02e4 VLD: 0x0d<br>
+SCN: 0x0000.00729c6b SUBSCN:&nbsp;&nbsp;1 01/08/2014 19:35:40<br>
+(LWN RBA: 0x000144.0000000e.0010 LEN: 0002 NST: 0001 SCN: 0x0000.00729c6a)<br>
+#######一个REDO RECORD: RECORD头+CHANGE VECTOR组成（一个CV就是一个操作）<br>
+以上是日志头,Thread:1 线程号，RAC时会有1，2等<br>
+RBA: 0x000144.0000000e.0010 将16进制转换为十进制分别是日志文件号、日志块号、在块上第N字节<br>
+VLD: 0x0d日志类型--IMU模式时是这个；非IMU时是：VLD: 0x05<br>
+SCN: 0x0000.00729c6b SUBSCN:&nbsp;&nbsp;1 01/08/2014 19:35:40&nbsp;&nbsp;<br>
+BYS@ bys3&gt;select scn_to_timestamp(to_number('729c6b','xxxxxxxx')) from dual;<br>
+SCN_TO_TIMESTAMP(TO_NUMBER('729C6B','XXXXXXXX'))<br>
+---------------------------------------------------------------------------<br>
+08-JAN-14 07.35.38.000000000 PM<br>
+--是此REDO条目产生时的SCN号，转为十进制现转为时间戳为：19:35:33， 插入语句完成是在19:35:33 BYS@ bys3&gt;commit;<br>
+(LWN RBA: 0x000144.0000000e.0010 LEN: 0002 NST: 0001 SCN: 0x0000.00729c6a)<br>
+括号中SCN: 0x0000.00729c6a 比上一行：SCN: 0x0000.00729c6b&nbsp; &nbsp;少了1个SCN。<br>
+################<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #1</strong></font> TYP:2 CLS:1 AFN:4 DBA:0x010000fd OBJ:22327 SCN:0x0000.00719188 SEQ:3<font color="#FF0000">OP:11.2</font> ENC:0 RBL:0<br>
+##AFN:4，操作是在4号文件做的-dba_data_files.file_id；OBJ:22327--操作的对象的OBJECT_ID。OP:11.2--插入操作<br>
+KTB Redo <br>
+op: 0x01&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat <a href="http://www.itpub.net/tree/index_339/" target="_blank" class="relatedlink">bi</a>t: 4 (post-11) padding: 1<br>
+op: F&nbsp;&nbsp;xid:&nbsp;&nbsp;0x0001.00f.00000f13&nbsp; &nbsp; uba: 0x00c017b7.0262.08<br>
+KDO Op code: IRP row dependencies Disabled&nbsp; &nbsp;--这个是IRP --INSERT ROW PIECE<br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 1&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 2(0x2) size/delt: 25<br>
+fb: --H-FL-- lb: 0x1&nbsp;&nbsp;cc: 3<br>
+null: ---<br>
+<font color="#FF0000">col&nbsp;&nbsp;0: [ 2]&nbsp;&nbsp;c1 43&nbsp; &nbsp;&nbsp; &nbsp; --col&nbsp;&nbsp;0: [ 2]，第一列，2个字符</font><br>
+col&nbsp;&nbsp;1: [ 8]&nbsp;&nbsp;69 6d 75 74 65 73 74 32&nbsp; &nbsp;&nbsp;&nbsp;--第2列，8个字符<br>
+col&nbsp;&nbsp;2: [ 9]&nbsp;&nbsp;7a 68 65 6e 67 7a 68 6f 75<br>
+<font color="#FF0000">#####可以将插入的值转为16进制，可以与这里的值对应上。</font> <font color="#FF0000">insert into dept values(66,'imutest2','zhengzhou');</font><br>
+select dump(66,16),dump('imutest2',16),dump('zhengzhou',16) from dual;<br>
+DUMP(66,16)&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;DUMP('IMUTEST2',16)&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; DUMP('ZHENGZHOU',16)<br>
+------------------ ------------------------------------- ----------------------------------------<br>
+Typ=2 Len=2: c1,43 Typ=96 Len=8: 69,6d,75,74,65,73,74,32 Typ=96 Len=9: 7a,68,65,6e,67,7a,68,6f,75<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #2</strong></font> TYP:0 CLS:17 AFN:3 DBA:0x00c00080 OBJ:4294967295 SCN:0x0000.00729c37 SEQ:2<font color="#FF0000">OP:5.2</font> ENC:0 RBL:0<br>
+ktudh redo: slt: 0x000f sqn: 0x00000f13 flg: 0x0012 siz: 136 fbi: 0&nbsp; &nbsp;&nbsp; &nbsp;<font color="#FF0000"> ---OP:5.2，向UNDO段头的事务表写事务信息-事务开始</font><br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;uba: 
+0x00c017b7.0262.08&nbsp; &nbsp; 
+pxid:&nbsp;&nbsp;0x0000.000.00000000&nbsp; &nbsp;<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #3</strong></font> TYP:0 CLS:1 AFN:4 DBA:0x01003d53 OBJ:22818 SCN:0x0000.00729c68 SEQ:1<font color="#FF0000"> OP:10.2</font> ENC:0 RBL:0<br>
+<font color="#FF0000">index redo (kdxlin):&nbsp;&nbsp;insert leaf row&nbsp; &nbsp;--也说明是向索引插入，OBJ:22818就是索引的对象ID，OP:10.2-插入索引叶子块</font><br>
+KTB Redo <br>
+op: 0x01&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: F&nbsp;&nbsp;xid:&nbsp;&nbsp;0x0001.00f.00000f13&nbsp; &nbsp; uba: 0x00c017b7.0262.09<br>
+REDO: SINGLE / -- / -- <br>
+itl: 2, sno: 5, row size 14<br>
+<font color="#FF0000">insert key: (10):&nbsp;&nbsp;02 c1 43 06 01 00 00 fd 00 02&nbsp; &nbsp; --向索引叶子插入的KEY值</font><br>
+<br>
+<font color="#FF0000"><strong>CHANGE #4</strong></font> TYP:0 CLS:17 AFN:3 DBA:0x00c00080 OBJ:4294967295 SCN:0x0000.00729c6b SEQ:1<font color="#FF0000">OP:5.4</font> ENC:0 RBL:0<br>
+ktucm redo: slt: 0x000f sqn: 0x00000f13 srt: 0 sta: 9 flg: 0x2 ktucf redo: uba: 0x00c017b7.0262.09 ext: 3 spc: 7012 fbi: 0<br>
+<font color="#FF0000">###OP:5.4 --在这个CHANGE #4中对此事务做了提交操作</font><br>
+<br>
+<font color="#FF0000"><strong>CHANGE #5</strong></font> TYP:0 CLS:18 AFN:3 DBA:0x00c017b7 OBJ:4294967295 SCN:0x0000.00729c37 SEQ:3<font color="#FF0000"> OP:5.1</font> ENC:0 RBL:0<br>
+<br>
+ktudb redo: siz: 136 spc: 7252 flg: 0x0012 seq: 0x0262 rec: 0x08&nbsp;&nbsp;<font color="#FF0000">&nbsp;&nbsp;----OP:5.1-数据修改前值放到UNDO</font><br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;xid:&nbsp;&nbsp;0x0001.00f.00000f13&nbsp;&nbsp;<br>
+ktubl redo: slt: 15 rci: 0 opc: 11.1<font color="#FF0000"> [objn: 22327 objd: 22327 tsn: 4]</font>&nbsp;&nbsp;--是对表内数据的<br>
+Undo type:&nbsp;&nbsp;Regular undo&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;Begin trans&nbsp; &nbsp; Last buffer 
+split:&nbsp;&nbsp;No <br>
+Temp Object:&nbsp;&nbsp;No <br>
+Tablespace Undo:&nbsp;&nbsp;No <br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 0x00000000&nbsp;&nbsp;prev ctl uba: 0x00c017b7.0262.05 <br>
+prev ctl max cmt scn:&nbsp;&nbsp;0x0000.00729783&nbsp;&nbsp;prev tx cmt scn:&nbsp;&nbsp;0x0000.0072978f <br>
+txn start scn:&nbsp;&nbsp;0x0000.00729c68&nbsp;&nbsp;logon user: 
+32&nbsp;&nbsp;prev brb: 12588976&nbsp;&nbsp;prev bcl: 0 BuExt idx: 0 
+flg2: 0<br>
+KDO undo record:<br>
+KTB Redo <br>
+op: 0x04&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: L&nbsp;&nbsp;itl: xid:&nbsp;&nbsp;0x0005.005.00000ed4 uba: 0x00c029f3.02e9.0e<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp; flg: C---&nbsp; &nbsp; lkc:&nbsp;&nbsp;0&nbsp; 
+&nbsp;&nbsp;&nbsp;scn: 0x0000.007164a1<br>
+KDO Op code: DRP row dependencies Disabled<br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 1&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 2(0x2)<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #6</strong></font> TYP:0 CLS:18 AFN:3 DBA:0x00c017b7 OBJ:4294967295 SCN:0x0000.00729c6b SEQ:1 OP:5.1 ENC:0 RBL:0<br>
+ktudb redo: siz: 100 spc: 7114 flg: 0x0022 seq: 0x0262 rec: 0x09<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;xid:&nbsp;&nbsp;0x0001.00f.00000f13&nbsp;&nbsp;<br>
+ktubu redo: slt: 15 rci: 8 opc: 10.22 <font color="#FF0000">objn: 22818 objd: 22818 tsn: 4</font>&nbsp; &nbsp; ---<font color="#FF0000">objn: 22818</font>是索引的OBJECT_ID<br>
+Undo type:&nbsp;&nbsp;Regular undo&nbsp; &nbsp;&nbsp; &nbsp; Undo type:&nbsp;&nbsp;Last buffer split:&nbsp;&nbsp;No <br>
+Tablespace Undo:&nbsp;&nbsp;No <br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 0x00000000<br>
+<font color="#FF0000">index undo for leaf key operations</font><br>
+KTB Redo <br>
+op: 0x04&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: L&nbsp;&nbsp;itl: xid:&nbsp;&nbsp;0x0005.005.00000ed4 uba: 0x00c029f3.02e9.0f<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp; flg: C---&nbsp; &nbsp; lkc:&nbsp;&nbsp;0&nbsp; 
+&nbsp;&nbsp;&nbsp;scn: 0x0000.007164a1<br>
+Dump kdilk : itl=2, kdxlkflg=0x1 sdc=1 indexid=0x1003d52 block=0x01003d53<br>
+<font color="#FF0000">(kdxlpu): purge leaf row&nbsp; &nbsp; ----这里的purge leaf row也证明了CHANGE #6这个是对索引的操作</font><br>
+key <img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pz.gif" smilieid="586" alt="" border="0">10):&nbsp;&nbsp;02 c1 43 06 01 00 00 fd 00 02&nbsp; &nbsp; <br>
+END OF REDO DUMP<br>
+#################################################################<br>
+<strong><font color="#FF0000">UPDATE操作实验过程：</font></strong>SYS@ bys3&gt;alter system switch logfile;<br>
+System altered.<br>
+SYS@ bys3&gt;col&nbsp;&nbsp;MEMBER for a30<br>
+SYS@ bys3&gt;select a.group#,a.sequence#,a.archived,a.status,b.type,b.member from v$log a,v$logfile b where a.group#=b.group#;<br>
+&nbsp; &nbsp; GROUP#&nbsp;&nbsp;SEQUENCE# ARC STATUS&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;TYPE&nbsp; &nbsp; MEMBER<br>
+---------- ---------- --- ---------------- ------- ------------------------------<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;1&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;319 YES INACTIVE&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo01.log<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;2&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;320 YES ACTIVE&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo02.log<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;3&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;321 NO&nbsp;&nbsp;CURRENT&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp; ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo03.log<br>
+SYS@ bys3&gt;conn bys/bys<br>
+Connected.<br>
+BYS@ bys3&gt;select * from dept;<br>
+&nbsp; &nbsp; DEPTNO DNAME&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; LOC<br>
+---------- -------------- -------------<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;10 ACCOUNTING&nbsp; &nbsp;&nbsp;&nbsp;NEW YORK<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;20 RESEARCH&nbsp; &nbsp;&nbsp; &nbsp; DALLAS<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;40 OPERATIONS&nbsp; &nbsp;&nbsp;&nbsp;BOSTON<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;11 chedan&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;bj<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;22 test&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;sh<br>
+BYS@ bys3&gt;BYS@ bys3&gt;set time on<br>
+20:26:21 BYS@ bys3&gt;update dept set dname='database' where deptno=11;<br>
+1 row updated.<br>
+20:26:34 BYS@ bys3&gt;update dept set dname='dataoracle' where deptno=22;<br>
+1 row updated.<br>
+20:27:00 BYS@ bys3&gt;commit;<br>
+Commit complete.<br>
+<br>
+会话4：DUMP当前REDO日志：<br>
+BYS@ bys3&gt;alter system dump logfile '/u01/oradata/bys3/redo03.log';<br>
+System altered.<br>
+BYS@ bys3&gt;select value from v$diag_info where name like 'De%' ;<br>
+VALUE<br>
+----------------------------------------------------------------------------------------------------<br>
+/u01/diag/rdbms/bys3/bys3/trace/bys3_ora_13319.trc<br>
+#########################################<br>
+<strong><font color="#FF0000">UPDATE操作DUMP REDO 内容</font></strong><font color="#FF0000"><strong>REDO RECORD</strong></font> - Thread:1 RBA: 0x000141.00000027.0010 LEN: 0x031c VLD: 0x0d<br>
+<font color="#FF0000">SCN: 0x0000.00719188</font> SUBSCN:&nbsp;&nbsp;1 01/07/2014 20:27:05<br>
+(LWN RBA: 0x000141.00000027.0010 LEN: 0002 NST: 0001 SCN: 0x0000.00719187)<br>
+<font color="#FF0000">####一个REDO RECORD: RECORD头+CHANGE VECTOR组成（一个CV就是一个操作）</font><br>
+以上是日志头,Thread:1 线程号，RAC时会有1，2等<br>
+RBA: 0x000141.00000027.0010 将16进制转换为十进制分别是日志文件号、日志块号、在块上第N字节<br>
+VLD: 0x0d日志类型--IMU模式时是这个；非IMU时是：VLD: 0x05<br>
+SCN: 0x0000.00719188 SUBSCN:&nbsp;&nbsp;1 01/07/2014 20:27:05&nbsp; &nbsp;----<br>
+BYS@ bys3&gt;select scn_to_timestamp(to_number('719188','xxxxxxxx')) from dual;<br>
+SCN_TO_TIMESTAMP(TO_NUMBER('719188','XXXXXXXX'))<br>
+---------------------------------------------------------------------------<br>
+07-JAN-14 08.27.05.000000000 PM<br>
+--是此REDO条目产生时的SCN号，转为十进制现转为时间戳为：08.27.05， 插入语句完成是在20:27:00 BYS@ bys3&gt;commit;--&nbsp;&nbsp;-<font color="Red">-这个是在插入语句完成5秒后，此SCN与CHANGE#4提交时SCN一致。</font><br>
+(LWN RBA: 0x000141.00000027.0010 LEN: 0002 NST: 0001 SCN: 0x0000.00719187)<br>
+括号中SCN: 0x0000.00719187 比上一行：SCN: 0x0000.00719187&nbsp; &nbsp;少了1个SCN。<br>
+####<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #1 </strong></font>TYP:2 CLS:1 AFN:4 DBA:0x010000fd OBJ:22327 SCN:0x0000.007164a1 SEQ:1 OP:11.5 ENC:0 RBL:0<br>
+#####<font color="#FF0000">AFN:4，操作是在4号文件做的-dba_data_files.file_id；OBJ:22327--操作的对象的OBJECT_ID。OP:11.5-有的版本是OP:11.19--更新操作</font><br>
+KTB Redo<br>
+op: 0x11&nbsp;&nbsp;ver: 0x01<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: F&nbsp;&nbsp;xid:&nbsp;&nbsp;0x0005.002.00000edc&nbsp; &nbsp; uba: 0x00c041cd.02ea.01<br>
+Block cleanout record, scn:&nbsp;&nbsp;0x0000.0071917c ver: 0x01 opt: 0x02, entries follow...<br>
+&nbsp;&nbsp;itli: 1&nbsp;&nbsp;flg: 2&nbsp;&nbsp;scn: 0x0000.007164a1<br>
+KDO Op code: URP row dependencies Disabled&nbsp; &nbsp;-- --URP=UPDATE ROW PIECE。有时会是：KDO Op code:21 row dependencies Disabled<br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 2&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 8(0x8) flag: 0x2c lock: 2 ckix: 0<br>
+<font color="#FF0000">ncol: 3 nnew: 1 size: 2&nbsp; &nbsp;<strong>--</strong><strong>ncol: 3 nnew: 1&nbsp;&nbsp;表示操作的表有3个列，操作了一列</strong>，size: 2<br>
+--列字符长度增加2：database减去chedan---根据多次update并DUMP的日志来看，这里的size的值应该是：当前CHANGE中的值减去另一个。。<br>
+col&nbsp;&nbsp;1: [ 8]&nbsp;&nbsp;64 61 74 61 62 61 73 65&nbsp; 
+&nbsp;--set dname='database'&nbsp;&nbsp;--col&nbsp;&nbsp;1: [ 
+8]，第二列，8个字符</font><br>
+BYS@ bys3&gt;select dump('database',16),dump('dataoracle',16) from dual;<br>
+DUMP('DATAB<a href="http://www.itpub.net/thread-385520-1-1.html" target="_blank" class="relatedlink">ASE</a>',16)&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; DUMP('DATA<a href="http://www.itpub.net/tree/index_1/" target="_blank" class="relatedlink">ORACLE</a>',16)<br>
+------------------------------------- --------------------------------------------<br>
+Typ=96 Len=8: 64,61,74,61,62,61,73,65 Typ=96 Len=10: 64,61,74,61,6f,72,61,63,6c,65<br>
+#########################<br>
+<font color="#FF0000"><strong>CHANGE #2 </strong></font>TYP:0 CLS:25 AFN:3 DBA:0x00c000c0 OBJ:4294967295 SCN:0x0000.00719153 SEQ:1<font color="#FF0000"><strong> OP:5.2</strong></font> ENC:0 RBL:0<br>
+ktudh redo: slt: 0x0002 sqn: 0x00000edc flg: 0x000a siz: 164 fbi: 0<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;uba: 0x00c041cd.02ea.01&nbsp; &nbsp; pxid:&nbsp;&nbsp;0x0000.000.00000000<br>
+### #####################<font color="#FF0000">事务信息</font><br>
+TYP:0 普通块 ，CLS:25 class大于16是UNDO块-递增。AFN:3 绝对文件号dba_data_files.file_id--是UNDO的文件号<br>
+DBA:0x00c000c0 数据块在内存中地址<br>
+OBJ:4294967295 --十进制，转为16进制是FFFFFFFF<br>
+SCN:0x0000.00719153&nbsp;&nbsp;转换为16进制可与操作时对比<br>
+OP:5.2 -&gt; operation code 向UNDO段头的事务表写事务信息-事务开始<br>
+uba: 0x00c041cd.02ea.01&nbsp;&nbsp;UNDO块地址<br>
+#######################<br>
+<br>
+<font color="#FF6666"><strong>CHANGE #3</strong></font> TYP:0 CLS:1 AFN:4 DBA:0x010000fd<font color="#FF0000">OBJ:22327</font> SCN:0x0000.00719188 SEQ:1<font color="#FF0000">OP:11.5</font> ENC:0 RBL:0<br>
+KTB Redo&nbsp; &nbsp;&nbsp; &nbsp; <font color="#FF0000"> --同CHANGE #1的解析</font><br>
+op: 0x02&nbsp;&nbsp;ver: 0x01<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: C&nbsp;&nbsp;uba: 0x00c041cd.02ea.02<br>
+KDO Op code: URP row dependencies Disabled&nbsp; &nbsp;---UNDO ROW PIECE<br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 2&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 9(0x9) flag: 0x2c lock: 2 ckix: 0<br>
+ncol: 3 nnew: 1 size: 6<br>
+col&nbsp;&nbsp;1: [10]&nbsp;&nbsp;64 61 74 61 6f 72 61 63 6c 65&nbsp; &nbsp;--第2列，10个字符--此次操作的字符数<br>
+BYS@ bys3&gt;select dump('database',16),dump('dataoracle',16) from dual;<br>
+DUMP('DATABASE',16)&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; DUMP('DATAORACLE',16)<br>
+------------------------------------- --------------------------------------------<br>
+Typ=96 Len=8: 64,61,74,61,62,61,73,65 Typ=96 Len=10: 64,61,74,61,6f,72,61,63,6c,65<br>
+<br>
+###########################<br>
+<font color="#FF0000"><strong>CHANGE #4</strong></font> TYP:0 CLS:25<font color="#FF0000"><strong> AFN:3</strong></font>DBA:0x00c000c0 OBJ:4294967295<font color="#FF0000"><strong>SCN:0x0000.00719188</strong></font> SEQ:1<strong><font color="#FF0000"> OP:5.4</font></strong> ENC:0 RBL:0<br>
+ktucm redo: slt: 0x0002 sqn: 0x00000edc srt: 0 sta: 9 flg: 0x2 ktucf redo: uba: 0x00c041cd.02ea.02 ext: 15 spc: 7890 fbi: 0<br>
+######<font color="#FF0000">OP:5.4 表明是提交操作。AFN:3 对应的是UNDO文件，slt: 0x0002&nbsp;&nbsp;修改了UNDO文件的这个事务槽,uba: 0x00c041cd.02ea.02</font><br>
+<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #5 </strong></font>TYP:1 CLS:26 AFN:3 DBA:0x00c041cd OBJ:4294967295 SCN:0x0000.0071917c SEQ:1 OP:5.1 ENC:0 RBL:0<br>
+ktudb redo: siz: 164 spc: 0 flg: 0x000a seq: 0x02ea rec: 0x01<br>
+###<font color="#FF0000">OP:5.1 --把数据修改前值放到UNDO&nbsp; &nbsp;--AFN:3 --在UNDO文件里操作，UNDO文件号是3。。CLS:26 --比CHANGE #2中大1，顺序增长哈哈</font><br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;xid:&nbsp;&nbsp;0x0005.002.00000edc<br>
+ktubl redo: slt: 2 rci: 0 opc: 11.1 [objn: 22327 objd: 22327 tsn: 4]<br>
+Undo type:&nbsp;&nbsp;Regular undo&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;Begin trans&nbsp; &nbsp; Last buffer 
+split:&nbsp;&nbsp;No<br>
+Temp Object:&nbsp;&nbsp;No<br>
+Tablespace Undo:&nbsp;&nbsp;No<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 0x00000000&nbsp;&nbsp;prev ctl uba: 0x00c041cc.02ea.04<br>
+prev ctl max cmt scn:&nbsp;&nbsp;0x0000.00718dff&nbsp;&nbsp;prev tx cmt scn:&nbsp;&nbsp;0x0000.00718e4e<br>
+txn start scn:&nbsp;&nbsp;0x0000.00000000&nbsp;&nbsp;logon user: 
+32&nbsp;&nbsp;prev brb: 12599753&nbsp;&nbsp;prev bcl: 0 BuExt idx: 0 
+flg2: 0<br>
+KDO undo record:<br>
+KTB Redo<br>
+op: 0x04&nbsp;&nbsp;ver: 0x01<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: L&nbsp;&nbsp;itl: xid:&nbsp;&nbsp;0x0009.004.00000ebc uba: 0x00c037d5.0249.08<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp; flg: C---&nbsp; &nbsp; lkc:&nbsp;&nbsp;0&nbsp; 
+&nbsp;&nbsp;&nbsp;scn: 0x0000.0070cfea<br>
+<font color="#FF0000">KDO Op code: URP row dependencies Disabled&nbsp; &nbsp;-----UNDO ROW PIECE</font><br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 2&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 8(0x8) flag: 0x2c lock: 0 ckix: 0<br>
+<font color="#FF0000">ncol: 3 nnew: 1 size: -2&nbsp; &nbsp; ----列字符长度减少2：chedan 减去database---根据多次update并DUMP的日志来看，这里的size的值应该是：当前CHANGE中的值减去另一个<br>
+col&nbsp;&nbsp;1: [ 6]&nbsp;&nbsp;63 68 65 64 61 6e&nbsp; &nbsp;----&nbsp;&nbsp;原值是chedan，，第二列，6个字符</font><br>
+BYS@ bys3&gt;select dump('chedan',16),dump('test',16) from dual;<br>
+DUMP('CHEDAN',16)&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;DUMP('TEST',16)<br>
+------------------------------- -------------------------<br>
+Typ=96 Len=6: 63,68,65,64,61,6e Typ=96 Len=4: 74,65,73,74<br>
+<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #6 T</strong></font>YP:0 CLS:26 AFN:3 DBA:0x00c041cd OBJ:4294967295 SCN:0x0000.00719188 SEQ:1<strong><font color="#FF0000"> OP:5.1</font></strong>ENC:0 RBL:0&nbsp;&nbsp;--解析同上<br>
+ktudb redo: siz: 92 spc: 7984 flg: 0x0022 seq: 0x02ea rec: 0x02<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;xid:&nbsp;&nbsp;0x0005.002.00000edc<br>
+ktubu redo: slt: 2 rci: 1 opc: 11.1 objn: 22327 objd: 22327 tsn: 4<br>
+Undo type:&nbsp;&nbsp;Regular undo&nbsp; &nbsp;&nbsp; &nbsp; Undo type:&nbsp;&nbsp;Last buffer split:&nbsp;&nbsp;No<br>
+Tablespace Undo:&nbsp;&nbsp;No<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 0x00000000<br>
+KDO undo record:<br>
+KTB Redo<br>
+op: 0x02&nbsp;&nbsp;ver: 0x01<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: C&nbsp;&nbsp;uba: 0x00c041cd.02ea.01<br>
+<font color="#FF0000">KDO Op code: URP row dependencies Disabled&nbsp; &nbsp;&nbsp;&nbsp;-----UNDO ROW PIECE</font><br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 2&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 9(0x9) flag: 0x2c lock: 0 ckix: 0<br>
+<font color="#FF0000">ncol: 3 nnew: 1 size: -6&nbsp; &nbsp; -列字符长度减少2：test减去database---根据多次update并DUMP的日志来看，这里的size的值应该是：当前CHANGE中的值减去另一个<br>
+col&nbsp;&nbsp;1: [ 4]&nbsp;&nbsp;74 65 73 74&nbsp; &nbsp;&nbsp;&nbsp;--此次操作，第二列，4个字符</font><br>
+BYS@ bys3&gt;select dump('chedan',16),dump('test',16) from dual;<br>
+DUMP('CHEDAN',16)&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;DUMP('TEST',16)<br>
+------------------------------- -------------------------<br>
+Typ=96 Len=6: 63,68,65,64,61,6e Typ=96 Len=4: 74,65,73,74<br>
+<br>
+###################################################################<br>
+<strong><font color="#FF0000">DELETE操作实验过程：</font></strong>SYS@ bys3&gt;alter system switch logfile;<br>
+System altered.<br>
+SYS@ bys3&gt;select a.group#,a.sequence#,a.archived,a.status,b.type,b.member from v$log a,v$logfile b where a.group#=b.group#;<br>
+&nbsp; &nbsp; GROUP#&nbsp;&nbsp;SEQUENCE# ARC STATUS&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;TYPE&nbsp; &nbsp; MEMBER<br>
+---------- ---------- --- ---------------- ------- ------------------------------<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;1&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;325 NO&nbsp;&nbsp;CURRENT&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp; ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo01.log<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;2&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;323 YES INACTIVE&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo02.log<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;3&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;324 YES ACTIVE&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;ONLINE&nbsp;&nbsp;/u01/oradata/bys3/redo03.log<br>
+SYS@ bys3&gt;conn bys/bys<br>
+Connected.<br>
+BYS@ bys3&gt;select * from dept;<br>
+&nbsp; &nbsp; DEPTNO DNAME&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; LOC<br>
+---------- -------------- -------------<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;10 ACCOUNTING&nbsp; &nbsp;&nbsp;&nbsp;NEW YORK<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;20 RESEARCH&nbsp; &nbsp;&nbsp; &nbsp; DALLAS<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;66 imutest2&nbsp; &nbsp;&nbsp; &nbsp; zhengzhou<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;40 OPERATIONS&nbsp; &nbsp;&nbsp;&nbsp;BOSTON<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;11 database&nbsp; &nbsp;&nbsp; &nbsp; bj<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;22 dataoracle&nbsp; &nbsp;&nbsp;&nbsp;sh<br>
+BYS@ bys3&gt;set time on<br>
+20:32:58 BYS@ bys3&gt;delete dept where deptno=66;<br>
+1 row deleted.<br>
+20:33:02 BYS@ bys3&gt;commit;<br>
+Commit complete.<br>
+20:33:06 BYS@ bys3&gt;<br>
+<font color="#FF0000">另一会话DUMP REDO LOGFILE:</font><br>
+BYS@ bys3&gt;alter system dump logfile '/u01/oradata/bys3/redo01.log';<br>
+System altered.<br>
+BYS@ bys3&gt;select value from v$diag_info where name like 'De%' ;<br>
+<br>
+VALUE<br>
+----------------------------------------------------------------------------------------------------<br>
+/u01/diag/rdbms/bys3/bys3/trace/bys3_ora_29403.trc<br>
+#######################<br>
+<strong><font color="#FF0000">DELETE操作DUMP REDO 内容</font></strong>REDO RECORD - Thread:1 RBA: 0x000145.00000003.0010 LEN: 0x0308 VLD: 0x0d<br>
+SCN: 0x0000.0072a6f2 SUBSCN:&nbsp;&nbsp;1 01/08/2014 20:33:06<br>
+(LWN RBA: 0x000145.00000003.0010 LEN: 0002 NST: 0001 SCN: 0x0000.0072a6f1)<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #1</strong></font> TYP:2 CLS:1 AFN:4 DBA:0x010000fd OBJ:22327 SCN:0x0000.00729c6b SEQ:2<font color="#FF0000"> OP:11.3</font> ENC:0 RBL:0<br>
+KTB Redo <br>
+op: 0x11&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: F&nbsp;&nbsp;xid:&nbsp;&nbsp;0x000a.002.00000f0c&nbsp; &nbsp; uba: 0x00c0175c.026f.01<br>
+Block cleanout record, scn:&nbsp;&nbsp;0x0000.0072a6ee ver: 0x01 opt: 0x02, entries follow...<br>
+&nbsp;&nbsp;itli: 1&nbsp;&nbsp;flg: 2&nbsp;&nbsp;scn: 0x0000.00729c6b<br>
+&nbsp;&nbsp;itli: 2&nbsp;&nbsp;flg: 2&nbsp;&nbsp;scn: 0x0000.00719188<br>
+KDO Op code: DRP row dependencies Disabled&nbsp; &nbsp; --DRP&nbsp;&nbsp;DROP ROW PIECE<br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 2&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 2(0x2)<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #2 </strong></font>TYP:0 CLS:35 AFN:3 DBA:0x00c00110 OBJ:4294967295 SCN:0x0000.0072a6b9 SEQ:1<font color="#FF0000"> OP:5.2</font> ENC:0 RBL:0<br>
+ktudh redo: slt: 0x0002 sqn: 0x00000f0c flg: 0x000a siz: 200 fbi: 0<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;uba: 0x00c0175c.026f.01&nbsp; &nbsp; pxid:&nbsp;&nbsp;0x0000.000.00000000<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #3</strong></font> TYP:0 CLS:1 AFN:4 DBA:0x01003d53 OBJ:22818 SCN:0x0000.0072a6ef SEQ:1<font color="#FF0000">OP:10.4</font> ENC:0 RBL:0<br>
+<font color="#FF0000">index redo (kdxlde):&nbsp;&nbsp;delete leaf row&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;---删除索引叶</font><br>
+KTB Redo <br>
+op: 0x01&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: F&nbsp;&nbsp;xid:&nbsp;&nbsp;0x000a.002.00000f0c&nbsp; &nbsp; uba: 0x00c0175c.026f.02<br>
+REDO: SINGLE / -- / -- <br>
+itl: 2, sno: 5, row size 14<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #4 </strong></font>TYP:0 CLS:35 AFN:3 DBA:0x00c00110 OBJ:4294967295 SCN:0x0000.0072a6f2 SEQ:1<font color="#FF0000">OP:5.4</font> ENC:0 RBL:0<br>
+ktucm redo: slt: 0x0002 sqn: 0x00000f0c srt: 0 sta: 9 flg: 0x2 ktucf redo: uba: 0x00c0175c.026f.02 ext: 4 spc: 7846 fbi: 0<br>
+<br>
+<font color="#FF0000"><strong>CHANGE #5</strong></font> TYP:1 CLS:36 AFN:3 DBA:0x00c0175c OBJ:4294967295 SCN:0x0000.0072a6ee SEQ:1<font color="#FF0000">OP:5.1</font>ENC:0 RBL:0<br>
+ktudb redo: siz: 200 spc: 0 flg: 0x000a seq: 0x026f rec: 0x01<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;xid:&nbsp;&nbsp;0x000a.002.00000f0c&nbsp;&nbsp;<br>
+ktubl redo: slt: 2 rci: 0 opc: 11.1 [objn: 22327 objd: 22327 tsn: 4]<br>
+<font color="#FF0000">Undo type:&nbsp;&nbsp;Regular undo&nbsp; 
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;Begin trans&nbsp; &nbsp; Last buffer 
+split:&nbsp;&nbsp;No</font><br>
+Temp Object:&nbsp;&nbsp;No <br>
+Tablespace Undo:&nbsp;&nbsp;No <br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 0x00000000&nbsp;&nbsp;prev ctl uba: 0x00c0175b.026f.07 <br>
+prev ctl max cmt scn:&nbsp;&nbsp;0x0000.0072a2c6&nbsp;&nbsp;prev tx cmt scn:&nbsp;&nbsp;0x0000.0072a2d5 <br>
+txn start scn:&nbsp;&nbsp;0x0000.0072a6ef&nbsp;&nbsp;logon user: 
+32&nbsp;&nbsp;prev brb: 12588886&nbsp;&nbsp;prev bcl: 0 BuExt idx: 0 
+flg2: 0<br>
+KDO undo record:<br>
+KTB Redo <br>
+op: 0x04&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: L&nbsp;&nbsp;itl: xid:&nbsp;&nbsp;0x0005.002.00000edc uba: 0x00c041cd.02ea.02<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp; flg: C---&nbsp; &nbsp; lkc:&nbsp;&nbsp;0&nbsp; 
+&nbsp;&nbsp;&nbsp;scn: 0x0000.00719188<br>
+<font color="#FF0000">KDO Op code: IRP row dependencies Disabled</font><br>
+&nbsp;&nbsp;xtype: XA flags: 0x00000000&nbsp;&nbsp;bdba: 0x010000fd&nbsp;&nbsp;hdba: 0x010000fa<br>
+itli: 2&nbsp;&nbsp;ispac: 0&nbsp;&nbsp;maxfr: 4858<br>
+tabn: 0 slot: 2(0x2) size/delt: 25<br>
+fb: --H-FL-- lb: 0x0&nbsp;&nbsp;cc: 3<br>
+null: ---<br>
+<font color="#FF0000">col&nbsp;&nbsp;0: [ 2]&nbsp;&nbsp;c1 43&nbsp; &nbsp;--这三行是删除前的值，参见第一步INSERT里的DUMP计算</font><br>
+col&nbsp;&nbsp;1: [ 8]&nbsp;&nbsp;69 6d 75 74 65 73 74 32<br>
+col&nbsp;&nbsp;2: [ 9]&nbsp;&nbsp;7a 68 65 6e 67 7a 68 6f 75<br>
+#####<font color="#FF0000">可以将第一步插入的值转为16进制，可以与这里的值对应上。</font>&nbsp;&nbsp;--&nbsp;&nbsp;66 imutest2&nbsp; &nbsp;&nbsp; &nbsp; zhengzhou<br>
+BYS@ bys3&gt;select dump('66',16),dump('imutest2',16),dump('zhengzhou',16) from dual;<br>
+DUMP('66',16)&nbsp; &nbsp;&nbsp; &nbsp; DUMP('IMUTEST2',16)&nbsp; 
+&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 
+DUMP('ZHENGZHOU',16)<br>
+------------------- ------------------------------------- ----------------------------------------<br>
+<font color="#FF0000">Typ=96 Len=2: 36,36 Typ=96 Len=8: 69,6d,75,74,65,73,74,32 Typ=96 Len=9: 7a,68,65,6e,67,7a,68,6f,75</font><br>
+<br>
+<strong><font color="#FF0000">CHANGE #6 </font></strong>TYP:0 CLS:36 AFN:3 DBA:0x00c0175c OBJ:4294967295 SCN:0x0000.0072a6f2 SEQ:1<font color="#FF0000">OP:5.1</font> ENC:0 RBL:0<br>
+ktudb redo: siz: 100 spc: 7948 flg: 0x0022 seq: 0x026f rec: 0x02<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;xid:&nbsp;&nbsp;0x000a.002.00000f0c&nbsp;&nbsp;<br>
+ktubu redo: slt: 2 rci: 1 opc: 10.22 objn: 22818 objd: 22818 tsn: 4<br>
+Undo type:&nbsp;&nbsp;Regular undo&nbsp; &nbsp;&nbsp; &nbsp; Undo type:&nbsp;&nbsp;Last buffer split:&nbsp;&nbsp;No <br>
+Tablespace Undo:&nbsp;&nbsp;No <br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 0x00000000<br>
+<font color="#FF0000">index undo for leaf key operations&nbsp; &nbsp;---索引叶子值的UNDO</font><br>
+KTB Redo <br>
+op: 0x04&nbsp;&nbsp;ver: 0x01&nbsp;&nbsp;<br>
+compat bit: 4 (post-11) padding: 1<br>
+op: L&nbsp;&nbsp;itl: xid:&nbsp;&nbsp;0x0001.00f.00000f13 uba: 0x00c017b7.0262.09<br>
+&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+&nbsp;&nbsp; &nbsp; flg: C---&nbsp; &nbsp; lkc:&nbsp;&nbsp;0&nbsp; 
+&nbsp;&nbsp;&nbsp;scn: 0x0000.00729c6b<br>
+Dump kdilk : itl=2, kdxlkflg=0x1 sdc=0 indexid=0x1003d52 block=0x01003d53<br>
+<font color="#FF0000">(kdxlre): restore leaf row (clear leaf delete flags)&nbsp; &nbsp;--这个CHANGE #6往UNDO里写恢复索引叶子的，<br>
+key <img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pz.gif" smilieid="586" alt="" border="0">10):&nbsp;&nbsp;02 c1 43 06 01 00 00 fd 00 02</font><br>
+</td></tr></tbody></table>
+
+<div class="ptg mbm mtn">
+<a title="模式" href="http://www.itpub.net/misc.php?mod=tag&amp;id=6975" target="_blank">模式</a>, <a title="语句" href="http://www.itpub.net/misc.php?mod=tag&amp;id=6054" target="_blank">语句</a>, <a title="REDO" href="http://www.itpub.net/misc.php?mod=tag&amp;id=8887" target="_blank">REDO</a>, <a title="RECORD" href="http://www.itpub.net/misc.php?mod=tag&amp;id=1883" target="_blank">RECORD</a>, <a title="解读" href="http://www.itpub.net/misc.php?mod=tag&amp;id=5362" target="_blank">解读</a></div>
+
+</div>
+<div id="comment_22052351" class="cm">
+</div>
+    <!--//ITPUB JOB 自定义钩子-->
+            <div id="post_rate_div_22052351"></div>
+<script type="text/javascript">var auc_list_tmp = $('auc_list_tmp');if(auc_list_tmp !== null){document.write(auc_list_tmp.innerHTML);auc_list_tmp.innerHTML='';}
+function lalala(){
+	ajaxget('plugin.php?id=auction:involve&operation=view&tid=1839930&page=1', 'list_ajax');
+	$('list_ajax').style.display = 'block';
+}
+if($('list_ajax')){setTimeout('lalala()', 1000);}
+</script></div>
+</div>
+
+</td></tr>
+<tr><td class="plc plm">
+<div id="p_btn" class="mtw mbm hm cl" style="display:none;">
+
+<a href="http://www.itpub.net/home.php?mod=spacecp&amp;ac=favorite&amp;type=thread&amp;id=1839930&amp;formhash=04b55cd3" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' 人收藏'" title="收藏本帖"><i><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/fav.gif" alt="收藏">收藏<span id="favoritenumber" style="display:none">0</span></i></a>
+</div>
+       
+        
+        
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                <div class="mtw mbw w90">
+            <div class="tab011">
+                <ul id="tab011">
+                	                                        <li><a class="here">相关帖子</a></li> 
+                                                            <li><a>本版精华</a></li>
+                                        
+                                        
+                      
+                </ul>
+             </div>
+            <style>
+                #tab011_Content1{display: none;}
+                #tab011_Content2{display: none;}
+            </style>
+                                                            <div id="tab011_Content0" class="tab011Cont" style="display: block;">
+                    <div class="tab011_l1">
+                        <ul>     
+                                                                                	<li><a href="http://www.itpub.net/thread-1911675-1-1.html" target="_blank">【大话IT】查询结果要对其中一列的数值进行相加。</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1910897-1-1.html" target="_blank">【大话IT】读写分离怎么处理</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1910844-1-1.html" target="_blank">【大话IT】oracle 大表数据插入性能问题</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1910393-1-1.html" target="_blank">【讨论】如何切割以空格分开的字符串</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1909618-1-1.html" target="_blank">【讨论】请教个select语句的最好写法</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1907732-1-1.html" target="_blank">【讨论】分区表建立本地前缀索引后，不走索引</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1906396-1-1.html" target="_blank">【大话IT】简单恢复模式的日志文件异常增长</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1906327-1-1.html" target="_blank">【大话IT】求助一条SQL，报ORA-00920错误 无效的关系运算符</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1905653-1-1.html" target="_blank">【大话IT】oracel redo调整问题</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1904295-1-1.html" target="_blank">【讨论】请教一个SQL语句的问题</a></li>
+                                                        
+                                                </ul>
+                        <div class="clear"></div>
+                    </div> 
+                 </div>
+                                                                                                             <div id="tab011_Content1" class="tab011Cont">
+                    <div class="tab011_l1">
+                        <ul>     
+                                                                                	<li><a href="http://www.itpub.net/thread-1063956-1-1.html" target="_blank">我的担忧：dba如何在稳定环境中成长</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1763493-1-1.html" target="_blank">应聘dba职位到底需要多少经验</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1307822-1-1.html" target="_blank">无私奉献 企业级DBA--学习手册(中文版)体系结构,性能优化</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1815817-1-1.html" target="_blank">Oracle 12C 集群安装（4节点）详解</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-2053618-1-1.html" target="_blank">技术人生系列 · 我和数据中心的故事（第六期）-Oracle内存过度消耗风险提醒</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1846862-1-1.html" target="_blank">Oracle SQL命令通解三步曲</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-2051086-1-1.html" target="_blank">技术人生系列 · 我和数据中心的故事（第一期）——小机上运行Oracle数据库需要注意的</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-1814173-1-1.html" target="_blank">《Oracle Golden Gate图文并茂快速掌握》（附下载）</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-2063121-1-1.html" target="_blank">Oracle 运维最佳实践</a></li>
+                                                        
+                                                                                	<li><a href="http://www.itpub.net/thread-2089835-1-1.html" target="_blank">Oracle中的锁和10704对高级队列锁的跟踪实验</a></li>
+                                                        
+                                                </ul>
+                        <div class="clear"></div>
+                    </div> 
+                 </div>
+                                                                            
+             
+   	    </div>
+   	    <script type="text/javascript">
+function iniMenu(tabObj,selNum,tabTagName,t){
+var collection = document.getElementById(tabObj).getElementsByTagName(tabTagName);
+var selObj = collection[selNum];
+selObj.className = 'here';
+document.getElementById(tabObj+"_Content"+selNum).style.display = "block";
+for(var i = 0; i < collection.length; i++){
+collection[i].num= i;
+collection[i].onmouseover = function(){
+//onclick
+temp = this;
+timer = setTimeout( function(){
+if(temp != selObj){
+selObj.className = '';
+temp.className = 'here';
+document.getElementById( tabObj+"_Content" + temp.num).style.display="block";
+document.getElementById( tabObj+"_Content" + selObj.num).style.display="none";
+selObj = temp;
+}
+},t);
+}
+collection[i].onmouseout = function(){
+clearTimeout(timer);
+}
+}
+}
+iniMenu('tab011',0,'a',200);
+</script>
+                 
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 end-->         
+
+
+</td>
+</tr>
+<tr id="_postposition22052351"></tr>
+<tr>
+<td class="pls"></td>
+<td class="plc" style="overflow:visible;">
+<div class="po hin">
+<div class="pob cl">
+                            
+                            <p>
+<a href="javascript:;" id="mgc_post_22052351" onmouseover="showMenu(this.id)" class="showmenu">使用道具</a>
+<a href="javascript:;" onclick="showWindow('miscreport22052351', 'misc.php?mod=report&amp;rtype=post&amp;rid=22052351&amp;tid=1839930&amp;fid=2', 'get', -1);return false;">举报</a>
+</p>
+                            
+<em>
+<a class="fastre" href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;reppost=22052351&amp;extra=page%3D2&amp;page=1" onclick="showWindow('reply', this.href)">回复</a>
+                                        
+                                        <!--推荐到首页-->
+                                                                        
+                                                                        
+                
+</em>
+
+
+
+<ul id="mgc_post_22052351_menu" class="p_pop mgcmn" style="display: none;">
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=bump&amp;idtype=tid&amp;id=1839930" id="a_bump" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/bump.gif">提升卡</a></li>
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=stick&amp;idtype=tid&amp;id=1839930" id="a_stick" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/stick.gif">置顶卡</a></li>
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=highlight&amp;idtype=tid&amp;id=1839930" id="a_stick" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/highlight.gif">变色卡</a></li>
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=namepost&amp;idtype=pid&amp;id=22052351:1839930" id="a_namepost_22052351" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/namepost.gif">显身卡</a></li><li>
+</li></ul>
+<script type="text/javascript" reload="1">checkmgcmn('post_22052351')</script>
+</div>
+</div>
+</td>
+</tr>
+<tr class="ad">
+<td class="pls">
+</td>
+<td class="plc">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_22052409"><table id="pid22052409" class="plhin e_bg" summary="pid22052409" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2">
+<div id="favatar22052409" class="pls favatar">
+ <div class="pi">
+<div class="authi"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=210154" target="_blank" class="xw1">zcs0237</a>
+</div>
+</div>
+<div class="p_pop blk bui card_gender_" id="userinfo22052409" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo22052409_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://www.itpub.net/home.php?mod=space&amp;uid=210154" target="_blank" class="xi2">zcs0237</a></strong>
+<em>当前离线</em>
+</div><dl class="cl">
+<dt>积分</dt><dd><a href="http://www.itpub.net/home.php?mod=space&amp;uid=210154&amp;do=profile" target="_blank" class="xi2">101</a></dd>
+</dl><div class="imicn">
+<a href="http://www.itpub.net/home.php?mod=space&amp;uid=210154&amp;do=profile" target="_blank" title="查看详细资料"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/userinfo.gif" alt="查看详细资料"></a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=showip&amp;idtype=user&amp;id=zcs0237" id="a_showip_li_22052409" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/showip.gif" alt=""> IP卡</a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=checkonline&amp;idtype=user&amp;id=zcs0237" id="a_repent_22052409" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/checkonline.gif" alt=""> 狗仔卡</a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=210154" class="avtm" target="_blank"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/54_avatar_middle.jpg" onerror="this.onerror=null;this.src='http://passport.ixpub.net/images/noavatar_middle.gif'"></a></div>
+</div>
+<dl class="pil cl"><dt style="width:150px">求职 : <a href="http://www.itpub.net/space-uid-210154.html#zpqz" target="_blank">数据库管理员</a></dt><dt style="width:150px">招聘 : <a href="http://www.itpub.net/thread-1911060-1-1.html" target="_blank">Oracle OCP专职讲师</a></dt></dl><dl class="pil cl"><dt>论坛徽章:</dt><dd>45</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"><img id="1060" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/60_NationalDay_small1.gif" style="margin:2px;cursor: hand;" alt="祖国60周年纪念徽章
+日期:2015-05-19 13:02:04" title="祖国60周年纪念徽章
+日期:2015-05-19 13:02:04" width="24px"><img id="1308" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/itpub13-small.gif" style="margin:2px;cursor: hand;" alt="itpub13周年纪念徽章
+日期:2014-12-30 09:02:12" title="itpub13周年纪念徽章
+日期:2014-12-30 09:02:12" width="24px"><img id="1308" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/itpub13-small.gif" style="margin:2px;cursor: hand;" alt="itpub13周年纪念徽章
+日期:2014-12-30 09:02:12" title="itpub13周年纪念徽章
+日期:2014-12-30 09:02:12" width="24px"><img id="16" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/medal_16_small.gif" style="margin:2px;cursor: hand;" alt="BLOG每日发帖之星
+日期:2015-08-17 16:57:37" title="BLOG每日发帖之星
+日期:2015-08-17 16:57:37" width="24px"><img id="1319" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/2015sjkdh2424.png" style="margin:2px;cursor: hand;" alt="2015中国数据库技术大会纪念徽章
+日期:2015-04-24 16:04:24" title="2015中国数据库技术大会纪念徽章
+日期:2015-04-24 16:04:24" width="24px"><img id="1099" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/DT24.gif" style="margin:2px;cursor: hand;" alt="2010数据库技术大会纪念徽章
+日期:2015-04-23 10:33:19" title="2010数据库技术大会纪念徽章
+日期:2015-04-23 10:33:19" width="24px"><img id="1270" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/dtcc11-small.gif" style="margin:2px;cursor: hand;" alt="2011数据库大会纪念章
+日期:2015-04-23 10:33:19" title="2011数据库大会纪念章
+日期:2015-04-23 10:33:19" width="24px"><img id="1271" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/dtcc12-small.gif" style="margin:2px;cursor: hand;" alt="2012数据库大会纪念章
+日期:2015-04-23 10:33:19" title="2012数据库大会纪念章
+日期:2015-04-23 10:33:19" width="24px"><img id="1272" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/dtcc13-small.gif" style="margin:2px;cursor: hand;" alt="2013数据库大会纪念章
+日期:2015-04-23 10:33:19" title="2013数据库大会纪念章
+日期:2015-04-23 10:33:19" width="24px"><img id="1273" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/dtcc14-small.gif" style="margin:2px;cursor: hand;" alt="2014数据库大会纪念章
+日期:2015-04-23 10:33:19" title="2014数据库大会纪念章
+日期:2015-04-23 10:33:19" width="24px"></div></div>
+</td>
+<td class="plc">
+<div class="pi">
+<strong>
+<a href="http://www.itpub.net/forum.php?mod=redirect&amp;goto=findpost&amp;ptid=1839930&amp;pid=22052409" id="postnum22052409" onclick="setCopy(this.href, '帖子地址复制成功');return false;">
+<em>2</em><sup>#</sup></a>
+</strong>
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon22052409" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/online_member.gif">
+<em id="authorposton22052409">发表于 2014-1-9 13:06</em>
+<span class="pipe">|</span>
+<a href="http://www.itpub.net/forum.php?mod=viewthread&amp;tid=1839930&amp;page=1&amp;authorid=210154" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_22052409">
+<img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/mg.gif" smilieid="611" alt="" border="0"></td></tr></tbody></table>
+
+
+</div>
+<div id="comment_22052409" class="cm">
+</div>
+    <!--//ITPUB JOB 自定义钩子-->
+    <div id="post_rate_div_22052409"></div>
+<div style="margin:0px auto;padding:10px;">
+<style>
+.cl:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; } .cl { zoom: 1; }
+.rebtnw a:hover{text-decoration:none;box-shadow:1px 1px 3px #ccc}
+.rebtnw a{display:inline-block;height:32px;line-height:32px;padding:0 25px;font-size:16px;text-align: center;margin:0 auto;vertical-align: middle;color: #fff;border-radius: 5px;background:#D75847}
+.rebtnw{margin:8px auto 25px;text-align: center}
+.reword{ text-align: center; font-size: 18px;color: #666;line-height: 36px;}
+.relist p{font-size:16px;text-align:center;color:#909090}
+.relist p a{color:#627C97;font-size:16px}
+.relist ul{width:272px;margin:10px auto!important;text-align:center}
+.relist ul li{ margin:0 6px 6px 0;display:inline-block;list-style-type:none!important;}
+.relist ul li img{width:28px;height:28px;display:block}
+</style><style>.rebtnw{margin:10px auto;}.relist{margin-top:20px}</style>
+<div class="rebtnw">
+
+</div>
+<script>
+function showprconfirm(title,uid,subject,postid,url){
+        var notice = '<style>.alert_info{padding-left:0;background:none}</style>' +
+         '<div class="c altw"><div class="alert_info"><p><style>.alert_info{padding-left:0;background:none}</style></p><div class="cl" style="margin-top:10px;text-align:center" id="inputqrw"><input id="inputqr" class="px" type="number" name="amount" autocomplete="off" value="1"> 元</div><p></p></div></div><p class="o pns"><span class="z xg1">打赏无悔，概不退款</span><button id="fwin_dosubmit" value="true" class="pn pnc"><strong>立即打赏</strong></button><button id="fwin_dialog_cancel" value="true" class="pn" onclick="hideMenu(\'fwin_dialog\', \'dialog\')"><strong>关闭</strong></button></p>';
+        showDialog(notice, 'info', title,null,1);
+        $('fwin_dosubmit').onclick = function(){
+            var price = $('inputqr').value;
+            if(! /^[0-9]+\.{0,1}[0-9]{0,2}$/.test(price)){
+                alert('请输入正确的金额!');
+                $('inputqr').focus();
+                return true;
+            }
+            ajaxget('plugin.php?id=xigua_re:index&ac=pc&uid='+uid+'&price='+price+'&subject='+subject+'&postid='+postid+'&url='+url, 'inputqrw');
+            return true;
+        }
+}
+</script>
+</div></div>
+</div>
+
+</td></tr>
+<tr><td class="plc plm">
+       
+        
+        
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                 
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 end-->         
+
+
+</td>
+</tr>
+<tr id="_postposition22052409"></tr>
+<tr>
+<td class="pls"></td>
+<td class="plc" style="overflow:visible;">
+<div class="po hin">
+<div class="pob cl">
+                            
+                            <p>
+<a href="javascript:;" id="mgc_post_22052409" onmouseover="showMenu(this.id)" class="showmenu">使用道具</a>
+<a href="javascript:;" onclick="showWindow('miscreport22052409', 'misc.php?mod=report&amp;rtype=post&amp;rid=22052409&amp;tid=1839930&amp;fid=2', 'get', -1);return false;">举报</a>
+</p>
+                            
+<em>
+                                               
+<a class="fastre" href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;repquote=22052409&amp;extra=page%3D2&amp;page=1" onclick="showWindow('reply', this.href)">回复</a>                                                        
+                                        
+                                        <!--推荐到首页-->
+                                                                                
+</em>
+
+
+
+<ul id="mgc_post_22052409_menu" class="p_pop mgcmn" style="display: none;">
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=namepost&amp;idtype=pid&amp;id=22052409:1839930" id="a_namepost_22052409" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/namepost.gif">显身卡</a></li><li>
+</li></ul>
+<script type="text/javascript" reload="1">checkmgcmn('post_22052409')</script>
+</div>
+</div>
+</td>
+</tr>
+<tr class="ad">
+<td class="pls">
+</td>
+<td class="plc">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_22053132"><table id="pid22053132" class="plhin o_bg" summary="pid22053132" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2">
+<div id="favatar22053132" class="pls favatar">
+ <div class="pi">
+<div class="authi"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15773882" target="_blank" class="xw1"><font color="#c80000">jkopip</font><em style="display: inline-block;width: 16px;height: 9px;;background: url(source/plugin/auction/images/v.jpg) no-repeat;overflow: hidden;"></em></a>
+</div>
+</div>
+<div class="p_pop blk bui card_gender_" id="userinfo22053132" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo22053132_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15773882" target="_blank" class="xi2"><font color="#c80000">jkopip</font><em style="display: inline-block;width: 16px;height: 9px;;background: url(source/plugin/auction/images/v.jpg) no-repeat;overflow: hidden;"></em></a></strong>
+<em>当前离线</em>
+</div><dl class="cl">
+<dt>积分</dt><dd><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15773882&amp;do=profile" target="_blank" class="xi2">101</a></dd>
+</dl><div class="imicn">
+<a href="http://www.itpub.net/home.php?mod=space&amp;uid=15773882&amp;do=profile" target="_blank" title="查看详细资料"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/userinfo.gif" alt="查看详细资料"></a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=showip&amp;idtype=user&amp;id=%3Cfont%20color%3D%27%23c80000%27%3Ejkopip%3C%2Ffont%3E%3Cem%20style%3D%27display%3A%20inline-block%3Bwidth%3A%2016px%3Bheight%3A%209px%3B%3Bbackground%3A%20url%28source%2Fplugin%2Fauction%2Fimages%2Fv.jpg%29%20no-repeat%3Boverflow%3A%20hidden%3B%27%3E%3C%2Fem%3E" id="a_showip_li_22053132" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/showip.gif" alt=""> IP卡</a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=checkonline&amp;idtype=user&amp;id=%3Cfont%20color%3D%27%23c80000%27%3Ejkopip%3C%2Ffont%3E%3Cem%20style%3D%27display%3A%20inline-block%3Bwidth%3A%2016px%3Bheight%3A%209px%3B%3Bbackground%3A%20url%28source%2Fplugin%2Fauction%2Fimages%2Fv.jpg%29%20no-repeat%3Boverflow%3A%20hidden%3B%27%3E%3C%2Fem%3E" id="a_repent_22053132" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/checkonline.gif" alt=""> 狗仔卡</a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15773882" class="avtm" target="_blank"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/82_avatar_middle.jpg" onerror="this.onerror=null;this.src='http://passport.ixpub.net/images/noavatar_middle.gif'"></a></div>
+</div>
+<dl class="pil cl"><dt style="width:150px">求职 : <a href="http://www.itpub.net/space-uid-15773882.html#zpqz" target="_blank">数据库管理员</a></dt></dl><dl class="pil cl"><dt>认证徽章</dt><dd></dd><dt style="width:90px;height:25px;"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/renzheng.png"></dt></dl><dl class="pil cl"><dt>论坛徽章:</dt><dd>11</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"><img id="1193" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/11zn11_small.png" style="margin:2px;cursor: hand;" alt="ITPUB 11周年纪念徽章
+日期:2012-10-10 13:11:14" title="ITPUB 11周年纪念徽章
+日期:2012-10-10 13:11:14" width="24px"><img id="1235" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/maqian-small.gif" style="margin:2px;cursor: hand;" alt="马上有钱
+日期:2014-02-18 16:43:09" title="马上有钱
+日期:2014-02-18 16:43:09" width="24px"><img id="1232" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/fu2014-small.gif" style="margin:2px;cursor: hand;" alt="2014年新春福章
+日期:2014-02-18 16:43:09" title="2014年新春福章
+日期:2014-02-18 16:43:09" width="24px"><img id="1214" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car17-small.gif" style="margin:2px;cursor: hand;" alt="福特
+日期:2014-02-11 16:12:51" title="福特
+日期:2014-02-11 16:12:51" width="24px"><img id="1217" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car20-small.gif" style="margin:2px;cursor: hand;" alt="保时捷
+日期:2014-02-11 15:09:51" title="保时捷
+日期:2014-02-11 15:09:51" width="24px"><img id="1213" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car16-small.gif" style="margin:2px;cursor: hand;" alt="红旗
+日期:2014-02-08 15:20:03" title="红旗
+日期:2014-02-08 15:20:03" width="24px"><img id="1204" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car6-small.gif" style="margin:2px;cursor: hand;" alt="一汽
+日期:2014-01-16 19:28:15" title="一汽
+日期:2014-01-16 19:28:15" width="24px"><img id="1223" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car26-small.gif" style="margin:2px;cursor: hand;" alt="凯迪拉克
+日期:2014-01-08 17:02:34" title="凯迪拉克
+日期:2014-01-08 17:02:34" width="24px"><img id="1203" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car5-small.gif" style="margin:2px;cursor: hand;" alt="大众
+日期:2014-01-09 15:50:31" title="大众
+日期:2014-01-09 15:50:31" width="24px"><img id="1214" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/car17-small.gif" style="margin:2px;cursor: hand;" alt="福特
+日期:2013-12-28 11:05:25" title="福特
+日期:2013-12-28 11:05:25" width="24px"></div></div>
+</td>
+<td class="plc">
+<div class="pi">
+<strong>
+<a href="http://www.itpub.net/forum.php?mod=redirect&amp;goto=findpost&amp;ptid=1839930&amp;pid=22053132" id="postnum22053132" onclick="setCopy(this.href, '帖子地址复制成功');return false;">
+<em>3</em><sup>#</sup></a>
+</strong>
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon22053132" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/online_member.gif">
+<em id="authorposton22053132">发表于 2014-1-9 15:39</em>
+<span class="pipe">|</span>
+<a href="http://www.itpub.net/forum.php?mod=viewthread&amp;tid=1839930&amp;page=1&amp;authorid=15773882" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_22053132">
+不错的总结！<img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/mg.gif" smilieid="611" alt="" border="0"></td></tr></tbody></table>
+
+
+</div>
+<div id="comment_22053132" class="cm">
+</div>
+    <!--//ITPUB JOB 自定义钩子-->
+    <div id="post_rate_div_22053132"></div>
+<div style="margin:0px auto;padding:10px;">
+<style>.rebtnw{margin:10px auto;}.relist{margin-top:20px}</style>
+<div class="rebtnw">
+
+</div>
+
+</div></div>
+</div>
+
+</td></tr>
+<tr><td class="plc plm">
+       
+        
+        
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                 
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 end-->         
+
+
+</td>
+</tr>
+<tr id="_postposition22053132"></tr>
+<tr>
+<td class="pls"></td>
+<td class="plc" style="overflow:visible;">
+<div class="po hin">
+<div class="pob cl">
+                            
+                            <p>
+<a href="javascript:;" id="mgc_post_22053132" onmouseover="showMenu(this.id)" class="showmenu">使用道具</a>
+<a href="javascript:;" onclick="showWindow('miscreport22053132', 'misc.php?mod=report&amp;rtype=post&amp;rid=22053132&amp;tid=1839930&amp;fid=2', 'get', -1);return false;">举报</a>
+</p>
+                            
+<em>
+                                               
+<a class="fastre" href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;repquote=22053132&amp;extra=page%3D2&amp;page=1" onclick="showWindow('reply', this.href)">回复</a>                                                        
+                                        
+                                        <!--推荐到首页-->
+                                                                                
+</em>
+
+
+
+<ul id="mgc_post_22053132_menu" class="p_pop mgcmn" style="display: none;">
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=namepost&amp;idtype=pid&amp;id=22053132:1839930" id="a_namepost_22053132" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/namepost.gif">显身卡</a></li><li>
+</li></ul>
+<script type="text/javascript" reload="1">checkmgcmn('post_22053132')</script>
+</div>
+</div>
+</td>
+</tr>
+<tr class="ad">
+<td class="pls">
+</td>
+<td class="plc">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_22053266"><table id="pid22053266" class="plhin e_bg" summary="pid22053266" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2">
+<div id="favatar22053266" class="pls favatar">
+ <div class="pi">
+<div class="authi"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15786314" target="_blank" class="xw1"><font color="#c80000">songmingliang</font><em style="display: inline-block;width: 16px;height: 9px;;background: url(source/plugin/auction/images/v.jpg) no-repeat;overflow: hidden;"></em></a>
+</div>
+</div>
+<div class="p_pop blk bui card_gender_" id="userinfo22053266" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo22053266_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15786314" target="_blank" class="xi2"><font color="#c80000">songmingliang</font><em style="display: inline-block;width: 16px;height: 9px;;background: url(source/plugin/auction/images/v.jpg) no-repeat;overflow: hidden;"></em></a></strong>
+<em>当前离线</em>
+</div><dl class="cl">
+<dt>积分</dt><dd><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15786314&amp;do=profile" target="_blank" class="xi2">101</a></dd>
+</dl><div class="imicn">
+<a href="http://www.itpub.net/home.php?mod=space&amp;uid=15786314&amp;do=profile" target="_blank" title="查看详细资料"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/userinfo.gif" alt="查看详细资料"></a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=showip&amp;idtype=user&amp;id=%3Cfont%20color%3D%27%23c80000%27%3Esongmingliang%3C%2Ffont%3E%3Cem%20style%3D%27display%3A%20inline-block%3Bwidth%3A%2016px%3Bheight%3A%209px%3B%3Bbackground%3A%20url%28source%2Fplugin%2Fauction%2Fimages%2Fv.jpg%29%20no-repeat%3Boverflow%3A%20hidden%3B%27%3E%3C%2Fem%3E" id="a_showip_li_22053266" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/showip.gif" alt=""> IP卡</a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=checkonline&amp;idtype=user&amp;id=%3Cfont%20color%3D%27%23c80000%27%3Esongmingliang%3C%2Ffont%3E%3Cem%20style%3D%27display%3A%20inline-block%3Bwidth%3A%2016px%3Bheight%3A%209px%3B%3Bbackground%3A%20url%28source%2Fplugin%2Fauction%2Fimages%2Fv.jpg%29%20no-repeat%3Boverflow%3A%20hidden%3B%27%3E%3C%2Fem%3E" id="a_repent_22053266" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/checkonline.gif" alt=""> 狗仔卡</a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=15786314" class="avtm" target="_blank"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/14_avatar_middle.jpg" onerror="this.onerror=null;this.src='http://passport.ixpub.net/images/noavatar_middle.gif'"></a></div>
+</div>
+<dl class="pil cl"><dt>认证徽章</dt><dd></dd><dt style="width:90px;height:25px;"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/renzheng.png"></dt></dl><dl class="pil cl"><dt>论坛徽章:</dt><dd>764</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"><img id="1224" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/eye1-small.gif" style="margin:2px;cursor: hand;" alt="目光如炬
+日期:2015-01-12 06:00:13" title="目光如炬
+日期:2015-01-12 06:00:13" width="24px"><img id="1235" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/maqian-small.gif" style="margin:2px;cursor: hand;" alt="马上有钱
+日期:2015-01-12 16:15:24" title="马上有钱
+日期:2015-01-12 16:15:24" width="24px"><img id="1313" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/lyy-small.gif" style="margin:2px;cursor: hand;" alt="懒羊羊
+日期:2015-03-04 14:52:11" title="懒羊羊
+日期:2015-03-04 14:52:11" width="24px"><img id="1310" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/fu-small.gif" style="margin:2px;cursor: hand;" alt="2015年新春福章
+日期:2015-03-06 11:58:18" title="2015年新春福章
+日期:2015-03-06 11:58:18" width="24px"><img id="1338" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/shuiping-small.gif" style="margin:2px;cursor: hand;" alt="水瓶座
+日期:2015-08-26 16:06:05" title="水瓶座
+日期:2015-08-26 16:06:05" width="24px"><img id="1347" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/wusuopu-small.png" style="margin:2px;cursor: hand;" alt="乌索普
+日期:2016-12-12 09:37:32" title="乌索普
+日期:2016-12-12 09:37:32" width="24px"></div></div>
+</td>
+<td class="plc">
+<div class="pi">
+<strong>
+<a href="http://www.itpub.net/forum.php?mod=redirect&amp;goto=findpost&amp;ptid=1839930&amp;pid=22053266" id="postnum22053266" onclick="setCopy(this.href, '帖子地址复制成功');return false;">
+<em>4</em><sup>#</sup></a>
+</strong>
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon22053266" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/online_member.gif">
+<em id="authorposton22053266">发表于 2014-1-9 16:10</em>
+<span class="pipe">|</span>
+<a href="http://www.itpub.net/forum.php?mod=viewthread&amp;tid=1839930&amp;page=1&amp;authorid=15786314" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_22053266">
+不错 </td></tr></tbody></table>
+
+
+</div>
+<div id="comment_22053266" class="cm">
+</div>
+    <!--//ITPUB JOB 自定义钩子-->
+    <div id="post_rate_div_22053266"></div>
+<div style="margin:0px auto;padding:10px;">
+<style>.rebtnw{margin:10px auto;}.relist{margin-top:20px}</style>
+<div class="rebtnw">
+
+</div>
+
+</div></div>
+</div>
+
+</td></tr>
+<tr><td class="plc plm">
+       
+        
+        
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                 
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 end-->         
+
+
+</td>
+</tr>
+<tr id="_postposition22053266"></tr>
+<tr>
+<td class="pls"></td>
+<td class="plc" style="overflow:visible;">
+<div class="po hin">
+<div class="pob cl">
+                            
+                            <p>
+<a href="javascript:;" id="mgc_post_22053266" onmouseover="showMenu(this.id)" class="showmenu">使用道具</a>
+<a href="javascript:;" onclick="showWindow('miscreport22053266', 'misc.php?mod=report&amp;rtype=post&amp;rid=22053266&amp;tid=1839930&amp;fid=2', 'get', -1);return false;">举报</a>
+</p>
+                            
+<em>
+                                               
+<a class="fastre" href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;repquote=22053266&amp;extra=page%3D2&amp;page=1" onclick="showWindow('reply', this.href)">回复</a>                                                        
+                                        
+                                        <!--推荐到首页-->
+                                                                                
+</em>
+
+
+
+<ul id="mgc_post_22053266_menu" class="p_pop mgcmn" style="display: none;">
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=namepost&amp;idtype=pid&amp;id=22053266:1839930" id="a_namepost_22053266" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/namepost.gif">显身卡</a></li><li>
+</li></ul>
+<script type="text/javascript" reload="1">checkmgcmn('post_22053266')</script>
+</div>
+</div>
+</td>
+</tr>
+<tr class="ad">
+<td class="pls">
+</td>
+<td class="plc">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_22093301"><table id="pid22093301" class="plhin o_bg" summary="pid22093301" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2">
+<div id="favatar22093301" class="pls favatar">
+ <div class="pi">
+<div class="authi"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=29359173" target="_blank" class="xw1">一切为了小木</a>
+</div>
+</div>
+<div class="p_pop blk bui card_gender_" id="userinfo22093301" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo22093301_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://www.itpub.net/home.php?mod=space&amp;uid=29359173" target="_blank" class="xi2">一切为了小木</a></strong>
+<em>当前离线</em>
+</div><dl class="cl">
+<dt>积分</dt><dd><a href="http://www.itpub.net/home.php?mod=space&amp;uid=29359173&amp;do=profile" target="_blank" class="xi2">101</a></dd>
+</dl><div class="imicn">
+<a href="http://www.itpub.net/home.php?mod=space&amp;uid=29359173&amp;do=profile" target="_blank" title="查看详细资料"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/userinfo.gif" alt="查看详细资料"></a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=showip&amp;idtype=user&amp;id=%D2%BB%C7%D0%CE%AA%C1%CB%D0%A1%C4%BE" id="a_showip_li_22093301" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/showip.gif" alt=""> IP卡</a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=checkonline&amp;idtype=user&amp;id=%D2%BB%C7%D0%CE%AA%C1%CB%D0%A1%C4%BE" id="a_repent_22093301" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/checkonline.gif" alt=""> 狗仔卡</a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=29359173" class="avtm" target="_blank"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/noavatar_middle.gif" onerror="this.onerror=null;this.src='http://passport.ixpub.net/images/noavatar_middle.gif'"></a></div>
+</div>
+<dl class="pil cl"><dt>论坛徽章:</dt><dd>3</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"><img id="1226" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/youxiu1-small.gif" style="margin:2px;cursor: hand;" alt="优秀写手
+日期:2013-12-21 06:00:14" title="优秀写手
+日期:2013-12-21 06:00:14" width="24px"><img id="1232" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/fu2014-small.gif" style="margin:2px;cursor: hand;" alt="2014年新春福章
+日期:2014-02-18 16:50:09" title="2014年新春福章
+日期:2014-02-18 16:50:09" width="24px"><img id="1233" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/mache-small.gif" style="margin:2px;cursor: hand;" alt="马上有车
+日期:2014-02-18 16:50:09" title="马上有车
+日期:2014-02-18 16:50:09" width="24px"></div></div>
+</td>
+<td class="plc">
+<div class="pi">
+<strong>
+<a href="http://www.itpub.net/forum.php?mod=redirect&amp;goto=findpost&amp;ptid=1839930&amp;pid=22093301" id="postnum22093301" onclick="setCopy(this.href, '帖子地址复制成功');return false;">
+<em>5</em><sup>#</sup></a>
+</strong>
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon22093301" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/online_member.gif">
+<em id="authorposton22093301">发表于 2014-1-26 21:24</em>
+<span class="pipe">|</span>
+<a href="http://www.itpub.net/forum.php?mod=viewthread&amp;tid=1839930&amp;page=1&amp;authorid=29359173" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_22093301">
+good!!</td></tr></tbody></table>
+
+
+</div>
+<div id="comment_22093301" class="cm">
+</div>
+    <!--//ITPUB JOB 自定义钩子-->
+    <div id="post_rate_div_22093301"></div>
+<div style="margin:0px auto;padding:10px;">
+<style>.rebtnw{margin:10px auto;}.relist{margin-top:20px}</style>
+<div class="rebtnw">
+
+</div>
+
+</div></div>
+</div>
+
+</td></tr>
+<tr><td class="plc plm">
+       
+        
+        
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                 
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 end-->         
+
+
+</td>
+</tr>
+<tr id="_postposition22093301"></tr>
+<tr>
+<td class="pls"></td>
+<td class="plc" style="overflow:visible;">
+<div class="po hin">
+<div class="pob cl">
+                            
+                            <p>
+<a href="javascript:;" id="mgc_post_22093301" onmouseover="showMenu(this.id)" class="showmenu">使用道具</a>
+<a href="javascript:;" onclick="showWindow('miscreport22093301', 'misc.php?mod=report&amp;rtype=post&amp;rid=22093301&amp;tid=1839930&amp;fid=2', 'get', -1);return false;">举报</a>
+</p>
+                            
+<em>
+                                               
+<a class="fastre" href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;repquote=22093301&amp;extra=page%3D2&amp;page=1" onclick="showWindow('reply', this.href)">回复</a>                                                        
+                                        
+                                        <!--推荐到首页-->
+                                                                                
+</em>
+
+
+
+<ul id="mgc_post_22093301_menu" class="p_pop mgcmn" style="display: none;">
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=namepost&amp;idtype=pid&amp;id=22093301:1839930" id="a_namepost_22093301" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/namepost.gif">显身卡</a></li><li>
+</li></ul>
+<script type="text/javascript" reload="1">checkmgcmn('post_22093301')</script>
+</div>
+</div>
+</td>
+</tr>
+<tr class="ad">
+<td class="pls">
+</td>
+<td class="plc">
+</td>
+</tr>
+</tbody></table>
+</div><div id="post_22094195"><table id="pid22094195" class="plhin e_bg" summary="pid22094195" cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls" rowspan="2">
+<div id="favatar22094195" class="pls favatar">
+ <a name="lastpost"></a><div class="pi">
+<div class="authi"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=28939273" target="_blank" class="xw1"><font color="#c80000">haoge0205</font><em style="display: inline-block;width: 16px;height: 9px;;background: url(source/plugin/auction/images/v.jpg) no-repeat;overflow: hidden;"></em></a>
+</div>
+</div>
+<div class="p_pop blk bui card_gender_" id="userinfo22094195" style="display: none; margin-top: -11px;">
+<div class="m z">
+<div id="userinfo22094195_ma"></div>
+</div>
+<div class="i y">
+<div>
+<strong><a href="http://www.itpub.net/home.php?mod=space&amp;uid=28939273" target="_blank" class="xi2"><font color="#c80000">haoge0205</font><em style="display: inline-block;width: 16px;height: 9px;;background: url(source/plugin/auction/images/v.jpg) no-repeat;overflow: hidden;"></em></a></strong>
+<em>当前离线</em>
+</div><dl class="cl">
+<dt>积分</dt><dd><a href="http://www.itpub.net/home.php?mod=space&amp;uid=28939273&amp;do=profile" target="_blank" class="xi2">101</a></dd>
+</dl><div class="imicn">
+<a href="http://www.itpub.net/home.php?mod=space&amp;uid=28939273&amp;do=profile" target="_blank" title="查看详细资料"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/userinfo.gif" alt="查看详细资料"></a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=showip&amp;idtype=user&amp;id=%3Cfont%20color%3D%27%23c80000%27%3Ehaoge0205%3C%2Ffont%3E%3Cem%20style%3D%27display%3A%20inline-block%3Bwidth%3A%2016px%3Bheight%3A%209px%3B%3Bbackground%3A%20url%28source%2Fplugin%2Fauction%2Fimages%2Fv.jpg%29%20no-repeat%3Boverflow%3A%20hidden%3B%27%3E%3C%2Fem%3E" id="a_showip_li_22094195" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/showip.gif" alt=""> IP卡</a>
+<a href="http://www.itpub.net/home.php?mod=magic&amp;mid=checkonline&amp;idtype=user&amp;id=%3Cfont%20color%3D%27%23c80000%27%3Ehaoge0205%3C%2Ffont%3E%3Cem%20style%3D%27display%3A%20inline-block%3Bwidth%3A%2016px%3Bheight%3A%209px%3B%3Bbackground%3A%20url%28source%2Fplugin%2Fauction%2Fimages%2Fv.jpg%29%20no-repeat%3Boverflow%3A%20hidden%3B%27%3E%3C%2Fem%3E" id="a_repent_22094195" class="xi2" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/checkonline.gif" alt=""> 狗仔卡</a>
+</div>
+<div id="avatarfeed"><span id="threadsortswait"></span></div>
+</div>
+</div>
+<div>
+<div class="avatar"><a href="http://www.itpub.net/home.php?mod=space&amp;uid=28939273" class="avtm" target="_blank"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/73_avatar_middle.jpg" onerror="this.onerror=null;this.src='http://passport.ixpub.net/images/noavatar_middle.gif'"></a></div>
+</div>
+<dl class="pil cl"><dt style="width:150px">求职 : <a href="http://www.itpub.net/space-uid-28939273.html#zpqz" target="_blank">数据库管理员</a></dt></dl><dl class="pil cl"><dt>认证徽章</dt><dd></dd><dt style="width:90px;height:25px;"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/renzheng.png"></dt></dl><dl class="pil cl"><dt>论坛徽章:</dt><dd>123</dd></dl><div style="padding:3px; margin-left:5px; margin-right:5px;"><img id="1309" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/guoqing65-small.gif" style="margin:2px;cursor: hand;" alt="祖国65周年纪念徽章
+日期:2014-09-29 10:39:00" title="祖国65周年纪念徽章
+日期:2014-09-29 10:39:00" width="24px"><img id="1309" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/guoqing65-small.gif" style="margin:2px;cursor: hand;" alt="祖国65周年纪念徽章
+日期:2014-09-29 21:00:17" title="祖国65周年纪念徽章
+日期:2014-09-29 21:00:17" width="24px"><img id="1309" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/guoqing65-small.gif" style="margin:2px;cursor: hand;" alt="祖国65周年纪念徽章
+日期:2014-10-01 10:45:34" title="祖国65周年纪念徽章
+日期:2014-10-01 10:45:34" width="24px"><img id="1309" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/guoqing65-small.gif" style="margin:2px;cursor: hand;" alt="祖国65周年纪念徽章
+日期:2014-10-01 12:33:03" title="祖国65周年纪念徽章
+日期:2014-10-01 12:33:03" width="24px"><img id="1309" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/guoqing65-small.gif" style="margin:2px;cursor: hand;" alt="祖国65周年纪念徽章
+日期:2014-10-01 12:33:07" title="祖国65周年纪念徽章
+日期:2014-10-01 12:33:07" width="24px"><img id="1309" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/guoqing65-small.gif" style="margin:2px;cursor: hand;" alt="祖国65周年纪念徽章
+日期:2014-10-03 14:27:11" title="祖国65周年纪念徽章
+日期:2014-10-03 14:27:11" width="24px"><img id="1308" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/itpub13-small.gif" style="margin:2px;cursor: hand;" alt="itpub13周年纪念徽章
+日期:2014-10-01 12:57:11" title="itpub13周年纪念徽章
+日期:2014-10-01 12:57:11" width="24px"><img id="1308" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/itpub13-small.gif" style="margin:2px;cursor: hand;" alt="itpub13周年纪念徽章
+日期:2014-09-28 17:39:51" title="itpub13周年纪念徽章
+日期:2014-09-28 17:39:51" width="24px"><img id="1308" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/itpub13-small.gif" style="margin:2px;cursor: hand;" alt="itpub13周年纪念徽章
+日期:2014-09-28 18:00:21" title="itpub13周年纪念徽章
+日期:2014-09-28 18:00:21" width="24px"><img id="1308" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/itpub13-small.gif" style="margin:2px;cursor: hand;" alt="itpub13周年纪念徽章
+日期:2014-09-29 18:04:10" title="itpub13周年纪念徽章
+日期:2014-09-29 18:04:10" width="24px"></div></div>
+</td>
+<td class="plc">
+<div class="pi">
+<strong>
+<a href="http://www.itpub.net/forum.php?mod=redirect&amp;goto=findpost&amp;ptid=1839930&amp;pid=22094195" id="postnum22094195" onclick="setCopy(this.href, '帖子地址复制成功');return false;">
+<em>6</em><sup>#</sup></a>
+</strong>
+<div class="pti">
+<div class="pdbt">
+</div>
+<div class="authi">
+<img class="authicn vm" id="authicon22094195" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/online_member.gif">
+<em id="authorposton22094195">发表于 2014-1-27 10:34</em>
+<span class="pipe">|</span>
+<a href="http://www.itpub.net/forum.php?mod=viewthread&amp;tid=1839930&amp;page=1&amp;authorid=28939273" rel="nofollow">只看该作者</a>
+</div>
+</div>
+</div><div class="pct"><div class="pcb">
+<div class="t_fsz">
+<table cellspacing="0" cellpadding="0"><tbody><tr><td class="t_f" id="postmessage_22094195">
+<img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/gz.gif" smilieid="652" alt="" border="0">&nbsp; &nbsp; </td></tr></tbody></table>
+
+
+</div>
+<div id="comment_22094195" class="cm">
+</div>
+    <!--//ITPUB JOB 自定义钩子-->
+    <div id="post_rate_div_22094195"></div>
+<div style="margin:0px auto;padding:10px;">
+<style>.rebtnw{margin:10px auto;}.relist{margin-top:20px}</style>
+<div class="rebtnw">
+
+</div>
+
+</div></div>
+</div>
+
+</td></tr>
+<tr><td class="plc plm">
+       
+        
+        
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 start-->
+                 
+        <!--//ITPUB 一楼增加看了又看,相关帖子,本版精华内容 end-->         
+
+
+</td>
+</tr>
+<tr id="_postposition22094195"></tr>
+<tr>
+<td class="pls"></td>
+<td class="plc" style="overflow:visible;">
+<div class="po hin">
+<div class="pob cl">
+                            
+                            <p>
+<a href="javascript:;" id="mgc_post_22094195" onmouseover="showMenu(this.id)" class="showmenu">使用道具</a>
+<a href="javascript:;" onclick="showWindow('miscreport22094195', 'misc.php?mod=report&amp;rtype=post&amp;rid=22094195&amp;tid=1839930&amp;fid=2', 'get', -1);return false;">举报</a>
+</p>
+                            
+<em>
+                                               
+<a class="fastre" href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;repquote=22094195&amp;extra=page%3D2&amp;page=1" onclick="showWindow('reply', this.href)">回复</a>                                                        
+                                        
+                                        <!--推荐到首页-->
+                                                                                
+</em>
+
+
+
+<ul id="mgc_post_22094195_menu" class="p_pop mgcmn" style="display: none;">
+<li><a href="http://www.itpub.net/home.php?mod=magic&amp;mid=namepost&amp;idtype=pid&amp;id=22094195:1839930" id="a_namepost_22094195" onclick="showWindow(this.id, this.href)"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/namepost.gif">显身卡</a></li><li>
+</li></ul>
+<script type="text/javascript" reload="1">checkmgcmn('post_22094195')</script>
+</div>
+</div>
+</td>
+</tr>
+<tr class="ad">
+<td class="pls">
+</td>
+<td class="plc">
+</td>
+</tr>
+</tbody></table>
+</div><div id="postlistreply" class="pl"><div id="post_new" class="viewthread_table" style="display: none"></div></div>
+</div>
+
+
+<br>
+
+<form method="post" autocomplete="off" name="modactions" id="modactions">
+<input name="formhash" value="04b55cd3" type="hidden">
+<input name="optgroup" type="hidden">
+<input name="operation" type="hidden">
+<input name="listextra" value="page%3D2" type="hidden">
+<input name="page" value="1" type="hidden">
+</form>
+
+
+
+<div class="pgs mtm mbm cl">
+<span class="pgb y"><a href="http://www.itpub.net/forum-2-2.html">返回列表</a></span>
+<a id="newspecialtmp" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&amp;action=newthread&amp;fid=2')" href="javascript:;" title="发新帖"><img src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pn_post.png" alt="发新帖"></a>
+</div>
+
+<!--[diy=diyfastposttop]--><div id="diyfastposttop" class="area"></div><!--[/diy]-->
+<script type="text/javascript">
+var postminchars = parseInt('5');
+var postmaxchars = parseInt('50000');
+var disablepostctrl = parseInt('0');
+</script>
+
+<div id="f_pst" class="pl bm bmw">
+<form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;extra=page%3D2&amp;replysubmit=yes&amp;infloat=yes&amp;handlekey=fastpost" onsubmit="return fastpostvalidate(this)">
+<table cellspacing="0" cellpadding="0">
+<tbody><tr>
+<td class="pls">
+</td>
+<td class="plc">
+
+<span id="fastpostreturn"></span>
+
+
+<div class="cl">
+<div id="fastsmiliesdiv" class="y"><div id="fastsmiliesdiv_data"><div id="fastsmilies"></div></div></div><div class="hasfsl" id="fastposteditor">
+<div class="tedt mtn">
+<div class="bar">
+<span class="y">
+<a href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930" onclick="return switchAdvanceMode(this.href)">高级模式</a>
+</span><script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/seditor.js" type="text/javascript"></script>
+<div class="fpd">
+<a href="javascript:;" title="文字加粗" class="fbld">B</a>
+<a href="javascript:;" title="设置文字颜色" class="fclr" id="fastpostforecolor">Color</a>
+<a id="fastpostimg" href="javascript:;" title="图片" class="fmg">Image</a>
+<a id="fastposturl" href="javascript:;" title="添加链接" class="flnk">Link</a>
+<a id="fastpostquote" href="javascript:;" title="引用" class="fqt">Quote</a>
+<a id="fastpostcode" href="javascript:;" title="代码" class="fcd">Code</a>
+<a href="javascript:;" class="fsml" id="fastpostsml">Smilies</a>
+</div></div>
+<div class="area">
+<div class="pt hm">
+您需要登录后才可以回帖 <a href="http://www.itpub.net/member.php?mod=logging&amp;action=login" onclick="showWindow('login', this.href)" class="xi2">登录</a> | <a href="http://www.itpub.net/member.php?mod=register" class="xi2">注册</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="seccheck_fastpost">
+</div>
+
+
+<input name="formhash" value="04b55cd3" type="hidden">
+<input name="usesig" value="" type="hidden">
+<input name="subject" value="  " type="hidden">
+<p class="ptm pnpost">
+<a href="http://www.itpub.net/home.php?mod=spacecp&amp;ac=credit&amp;op=rule&amp;fid=2" class="y" target="_blank">本版积分规则</a>
+                           
+<button type="button" onclick="showWindow('login', 'member.php?mod=logging&amp;action=login&amp;guestmessage=yes')" name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>发表回复</strong></button>
+<label for="fastpostrefresh"><input id="fastpostrefresh" class="pc" type="checkbox">回帖后跳转到最后一页</label>
+<script type="text/javascript">if(getcookie('fastpostrefresh') == 1) {$('fastpostrefresh').checked=true;}</script>
+</p>
+</td>
+</tr>
+</tbody></table>
+</form>
+</div>
+
+<script type="text/javascript">
+new lazyload();
+</script>
+<script type="text/javascript">document.onkeyup = function(e){keyPageScroll(e, 0, 0, 'forum.php?mod=viewthread&tid=1839930', 1);}</script>
+</div>
+
+<div class="wp mtn">
+<!--[diy=diy3]--><div id="diy3" class="area"></div><!--[/diy]-->
+</div>
+<script type="text/javascript">
+var relatedlink = [];relatedlink[0] = {'sname':'软件测试', 'surl':'http://www.itpub.net/thread-1318404-1-1.html'};
+relatedlink[1] = {'sname':'全文索引', 'surl':'http://www.itpub.net/thread-1314534-1-1.html'};
+relatedlink[2] = {'sname':'MYSQL', 'surl':'http://www.itpub.net/thread-1431442-1-1.html'};
+relatedlink[3] = {'sname':'mysql', 'surl':'http://www.itpub.net/thread-1431442-1-1.html'};
+relatedlink[4] = {'sname':'asm', 'surl':'http://www.itpub.net/thread-1342473-1-1.html'};
+relatedlink[5] = {'sname':'ASM', 'surl':'http://www.itpub.net/thread-1342473-1-1.html'};
+relatedlink[6] = {'sname':'11G', 'surl':'http://www.itpub.net/thread-1318149-1-1.html'};
+relatedlink[7] = {'sname':'11g', 'surl':'http://www.itpub.net/thread-1318149-1-1.html'};
+relatedlink[8] = {'sname':'ASE', 'surl':'http://www.itpub.net/thread-385520-1-1.html'};
+relatedlink[9] = {'sname':'sybase', 'surl':'http://www.itpub.net/thread-1430388-1-1.html'};
+relatedlink[10] = {'sname':'bbed', 'surl':'http://www.itpub.net/thread-1475582-1-1.html'};
+relatedlink[11] = {'sname':'dataguard', 'surl':'http://www.itpub.net/thread-1349792-1-1.html'};
+relatedlink[12] = {'sname':'DATAGUARD', 'surl':'http://www.itpub.net/thread-1349792-1-1.html'};
+relatedlink[13] = {'sname':'IFS', 'surl':'http://www.itpub.net/thread-1468257-1-1.html'};
+relatedlink[14] = {'sname':'Python', 'surl':'http://www.itpub.net/thread-1319231-1-1.html'};
+relatedlink[15] = {'sname':'Ruby', 'surl':'http://www.itpub.net/thread-1318349-1-1.html'};
+relatedlink[16] = {'sname':'PDM', 'surl':'http://www.itpub.net/thread-588657-1-1.html'};
+relatedlink[17] = {'sname':'MongoDB', 'surl':'http://www.itpub.net/thread-1575399-1-1.html'};
+relatedlink[18] = {'sname':'mongodb', 'surl':'http://www.itpub.net/thread-1575399-1-1.html'};
+relatedlink[19] = {'sname':'hanganalyze', 'surl':'http://www.itpub.net/thread-1575393-1-1.html'};
+relatedlink[20] = {'sname':'物化视图', 'surl':'http://www.itpub.net/thread-1308625-1-1.html'};
+relatedlink[21] = {'sname':'java', 'surl':'http://www.itpub.net/tree/index_207/'};
+relatedlink[22] = {'sname':'Java', 'surl':'http://www.itpub.net/tree/index_207/'};
+relatedlink[23] = {'sname':'PMP', 'surl':'http://www.itpub.net/tree/index_137/'};
+relatedlink[24] = {'sname':'pmp', 'surl':'http://www.itpub.net/tree/index_137/'};
+relatedlink[25] = {'sname':'项目管理', 'surl':'http://www.itpub.net/tree/index_137/'};
+relatedlink[26] = {'sname':'数据挖掘', 'surl':'http://www.itpub.net/tree/index_339/'};
+relatedlink[27] = {'sname':'数据仓库', 'surl':'http://www.itpub.net/tree/index_339/'};
+relatedlink[28] = {'sname':'bi', 'surl':'http://www.itpub.net/tree/index_339/'};
+relatedlink[29] = {'sname':'BI', 'surl':'http://www.itpub.net/tree/index_339/'};
+relatedlink[30] = {'sname':'sybase', 'surl':'http://www.itpub.net/tree/index_343/'};
+relatedlink[31] = {'sname':'SYBASE', 'surl':'http://www.itpub.net/tree/index_343/'};
+relatedlink[32] = {'sname':'Sybase', 'surl':'http://www.itpub.net/tree/index_343/'};
+relatedlink[33] = {'sname':'MYSQL', 'surl':'http://www.itpub.net/tree/index_166/'};
+relatedlink[34] = {'sname':'mysql', 'surl':'http://www.itpub.net/tree/index_166/'};
+relatedlink[35] = {'sname':'Mysql', 'surl':'http://www.itpub.net/tree/index_166/'};
+relatedlink[36] = {'sname':'sqlserver', 'surl':'http://www.itpub.net/tree/index_95/'};
+relatedlink[37] = {'sname':'SQL Server', 'surl':'http://www.itpub.net/tree/index_95/'};
+relatedlink[38] = {'sname':'SQL server', 'surl':'http://www.itpub.net/tree/index_95/'};
+relatedlink[39] = {'sname':'MSSQL', 'surl':'http://www.itpub.net/tree/index_95/'};
+relatedlink[40] = {'sname':'SQLSERVER', 'surl':'http://www.itpub.net/tree/index_95/'};
+relatedlink[41] = {'sname':'db2', 'surl':'http://www.itpub.net/tree/index_51/'};
+relatedlink[42] = {'sname':'DB2', 'surl':'http://www.itpub.net/tree/index_51/'};
+relatedlink[43] = {'sname':'索引树', 'surl':'http://www.itpub.net/pubtree/index.htm'};
+relatedlink[44] = {'sname':'Oracle', 'surl':'http://www.itpub.net/tree/index_1/'};
+relatedlink[45] = {'sname':'ORACLE', 'surl':'http://www.itpub.net/tree/index_1/'};
+relatedlink[46] = {'sname':'oracle', 'surl':'http://www.itpub.net/tree/index_1/'};
+relatedlink[47] = {'sname':'', 'surl':''};
+relatedlinks('postmessage_22052351');
+</script>
+
+<script type="text/javascript">
+function succeedhandle_followmod(url, msg, values) {
+var fObj = $('followmod_'+values['fuid']);
+if(values['type'] == 'add') {
+fObj.innerHTML = '不收听';
+fObj.href = 'home.php?mod=spacecp&ac=follow&op=del&fuid='+values['fuid'];
+} else if(values['type'] == 'del') {
+fObj.innerHTML = '收听TA';
+fObj.href = 'home.php?mod=spacecp&ac=follow&op=add&hash=04b55cd3&fuid='+values['fuid'];
+}
+}
+fixed_avatar([22052351,22052409,22053132,22053266,22093301,22094195], 1);
+</script>	</div>
+    
+    <div class="xu_bg1108"><span><a href="javascript:;" onclick="window.scrollTo('0','0');">TOP</a></span><a href="http://www.itpub.net/techmatch.php" target="_blank">技术积分榜</a> <a href="http://www.itpub.net/forummatch.php" target="_blank">社区积分榜</a> <a href="http://www.itpub.net/plugin.php?id=itpub_medal:medal_list">徽章</a> <a href="http://epub.itpub.net/" target="_blank">电子杂志</a> <a href="http://www.itpub.net/misc.php?mod=stat&amp;op=team">团队</a> <a href="http://www.itpub.net/misc.php?mod=stat">统计</a>  <a href="http://f.dataguru.cn/" target="_blank">虎吧</a> <a href="http://weblog.itpub.net/" target="_blank">老博客</a> <a href="http://www.itpub.net/tree/index.htm" target="_blank">知识索引树</a> <a href="http://book.itpub.net/index.html" target="_blank">读书频道</a> <a href="http://www.itpub.net/plugin.php?id=auction" target="_blank">积分竞拍</a> <a href="http://www.itpub.net/archiver/">文本模式</a> <a href="http://www.itpub.net/misc.php?mod=faq">帮助</a></div>  
+    <!--//ITPUB 增加底部导航 start-->
+    <div class="xu_bg1108"><span>&nbsp;</span> <a href="http://www.itpub.net/" target="_blank">ITPUB首页</a> | <a href="http://www.itpub.net/forum.php" target="_blank">ITPUB论坛</a> | <a href="http://www.itpub.net/forum.php?gid=1" target="_blank">数据库技术</a> | <a href="http://www.itpub.net/forum.php?gid=71" target="_blank">企业信息化</a> | <a href="http://www.itpub.net/forum.php?gid=33" target="_blank">开发技术</a> | <a href="http://www.itpub.net/forum.php?gid=170" target="_blank">微软技术</a> | <a href="http://www.itpub.net/forum.php?gid=121" target="_blank">软件工程与项目管理</a> | <a href="http://www.itpub.net/forum.php?gid=140" target="_blank">IBM技术园地</a> | <a href="http://www.itpub.net/forum.php?gid=50" target="_blank">行业纵向讨论</a> | <a href="http://www.itpub.net/forum-11-1.html" target="_blank">IT招聘</a> | <a href="http://www.itpub.net/forum-61-1.html" target="_blank">IT文档</a> | <a href="http://space.itpub.net/" target="_blank">IT博客</a>
+</div>
+
+<div class="xu_bg1108"><span>&nbsp;</span> 
+    <a href="http://www.chinaunix.net/" target="_blank">ChinaUnix</a> | <a href="http://blog.chinaunix.net/" target="_blank">ChinaUnix博客</a> | <a href="http://bbs.chinaunix.net/" target="_blank">ChinaUnix论坛</a> | <a href="http://www.bestsapchina.com/" target="_blank">SAP ERP系统</a>
+</div> 
+    <div><div style="text-align:center;margin-top:10px;">
+<iframe scrolling="no" src="http://boardx.huanqiu.com/smu0/j.html#eff34e4551aa40dpu3118761r74456484431777840000t1524566504712%28IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%29" style="width: 960px; height: 90px; margin: 0px; padding: 0px; border: 0px none;" frameborder="0"></iframe>
+</div></div><div id="ft" class="wp cl" style="text-align:center">
+        <span style="font-size: 12px"> CopyRight 1999-2011 itpub.net All Right Reserved. 北京盛拓优讯信息技术有限公司版权所有　<a href="http://www.itpub.net/contactus.php" target="_blank">联系我们</a>　<a href="http://www.itpub.net/footer_wzls.php" target="_blank">网站律师</a>　<a href="http://www.itpub.net/footer_ys.php" target="_blank">隐私政策</a>　<a href="http://www.itpub.net/footer_zscq.php" target="_blank">知识产权声明</a><br>
+                <a href="http://www.it168.com/images/icp.jpg" target="_blank">京ICP备16024965号</a>　北京市公安局海淀分局网监中心备案编号：11010802021510　广播电视节目制作经营许可证：编号（京）字第1149号 </span>  
+        <!--//ITPUB 腾讯分析代码-->
+                &nbsp;&nbsp;<span id="tcss"></span><script type="text/javascript" src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/ping.html" charset="utf-8"></script><script type="text/javascript" reload="1">pgvMain({"discuzParams":{"r2":"7333512","ui":0,"rt":"forum","md":"viewthread","fi":"2","ti":"1839930","pn":1,"qq":"000"},"extraParams":""});</script>
+</div>    
+
+<div id="scrolltop" style="left: auto; right: 0px; visibility: hidden;">
+<span><a href="http://www.itpub.net/forum.php?mod=post&amp;action=reply&amp;fid=2&amp;tid=1839930&amp;extra=page%3D2&amp;page=1" onclick="showWindow('reply', this.href)" class="replyfast" title="快速回复"><b>快速回复</b></a></span>
+<span hidefocus="true"><a title="返回顶部" onclick="window.scrollTo('0','0')" class="scrolltopa"><b>返回顶部</b></a></span>
+<span>
+<a href="http://www.itpub.net/forum-2-1.html" hidefocus="true" class="returnlist" title="返回列表"><b>返回列表</b></a>
+</span>
+</div>
+<script type="text/javascript">_attachEvent(window, 'scroll', function () { showTopLink(); });checkBlind();</script>
+			<div id="discuz_tips" style="display:none;"></div>
+			<script type="text/javascript">
+				var tipsinfo = '7333512|X3.2|0.6||0||0|7|1524566495|08fa5567d34f76059e4f669b8e87d859|2';
+			</script>
+			<script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/discuz_tips.js" type="text/javascript" charset="UTF-8"></script>
+<!-- START STAT PV -->
+<script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/pv.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+function sendPV(){ 
+var pvTrack = new PvTrack(); 
+pvTrack.type = 35; // 频道类别ID 
+pvTrack.channel = 23; // 频道ID 
+pvTrack.pageType = 0; 
+pvTrack.track(); 
+} 
+window.setTimeout("sendPV()", 3); 
+</script>
+<!--引入百分点-->
+    	
+          <script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/itpub_detail_bbs.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+//  var _gaq = _gaq || [];
+//  _gaq.push(['_setAccount', 'UA-20237423-4']);
+//  _gaq.push(['_setDomainName', '.itpub.net']);
+//  _gaq.push(['_trackPageview']);
+//
+//  (function() {
+//    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+//    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+//    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+//  })();
+
+</script>
+<div style="display:none">
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F5016281862f595e78ffa42f085ea0f49' type='text/javascript'%3E%3C/script%3E"));
+//2017.11.27
+location.href.indexOf('itpub.net')<0 && (location.href='http://www.itpub.net')
+</script><script src="IMU%E6%A8%A1%E5%BC%8F%E4%B8%8BDML%E8%AF%AD%E5%8F%A5%E6%89%80%E4%BA%A7%E7%94%9F%E7%9A%84REDO%20RECORD%E6%A0%BC%E5%BC%8F%E8%A7%A3%E8%AF%BB%20-%20Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%20-%20ITPUB%E8%AE%BA%E5%9D%9B%EF%BC%8D%E4%B8%AD%E5%9B%BD%E6%9C%80%E4%B8%93%E4%B8%9A%E7%9A%84IT%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA_files/h.js" type="text/javascript"></script></div>
+<!-- END STAT PV -->
+
+
+</body></html>

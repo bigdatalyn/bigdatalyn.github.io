@@ -2,7 +2,7 @@
 layout: post
 title: "Oracle 12c - Resetlogs"
 category: Unix
-tags: Box
+tags: Oracle 12c redolog
 ---
 
 * content
