@@ -1,0 +1,100 @@
+#!/bin/bash
+
+#author: alexandru.dobritescu@oracle.com
+#date: 10-May-2018
+#version: 1.0
+
+#Each VNC desktop is associated with a user account. Change this value accordingly to your needs.
+display="1"
+
+#Installing TigerVNC-Server
+#this is checking wether TigerVNC-Server is installed or not; if it is not then it will perform the installation
+
+sleep 5
+
+echo "Installing TigerVNC-Server!"
+
+if ! rpm -qa | grep -qw tigervnc-server; then
+yum install tigervnc-server -y
+else 
+echo "TigerVNC-Server already installed. Nothing to do."
+fi
+
+#Installing Desktop environment
+#this will install all the necessary packages needed for the graphical user interface
+
+if ! rpm -qa | grep -qw "Server with GUI"; then
+echo "Installing "Server with GUI"!"
+else
+echo "Server with Gui already installed. Nothing to do."
+fi
+
+yum groupinstall "server with gui" -y
+
+sleep 5
+
+#Creating a username for accessing VNC server
+#this will ask you to enter the name ofthe user and input a password for it
+
+echo "Creating an username for VNC access!"
+
+# Script to add a user to Linux system
+if [ $(id -u) -eq 0 ]; then
+	read -p "Enter username : " username
+	read -s -p "Enter password : " password
+	egrep "^$username" /etc/passwd >/dev/null
+	if [ $? -eq 0 ]; then
+		echo "$username exists!"
+		
+	else
+		pass=$(perl -e 'print crypt($ARGV[0], "password")' $password)
+		useradd -m -p $pass $username
+		[ $? -eq 0 ] && echo "User "$username" has been added to system!" || echo "Failed to add a user!"
+	fi
+else
+	echo "Only root may add a user to the system"
+	exit 2
+fi
+
+sleep 5
+
+#Script to check if the username exists and it is currently used
+
+if [ "$(id -un)" != "$username" ]; then
+
+ echo "Insert vncpasswd for user $username!"
+ su - $username -c vncpasswd
+
+else 
+  echo "Insert vncpasswd for user $username!"
+  vncpasswd
+
+fi
+
+sleep 5 
+
+echo "Creating a service unit configuration file for the VNC desktop that is to be made available on the system."
+cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver-$username@\:$display.service
+
+sleep 5
+
+echo "Editing the service unit configuration files."
+sed -i "s/<USER>/$username/g" /etc/systemd/system/vncserver-$username@\:$display.service
+
+sleep 5
+
+echo "Making systemd reload its configuration files."
+systemctl daemon-reload
+
+sleep 5
+
+systemctl start vncserver-$username@\:$display.service
+systemctl enable vncserver-$username@\:$display.service
+
+sleep 5
+
+echo "Creating firewall rules to open ports 5900 to 5903."
+firewall-cmd --zone=public --add-service=vnc-server
+firewall-cmd --zone=public --add-service=vnc-server --permanent
+
+echo "Installation & Configuration of TigerVNC-Server is now complete!"
