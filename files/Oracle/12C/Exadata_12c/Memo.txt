@@ -1,0 +1,9 @@
+http://education.oracle.com/pls/web_prod-plq-dad/db_pages.getpage?page_id=858&get_params=courseId:D95882GC20,totalDays:5,ilaU:1221647493,ilaO:1815256895,showLabTab:Y
+
+http://www.ora-certification.com/p/exam-questions.html
+
+http://vceguide.com/
+https://examsdb.com/oracle/
+
+http://vceguide.com/which-mysqldump-option-can-be-used-when-dumping-data-from-the-master-server-in-order-to-include-the-master-servers-binary-log-information/
+
