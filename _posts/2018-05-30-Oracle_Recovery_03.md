@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle Recover the delete/truncate/drop action"
+title: "Oracle Recovery 03 - Recover the delete/truncate/drop action"
 category: Oracle
 tags: Oracle flashback rman tts 
 ---
@@ -9,11 +9,11 @@ tags: Oracle flashback rman tts
 {:toc}
 
 
-Oracle Recover the delete/truncate/drop action
+Oracle Recovery 03 - Recover the delete/truncate/drop action
 
 Recovering the database/datafile/block is easy if there was rman backup.
 However it is pretty hard when delete/truncate/drop are happened due to human miss or bussiness bug.
-There are some ways to recover the delete/truncate/drop action.
+I have summaried some ways to recovery the delete/truncate/drop action and list some steps.
 
 
 
@@ -603,11 +603,11 @@ Clear the temp user and tablespaces..
 	SQL> drop directory sh_dir;
 
 
-### RMAN uncomplete recovery new database(only the tablespace)
+### NO.4 RMAN uncomplete recovery new database(only the target tablespace)
 
 To be continue...
 
-### Other tools
+### NO.5 Other tools
 
 Like:dul
 
