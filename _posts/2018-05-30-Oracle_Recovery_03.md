@@ -123,7 +123,7 @@ The current scn and the count of the table;
 
 ### the recovery of delete table
 
-#### N0.1 Use flashback query
+#### No.1 Use flashback query
 
 Query the data in UNDO tablespace with SCN timestamp.But it is limited the UNDO_RETENTION.
 It can't be recovery if the transactions are busy...
@@ -154,7 +154,7 @@ It can't be recovery if the transactions are busy...
 
 	SYS@orcl11g> 
 
-#### N0.2 Duplicate database/DataGuard.
+#### No.2 Duplicate database/DataGuard.
 
 Create duplication Database using rman duplicate database.
 
@@ -183,7 +183,7 @@ Example:
 
 After completing rman(duplicatie database), we can use dblink/expdp & impdp to recovery the tables.
 
-#### NO.3 Transport tablespace
+#### No.3 Transport tablespace
 
 About TTS:
 
@@ -203,7 +203,7 @@ So they are the same platform and Character set. If not, we should use rman to c
 
 	SYS@orcl11g> 
 
-#### Check tablespace is OK or NOT.
+##### Check tablespace is OK or NOT.
 
 Use the dbms_tts.transport_set_check to check.
 
@@ -232,7 +232,7 @@ Use the dbms_tts.transport_set_check to check.
 
 	SYS@orcl11g> 
 
-#### RMAN to transport the target tablespace
+##### RMAN to transport the target tablespace
 
 This step will set the target tablespace to read status just like the command executing log.
 
@@ -603,11 +603,11 @@ Clear the temp user and tablespaces..
 	SQL> drop directory sh_dir;
 
 
-### NO.4 RMAN uncomplete recovery new database(only the target tablespace)
+#### No.4 RMAN uncomplete recovery new database(only the target tablespace)
 
 To be continue...
 
-### NO.5 Other tools
+#### No.5 Other tools
 
 Like:dul
 
