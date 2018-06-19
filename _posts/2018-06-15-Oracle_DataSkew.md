@@ -10,7 +10,11 @@ tags: Oracle DataSkew
 
 Oracle Data Skew Basic knowledge
 
+The test cases for data skew.
 
+> Not use Bind Variable
+> Use Bind Variable
+> Other cases
 
 
 
