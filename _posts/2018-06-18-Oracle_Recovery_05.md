@@ -382,8 +382,33 @@ The status list of datafile is the following.
 	KCCFEDBR 0x4000 /* entry created by DBMS_BACKUP_RESTORE */
 	KCCFETRO 0x8000 /* Transition Read Only */define KCCFEWCC 0x1000 /*
 
+Dump the datafile header.
 
 
+	SYS@orcl11g> alter session set events 'immediate trace name file_hdrs level 10';
+
+	-####level <n>
+	level 1: control file's data file entry
+	level 2 & 4 : level 1 + generic file header
+	level 3 or higher: level 2 + data file header
+	level 10: Most commonly used, It provides the same output as level 3.
+
+	SYS@orcl11g> select * from v$diag_info where NAME='Default Trace File'; 
+
+	File Type:
+	KCCTYPCF 1 /* control file */
+	KCCTYPRL 2 /* redo log file */
+	KCCTYPDF 3 /* vanilla db file */
+	KCCTYPBC 4 /* backup control file */
+	KCCTYPBP 5 /* backup piece */
+	KCCTYPTF 6 /* temporary db file */
+	KCCTYPCT 7 /* change tracking file */
+	KCCTYPFL 8 /* flashback database log file */
+	KCCTYPAL 9 /* archivelog file */
+	KCCTYPDC 10 /* datafile copy file */
+	KCCTYPIR 11 /* incompletely restored db file */
+	KCCTYPEL 12 /* foreign archivelog file */
+	KCCTYPLB 13 /* LOB */
 
 To be continue....
 
