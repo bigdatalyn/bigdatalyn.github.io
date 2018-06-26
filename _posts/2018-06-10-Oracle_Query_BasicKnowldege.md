@@ -16,6 +16,15 @@ Oracle Query 基础知识
 什么是子查询？
 
 
+
+
+
+
+
+
+
+
+
 ### 测试Schema-scott
 
 	SCOTT@orcl11g> select table_name from user_tables;
