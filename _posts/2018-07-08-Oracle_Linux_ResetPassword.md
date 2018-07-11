@@ -32,7 +32,7 @@ Some tips ....
 	reboot
 
 
-
+![reboot]({{ "/files/Linux/reboot.png"}})
 
 To be continue....
 
