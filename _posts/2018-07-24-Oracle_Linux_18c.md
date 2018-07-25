@@ -26,7 +26,7 @@ Oracle database 18c for Linux can be download from 7/24/2018.
 
 ### Download
 
-There are two ways in the following URLs which are provided.
+There are two following URLs which are provided to download.
 
 [Oracle Database 18c - 18.3](http://www.oracle.com/technetwork/database/enterprise-edition/downloads/oracle18c-linux-180000-5022980.html)
 
