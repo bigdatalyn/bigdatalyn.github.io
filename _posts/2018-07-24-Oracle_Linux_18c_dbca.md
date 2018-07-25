@@ -21,7 +21,6 @@ Steps create cdb/pdb database via DBCA.
 ### DBCA create CDB/PDB
 
 
-
 Step 1.
 	
 ![Step01]({{ "/files/Oracle/18c/GA_Install/createdb/dbca_01.png"}})	
@@ -111,6 +110,8 @@ The HR demo schema sqls are the following.
 	......
 	PL/SQL procedure successfully completed.	
 	SYS@PRODCDB1>
+
+Edit tnsnames.ora to set the pdb1.	
 	
 	[oracle@vedb admin]$ pwd
 	/u02/app/oracle/product/18.0.0/dbhome_1/network/admin
@@ -125,6 +126,7 @@ The HR demo schema sqls are the following.
 		)
 	[oracle@vedb admin]$ 
 	
+Connect hr/oracle and test sql.
 	
 	[oracle@vedb admin]$ sqlplus hr/oracle@pdb1
 
@@ -140,7 +142,6 @@ The HR demo schema sqls are the following.
 	Version 18.3.0.0.0
 
 	HR@pdb1> 
-	
 	HR@pdb1> select employee_id,first_name,salary from employees order by salary desc fetch first 5 rows only;
 
 	EMPLOYEE_ID FIRST_NAME               SALARY
