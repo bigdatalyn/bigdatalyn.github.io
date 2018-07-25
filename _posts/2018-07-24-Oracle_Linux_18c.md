@@ -470,7 +470,13 @@ Example logs:
 	PRODCDB   READ WRITE
 
 	SQL> show pdbs;
-	SQL> 
+	SYS@PRODCDB> select name,cdb from v$database;
+
+	NAME                                               CDB
+	-------------------------------------------------- ---
+	PRODCDB                                            NO
+
+	SYS@PRODCDB> 
 
 To be continue....
 
