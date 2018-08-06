@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle 12c pdbseed Tips"
+title: "Oracle 18c EM Express Tips"
 category: Oracle
 tags: Oracle 12c
 ---
