@@ -74,20 +74,22 @@ Oracle Get explain Tips
 
 #### 05.get sql_id from awr
 
-select dbms_workload_repository.create_snapshot() from dual;
-exec :myid:=1001;
-Select count(*) from test1 t1,test1 t2 where t2.id=:myid;
-select dbms_workload_repository.create_snapshot() from dual;
-@?/rdbms/admin/awrrpt
-select * from table(dbms_xplan.display_cursor('&sqlid', null, 'ADVANCED ALLSTATS LAST'));
-(or: @?/rdbms/admin/awrsqrpt)
+	select dbms_workload_repository.create_snapshot() from dual;
+	exec :myid:=1001;
+	Select count(*) from test1 t1,test1 t2 where t2.id=:myid;
+	select dbms_workload_repository.create_snapshot() from dual;
+	@?/rdbms/admin/awrrpt
+	select * from table(dbms_xplan.display_cursor('&sqlid', null, 'ADVANCED ALLSTATS LAST'));
+	(or: @?/rdbms/admin/awrsqrpt)
 
 
 
 #### 06.Get execution plan for monitored SQL
 
 -- SQL elapsed time > 5s (default, specified by parameter _sqlmon_threshold)
+
 -- SQL with hint monitor
+
 -- Parameter statistics_level=ALL (default: TYPICAL)
 
 	var myid number; 
@@ -101,6 +103,7 @@ select * from table(dbms_xplan.display_cursor('&sqlid', null, 'ADVANCED ALLSTATS
 for sql monitor active html
 
 -- Full script to generate html type report:
+
 	set echo off verify off timing off trimsp on feed off pages 0 term off long 9999999 longc 9999999
 	
 --optional: disable compress in report
@@ -113,6 +116,7 @@ for sql monitor active html
 #### Get the sequence for execution plan.
 
 --Execution plan with sequence from plan_table:
+
 -- seq limitation: the total lines of execution plan < 1000
 
 	select 
