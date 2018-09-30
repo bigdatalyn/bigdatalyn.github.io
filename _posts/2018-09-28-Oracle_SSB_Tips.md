@@ -24,8 +24,7 @@ and Xuedong Chen at the University of Massachusetts at Boston alters the TPC-H s
 
 [StarSchemaBenchmark-master](https://github.com/lemire/StarSchemaBenchmark)
 
-
-
+[LabGuide900_inmemory.md](https://github.com/oracle/learning-library/blob/master/workshops/journey2-new-data-lake/LabGuide900_inmemory.md)
 
 
 
