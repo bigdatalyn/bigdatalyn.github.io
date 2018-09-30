@@ -12,7 +12,7 @@ tags: Oracle Tips
 Oracle dbca create database in DB18c Tips
 
 
-sample commond line:
+DBCA sample command line:
 
 	dbca -silent \
 	-createDatabase \
