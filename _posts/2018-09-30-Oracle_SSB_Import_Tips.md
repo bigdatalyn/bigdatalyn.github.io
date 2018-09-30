@@ -91,6 +91,50 @@ Oracle Setting up the Star Schema Benchmark (SSB) with Import Tips
 
 	[oracle@emccsvr scripts]$
 
+#### The count of ssb tables	
+
+	SQL> select table_name from user_tables;
+
+	TABLE_NAME
+	--------------------------------------------------------------------------------
+	LINEORDER
+	PART
+	CUSTOMER
+	SUPPLIER
+	DATE_DIM
+
+	SQL> select count(*) from lineorder;
+
+	  COUNT(*)
+	----------
+	  23996604
+
+	SQL> select count(*) from part;
+
+	  COUNT(*)
+	----------
+		600000
+
+	SQL> select count(*) from customer;
+
+	  COUNT(*)
+	----------
+		120000
+
+	SQL> select count(*) from supplier;
+
+	  COUNT(*)
+	----------
+		  8000
+
+	SQL> select count(*) from date_dim;
+
+	  COUNT(*)
+	----------
+		  2556
+
+	SQL>
+
 #### Reference
 	
 [LabGuide900_inmemory.md](https://github.com/oracle/learning-library/blob/master/workshops/journey2-new-data-lake/LabGuide900_inmemory.md)
