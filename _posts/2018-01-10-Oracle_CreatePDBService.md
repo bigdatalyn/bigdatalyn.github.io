@@ -179,6 +179,290 @@ connect test:
 	sqlplus system/oracle@host01:1521/pdbprod1.us.oracle.com
 
 	  
+
+Step 5. Save the state for PDB.
+
+	SQL> alter pluggable database save state;
+
+Need save the state for pluggable for the new pdb service.
+
+Otherwise, you need to manually start the service after you restart the pdb just like the following test.
+	
+	SQL> !lsnrctl status
+
+	LSNRCTL for Linux: Version 18.0.0.0.0 - Production on 10-OCT-2018 01:32:39
+
+	Copyright (c) 1991, 2018, Oracle.  All rights reserved.
+
+	Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 18.0.0.0.0 - Production
+	Start Date                08-OCT-2018 03:27:11
+	Uptime                    1 days 22 hr. 5 min. 28 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Parameter File   /u01/app/oracle/product/18.0.0/dbhome_1/network/admin/listener.ora
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/emccsvr/listener/alert/log.xml
+	Listening Endpoints Summary...
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+	Services Summary...
+	Service "77133bc555247726e0530100007fa8fe.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDBXDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "pdb1.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	The command completed successfully
+
+	SQL> select service_id,name,pdb,con_id from cdb_services order by con_id;
+
+	SERVICE_ID NAME       PDB            CON_ID
+	---------- ---------- ---------- ----------
+			 8 PDB1       PDB1                3
+
+	SQL>
+	SQL> exec dbms_service.create_service('prodpdb1','prodpdb1');
+
+	PL/SQL procedure successfully completed.
+
+	SQL>
+	SQL> exec dbms_service.start_service('prodpdb1');
+
+	PL/SQL procedure successfully completed.
+
+	SQL> !lsnrctl status
+
+	LSNRCTL for Linux: Version 18.0.0.0.0 - Production on 10-OCT-2018 01:37:01
+
+	Copyright (c) 1991, 2018, Oracle.  All rights reserved.
+
+	Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 18.0.0.0.0 - Production
+	Start Date                08-OCT-2018 03:27:11
+	Uptime                    1 days 22 hr. 9 min. 50 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Parameter File   /u01/app/oracle/product/18.0.0/dbhome_1/network/admin/listener.ora
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/emccsvr/listener/alert/log.xml
+	Listening Endpoints Summary...
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+	Services Summary...
+	Service "77133bc555247726e0530100007fa8fe.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDBXDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "pdb1.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "prodpdb1.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	The command completed successfully
+
+	SQL>
+	SQL> show pdbs;
+
+		CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+	---------- ------------------------------ ---------- ----------
+			 3 PDB1                           READ WRITE NO
+	SQL> alter pluggable database pdb1 close;
+
+	Pluggable database altered.
+
+	SQL> alter pluggable database pdb1 open;
+
+	Pluggable database altered.
+
+	SQL> !lsnrctl status
+
+	LSNRCTL for Linux: Version 18.0.0.0.0 - Production on 10-OCT-2018 01:37:45
+
+	Copyright (c) 1991, 2018, Oracle.  All rights reserved.
+
+	Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 18.0.0.0.0 - Production
+	Start Date                08-OCT-2018 03:27:11
+	Uptime                    1 days 22 hr. 10 min. 34 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Parameter File   /u01/app/oracle/product/18.0.0/dbhome_1/network/admin/listener.ora
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/emccsvr/listener/alert/log.xml
+	Listening Endpoints Summary...
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+	Services Summary...
+	Service "77133bc555247726e0530100007fa8fe.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDBXDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "pdb1.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	The command completed successfully
+
+	SQL> alter system register;
+
+	System altered.
+
+	SQL> !lsnrctl status
+
+	LSNRCTL for Linux: Version 18.0.0.0.0 - Production on 10-OCT-2018 01:38:01
+
+	Copyright (c) 1991, 2018, Oracle.  All rights reserved.
+
+	Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 18.0.0.0.0 - Production
+	Start Date                08-OCT-2018 03:27:11
+	Uptime                    1 days 22 hr. 10 min. 50 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Parameter File   /u01/app/oracle/product/18.0.0/dbhome_1/network/admin/listener.ora
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/emccsvr/listener/alert/log.xml
+	Listening Endpoints Summary...
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+	Services Summary...
+	Service "77133bc555247726e0530100007fa8fe.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDBXDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "pdb1.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	The command completed successfully
+
+	SQL>
+	SQL> select service_id,name,pdb,con_id from cdb_services order by con_id;
+
+	SERVICE_ID NAME       PDB            CON_ID
+	---------- ---------- ---------- ----------
+			 8 PDB1       PDB1                3
+			 1 prodpdb1   PDB1                3
+
+	SQL> exec dbms_service.start_service('prodpdb1');
+
+	PL/SQL procedure successfully completed.
+
+	SQL> !lsnrctl status;
+
+	LSNRCTL for Linux: Version 18.0.0.0.0 - Production on 10-OCT-2018 01:39:45
+
+	Copyright (c) 1991, 2018, Oracle.  All rights reserved.
+
+	Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 18.0.0.0.0 - Production
+	Start Date                08-OCT-2018 03:27:11
+	Uptime                    1 days 22 hr. 12 min. 34 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Parameter File   /u01/app/oracle/product/18.0.0/dbhome_1/network/admin/listener.ora
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/emccsvr/listener/alert/log.xml
+	Listening Endpoints Summary...
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+	Services Summary...
+	Service "77133bc555247726e0530100007fa8fe.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDBXDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "pdb1.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "prodpdb1.us.oracle.com" has 1 instance(s).		=================================================> new pdb service.
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	The command completed successfully
+
+	SQL> alter pluggable database save state;
+
+	Pluggable database altered.
+
+	SQL> alter pluggable database close;
+
+	Pluggable database altered.
+
+	SQL> alter pluggable database open;
+
+	Pluggable database altered.
+
+	SQL> !lsnrctl status
+
+	LSNRCTL for Linux: Version 18.0.0.0.0 - Production on 10-OCT-2018 01:40:25
+
+	Copyright (c) 1991, 2018, Oracle.  All rights reserved.
+
+	Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	STATUS of the LISTENER
+	------------------------
+	Alias                     LISTENER
+	Version                   TNSLSNR for Linux: Version 18.0.0.0.0 - Production
+	Start Date                08-OCT-2018 03:27:11
+	Uptime                    1 days 22 hr. 13 min. 14 sec
+	Trace Level               off
+	Security                  ON: Local OS Authentication
+	SNMP                      OFF
+	Listener Parameter File   /u01/app/oracle/product/18.0.0/dbhome_1/network/admin/listener.ora
+	Listener Log File         /u01/app/oracle/diag/tnslsnr/emccsvr/listener/alert/log.xml
+	Listening Endpoints Summary...
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=emccsvr.oracle.com)(PORT=1521)))
+	  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+	Services Summary...
+	Service "77133bc555247726e0530100007fa8fe.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "ORCLCDBXDB.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "pdb1.us.oracle.com" has 1 instance(s).
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	Service "prodpdb1.us.oracle.com" has 1 instance(s).		=================================================> new pdb service.
+	  Instance "ORCLCDB", status READY, has 1 handler(s) for this service...
+	The command completed successfully
+
+	SQL> exit
+	Disconnected from Oracle Database 18c Enterprise Edition Release 18.0.0.0.0 - Production
+	Version 18.3.0.0.0
+	[oracle@emccsvr ~]$
+	[oracle@emccsvr ~]$ sqlplus system/welcome@127.0.0.1:1521/prodpdb1.us.oracle.com
+
+	SQL*Plus: Release 18.0.0.0.0 - Production on Wed Oct 10 01:45:50 2018
+	Version 18.3.0.0.0
+
+	Copyright (c) 1982, 2018, Oracle.  All rights reserved.
+
+	Last Successful login time: Mon Oct 08 2018 05:24:53 -04:00
+
+	Connected to:
+	Oracle Database 18c Enterprise Edition Release 18.0.0.0.0 - Production
+	Version 18.3.0.0.0
+
+	SQL>
+
 	  
 ### Reference documents
 
