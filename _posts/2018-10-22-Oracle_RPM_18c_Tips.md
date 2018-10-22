@@ -70,6 +70,8 @@ Or get from yum and install
 
 Use oracledb_ORCLCDB-18c to create database just like the following command.
 
+You can modify the configuration parameters by editing the /etc/sysconfig/oracledb_ORCLCDB-18c.conf file. 
+
 	# /etc/init.d/oracledb_ORCLCDB-18c configure
 	Configuring Oracle Database ORCLCDB.
 	Prepare for db operation
