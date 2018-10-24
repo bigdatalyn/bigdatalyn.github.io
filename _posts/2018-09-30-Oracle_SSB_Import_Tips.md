@@ -12,6 +12,12 @@ tags: Oracle Tips
 Oracle Setting up the Star Schema Benchmark (SSB) with Import Tips
 
 
+
+
+
+
+
+
 #### Step1: Create Table spaces for loading the data (Star schema)
 
 	[oracle@emccsvr scripts]$ cat 01_create_ssb.txt
