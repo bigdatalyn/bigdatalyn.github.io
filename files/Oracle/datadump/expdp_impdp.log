@@ -1,0 +1,1360 @@
+=~=~=~=~=~=~=~=~=~=~=~= MobaXterm log 2018.12.26 22:12:58 =~=~=~=~=~=~=~=~=~=~=~=
+     
+                              MobaXterm 10.9                           
+                 (SSH client, X-server and networking tools)             
+                                                                         
+       SSH session to root@120.79.245.44                                
+         SSH compression :                                             
+         SSH-browser     :                                             
+         X11-forwarding  :   (disabled or not supported by server)     
+         DISPLAY         : 192.168.1.100:0.0                            
+                                                                         
+       For more info, ctrl+click on help or visit our website           
+     
+
+Last login: Wed Dec 26 21:52:02 2018 from 119.123.133.140
+
+Welcome to Alibaba Cloud Elastic Compute Service !
+
+[root@iZwz92mfhsio3n38nswnocZ ~]# su - oracle
+Last login: Wed Dec 26 21:52:04 CST 2018 on pts/1
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:13:04 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SYS@orcl> create public database link netlink connect to imp_user                                                       exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ cd $ORACLE_HOME/network/admin
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ ls -ltr
+total 8
+-rw-r--r-- 1 oracle oinstall  187 May  7  2007 shrept.lst
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:15 samples
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ lsnrctl status
+
+LSNRCTL for Linux: Version 11.2.0.1.0 - Production on 26-DEC-2018 22:13:43
+
+Copyright (c) 1991, 2009, Oracle.  All rights reserved.
+
+Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 11.2.0.1.0 - Production
+Start Date                17-JUL-2018 19:28:45
+Uptime                    162 days 2 hr. 44 min. 58 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Log File         /usr/local/oracle/diag/tnslsnr/iZwz92mfhsio3n38nswnocZ/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=iZwz92mfhsio3n38nswnocZ)(PORT=1521)))
+Services Summary...
+Service "orcl.us.oracle.com" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+Service "orclXDB.us.oracle.com" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+The command completed successfully
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ lsnrctl status
+
+LSNRCTL for Linux: Version 11.2.0.1.0 - Production on 26-DEC-2018 22:14:00
+
+Copyright (c) 1991, 2009, Oracle.  All rights reserved.
+
+Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 11.2.0.1.0 - Production
+Start Date                17-JUL-2018 19:28:45
+Uptime                    162 days 2 hr. 45 min. 15 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Log File         /usr/local/oracle/diag/tnslsnr/iZwz92mfhsio3n38nswnocZ/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=iZwz92mfhsio3n38nswnocZ)(PORT=1521)))
+Services Summary...
+Service "orcl.us.oracle.com" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+Service "orclXDB.us.oracle.com" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+The command completed successfully
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ pwd
+/usr/local/oracle/product/11.2.0/db_1/network/admin
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ ls -ltr
+total 8
+-rw-r--r-- 1 oracle oinstall  187 May  7  2007 shrept.lst
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:15 samples
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ pwd
+/usr/local/oracle/product/11.2.0/db_1/network/admin
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ cd ..cd /usr/local/oracle/diag/tnslsnr/
+[oracle@iZwz92mfhsio3n38nswnocZ tnslsnr]$ ls -ltr
+total 4
+drwxr-xr-x 3 oracle oinstall 4096 Jul 17 19:28 iZwz92mfhsio3n38nswnocZ
+[oracle@iZwz92mfhsio3n38nswnocZ tnslsnr]$ cd ..
+[oracle@iZwz92mfhsio3n38nswnocZ diag]$ ls -ltr
+total 8
+drwxr-xr-x 3 oracle oinstall 4096 Jul 17 19:28 tnslsnr
+drwxr-xr-x 3 oracle oinstall 4096 Jul 17 22:40 rdbms
+[oracle@iZwz92mfhsio3n38nswnocZ diag]$ cd rdbms/
+[oracle@iZwz92mfhsio3n38nswnocZ rdbms]$ -s ls -ltr
+total 4
+drwxr-xr-x 3 oracle oinstall 4096 Jul 17 22:44 orcl
+[oracle@iZwz92mfhsio3n38nswnocZ rdbms]$ cd orcl
+[oracle@iZwz92mfhsio3n38nswnocZ orcl]$ ls -ltr
+total 4
+drwxr-xr-x 13 oracle oinstall 4096 Jul 17 22:40 orcl
+-rw-r-----  1 oracle oinstall    0 Jul 17 22:44 i_1.mif
+[oracle@iZwz92mfhsio3n38nswnocZ orcl]$ cdpwd
+/usr/local/oracle/diag/rdbms/orcl
+[oracle@iZwz92mfhsio3n38nswnocZ orcl]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ orcl]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ orcl]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ orcl]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ orcl]$ cd
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ pwd
+/home/oracle
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ ls -ltr
+total 3288
+drwxrwxrwx 8 oracle oinstall    4096 Jul  2 08:39 database
+drwxr-x--- 3 oracle oinstall    4096 Jul 17 23:36 oradiag_oracle
+drwxr-xr-x 2 oracle oinstall    4096 Jul 19 21:44 dump_dir
+-rwxrwxrwx 1 root   root     3338240 Jul 30 20:23 gxkb0730.dmp
+-rw-r----- 1 oracle oinstall   10927 Jul 30 22:24 import.log
+drwxr-xr-x 2 oracle oinstall    4096 Jul 31 12:54 lin
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ cd diagoradiag_oracle/
+[oracle@iZwz92mfhsio3n38nswnocZ oradiag_oracle]$ ls -ltr
+total 4
+drwxrwxr-x 3 oracle oinstall 4096 Jul 17 23:36 diag
+[oracle@iZwz92mfhsio3n38nswnocZ oradiag_oracle]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ oradiag_oracle]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ oradiag_oracle]$ pwd
+/home/oracle/oradiag_oracle
+[oracle@iZwz92mfhsio3n38nswnocZ oradiag_oracle]$ exit
+logout
+[root@iZwz92mfhsio3n38nswnocZ ~]# 
+[root@iZwz92mfhsio3n38nswnocZ ~]# 
+[root@iZwz92mfhsio3n38nswnocZ ~]# 
+[root@iZwz92mfhsio3n38nswnocZ ~]# find / -name tns*.ora
+/usr/local/oracle/product/11.2.0/db_1/network/admin/samples/tnsnames.ora
+[root@iZwz92mfhsio3n38nswnocZ ~]# cd /usr/local/oracle/product/11.2.0/db_1/network/admin/
+[root@iZwz92mfhsio3n38nswnocZ admin]# ls -ltr
+total 8
+-rw-r--r-- 1 oracle oinstall  187 May  7  2007 shrept.lst
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:15 samples
+[root@iZwz92mfhsio3n38nswnocZ admin]# su - oracle
+Last login: Wed Dec 26 22:13:01 CST 2018 on pts/2
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ lsnrctl satatus
+
+LSNRCTL for Linux: Version 11.2.0.1.0 - Production on 26-DEC-2018 22:16:41
+
+Copyright (c) 1991, 2009, Oracle.  All rights reserved.
+
+Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 11.2.0.1.0 - Production
+Start Date                17-JUL-2018 19:28:45
+Uptime                    162 days 2 hr. 47 min. 56 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Log File         /usr/local/oracle/diag/tnslsnr/iZwz92mfhsio3n38nswnocZ/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=iZwz92mfhsio3n38nswnocZ)(PORT=1521)))
+Services Summary...
+Service "orcl.us.oracle.com" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+Service "orclXDB.us.oracle.com" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+The command completed successfully
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ cd /usr/local/oracle/product/11.2.0/db_1/network/
+[oracle@iZwz92mfhsio3n38nswnocZ network]$ ls -ltr
+total 36
+drwxr-xr-x 3 oracle oinstall 4096 Jul 17 19:15 admin
+drwxr-xr-x 4 oracle oinstall 4096 Jul 17 19:15 install
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:16 doc
+drwxr-xr-x 4 oracle oinstall 4096 Jul 17 19:17 tools
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:17 mesg
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:17 jlib
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:18 lib
+drwxrwx--- 2 oracle oinstall 4096 Jul 17 19:18 log
+drwxrwx--- 2 oracle oinstall 4096 Jul 17 19:18 trace
+[oracle@iZwz92mfhsio3n38nswnocZ network]$ cd admin
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ ls -ltr
+total 8
+-rw-r--r-- 1 oracle oinstall  187 May  7  2007 shrept.lst
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:15 samples
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ vi cd samples
+[oracle@iZwz92mfhsio3n38nswnocZ samples]$ ls -ltr
+total 44
+-rw-r--r-- 1 oracle oinstall  3867 Sep  9  1997 listener.ora
+-rw-r--r-- 1 oracle oinstall  2939 May 16  2000 tnsnames.ora
+-rw-r--r-- 1 oracle oinstall 32812 Apr 26  2007 sqlnet.ora
+[oracle@iZwz92mfhsio3n38nswnocZ samples]$ cp tnsnames.ora ../
+[oracle@iZwz92mfhsio3n38nswnocZ samples]$ ls -ltr
+total 44
+-rw-r--r-- 1 oracle oinstall  3867 Sep  9  1997 listener.ora
+-rw-r--r-- 1 oracle oinstall  2939 May 16  2000 tnsnames.ora
+-rw-r--r-- 1 oracle oinstall 32812 Apr 26  2007 sqlnet.ora
+[oracle@iZwz92mfhsio3n38nswnocZ samples]$ cat tncd ..
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ ls -ltr
+total 12
+-rw-r--r-- 1 oracle oinstall  187 May  7  2007 shrept.lst
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:15 samples
+-rw-r--r-- 1 oracle oinstall 2939 Dec 26 22:17 tnsnames.ora
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ cat tnsnames.ora 
+# This file contains the syntax information for 
+# the entries to be put in any tnsnames.ora file
+# The entries in this file are need based. 
+# There are no defaults for entries in this file
+# that Sqlnet/Net3 use that need to be overridden 
+#
+# Typically you could have two tnsnames.ora files
+# in the system, one that is set for the entire system
+# and is called the system tnsnames.ora file, and a
+# second file that is used by each user locally so that
+# he can override the definitions dictated by the system
+# tnsnames.ora file.
+
+# The entries in tnsnames.ora are an alternative to using
+# the names server with the onames adapter.
+# They are a collection of aliases for the addresses that 
+# the listener(s) is(are) listening for a database or 
+# several databases.
+
+# The following is the general syntax for any entry in 
+# a tnsnames.ora file. There could be several such entries 
+# tailored to the user's needs.
+
+<alias>= [ (DESCRIPTION_LIST =  # Optional depending on whether u have 
+# one or more descriptions
+# If there is just one description, unnecessary ]
+  (DESCRIPTION=
+    [ (SDU=2048) ]# Optional, defaults to 2048
+# Can take values between 512 and 32K
+    [ (ADDRESS_LIST=    # Optional depending on whether u have
+# one or more addresses
+# If there is just one address, unnecessary ]
+      (ADDRESS=
+[ (COMMUNITY=<community_name>) ] 
+(PROTOCOL=tcp)
+(HOST=<hostname>)
+(PORT=<portnumber (1521 is a standard port used)>)
+      )
+      [ (ADDRESS=
+  (PROTOCOL=ipc)
+  (KEY=<ipckey (PNPKEY is a standard key used)>)
+)
+      ]
+      [ (ADDRESS=
+  [ (COMMUNITY=<community_name>) ]
+  (PROTOCOL=decnet)
+  (NODE=<nodename>)
+  (OBJECT=<objectname>)
+)
+      ]
+              ... # More addresses
+    [ ) ] # Optional depending on whether ADDRESS_LIST is used or not 
+    [ (CONNECT_DATA=
+(SID=<oracle_sid>)
+[ (GLOBAL_NAME=<global_database_name>) ]
+      )
+    ]
+    [ (SOURCE_ROUTE=yes) ]  
+  )
+  (DESCRIPTION=     
+    [ (SDU=2048) ]# Optional, defaults to 2048
+# Can take values between 512 and 32K
+    [ (ADDRESS_LIST= ]# Optional depending on whether u have more
+# than one address or not
+# If there is just one address, unnecessary
+      (ADDRESS
+[ (COMMUNITY=<community_name>) ]
+(PROTOCOL=tcp)
+(HOST=<hostname>)
+(PORT=<portnumber (1521 is a standard port used)>)
+      )
+      [ (ADDRESS=
+  (PROTOCOL=ipc)
+  (KEY=<ipckey (PNPKEY is a standard key used)>)
+         )
+      ]
+      ... # More addresses
+    [ ) ] # Optional depending on whether ADDRESS_LIST  
+# is being used
+    [ (CONNECT_DATA=
+(SID=<oracle_sid>)
+[ (GLOBAL_NAME=<global_database_name>) ]
+      )
+    ]
+    [ (SOURCE_ROUTE=yes) ]
+  )
+  [ (CONNECT_DATA=
+      (SID=<oracle_sid>)
+      [ (GLOBAL_NAME=<global_database_name>) ]
+    )
+  ]
+  ...   # More descriptions 
+[ ) ]# Optional depending on whether DESCRIPTION_LIST is used or not
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ ls -ltr
+total 12
+-rw-r--r-- 1 oracle oinstall  187 May  7  2007 shrept.lst
+drwxr-xr-x 2 oracle oinstall 4096 Jul 17 19:15 samples
+-rw-r--r-- 1 oracle oinstall 2939 Dec 26 22:17 tnsnames.ora
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ vi tnsnames.ora 
+  "tnsnames.ora" 93L, 2939C# This file contains the syntax information for 
+# the entries to be put in any tnsnames.ora file
+# The entries in this file are need based. 
+# There are no defaults for entries in this file
+# that Sqlnet/Net3 use that need to be overridden 
+#
+# Typically you could have two tnsnames.ora files
+# in the system, one that is set for the entire system
+# and is called the system tnsnames.ora file, and a
+# second file that is used by each user locally so that
+# he can override the definitions dictated by the system
+# tnsnames.ora file.
+
+# The entries in tnsnames.ora are an alternative to using
+# the names server with the onames adapter.
+# They are a collection of aliases for the addresses that 
+# the listener(s) is(are) listening for a database or 
+# several databases.
+
+# The following is the general syntax for any entry in 
+# a tnsnames.ora file. There could be several such entries 
+# tailored to the user's needs.
+
+<alias>= [ (DESCRIPTION_LIST =  # Optional depending on whether u have # one or more descriptions# If there is just one description, unnecessary ](DESCRIPTION=[ (SDU=2048) ]      # Optional, defaults to 2048# Can take values between 512 and 32K[ (ADDRESS_LIST=    # Optional depending on whether u have# one or more addresses# If there is just one address, unnecessary ](ADDRESS=[ (COMMUNITY=<community_name>) ](PROTOCOL=tcp)(HOST=<hostname>)(PORT=<portnumber (1521 is a standard port used)>))[ (ADDRESS=(PROTOCOL=ipc)(KEY=<ipckey (PNPKEY is a standard key used)>))1,1Top~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              ~                                                                                                                                                              --No lines in buffer--0,0-1All-- INSERT --0,1All2orcl =3  (DESCRIPTION =
+    (ADDRESS_LIST =      (ADDRESS = (PROTOCOL = TCP)(HOST = IP)(PORT = 1521))    )    (CONNECT_DATA =      (SERVICE_NAME = )    )  )---------------------  CSDN https://blog.csdn.net/haitaofeiyang/article/details/54572531 15,76-513-490-4767-454-431-4158-395-372-3549-336-313-290-2737-254-231-2128-195-172-1519-136-113-9 0-77-5 4-31  ~                                                                                                                                                              4,71-680-6769-668-657-646-635-624-613-602-591-580-5759-568-557-546-535-524-513-502-491-480-4749-468-457-446-435-424-413-402-391-380-3739-368-357-346-335-324-313-302-291-280-2729-268-257-246-235-224-213-202-191-180-1719-168-157-146-135-124-113-102-9 1-80-77-5 4-31  ~                                                                                                                                                              3,15-124-113-102-9 1-80-77-5 4-31  ~                                                                                                                                                              2,17-126-113-9 0-77-5 4-31  ~                                                                                                                                                              1,23210198765432109 8765432109,1 87654322345432345i =6_ =7s =8o =9 =8 =7 =6 =5) =6_ =2,7All1 =8 =7 =2,6All =5 =11-7 =8-6  =5  _ =61 =783941051234567 ()85,19All()201234567893012()3()()45,35All()678940125-448-4651-484-505-51()6-52()()7-535,58-54All7-53()()6-52)(PORT = 1521))(5-51)(PORT = 1521))(4-50)(PORT = 1521)))O1-48)(PORT = 1521)))O48-46)(PORT = 1521)))O5-44)(PORT = 1521)))O2   )(PORT = 1521))(1 )(PORT = 1521)) )239.108.142.66)(PORT = 1521))3)55(()
+    )6,6All()7,20()8,39-34All8-33) )5-31) )2-29) )29-27) )6-25) )3   ) )2 ) )3O)O)4R)R)5C)C)6L)L)7()8,26All:wq"tnsnames.ora" 11L, 182C written
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ tnsping orcl_1
+
+TNS Ping Utility for Linux: Version 11.2.0.1.0 - Production on 26-DEC-2018 22:18:29
+
+Copyright (c) 1997, 2009, Oracle.  All rights reserved.
+
+Used parameter files:
+
+
+Used TNSNAMES adapter to resolve the alias
+Attempting to contact (DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = 39.108.142.66)(PORT = 1521))) (CONNECT_DATA = (SERVICE_NAME = ORCL)))
+OK (10 msec)
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ sqlplus imp_user/welcome21@orcl_1
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:18:40 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+IMP_USER@orcl_1> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:20:24 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SYS@orcl> create public database link orcl_link connect to imp_user identified by welcome1 using 'orcl_1';
+
+Database link created.
+
+SYS@orcl> 
+SYS@orcl> select * from imp_user.t1@orcl_link;
+
+ A
+----------
+ 1
+
+SYS@orcl> crea    !pwd
+/usr/local/oracle/product/11.2.0/db_1/network/admin
+
+SYS@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ admin]$ cd
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ pwd
+/home/oracle
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ ls -ltr
+total 3288
+drwxrwxrwx 8 oracle oinstall    4096 Jul  2 08:39 database
+drwxr-x--- 3 oracle oinstall    4096 Jul 17 23:36 oradiag_oracle
+drwxr-xr-x 2 oracle oinstall    4096 Jul 19 21:44 dump_dir
+-rwxrwxrwx 1 root   root     3338240 Jul 30 20:23 gxkb0730.dmp
+-rw-r----- 1 oracle oinstall   10927 Jul 30 22:24 import.log
+drwxr-xr-x 2 oracle oinstall    4096 Jul 31 12:54 lin
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ pwd
+/home/oracle
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ ls -ltr
+total 3288
+drwxrwxrwx 8 oracle oinstall    4096 Jul  2 08:39 database
+drwxr-x--- 3 oracle oinstall    4096 Jul 17 23:36 oradiag_oracle
+drwxr-xr-x 2 oracle oinstall    4096 Jul 19 21:44 dump_dir
+-rwxrwxrwx 1 root   root     3338240 Jul 30 20:23 gxkb0730.dmp
+-rw-r----- 1 oracle oinstall   10927 Jul 30 22:24 import.log
+drwxr-xr-x 2 oracle oinstall    4096 Jul 31 12:54 lin
+[oracle@iZwz92mfhsio3n38nswnocZ ~]$ excd dump_dir
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ pwd
+/home/oracle/dump_dir
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ ls -ltr
+total 0
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:22:55 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SYS@orcl> create directory imp_dir as '/home/oracle/dump_dir';
+
+Directory created.
+
+SYS@orcl> greant read,write,execute on directory di  imp_dir to public;
+
+Grant succeeded.
+
+SYS@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:23:59 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SYS@orcl> create user imp_user identified by welcome1 account unlock;
+
+User created.
+
+SYS@orcl> grant connect,resouf rce,dba to imp_users ;
+
+Grant succeeded.
+
+SYS@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ expdp imp_user/welcome1 network_link=orcl_link directory=imp_dir schemas=gxkb dumpfile=expdp_gxkb.dmp logfile=expdp_ gxkb.log;
+
+Export: Release 11.2.0.1.0 - Production on Wed Dec 26 22:26:15 2018
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+Starting "IMP_USER"."SYS_EXPORT_SCHEMA_01":  imp_user/******** network_link=orcl_link directory=imp_dir schemas=gxkb dumpfile=expdp_gxkb.dmp logfile=expdp_gxkb.log 
+Estimate in progress using BLOCKS method...
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Total estimation using BLOCKS method: 37 MB
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/TYPE/TYPE_SPEC
+Processing object type SCHEMA_EXPORT/DB_LINK
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/VIEW/COMMENT
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_AND_BITMAP/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_AND_BITMAP/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+. . exported "GXKB"."XYK_USER_CARD"                      12.14 MB   11217 rows
+. . exported "GXKB"."XYK_USER"                           4.594 MB    8553 rows
+. . exported "GXKB"."XYK_CHANNEL_CARD"                   3.006 MB   10975 rows
+. . exported "GXKB"."TEST_USER_DETAILS"                  1.586 MB    4885 rows
+. . exported "GXKB"."XYK_RECHARGE_ORDER"                 874.8 KB    3675 rows
+. . exported "GXKB"."TEST_USER_LOGIN"                    518.7 KB    8396 rows
+. . exported "GXKB"."XYK_AGENT_INVITATION"               546.9 KB   14514 rows
+. . exported "GXKB"."ERROR_LOG"                          351.2 KB     134 rows
+. . exported "GXKB"."TEST_CREDIT_CARD"                   489.9 KB    3344 rows
+. . exported "GXKB"."XYK_AGENT_INVITATION_LOG"           456.5 KB   16971 rows
+. . exported "GXKB"."XYK_CHANNEL_USER"                   393.6 KB    4589 rows
+. . exported "GXKB"."TEST_USER_CARD"                     289.3 KB    1980 rows
+. . exported "GXKB"."XYK_USER_PLAN_ITEM"                 292.8 KB     880 rows
+. . exported "GXKB"."XYK_SHARE_PROFIT"                   246.0 KB    4979 rows
+. . exported "GXKB"."TEST_USER_RELATION"                 97.05 KB    1984 rows
+. . exported "GXKB"."TS_SYS_MESSAGE"                     39.60 KB     184 rows
+. . exported "GXKB"."TS_SYS_BANNER"                      10.66 KB       3 rows
+. . exported "GXKB"."XYK_BANK"                           10.44 KB      39 rows
+. . exported "GXKB"."XYK_BANK_BIN"                       59.15 KB    1364 rows
+. . exported "GXKB"."SYS_VERSION"                        8.132 KB       2 rows
+. . exported "GXKB"."TMP_AAA"                            5.023 KB       1 rows
+. . exported "GXKB"."TS_MENU"                            14.38 KB      55 rows
+. . exported "GXKB"."TS_PARAM_INFO"                      9.296 KB       5 rows
+. . exported "GXKB"."TS_ROLE_INFO"                       8.710 KB       6 rows
+. . exported "GXKB"."TS_ROLE_MENU"                       13.13 KB     150 rows
+. . exported "GXKB"."TS_STAFF_INFO"                      12.05 KB       5 rows
+. . exported "GXKB"."TS_STAFF_ROLE"                      9.039 KB      16 rows
+. . exported "GXKB"."TS_STATUS"                          8.601 KB      36 rows
+. . exported "GXKB"."TS_SYS_FEEDBACK"                    8.929 KB       3 rows
+. . exported "GXKB"."TS_SYS_TEMPLATE"                    8.960 KB       8 rows
+. . exported "GXKB"."TS_VERIFY_CODE"                     39.48 KB     652 rows
+. . exported "GXKB"."XYK_AGENT"                          20.04 KB      11 rows
+. . exported "GXKB"."XYK_AGENT_OEM"                      9.320 KB       2 rows
+. . exported "GXKB"."XYK_APPLY_CREDIT_CARD"              8.359 KB       3 rows
+. . exported "GXKB"."XYK_CHANNEL_BANK"                   13.58 KB     115 rows
+. . exported "GXKB"."XYK_CHANNEL_INFO"                   9.921 KB       3 rows
+. . exported "GXKB"."XYK_CHANNEL_NOTIFY"                 9.960 KB      10 rows
+. . exported "GXKB"."XYK_USER_PLAN"                      32.53 KB      60 rows
+. . exported "GXKB"."XYK_USER_RATE"                      6.335 KB       8 rows
+. . exported "GXKB"."TMP_USER_PLAN_ITEM"                     0 KB       0 rows
+. . exported "GXKB"."XYK_AGENT_DRAWALS_ORDER"                0 KB       0 rows
+. . exported "GXKB"."XYK_COORDS"                             0 KB       0 rows
+. . exported "GXKB"."XYK_DRAWALS_ORDER"                      0 KB       0 rows
+. . exported "GXKB"."XYK_USER_REFUND"                        0 KB       0 rows
+Master table "IMP_USER"."SYS_EXPORT_SCHEMA_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for IMP_USER.SYS_EXPORT_SCHEMA_01 is:
+  /home/oracle/dump_dir/expdp_gxkb.dmp
+Job "IMP_USER"."SYS_EXPORT_SCHEMA_01" successfully completed at 22:27:09
+
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ ls -ltr
+total 28320
+-rw-r----- 1 oracle oinstall     5919 Dec 26 22:27 expdp_gxkb.log
+-rw-r----- 1 oracle oinstall 28991488 Dec 26 22:27 expdp_gxkb.dmp
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ du -sm expdp_gxkb.dmp
+28expdp_gxkb.dmp
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ esqlsqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:28:38 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SYS@orcl> select        desc dba_data_files;
+ Name   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE_NAME    VARCHAR2(513)
+ FILE_ID    NUMBER
+ TABLESPACE_NAME    VARCHAR2(30)
+ BYTES    NUMBER
+ BLOCKS     NUMBER
+ STATUS     VARCHAR2(9)
+ RELATIVE_FNO    NUMBER
+ AUTOEXTENSIBLE     VARCHAR2(3)
+ MAXBYTES    NUMBER
+ MAXBLOCKS    NUMBER
+ INCREMENT_BY    NUMBER
+ USER_BYTES    NUMBER
+ USER_BLOCKS    NUMBER
+ ONLINE_STATUS    VARCHAR2(7)
+
+SYS@orcl> select file_name,tablespace_name from dba_data_files;
+
+FILE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+/usr/local/oracle/oradata/orcl/users01.dbf
+USERS
+
+/usr/local/oracle/oradata/orcl/undotbs01.dbf
+UNDOTBS1
+
+/usr/local/oracle/oradata/orcl/sysaux01.dbf
+SYSAUX
+
+
+FILE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+/usr/local/oracle/oradata/orcl/system01.dbf
+SYSTEM
+
+/usr/local/oracle/oradata/gxkb.dbf
+GXKB
+
+
+SYS@orcl> create tablespace gxkbhonban datafile '/usr/local/oracle/oradata/gxkbhonban.dbf' size 1g al utoextend on;
+
+Tablespace created.
+
+SYS@orcl> g create user gxkbhonban identified by gxkbhonban default tablespace gxkbhonban;
+
+User created.
+
+SYS@orcl> grant connect,resource,dba t0 gxkbhonban            o gxkbhonban;
+
+Grant succeeded.
+
+SYS@orcl> conn gxkbhonban/gxkbhonban
+Connected.
+GXKBHONBAN@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ impdp imp_user/welcome1 remap_tablespace=gxkb:gxkbhonban remap_schema=gxkb:gxkbhonban directory=imp_dir dumpfile=exp dp_gxkb.dmp logfile=impdp_gxkbhonban.log include=TABLE/TABLE,index
+
+Import: Release 11.2.0.1.0 - Production on Wed Dec 26 22:35:35 2018
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+Master table "IMP_USER"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "IMP_USER"."SYS_IMPORT_FULL_01":  imp_user/******** remap_tablespace=gxkb:gxkbhonban remap_schema=gxkb:gxkbhonban directory=imp_dir dumpfile=expdp_gxkb.dmp logfile=impdp_gxkbhonban.log include=TABLE/TABLE,index 
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_AND_BITMAP/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_AND_BITMAP/INDEX_STATISTICS
+Job "IMP_USER"."SYS_IMPORT_FULL_01" successfully completed at 22:35:40
+
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ ssqlplus gkbxkbhonban/gxkbhonban
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:36:01 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+GXKBHONBAN@orcl> selec     desc user_indexes;
+ Name   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ INDEX_NAME   NOT NULL VARCHAR2(30)
+ INDEX_TYPE    VARCHAR2(27)
+ TABLE_OWNER   NOT NULL VARCHAR2(30)
+ TABLE_NAME   NOT NULL VARCHAR2(30)
+ TABLE_TYPE    VARCHAR2(11)
+ UNIQUENESS    VARCHAR2(9)
+ COMPRESSION    VARCHAR2(8)
+ PREFIX_LENGTH    NUMBER
+ TABLESPACE_NAME    VARCHAR2(30)
+ INI_TRANS    NUMBER
+ MAX_TRANS    NUMBER
+ INITIAL_EXTENT     NUMBER
+ NEXT_EXTENT    NUMBER
+ MIN_EXTENTS    NUMBER
+ MAX_EXTENTS    NUMBER
+ PCT_INCREASE    NUMBER
+ PCT_THRESHOLD    NUMBER
+ INCLUDE_COLUMN     NUMBER
+ FREELISTS    NUMBER
+ FREELIST_GROUPS    NUMBER
+ PCT_FREE    NUMBER
+ LOGGING    VARCHAR2(3)
+ BLEVEL     NUMBER
+ LEAF_BLOCKS    NUMBER
+ DISTINCT_KEYS    NUMBER
+ AVG_LEAF_BLOCKS_PER_KEY    NUMBER
+ AVG_DATA_BLOCKS_PER_KEY    NUMBER
+ CLUSTERING_FACTOR    NUMBER
+ STATUS     VARCHAR2(8)
+ NUM_ROWS    NUMBER
+ SAMPLE_SIZE    NUMBER
+ LAST_ANALYZED    DATE
+ DEGREE     VARCHAR2(40)
+ INSTANCES    VARCHAR2(40)
+ PARTITIONED    VARCHAR2(3)
+ TEMPORARY    VARCHAR2(1)
+ GENERATED    VARCHAR2(1)
+ SECONDARY    VARCHAR2(1)
+ BUFFER_POOL    VARCHAR2(7)
+ FLASH_CACHE    VARCHAR2(7)
+ CELL_FLASH_CACHE    VARCHAR2(7)
+ USER_STATS    VARCHAR2(3)
+ DURATION    VARCHAR2(15)
+ PCT_DIRECT_ACCESS    NUMBER
+ ITYP_OWNER    VARCHAR2(30)
+ ITYP_NAME    VARCHAR2(30)
+ PARAMETERS    VARCHAR2(1000)
+ GLOBAL_STATS    VARCHAR2(3)
+ DOMIDX_STATUS    VARCHAR2(12)
+ DOMIDX_OPSTATUS    VARCHAR2(6)
+ FUNCIDX_STATUS     VARCHAR2(8)
+ JOIN_INDEX    VARCHAR2(3)
+ IOT_REDUNDANT_PKEY_ELIM    VARCHAR2(3)
+ DROPPED    VARCHAR2(3)
+ VISIBILITY    VARCHAR2(9)
+ DOMIDX_MANAGEMENT    VARCHAR2(14)
+ SEGMENT_CREATED    VARCHAR2(3)
+
+GXKBHONBAN@orcl> select index_name from user_indexes;
+
+INDEX_NAME
+------------------------------
+SYS_IL0000088727C00003$$
+SYS_C0011124
+SYS_C0011120
+SYS_IL0000088724C00005$$
+SYS_C0011151
+INDEX_TEL_OEMID
+SYS_C0011145
+SYS_C0011143
+SYS_C0011141
+INDEX_USERID_CHANNELID
+INDEX_CHANNELID_CARDNO
+
+INDEX_NAME
+------------------------------
+SYS_C0011139
+SYS_C0011137
+SYS_C0011135
+INDEX_XAI_AGENT_ID
+SYS_C0011133
+INDEX_XAI_ALLOT_STATUS
+INDEX_XAI_INVITATION_SN
+INDEX_XAT_CODE
+SYS_C0011131
+INDEX_XAT_STATUS
+INDEX_XAT_AGENT_ID
+
+INDEX_NAME
+------------------------------
+SYS_C0011128
+SYS_C0011122
+SYS_C0011118
+SYS_C0011116
+
+26 rows selected.
+
+GXKBHONBAN@orcl> 
+GXKBHONBAN@orcl> 
+GXKBHONBAN@orcl> 
+GXKBHONBAN@orcl> 
+GXKBHONBAN@orcl> l exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:36:22 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SYS@orcl> exec dbms_geta stats.schemas('gxkbhonban');
+BEGIN dbms_getstats.schemas('gxkbhonban'); END;
+
+      *
+ERROR at line 1:
+ORA-06550: line 1, column 7:
+PLS-00201: identifier 'DBMS_GETSTATS.SCHEMAS' must be declared
+ORA-06550: line 1, column 7:
+PL/SQL: Statement ignored
+
+
+SYS@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ ora segsize gkxkbhonban
+
+TABLESPACE_NAME        SEGMENT_NAME   SIZE_MB
+------------------------------ ---------------------------------------- ----------
+GXKBHONBAN       SYS_VERSION[Tab]  0
+
+GXKBHONBAN       TS_PARAM_INFO[Tab] 0
+
+GXKBHONBAN       TS_ROLE_MENU[Tab] 0
+
+GXKBHONBAN       TS_VERIFY_CODE[Tab] 0
+
+GXKBHONBAN       XYK_BANK_BIN[Tab] 0
+
+GXKBHONBAN       INDEX_XAI_ALLOT_STATUS[Idx] 0
+
+GXKBHONBAN       INDEX_CHANNELID_CARDNO[Idx] 0
+
+GXKBHONBAN       SYS_C0011118[Idx] 0
+
+GXKBHONBAN       INDEX_XAT_AGENT_ID[Idx] 0
+
+GXKBHONBAN       TS_STATUS[Tab] 0
+
+GXKBHONBAN       XYK_APPLY_CREDIT_CARD[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_CARD[Tab] 0
+
+GXKBHONBAN       XYK_RECHARGE_ORDER[Tab] 0
+
+GXKBHONBAN       ERROR_LOG[Tab] 0
+
+GXKBHONBAN       INDEX_XAI_INVITATION_SN[Idx] 0
+
+GXKBHONBAN       SYS_LOB0000088724C00005$$ 0
+
+GXKBHONBAN       XYK_CHANNEL_BANK[Tab] 0
+
+GXKBHONBAN       XYK_SHARE_PROFIT[Tab] 0
+
+GXKBHONBAN       TEST_USER_LOGIN[Tab] 0
+
+GXKBHONBAN       SYS_C0011135[Idx] 0
+
+GXKBHONBAN       SYS_C0011137[Idx] 0
+
+GXKBHONBAN       SYS_IL0000088724C00005$$  0
+
+GXKBHONBAN       SYS_C0011141[Idx] 0
+
+GXKBHONBAN       SYS_C0011124[Idx] 0
+
+GXKBHONBAN       SYS_C0011122[Idx] 0
+
+GXKBHONBAN       SYS_C0011139[Idx] 0
+
+GXKBHONBAN       SYS_LOB0000088727C00003$$ 0
+
+GXKBHONBAN       TS_SYS_FEEDBACK[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_INVITATION_LOG[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_USER[Tab] 0
+
+GXKBHONBAN       TS_SYS_MESSAGE[Tab] 0
+
+GXKBHONBAN       SYS_IL0000088727C00003$$  0
+
+GXKBHONBAN       INDEX_TEL_OEMID[Idx] 0
+
+GXKBHONBAN       TS_STAFF_INFO[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_INVITATION[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_INFO[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_NOTIFY[Tab] 0
+
+GXKBHONBAN       XYK_USER[Tab] 0
+
+GXKBHONBAN       XYK_USER_PLAN_ITEM[Tab] 0
+
+GXKBHONBAN       TEST_CREDIT_CARD[Tab] 0
+
+GXKBHONBAN       TS_SYS_BANNER[Tab] 0
+
+GXKBHONBAN       SYS_C0011116[Idx] 0
+
+GXKBHONBAN       SYS_C0011120[Idx] 0
+
+GXKBHONBAN       TMP_AAA[Tab] 0
+
+GXKBHONBAN       TS_STAFF_ROLE[Tab] 0
+
+GXKBHONBAN       XYK_AGENT[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_OEM[Tab] 0
+
+GXKBHONBAN       TEST_USER_DETAILS[Tab] 0
+
+GXKBHONBAN       TEST_USER_RELATION[Tab] 0
+
+GXKBHONBAN       XYK_USER_RATE[Tab] 0
+
+GXKBHONBAN       INDEX_XAI_AGENT_ID[Idx] 0
+
+GXKBHONBAN       SYS_C0011131[Idx] 0
+
+GXKBHONBAN       INDEX_USERID_CHANNELID[Idx] 0
+
+GXKBHONBAN       SYS_C0011128[Idx] 0
+
+GXKBHONBAN       TS_MENU[Tab] 0
+
+GXKBHONBAN       SYS_C0011133[Idx] 0
+
+GXKBHONBAN       INDEX_XAT_CODE[Idx] 0
+
+GXKBHONBAN       INDEX_XAT_STATUS[Idx] 0
+
+GXKBHONBAN       TS_ROLE_INFO[Tab] 0
+
+GXKBHONBAN       TS_SYS_TEMPLATE[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_DRAWALS_ORDER[Tab] 0
+
+GXKBHONBAN       XYK_BANK[Tab] 0
+
+GXKBHONBAN       XYK_USER_CARD[Tab] 0
+
+GXKBHONBAN       XYK_USER_PLAN[Tab] 0
+
+GXKBHONBAN       TEST_USER_CARD[Tab] 0
+
+GXKBHONBAN       SYS_C0011145[Idx] 0
+
+
+
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sqlplus / as sysdba
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:38:18 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SYS@orcl> exec dbms_stats.gather_schema_stats('gxkbhonban');
+
+PL/SQL procedure successfully completed.
+
+SYS@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sqlplus / as sysdbaora segsize gxkbhonbansqlplus / as sysdbagxkbhonban/gxkbhonban/ as sysdbaora segsize gxkbhonban
+
+TABLESPACE_NAME        SEGMENT_NAME   SIZE_MB
+------------------------------ ---------------------------------------- ----------
+GXKBHONBAN       SYS_VERSION[Tab]  0
+
+GXKBHONBAN       TS_PARAM_INFO[Tab] 0
+
+GXKBHONBAN       TS_ROLE_MENU[Tab] 0
+
+GXKBHONBAN       TS_VERIFY_CODE[Tab] 0
+
+GXKBHONBAN       XYK_BANK_BIN[Tab] 0
+
+GXKBHONBAN       INDEX_XAI_ALLOT_STATUS[Idx] 0
+
+GXKBHONBAN       INDEX_CHANNELID_CARDNO[Idx] 0
+
+GXKBHONBAN       SYS_C0011118[Idx] 0
+
+GXKBHONBAN       INDEX_XAT_AGENT_ID[Idx] 0
+
+GXKBHONBAN       TS_STATUS[Tab] 0
+
+GXKBHONBAN       XYK_APPLY_CREDIT_CARD[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_CARD[Tab] 0
+
+GXKBHONBAN       XYK_RECHARGE_ORDER[Tab] 0
+
+GXKBHONBAN       ERROR_LOG[Tab] 0
+
+GXKBHONBAN       INDEX_XAI_INVITATION_SN[Idx] 0
+
+GXKBHONBAN       SYS_LOB0000088724C00005$$ 0
+
+GXKBHONBAN       XYK_CHANNEL_BANK[Tab] 0
+
+GXKBHONBAN       XYK_SHARE_PROFIT[Tab] 0
+
+GXKBHONBAN       TEST_USER_LOGIN[Tab] 0
+
+GXKBHONBAN       SYS_C0011135[Idx] 0
+
+GXKBHONBAN       SYS_C0011137[Idx] 0
+
+GXKBHONBAN       SYS_IL0000088724C00005$$  0
+
+GXKBHONBAN       SYS_C0011141[Idx] 0
+
+GXKBHONBAN       SYS_C0011124[Idx] 0
+
+GXKBHONBAN       SYS_C0011122[Idx] 0
+
+GXKBHONBAN       SYS_C0011139[Idx] 0
+
+GXKBHONBAN       SYS_LOB0000088727C00003$$ 0
+
+GXKBHONBAN       TS_SYS_FEEDBACK[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_INVITATION_LOG[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_USER[Tab] 0
+
+GXKBHONBAN       TS_SYS_MESSAGE[Tab] 0
+
+GXKBHONBAN       SYS_IL0000088727C00003$$  0
+
+GXKBHONBAN       INDEX_TEL_OEMID[Idx] 0
+
+GXKBHONBAN       TS_STAFF_INFO[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_INVITATION[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_INFO[Tab] 0
+
+GXKBHONBAN       XYK_CHANNEL_NOTIFY[Tab] 0
+
+GXKBHONBAN       XYK_USER[Tab] 0
+
+GXKBHONBAN       XYK_USER_PLAN_ITEM[Tab] 0
+
+GXKBHONBAN       TEST_CREDIT_CARD[Tab] 0
+
+GXKBHONBAN       TS_SYS_BANNER[Tab] 0
+
+GXKBHONBAN       SYS_C0011116[Idx] 0
+
+GXKBHONBAN       SYS_C0011120[Idx] 0
+
+GXKBHONBAN       TMP_AAA[Tab] 0
+
+GXKBHONBAN       TS_STAFF_ROLE[Tab] 0
+
+GXKBHONBAN       XYK_AGENT[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_OEM[Tab] 0
+
+GXKBHONBAN       TEST_USER_DETAILS[Tab] 0
+
+GXKBHONBAN       TEST_USER_RELATION[Tab] 0
+
+GXKBHONBAN       XYK_USER_RATE[Tab] 0
+
+GXKBHONBAN       INDEX_XAI_AGENT_ID[Idx] 0
+
+GXKBHONBAN       SYS_C0011131[Idx] 0
+
+GXKBHONBAN       INDEX_USERID_CHANNELID[Idx] 0
+
+GXKBHONBAN       SYS_C0011128[Idx] 0
+
+GXKBHONBAN       TS_MENU[Tab] 0
+
+GXKBHONBAN       SYS_C0011133[Idx] 0
+
+GXKBHONBAN       INDEX_XAT_CODE[Idx] 0
+
+GXKBHONBAN       INDEX_XAT_STATUS[Idx] 0
+
+GXKBHONBAN       TS_ROLE_INFO[Tab] 0
+
+GXKBHONBAN       TS_SYS_TEMPLATE[Tab] 0
+
+GXKBHONBAN       XYK_AGENT_DRAWALS_ORDER[Tab] 0
+
+GXKBHONBAN       XYK_BANK[Tab] 0
+
+GXKBHONBAN       XYK_USER_CARD[Tab] 0
+
+GXKBHONBAN       XYK_USER_PLAN[Tab] 0
+
+GXKBHONBAN       TEST_USER_CARD[Tab] 0
+
+GXKBHONBAN       SYS_C0011145[Idx] 0
+
+
+
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sqlplus / as sydba
+
+SQL*Plus: Release 11.2.0.1.0 Production
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+Use SQL*Plus to execute SQL, PL/SQL and SQL*Plus statements.
+
+Usage 1: sqlplus -H | -V
+
+    -H   Displays the SQL*Plus version and the
+   usage help.
+    -V   Displays the SQL*Plus version.
+
+Usage 2: sqlplus [ [<option>] [{logon | /nolog}] [<start>] ]
+
+  <option> is: [-C <version>] [-L] [-M "<options>"] [-R <level>] [-S]
+
+    -C <version>   Sets the compatibility of affected commands to the
+   version specified by <version>.  The version has
+   the form "x.y[.z]".For example, -C 10.2.0
+    -L   Attempts to log on just once, instead of
+   reprompting on error.
+    -M "<options>" Sets automatic HTML markup of output.  The options
+   have the form:
+   HTML [ON|OFF] [HEAD text] [BODY text] [TABLE text]
+   [ENTMAP {ON|OFF}] [SPOOL {ON|OFF}] [PRE[FORMAT] {ON|OFF}]
+    -R <level>   Sets restricted mode to disable SQL*Plus commands
+   that interact with the file system.The level can
+   be 1, 2 or 3.  The most restrictive is -R 3 which
+   disables all user commands interacting with the
+   file system.
+    -S   Sets silent mode which suppresses the display of
+   the SQL*Plus banner, prompts, and echoing of
+   commands.
+
+  <logon> is: {<username>[/<password>][@<connect_identifier>] | / }
+      [AS {SYSDBA | SYSOPER | SYSASM}] [EDITION=value]
+
+    Specifies the database account username, password and connect
+    identifier for the database connection.  Without a connect
+    identifier, SQL*Plus connects to the default database.
+
+    The AS SYSDBA, AS SYSOPER and AS SYSASM  options are database
+    administration privileges.
+
+    <connect_identifier> can be in the form of Net Service Name
+    or Easy Connect.
+
+      @[<net_service_name> | [//]Host[:Port]/<service_name>]
+
+<net_service_name> is a simple name for a service that resolves
+to a connect descriptor.
+
+Example: Connect to database using Net Service Name and the
+ database net service name is ORCL.
+
+   sqlplus myusername/mypassword@ORCL
+
+Host specifies the host name or IP address of the database
+server computer.
+
+Port specifies the listening port on the database server.
+
+<service_name> specifies the service name of the database you
+want to access.
+
+Example: Connect to database using Easy Connect and the
+ Service name is ORCL.
+
+   sqlplus myusername/mypassword@Host/ORCL
+
+    The /NOLOG option starts SQL*Plus without connecting to a
+    database.
+
+    The EDITION specifies the value for Session Edition.
+
+
+  <start> is: @<URL>|<filename>[.<ext>] [<parameter> ...]
+
+    Runs the specified SQL*Plus script from a web server (URL) or the
+    local file system (filename.ext) with specified parameters that
+    will be assigned to substitution variables in the script.
+
+When SQL*Plus starts, and after CONNECT commands, the site profile
+(e.g. $ORACLE_HOME/sqlplus/admin/glogin.sql) and the user profile
+(e.g. login.sql in the working directory) are run.  The files may
+contain SQL*Plus commands.
+
+Refer to the SQL*Plus User's Guide and Reference for more information.
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sqlplus / as sydbaora segsize gxkbhonbansqlplus / as sysdbaora segsize gxkbhonbansqlplus / as sysdbagxkbhonban/gxkbhonban
+
+SQL*Plus: Release 11.2.0.1.0 Production on Wed Dec 26 22:38:37 2018
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+GXKBHONBAN@orcl> exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ 
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ ls -ltr
+total 28324
+-rw-r----- 1 oracle oinstall     5919 Dec 26 22:27 expdp_gxkb.log
+-rw-r----- 1 oracle oinstall 28991488 Dec 26 22:27 expdp_gxkb.dmp
+-rw-r----- 1 oracle oinstall     1049 Dec 26 22:35 impdp_gxkbhonban.log
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ impdp imp_user/welcome1 remap_tablespace=gxkb:gxkbhonban remap_schema=gxkb:gxkbhonban directory=imp_dir dumpfile=exp dp_gxkb.dmp logfile=impdp_gxkbhonban_01.log table_exists_action=replace
+
+Import: Release 11.2.0.1.0 - Production on Wed Dec 26 22:41:04 2018
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+Master table "IMP_USER"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "IMP_USER"."SYS_IMPORT_FULL_01":  imp_user/******** remap_tablespace=gxkb:gxkbhonban remap_schema=gxkb:gxkbhonban directory=imp_dir dumpfile=expdp_gxkb.dmp logfile=impdp_gxkbhonban_01.log table_exists_action=replace 
+Processing object type SCHEMA_EXPORT/USER
+ORA-31684: Object type USER:"GXKBHONBAN" already exists
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/TYPE/TYPE_SPEC
+Processing object type SCHEMA_EXPORT/DB_LINK
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+. . imported "GXKBHONBAN"."XYK_USER_CARD"                12.14 MB   11217 rows
+. . imported "GXKBHONBAN"."XYK_USER"                     4.594 MB    8553 rows
+. . imported "GXKBHONBAN"."XYK_CHANNEL_CARD"             3.006 MB   10975 rows
+. . imported "GXKBHONBAN"."TEST_USER_DETAILS"            1.586 MB    4885 rows
+. . imported "GXKBHONBAN"."XYK_RECHARGE_ORDER"           874.8 KB    3675 rows
+. . imported "GXKBHONBAN"."TEST_USER_LOGIN"              518.7 KB    8396 rows
+. . imported "GXKBHONBAN"."XYK_AGENT_INVITATION"         546.9 KB   14514 rows
+. . imported "GXKBHONBAN"."ERROR_LOG"                    351.2 KB     134 rows
+. . imported "GXKBHONBAN"."TEST_CREDIT_CARD"             489.9 KB    3344 rows
+. . imported "GXKBHONBAN"."XYK_AGENT_INVITATION_LOG"     456.5 KB   16971 rows
+. . imported "GXKBHONBAN"."XYK_CHANNEL_USER"             393.6 KB    4589 rows
+. . imported "GXKBHONBAN"."TEST_USER_CARD"               289.3 KB    1980 rows
+. . imported "GXKBHONBAN"."XYK_USER_PLAN_ITEM"           292.8 KB     880 rows
+. . imported "GXKBHONBAN"."XYK_SHARE_PROFIT"             246.0 KB    4979 rows
+. . imported "GXKBHONBAN"."TEST_USER_RELATION"           97.05 KB    1984 rows
+. . imported "GXKBHONBAN"."TS_SYS_MESSAGE"               39.60 KB     184 rows
+. . imported "GXKBHONBAN"."TS_SYS_BANNER"                10.66 KB       3 rows
+. . imported "GXKBHONBAN"."XYK_BANK"                     10.44 KB      39 rows
+. . imported "GXKBHONBAN"."XYK_BANK_BIN"                 59.15 KB    1364 rows
+. . imported "GXKBHONBAN"."SYS_VERSION"                  8.132 KB       2 rows
+. . imported "GXKBHONBAN"."TMP_AAA"                      5.023 KB       1 rows
+. . imported "GXKBHONBAN"."TS_MENU"                      14.38 KB      55 rows
+. . imported "GXKBHONBAN"."TS_PARAM_INFO"                9.296 KB       5 rows
+. . imported "GXKBHONBAN"."TS_ROLE_INFO"                 8.710 KB       6 rows
+. . imported "GXKBHONBAN"."TS_ROLE_MENU"                 13.13 KB     150 rows
+. . imported "GXKBHONBAN"."TS_STAFF_INFO"                12.05 KB       5 rows
+. . imported "GXKBHONBAN"."TS_STAFF_ROLE"                9.039 KB      16 rows
+. . imported "GXKBHONBAN"."TS_STATUS"                    8.601 KB      36 rows
+. . imported "GXKBHONBAN"."TS_SYS_FEEDBACK"              8.929 KB       3 rows
+. . imported "GXKBHONBAN"."TS_SYS_TEMPLATE"              8.960 KB       8 rows
+. . imported "GXKBHONBAN"."TS_VERIFY_CODE"               39.48 KB     652 rows
+. . imported "GXKBHONBAN"."XYK_AGENT"                    20.04 KB      11 rows
+. . imported "GXKBHONBAN"."XYK_AGENT_OEM"                9.320 KB       2 rows
+. . imported "GXKBHONBAN"."XYK_APPLY_CREDIT_CARD"        8.359 KB       3 rows
+. . imported "GXKBHONBAN"."XYK_CHANNEL_BANK"             13.58 KB     115 rows
+. . imported "GXKBHONBAN"."XYK_CHANNEL_INFO"             9.921 KB       3 rows
+. . imported "GXKBHONBAN"."XYK_CHANNEL_NOTIFY"           9.960 KB      10 rows
+. . imported "GXKBHONBAN"."XYK_USER_PLAN"                32.53 KB      60 rows
+. . imported "GXKBHONBAN"."XYK_USER_RATE"                6.335 KB       8 rows
+. . imported "GXKBHONBAN"."TMP_USER_PLAN_ITEM"               0 KB       0 rows
+. . imported "GXKBHONBAN"."XYK_AGENT_DRAWALS_ORDER"          0 KB       0 rows
+. . imported "GXKBHONBAN"."XYK_COORDS"                       0 KB       0 rows
+. . imported "GXKBHONBAN"."XYK_DRAWALS_ORDER"                0 KB       0 rows
+. . imported "GXKBHONBAN"."XYK_USER_REFUND"                  0 KB       0 rows
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/COMMENT
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/VIEW/COMMENT
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_CATALOGS" created with compilation warnings
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_CONNECTIONS" created with compilation warnings
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_SCHEMA" created with compilation warnings
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_STORED_PROGRAMS" created with compilation warnings
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_TABLE_TRIGGERS" created with compilation warnings
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_TABLES" created with compilation warnings
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_VIEW_TRIGGERS" created with compilation warnings
+ORA-39082: Object type VIEW:"GXKBHONBAN"."MGV_ALL_VIEWS" created with compilation warnings
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_AND_BITMAP/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_AND_BITMAP/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Job "IMP_USER"."SYS_IMPORT_FULL_01" completed with 9 error(s) at 22:41:24
+
+[oracle@iZwz92mfhsio3n38nswnocZ dump_dir]$ sq
+
+
+Session stopped
+    - Press <return> to exit tab
+    - Press R to restart session
+    - Press S to save terminal output to file
+
+Network error: Software caused connection abort
