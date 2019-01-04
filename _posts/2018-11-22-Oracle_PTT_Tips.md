@@ -22,6 +22,14 @@ Memory-based temporary table that is dropped at the end of the session or transa
 
 The document is [PRIVATE TEMPORARY TABLE](https://docs.oracle.com/en/database/oracle/oracle-database/18/sqlrf/CREATE-TABLE.html#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6)
 
+
+
+
+
+
+
+
+
 ### Restrictions
 
 Restrictions on Temporary Tables
