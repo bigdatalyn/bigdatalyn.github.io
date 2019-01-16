@@ -202,7 +202,9 @@ bigfile 40亿块
 	[1]+  Done                    nohup $ORACLE_HOME/bin/dbfs_client dbfs@dbm -o allow_other,direct_io /home/oracle/DBFS < passwd.txt
 	[oracle@qr01dbadm02 ~]$
 
-
+#### drop dbfs
+	
+	SQL>@dbfs_drop_filesystem.sql mydbfs
 
 
 
