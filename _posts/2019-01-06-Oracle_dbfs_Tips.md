@@ -119,6 +119,7 @@ chmod 644 /etc/fuse.conf
 	[oracle@qr01dbadm01 ~]$ 
 
 报错,需要用root用户赋予权限
+
 	[oracle@qr01dbadm01 ~]$ su - root
 	Password:
 	[root@qr01dbadm01 ~]# ls -tlr /bin/fusermount
