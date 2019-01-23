@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 9: DBA Views</h3>
+  			 <h4>Overview</h4>
+  			 <p>In Lab 9 we introduce some of the DBA Views which are
+relevant to Application Containers.  
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab09.fld/image001.gif" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 <ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>09.DBA_Views.sql </b> </li>
+				</ul>
+			 
+			 <h4>Review of Application Container Lab7:</h4>
+			 <p class=MsoNormal>Several DBA views are provided, which can help both
+application developers and application administrators with their work. </p>
+
+			<h4>Detailed Steps</h4>
+
+<h4>DBA_PDBs</h4>
+
+<p class=MsoNormal>There are lots of columns in DBA_PDBs, but those shown are
+among the most relevant to work with Application Containers.</p>
+
+<h4><span class=SpellE>DBA_Applications</span></h4>
+
+<p class=MsoNormal><span class=SpellE>wmStore</span> is defined here of course.
+The more cryptically-named application is the &quot;default application&quot;.
+Any &quot;application action&quot; – essentially DDL or DML – in Application
+Root is associated with an Application. If one is not explicitly specified in a
+&quot;begin / end&quot; block, then these application actions are associated
+with the default Application.</p>
+
+<h4><span class=SpellE>DBA_App_Versions</span></h4>
+
+<p class=MsoNormal>Besides the default application, described above, we see
+three rows for application <span class=SpellE>wmStore</span> here – one each
+for versions 1.0, 2.0 and 3.0.</p>
+
+<h4><span class=SpellE>DBA_App_Patches</span></h4>
+
+<p class=MsoNormal>Similarly, we see the definition of Patch 301.</p>
+
+<h4><span class=SpellE>DBA_App_PDB_Status</span></h4>
+
+<p class=MsoNormal><span class=SpellE>DBA_App_PDB_Status</span> shows us which
+versions and patches have been applied to which PDBs, with the status in each
+case.</p>
+
+<h4><span class=SpellE>DBA_App_Statements</span></h4>
+
+<p class=MsoNormal><span class=SpellE>DBA_App_Statements</span> shows the
+various SQL statements that have been &quot;captured&quot; in Application Root,
+in various Application Actions. These can then be replayed to sync the various
+Application PDBs.</p>
+
+<h4><span class=SpellE>DBA_App_Errors</span></h4>
+
+<p class=MsoNormal><span class=SpellE>DBA_App_Errors</span> will record which
+statements have failed during a sync. It only makes sense to run this from
+within an Application PDB.</p>
+
+					<a style="text-decoration: underline" href="AppContainerLab10.html"><b>Click Here to Go to Lab 10</b></a>
+			  
+			<br>
+			<br>
+			<br>
+			<br>
+			  
+			 </div>
+		</div>
+  </body>
+</html>

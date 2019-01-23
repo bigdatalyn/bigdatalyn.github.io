@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+
+		   a:link {color: white}
+           a:visited {color: white}
+           a:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html"><b>Before you begin</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="appcontainer.html"><b>Application Containers</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="proxypdb.html"><b>Proxy PDBs</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="lockdown.html"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="provisioning.html"><b>Provisioning</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <h2> What are Application Containers? </h2>
+			 <p> An application container consists of an application root and all of the application PDBs associated with it.
+			 The Application root is a special PDB, which contains the data model definition along with any metadata and common data for any application.
+			 Application Containers enables you to create a common application data model that can be shared across multiple tenants participating in the federation.
+			 You can also create and maintain a common data source that can be referenced by individual tenants.
+			 <br>
+			 <br>
+			 An application root enables you to create application common objects that are shared only by the application root and the application PDBs that belong
+			 to the application root. Application common objects are not visible to the CDB root, other application roots, or PDBs that do not belong to the application
+			 root. An application root cannot belong to another application root, and a PDB can belong to either no application roots or to only one application root.
+			 You can create an application seed for an application container. The application seed is optional, but, if it exists,
+			 you can use it to create application PDBs quickly that match the requirements of the application container.
+			 <br>
+			 <br>
+			 An application seed enables instant provisioning of application PDBs that are created from it.
+			 <br>
+			 <br>
+			 <CENTER><img src="AppContainers.png" alt="Application Containers" style="width:400px;height:300px;"></CENTER>
+			 </p>
+			 
+			 <p>
+			  We have two labs in this section. 
+			 <h3> Lab 1: Create an application that will be shared by multiple PDBs </h3>
+                          <br>The first one we will go through the creation of application root, installing an application followed by setting up
+			  two application PDBs (Robots and Dolls). 
+			  <br>
+			  <br>
+			  My Toy Inc. sells two toys Robots and Dolls. Revenue information for these two products are stored in two separate PDBs, however the table definition for
+			  this sales application is the same. So we will create an application container, define a metadata linked table which will allow us to share the table
+			  definition in both the PDBs. The definition is shared but data in each PDB will be isolated and is not accessible from another PDB.At the end we will
+			  execute a query that will aggregate data from the two applciation PDBs using a containers clause.
+			 </p>
+			 <br>
+			  <ul>
+				<li> Open a terminal window </li>
+                                <li> change directory to <b>/u01/HOL/app_containers/</b> </li>
+                                <li> source the environment. At command prompt execute <b>$source cdb1.env </b></li>
+                                <li> sqlplus /nolog </li>
+                                <li> At the SQL prompt execute <b> SQL>@01.app_container_lab.sql </b> </li>
+                                <br><br>This is a self guided script that will walk you through the basics of Application containers. 
+			  </ul>
+			
+			 <p>
+			 <h3> Lab 2: Logical partitioning of data in pluggable database using container maps  </h3>
+                          <br> Container maps enable the partitioning of data at the PDB level when the data is not physically partitioned at the table level.
+			 <CENTER><img src="ContainerMaps.png" alt="Container Maps" style="width:450px;height:300px;"></CENTER>
+			  <br>
+			  <br>
+                          In this exercise, we will use the well known EMP and DEPT table. Imagine in every department of our company there are hundreds of thousands of employees.
+                          We have a need to separate this data into few pluggable databases but we cannot make any changes to the application i.e. existing queries should continue to work as before. Since deptno column is used by most of our application queries we will use that as the container map column. 
+			 </p>
+			 <br>
+			  <ul>
+				<li> Open a terminal window </li>
+                                <li> change directory to <b>/u01/HOL/app_containers/</b> </li>
+                                <li> source the environment. At command prompt execute <b>$source cdb2.env </b></li>
+                                <li> sqlplus /nolog </li>
+                                <li> At the SQL prompt execute <b> SQL>@02.container_map_lab.sql </b> </li>
+                                <br><br>This is a self guided script that will walk you through the basics of Application containers. 
+			  </ul>
+			 </div>
+		</div>
+  </body>
+</html>

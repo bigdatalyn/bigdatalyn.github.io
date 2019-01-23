@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Before you begin</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+	
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+		   
+    </style> 
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'>
+			 	  <h2>Before you begin:</h2>
+				  <h4><u><div align="center">Safe Harbor Statement</div></u></h4>
+				  <p><div align="center">The following is intended to outline our general product direction. It is intended for information purposes only, and may not be incorporated into any contract. It is not a commitment to deliver any material, code, or functionality, and should not be relied upon in making purchasing decisions. The development, release, and timing of any features or functionality described for Oracle's products remains at the sole discretion of Oracle.</div></p>
+				  <br />
+				  <p>Each participant is assigned a VM where we have two container databases CDB1 and CDB2 running. 
+                                  <br> You will be doing the labs as the user <b>oracle (password: oracle)</b></p>
+                                     <p><b> Location of labs: /u01/HOL/ </b>
+                  			<br> In this folder, you will find 4 folders each containing the scripts that will walk you 
+                                            through a set of features that we are planning to introduce in the upcoming release of the Oracle database. 
+                                     </p>
+				  
+                                       <div>
+				     <table width="100%" border="1" cellpadding="2" bordercolor="#000000" cellspacing="2" bgcolor="#ffffff">
+                                          <tr valign="top">
+                  			  	  <td>
+							 <div>Provisioning - Hot Clone,Refresh and Relocate </div>
+                  				  </td>
+                  				  <td>
+                  				  	  <div>/u01/HOL/provisioning<div>
+                  			      </td>
+                  		      </tr>
+                                          <tr valign="top">
+                  			  	  <td>
+						  	  <div>Lockdown Profiles </div>
+                  				  </td>
+                  				  <td>
+                  				  	  <div>/u01/HOL/lockdown_profiles<div>
+                  			      </td>
+                  		      </tr>
+                                          <tr valign="top">
+                  			  	  <td>
+								  	  <div>Application Containers </div>
+                  				  </td>
+                  				  <td>
+                  				  	  <div>/u01/HOL/app_containers<div>
+                  			      </td>
+                  		      </tr>
+                  	   </table>
+                  </div>
+
+				  <p><b>Note the OS password for the oracle user is <i>oracle</i> and the VNC password is <i>welcome</i>.</b></p>
+				  <p>If you are using VNC please open a terminal to execute the scripts.</p>
+				  <p><b><font color="#FF0000">Note: While doing the labs you are expected to execute the scripts in sqlplus and go through the flow.</font></b></p>
+				  <br />
+				  
+				  
+				  <h2> Verify your environment </h2>
+                                  <p> 
+                                   Login to your VM [oracle/oracle] then source your environment.
+                                   <br><br> [oracle@osc-wkshp ~]$ cd /u01/HOL
+                                   <br><br> [oracle@osc-wkshp HOL]$ source cdb1.env
+                                   <br><br> [oracle@cdb1-osc-wkshp:4 HOL]$ cd app_containers/
+                                   <br><br> [oracle@cdb1-osc-wkshp:4 app_containers]$
+                                  </p>
+                                  <p>
+                                  <br>[oracle@cdb1-osc-wkshp:4 app_containers]$ ps -ef|grep -i pmon|grep -v grep
+                                  <br><br> oracle   20638     1  0 13:54 ?        00:00:02 ora_pmon_cdb1
+                                  <br> <br> oracle   21112     1  0 13:59 ?        00:00:02 ora_pmon_cdb2
+                                  <br><br> You should see two pmon processes. If you do not see two databases running you can start them by executing 
+                                      <b> /u01/HOL/startdb.sh </b> 
+                                      <br> change directory to /u01/HOL and type ./startdb.sh
+<br>
+<br>
+<br>
+  </body>
+</html>

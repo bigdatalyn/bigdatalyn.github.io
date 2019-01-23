@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 8: Application Patches</h3>
+  			 <h4>Overview</h4>
+  			 <p>In Lab8 we define an application patch. Patches are
+comparable to the application upgrades that we've seen in previous labs, but
+there are three important differences. 
+					<ol>
+ 						 <li>The types of operation that are allowed in a
+								patch are more limited. Essentially operations which are destructive are not
+								allowed, including:
+								<ul>
+      								<li>Drop a table, column, index, trigger...</li>
+     								<li>Create *or replace* view, package, procedure...</li>
+    							</ul>
+						 </li>
+ 						 <li>Patches do not involve creation of Application Root Clones.</li>
+  					    <li>Patches are not version-specific. This means that a single patch may be applied to multiple application versions.</li>
+					</ol>  
+		     <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab08.fld/image002.png" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 <ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>@08.Patch_301.sql </b> </li>
+				</ul>
+			 
+			 <h4>Review of Application Container Lab8:</h4>
+			 <p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l3 level1 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Define patch 301 for application <span
+class=SpellE>wmStore</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level2 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>a.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Add column for financial quarter to <span
+class=SpellE>wm_Orders</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level2 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>b.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create a new index on <span class=SpellE>wm_Orders</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level2 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>c.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Add more seed data to <span class=SpellE>wm_List_of_Values</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level2 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>d.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Update data in <span class=SpellE>wm_Orders</span>
+to set the appropriate value for the newly added <span class=SpellE>denormalized</span>
+column.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l3 level1 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Propagate the Upgrade to three franchises (but
+not to all).</p>
+
+			<h4>Detailed Steps</h4>
+
+<h4>Phase 1: Declare beginning of application patch.</h4>
+
+<p class=MsoNormal>Connected to Master Application Root Notice that patches are
+positive integers. (Compare this with upgrades, which are character strings.)</p>
+
+<h4>Phase 2. Upgrade the application schema.</h4>
+
+<h4>Phase 3. Add more seed data to <span class=SpellE>wm_List_of_Values</span>.</h4>
+
+<h4>Phase 4. Update orders to specify the appropriate financial quarter.</h4>
+
+<p class=MsoNormal>Remember the sequence of these operations. We shall refer to
+these in a future lab.</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l2 level1 lfo8'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Add column <span class=SpellE>wm_Orders.Financial_Quarter_Code</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l2 level1 lfo8'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create index wm_Orders_M1 on <span class=SpellE>wm_Orders</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-outline-level:1;mso-list:l2 level1 lfo8'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Add rows to <span class=SpellE>wm_List_of_Values</span></p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l2 level1 lfo8'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Update orders to specify the appropriate
+financial quarter.</p>
+
+<p class=MsoNormal>The previous section included some standard DML (updates in
+this case) to change existing data in the normal course of an upgrade. One
+curiosity in this case is that the actual data to be updated is in the
+Application PDBs, not in Application Root. (Notice that no rows were updated by
+any of these update statements in Application Root.) These statements are
+captured in Application Root, and will be replayed in the Application PDBs for
+each tenant / franchise when they synchronize.</p>
+
+<h4>Phase 5. Declare the end of the patch definition.</h4>
+
+<p class=MsoNormal>We have now completed the definition of the application
+patch. As with upgrades, patches are defined in a &quot;begin / end&quot;
+block. Between the begin and end statements, the patch contains a typical set
+of SQL statements (both DDL and DML). We have also seen how the steps in the
+upgrade script are captured in Application Root, to be replayed subsequently in
+the Application PDBs as they are <span class=SpellE>sync'ed</span>. The patch
+is applied to the Application PDBs by synchronizing them. In this lab, we'll
+patch three franchises – Tulsa, California and Tahoe.</p>
+
+<h4>Phase 6. Sync Application PDBs for three franchises.</h4>
+
+<p class=MsoNormal>Do not patch NYC yet.</p>
+
+					<a style="text-decoration: underline" href="AppContainerLab9.html"><b>Click Here to Go to Lab 9</b></a>
+			  
+			<br>
+			<br>
+			<br>
+			<br>
+			  
+			 </div>
+		</div>
+  </body>
+</html>

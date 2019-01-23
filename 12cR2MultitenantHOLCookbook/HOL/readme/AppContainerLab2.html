@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 2: Upgrade from v1 to v2</h3>
+  			 <h4>Overview</h4>
+  			 <p>In this <span class=GramE>lab</span> we upgrade Application <span
+				class=SpellE>wmStore</span> from v1 to v2. Despite each franchise having a
+				separate tenant PDB, there is only one master application definition to be upgraded
+				– in Application Root. We run the upgrade script only once, against the
+				Application Root. It is then simply a matter of synchronizing the tenant PDBs
+				for each franchise for them to be upgraded to the new version. Note that this
+				model allows for granular (per tenant/franchise) upgrade schedules. Let's get
+				started!   
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab02.fld/image001.gif" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 	<ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>@02.Upgrade_v1_v2.sql </b> </li>
+				</ul> 
+			 
+			 <h4>Review of Application Container Lab2:</h4>
+			 <p class=MsoNormal>In this lab, we have worked through the following stages:</p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in;mso-list:l1 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Upgrade application <span class=SpellE>wmStore</span>
+to v2. </p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in;mso-list:l1 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Synchronize all Application Tenant PDBs.</p>
+
+<p class=MsoNormal>An important advantage of Multitenant, with Application
+Containers is that, as we've seen, we <span class=GramE>have the opportunity to</span>
+upgrade individual tenants / franchises on their own schedule if appropriate.
+This demonstrates how Multitenant with Application Containers allows an
+Application administrator to manage many tenants as one, but retain granular
+control when appropriate.</p>
+			 
+			 <h4>Detailed Steps</h4>
+			 <h4>Phase 1: Upgrade Application.</h4>
+
+<h5>Phase 1a: -- Begin the master application upgrade.</h5>
+
+<p class=MsoNormal>Connect to the common user / application schema owner – <span
+class=SpellE>wmStore_Admin</span>. Notice that the version is expressed as a
+character string. What now follows is the standard upgrade script for the
+application. Note that this is basically unchanged from the application upgrade
+script that would have been run for a standalone installation in a non-CDB.</p>
+
+<h5>Phase 1b: Upgrade Schema.</h5>
+
+<h5>Phase 1c: Upgrade Seed Data.</h5>
+
+<p class=MsoNormal>In the preceding <span class=GramE>section</span> we
+upgraded the master application definition in our application root, <span
+class=SpellE>wmStore_Master</span>, from v1 to v2. This process started with
+the statement:</p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Courier'>alter
+pluggable database application <span class=SpellE>wmStore</span><br>
+begin upgrade '1.0' to '2.0'<o:p></o:p></span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Courier'>/<o:p></o:p></span></p>
+
+<p class=MsoNormal>Following this we had a standard application upgrade script.
+We now <span class=GramE>have to</span> designate the end of the master
+application upgrade.</p>
+
+<h5>Phase 1d: End the master application upgrade.</h5>
+
+<p class=MsoNormal>With Application Container, we only need to upgrade the
+application once. Tenant (franchise) PDBs are simply &quot;<span class=SpellE>sync'ed</span>&quot;
+with this master definition. This is simply a matter of connecting to each
+tenant (franchise) PDB in turn and issuing the sync command. Let's do that now.</p>
+
+<h4>Phase 2. Sync Application PDBs for three of four franchises.</h4>
+
+<p class=MsoNormal>We have now synchronized the application definition in three
+of the four tenant (franchise) PDBs with the master definition. Franchise NYC
+has not yet upgraded. Let's confirm that there are now different application
+versions in use. To do this, we'll connect to one franchise that has upgraded,
+and look at definition of a table changed in the upgrade. Then, we'll connect
+to the franchise that has not upgraded, and confirm that the old table
+definition is still in effect there. </p>
+
+<p class=MsoListParagraph style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l2 level1 lfo5'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>First, connect to Franchise Tulsa and look at
+the table definition there.</p>
+
+<p class=MsoNormal style='margin-left:.25in'>Show definition of table <span
+class=SpellE>wm_Products</span>.</p>
+
+<p class=MsoListParagraph style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l2 level1 lfo5'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Now, connect to Franchise NYC and look at the
+table definition there.</p>
+
+<p class=MsoNormal style='margin-left:.25in'>Show definition of table <span
+class=SpellE>wm_Products</span>.</p>
+
+<p class=MsoNormal style='margin-left:.25in'><o:p>&nbsp;</o:p></p>
+
+<h4>Phase 3: Queries</h4>
+
+<p class=MsoNormal>Show definition of table <span class=SpellE>wm_Products</span>
+in &amp;Franchise. Notice that Tulsa has the new column <span class=SpellE>Local_Product_YN</span>,
+added during the upgrade to v2.0. Now let's switch to NYC, and look at the
+definition of <span class=SpellE>wm_Products</span> there. Notice that NYC does
+not have the new column <span class=SpellE>Local_Product_YN</span>, because
+this franchise / tenant has not yet upgraded to v2.0. This is an important
+advantage of Multitenancy with Application Container. It is not necessary to
+enforce a simultaneous business-wide application upgrade. Tenants / franchises
+can upgrade on an individual schedule if necessary.</p>
+			<a style="text-decoration: underline" href="AppContainerLab3.html"><b>Click Here to Go to Lab 3</b></a>
+			  
+			<br>
+			<br>
+			<br>
+			<br>
+			 
+			 </div>
+		</div>
+  </body>
+</html>

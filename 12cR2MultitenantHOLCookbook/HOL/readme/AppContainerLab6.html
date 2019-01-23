@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 6: Durable Location Transparency</h3>
+  			 <h4>Overview</h4>
+  			 <p>Lab6 demonstrates &quot;durable location transparency&quot;.
+In Lab5 we saw how Proxy PDBs can provide location transparency. The Proxy PDBs
+for the Application Root Replicas (ARRs) provided local context (in the master
+Application Root) for the ARRs, which are physically located in a different
+CDB. This is a good example of location transparency. In this lab, we see how
+these ARR Proxies can provide &quot;durable location transparency. That is,
+location transparency that survives the physical reconfiguration of the
+Application Estate – specifically by relocating an Application PDB for a <span
+class=GramE>particular franchise</span> from one CDB to another. Let's get
+started!  
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab06.fld/image001.gif" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 <ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>@06.Durable_Location_Transparency.sql </b> </li>
+				</ul>
+			 
+			 <h4>Review of Application Container Lab5:</h4>
+			 <p class=MsoNormal>In this lab, we have demonstrated &quot;Durable Location
+Transparency&quot;.</p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in;mso-list:l1 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>We executed some application code – in this case
+aggregating revenue across all franchises.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l1 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Then we relocated of the franchises to another
+CDB (without incurring any application outage – the PDB remained open
+read/write during this operation</p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in;mso-list:l1 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>We re-executed the same application code. It
+continued to work, despite the relocation of one of the Application PDBs.</p>
+
+<p class=MsoNormal>In a SaaS <span class=GramE>operation</span> we typically
+operate with large number of Application PDBs. On-going operations – load
+balancing, hardware refreshes, migrations to the Cloud – are going to involve
+relocation of PDBs. <span class=GramE>With this in mind, durable</span>
+location transparency becomes an important capability from the perspective of
+high availability. Even if a database were technically available, if you can't
+find it (because it's moved), it might as well be offline. Durable location
+transparency, enabled via Proxy PDBs of Application Root Replicas (ARRs), is a
+very important High Availability feature. </p>
+			
+				<h4>Detailed Steps</h4>
+				<h4>Phase 1: Run application query: Order volume by franchise.</h4>
+
+<p class=MsoNormal>Lab6_Campaign_Performance.sql runs a query to retrieve order
+volume by franchise for a specified campaign. Let's print it out. Notice that
+this is a <span class=GramE>containers(</span>) query, aggregating order volume
+across all franchises. Of course, Walt's Malts has now expanded beyond a single
+CDB! Notice also the use of the pseudo-column <span class=SpellE>CDB$Name</span>.
+This shows from which CDB the data is retrieved. Run the script to execute the
+query. Now we're going to do some load balancing. We're going to relocate
+franchise Tahoe from CDB1 to CDB2. <span class=GramE>Specifically</span> we're
+going to relocate it to ARR <span class=SpellE>wmStore_West</span>. (Perhaps we
+could also think of this operation in terms of moving the Application PDB to
+the physically nearest CDB to minimize latency.) Here we'll use the PDB
+relocate capability, demonstrated in other Labs.</p>
+
+
+<h4>Phase 2. Relocate PDB Tahoe from <span class=SpellE>wmStore_Master</span>
+to <span class=SpellE>wmStore_West</span></h4>
+
+<p class=MsoNormal>Remember that PDB relocate is a &quot;pull&quot; operation. <span
+class=GramE>Therefore</span> we need to connect to the target ARR. Initiate the
+online relocation of franchise Tahoe. Complete the online relocation by opening
+the PDB in its new location. Now, having relocated franchise Tahoe to CDB2,
+we're going to re-execute our application query. Pay close attention to the
+results of this query and compare them to the results from the first time it
+was run.</p>
+
+<h4>Phase 3: Re-run application query:</h4>
+
+<p class=MsoNormal>Notice that the results are identical, with the sole
+exception that data for franchise Tahoe is now retrieved from CDB2.</p>
+
+				<a style="text-decoration: underline" href="AppContainerLab7.html"><b>Click Here to Go to Lab 7</b></a>
+			  
+				<br>
+				<br>
+				<br>
+				<br>
+			  
+			 </div>
+		</div>
+  </body>
+</html>

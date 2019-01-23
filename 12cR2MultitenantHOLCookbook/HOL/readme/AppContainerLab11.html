@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 11: Container Map</h3>
+  			 <h4>Overview</h4>
+  			 <p>In Lab11 we explore another location transparency technology:
+Container Map. Here we follow the expansion of Walt's Malts through the acquisition
+of a formerly independent distributor of Walt's Malts products. This company is
+named Terminally Chill, and their niche was selling Walt's Malts product
+through <span class=GramE>a number of</span> small kiosks in various airports
+globally. The Terminally Chill application has a different design from the
+original <span class=SpellE>wmStore</span> application. Whereas <span
+class=SpellE>wmStore</span> was originally designed for standalone deployment,
+Terminally Chill used a single database to manage data for all kiosks in all
+airports. The application server tiers are designed to connect directly to a
+single database, with query predicates to retrieve data for the right airport
+and kiosk. In this lab, we'll see how Container Map can help accommodate
+applications of this design.  
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab11.fld/image001.gif" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 <ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>@11.Container_Map.sql </b> </li>
+				</ul>
+			 
+			 <h4>Review of Application Container Lab11:</h4>
+			 <p class=MsoNormal>In this lab, we have explored the Container Map feature.
+Container Map may be viewed as another location transparency feature. We went
+through several steps during this lab. Many of these are familiar, but the new
+concept introduced is in Phase 2b, when we defined the Container Map. The steps
+are summarized below:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l5 level1 lfo14'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Phase 1: Setup Application PDBs for new Airport
+franchises.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l5 level1 lfo14'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Phase 2. Install v1 of Application
+&quot;Terminal&quot;, in important sub-steps:</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l2 level3 lfo4'><![if !supportLists]><span
+style='font-family:"Courier New";mso-fareast-font-family:"Courier New"'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span></span><![endif]>2a. Declare the start of the application
+installation.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l2 level3 lfo4'><![if !supportLists]><span
+style='font-family:"Courier New";mso-fareast-font-family:"Courier New"'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span></span><![endif]>2b. Create Container Map Table and set <span
+class=SpellE>Container_Map</span> property for the database.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l2 level3 lfo4'><![if !supportLists]><span
+style='font-family:"Courier New";mso-fareast-font-family:"Courier New"'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span></span><![endif]>2c. Execute standard installation for the
+application</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l2 level3 lfo4'><![if !supportLists]><span
+style='font-family:"Courier New";mso-fareast-font-family:"Courier New"'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span></span><![endif]>2d. Prepare tables to be used with Container Map
+as required.<br>
+This includes setting <span class=SpellE>containers_default</span> and enabling
+<span class=SpellE>container_map</span> for the required tables.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l2 level3 lfo4'><![if !supportLists]><span
+style='font-family:"Courier New";mso-fareast-font-family:"Courier New"'><span
+style='mso-list:Ignore'>o<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span></span><![endif]>2e. Declare the end of the application
+installation.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l7 level1 lfo15'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Phase 3. Sync Application PDBs.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l7 level1 lfo15'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Phase 4: Create franchise-specific demonstration
+data.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l7 level1 lfo15'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Phase 5: Perform various queries to see how
+Container Map can deliver location transparency.</p>
+
+				<h4>Detailed Steps</h4>
+
+<h4>Phase 1: Setup Application Root and Application PDBs for new Airport
+franchises.</h4>
+
+<p class=MsoNormal>The key step in this lab immediately follows the declaration
+of the application installation. Here we set up the Container Map, in terms of
+a Map table and the <span class=SpellE>Container_Map</span> database property.
+The container map is a table <span class=SpellE>definiton</span> where each partition
+name corresponds to a PDB name. You only need one column in this table that you
+have decided to use to partition the data.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<h4>Phase 2. Install v1 of Application &quot;Terminal&quot;.</h4>
+
+<h5>Phase 2a. Declare the start of the application installation.</h5>
+
+<h5>Phase 2b. Setup Container Map.<o:p></o:p></h5>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l10 level2 lfo17'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>2b1. Create Container Map Table.<o:p></o:p></p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l10 level2 lfo17'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>2b2. Define Container Map property for the
+database.<o:p></o:p></p>
+
+<p class=MsoNormal style='margin-left:.25in'>Notice that the Container Map is
+defined with Partitioning syntax. In our example, Terminally Chill, each
+partition listed in the Container Map is the name of an Application PDB – for a
+tenant / franchise. For each Partition / Application PDB / tenant / franchise there
+is a list of kiosks associated with that Application PDB. In the query section
+of this lab, we'll use these kiosk codes as query predicates. Container Map
+uses the mapping defined above to route these queries to the appropriate PDB. <span
+class=GramE>So</span> this was a two-step process:<o:p></o:p></p>
+
+<p class=MsoListParagraphCxSpFirst style='text-indent:-.25in;mso-list:l9 level1 lfo7'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create the Map table.<o:p></o:p></p>
+
+<p class=MsoListParagraphCxSpLast style='text-indent:-.25in;mso-list:l9 level1 lfo7'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Set the Container Map property for the database.<o:p></o:p></p>
+
+<p class=MsoNormal style='margin-left:.25in'>Notice that it is not necessary to
+populate the Container Map table with any data.<o:p></o:p></p>
+
+<p class=MsoNormal style='margin-left:.25in'>Now we proceed to execute the
+standard installation script for the Terminally Chill application.<o:p></o:p></p>
+
+<h5>Phase 2c. Install v1 of Application &quot;Terminal&quot;.<o:p></o:p></h5>
+
+<h5>Phase 2d. Prepare tables to take advantage of Container Map capabilities.<o:p></o:p></h5>
+
+<p class=MsoNormal>Define <span class=SpellE>tc_Orders</span> as containers
+default and enable for Container Map.<o:p></o:p></p>
+
+<h5>Phase 2e. Declare the end of the application installation.<o:p></o:p></h5>
+
+<p class=MsoNormal>Notice that following the standard application installation,
+table <span class=SpellE>tc_Orders</span> was altered to take advantage of
+Container Map capabilities. This is a two-step process.</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l1 level1 lfo12;tab-stops:list -.25in'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Define the table as &quot;<span class=SpellE>containers_default</span>&quot;.<br>
+This means that a &quot;standard&quot; query against this table in Application
+Root will be converted into <span class=GramE>containers(</span>) syntax
+implicitly.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l1 level1 lfo12;tab-stops:list -.25in'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Enable <span class=SpellE>Container_Map</span>
+for the table.<br>
+This means that queries against this table in Application Root will be routed
+to the appropriate PDB. The requirement is that the table definition include
+the Container Map column – Kiosk in our example.</p>
+
+<p class=MsoNormal style='tab-stops:list -.25in'><o:p>&nbsp;</o:p></p>
+
+<h4>Phase 3. Sync Application PDBs.</h4>
+
+<h4>Phase 4: Create franchise-specific products</h4>
+
+<h4>Container Map Queries</h4>
+
+<p class=MsoNormal>Connect to Application Root and route query appropriately.</p>
+
+						<a style="text-decoration: underline" href="AppContainer.html"><b>Click Here to Go to the Main Page of Application Container Labs</b></a>
+			  
+			<br>
+			<br>
+			<br>
+			<br>
+			  
+			 </div>
+		</div>
+  </body>
+</html>

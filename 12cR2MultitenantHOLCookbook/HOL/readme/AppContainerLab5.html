@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 5: Expansion Beyond Single CDB, and Application Root Replicas</h3>
+  			 <h4>Overview</h4>
+  			 <p>In this <span class=GramE>lab</span> we follow the global
+expansion of Walt's Malts. <span class=GramE>In order to</span> comply with
+requirements of data sovereignty and latency Walt's Malts has had to expand
+into a second CDB, CDB2. (<span class=GramE>In reality this</span> would be in
+a separate server.) Let's get started!
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab05.fld/image001.gif" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 <ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>@05.Expansion_ARRs.sql </b> </li>
+				</ul>
+			 
+			 <h4>Review of Application Container Lab4:</h4>
+			 <p class=MsoNormal>In this lab, we have worked through the expansion of the
+application beyond a single CDB. This followed the following stages:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l4 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create and Open Application Root Replicas
+(ARRs):</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l0 level1 lfo14'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span class=SpellE>wmStore_International</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l0 level1 lfo14'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span class=SpellE>wmStore_West</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l4 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create Proxy PDBs for the ARRs.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l4 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Synchronize the ARRs via their proxies.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l4 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create App Seeds for the ARRs.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l4 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>5.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Provision the App PDBs for five new franchises.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l4 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>6.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Add franchise-specific products for new
+franchises.</p>
+
+<p class=MsoNormal>It is very important to note that we still only have a
+single master application definition, despite the application now being
+deployed across multiple CDBs.</p>
+
+			 <h4>Detailed Steps</h4>
+			 <h4>Phase 1. Create and Open Application Root Replicas in CDB2</h4>
+
+<p class=MsoNormal>In this <span class=GramE>section</span> we do the
+following:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l6 level1 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Connect to CDB2's Root.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l6 level1 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create the <span class=SpellE>CDB$Root-level</span>
+DB Link.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l6 level1 lfo6'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create and open the Application Root Replicas
+(ARRs).</p>
+
+<p class=MsoNormal>Application Root Replicas are required to serve metadata for
+Application Tenant (Franchise) PDBs in remote CDBs. This is because it is not
+realistic to assume continuous very low latency access across the internet to a
+remote Application Root. Next, we create Proxy PDBs for these Application Root
+Replicas in the Master Application Root. Let's proceed...</p>
+
+<h4>Phase 2. Create DB Link and Proxy PDBs for Application Root Replicas in
+CDB1</h4>
+
+<p class=MsoNormal>In this <span class=GramE>section</span> we do the
+following:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l1 level1 lfo8'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Connect to <span class=SpellE>wmStore_Master</span>
+as C##System.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l1 level1 lfo8'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create the Application-Root-level DB Links to
+CDB2.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l1 level1 lfo8'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create and opened Proxy PDBs for the Application
+Root Replicas.</p>
+
+<p class=MsoNormal>Notice the syntax for creating the proxy PDBs, using the
+phrase &quot;as proxy&quot;. Next, we sync the ARRs via their Proxies.</p>
+
+
+<h4>Phase 3. Synchronize the ARRs via their proxies.</h4>
+
+<p class=MsoNormal>The Application Root Replicas are now synchronized with the
+master. Now we can create Seeds for each ARR.</p>
+
+
+<p class=MsoNormal><span class=Heading2Char><span style='font-size:13.0pt'>Phase
+4. Create and open the Application Seed PDBs, and sync them with Application <span
+class=SpellE>wmStore</span>.</span></span></p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l5 level1 lfo13'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Phase 4a. ARR: <span class=SpellE>wmStore_International</span></p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-outline-level:1;mso-list:l5 level1 lfo13'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Phase 4b. ARR: <span class=SpellE>wmStore_West</span></p>
+
+<p class=MsoNormal>Now, with extra capacity (in the right geographic location)
+we are ready to create additional Application PDBs for the new tenants /
+franchises added during the international expansion of Walt's Malts. The next
+several steps accomplish this.</p>
+
+<h4>Phase 5. Provision the App PDBs for each new Franchise.</h4>
+
+<p class=MsoNormal>In this <span class=GramE>phase</span> we need to do the
+following:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l3 level1 lfo12'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Connect to the appropriate Application Root
+Replica (ARR)</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l3 level1 lfo12'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Create a database link from that ARR to the CDB
+of the Master Root.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l3 level1 lfo12'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Provision Application PDBs for each tenant /
+franchise as needed.</p>
+
+<h4>Phase 6: Create franchise-specific data</h4>
+
+<p class=MsoNormal>Now we'll go to each tenant PDB in turn and add some
+franchise-specific data. This is for demonstration purposes only. This is not
+part of the application definition. It merely simulates the creation of data
+which in the usual course of events would be defined through the application
+itself. This demo data will be added by the execution of scripts.</p>
+			
+				<a style="text-decoration: underline" href="AppContainerLab6.html"><b>Click Here to Go to Lab 6</b></a>
+			  
+			<br>
+			<br>
+			<br>
+			<br>
+			  
+			 </div>
+		</div>
+  </body>
+</html>

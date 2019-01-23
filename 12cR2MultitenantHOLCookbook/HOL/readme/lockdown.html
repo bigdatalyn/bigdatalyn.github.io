@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Lockdown Profiles</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+	
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+		   
+    </style> 
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'>
+                                  <CENTER><u><h2> Lockdown Profiles</h2></u></CENTER>
+				  <p>A potential for elevation of privileges exists where identity is shared between PDBs, when it needs to be compartmentalized because the individuals using those identities are different and may have different aims or allegiances. Identity can be shared</p>
+				  <ul>
+    			  	  <li>at the OS level when the database interacts with OS resources likes files or processes, </li>
+    				  <li>at a network level when the database communicates with other systems and network identity is important, or </li>
+    				  <li>inside the database, as PDBs access or create common objects or communicate across container     boundaries using features like Database Links.</li>
+				  </ul> 
+				  <p>A lockdown profile is a declarative way to prevent a PDB to access to the network, administrative features, or common users and objects.</p>
+				  <p>Limiting the access to certain administrative features within a PDB might be desirable for some customers. In this lab, we will examine the effect of a lockdown profile that is intended to prevent any attempt to change the value of the 'cursor_sharing' parameter. </p>
+                                  <p> In this section we have 3 labs. In the first one we will disable a statement, followed by disabling the partitioning option in the PDB. Finally we will disable the network access in the PDB.
+				  <h2>Lab 1: Lockdown Profiles - Disable Statement 'Alter System'</h2>
+
+				  <p><b>Lab Details:</b> This lab will help you to disable 'Alter System' statement for 'cursor_sharing' parameter via a lockdown profile.</p>
+				  <p><b>Database targets to be used:</b> cdb1</p>
+				  <p><font color="#FF0000">Please go through the following steps:</font></p>
+				  <ul>
+    			  	  <li><font color="#FF0000"><b>$</b> cd /u01/HOL/lockdown_profiles</font></li>
+    				  <li><font color="#FF0000"><b>$</b> source cdb1.env</font></li>
+  					  <li><font color="#FF0000"><b>$</b> sqlplus /nolog</font></li>
+    				  <li><font color="#FF0000"><b>SQL</b>> @lab1.sql</font></li>
+				  </ul>
+				  <p> In the following table we have listed the various commands executed by the script. 
+				  <div>
+				  	   <table width="100%" border="1" cellpadding="6" bordercolor="#000000" cellspacing="2" bgcolor="#ffffff">
+                  	   		  <tr valign="top">
+                  			  	  <td style="width: 10%">
+                  				  	  <div align="center">Step</div>
+                  				  </td>
+                  				  <td style="width: 45%">
+								  	  <div align="center">Action</div>
+                  				  </td>
+								  <td style="width: 45%">
+								  	  <div align="center">Comments</div>
+                  				  </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">1</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> cd /u01/HOL/lockdown_profiles<br />
+										   <b>$</b> source cdb1.env
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will setup the Oracle environment so that cdb1 will be ready to run our lab script.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">2</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> sqlplus / as sysdba
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will login to SQLPlus and go through the following steps to complete our first lockdown profiles lab.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">3</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> set lines 200 pages 1000 <br />
+										   <b>SQL</b>> column PROFILE_NAME FORMAT A15 <br />
+										   <b>SQL</b>> column RULE_TYPE FORMAT A10<br />
+										   <b>SQL</b>> column RULE FORMAT A20 <br />
+										   <b>SQL</b>> column CLAUSE FORMAT A10 <br />
+										   <b>SQL</b>> column OPTION$ FORMAT A20 <br />
+										   <b>SQL</b>> column VALUE$ FORMAT A5 <br />
+										   <b>SQL</b>> column STATUS FORMAT A8 <br />
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will format the columns of DBA_LOCKDOWN_PROFILES table so that the available lockdown profiles can be displayed smoothly in the next steps.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">4</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div><b>SQL</b>> create pluggable database SALES admin user admin identified by oracle12;</div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This will create a PDB named 'SALES' in our CDB.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">5</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> create lockdown profile p1;<br />
+									       <b>SQL</b>> alter lockdown profile p1 disable statement=('ALTER SYSTEM') clause=('SET') option=('cursor_sharing');
+	 	   					   		  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>A lockdown profile named 'p1' will be created to disable 'alter system' statement and 'set' clause for the option 'cursor_sharing'. </div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">6</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> select * from DBA_LOCKDOWN_PROFILES;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>The current list of lockdown profiles including 'p1' will be displayed.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">7</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> alter session set container = SALES;<br />
+										   <b>SQL</b>> show parameter cursor_sharing
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will be connected to the PDB that we created earlier and shown the current value of the parameter 'cursor_sharing'.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">8</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										   <b>SQL</b>> alter system set cursor_sharing = FORCE;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This will change the value of 'cursor_sharing' to 'FORCE'. However, please remember that the lockdown profile 'p1' is not in use yet.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">9</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> alter system set pdb_lockdown = p1;<br />
+										   <b>SQL</b>> alter pluggable database close;<br />
+										   <b>SQL</b>> alter pluggable database open;
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will set the current lockdown profile to ‘p1’ and bounce the database in order for the changes to take effect.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">10</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div><b>SQL</b>> alter system set cursor_sharing = EXACT;</div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This time, you will run into the error “ORA-01031: insufficient privileges” since the lockdown profile ‘p1’ is in effect.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">11</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+											<b>SQL</b>> alter session set container = cdb$root;<br />
+											<b>SQL</b>> drop lockdown profile p1;<br />
+											<b>SQL</b>> alter session set container = SALES;<br />
+											<b>SQL</b>> alter pluggable database close;<br />
+											<b>SQL</b>> alter pluggable database open;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will connect to the root, drop the lockdown profile ‘p1’, and connect back to the ‘SALES’. In order to see the effect of dropped lockdown profile, it will bounce the database.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">12</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> alter system set cursor_sharing = EXACT;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will change the value of ‘cursor_sharing’ to ‘EXACT’ since we dropped ‘p1’.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">13</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> alter pluggable database close;<br />
+									  <b>SQL</b>> exit;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This final step will close the PDB.</div>
+                  			      </td>
+                  			  </tr>
+                  	   </table>
+                  </div>
+				  
+				  <h2>Lab 2: Lockdown Profiles – Disable Database Option ‘Partitioning’</h2>
+				  <p>Shared identities across PDBs may lead to malicious activities during the operations that are used to administer certain database options such as ‘Partitioning’. In this lab, utilizing the database option ‘Partitioning’ will be illustrated in the existence and absence of a lockdown profile that controls the option.</p>
+				  <p><b>Lab Details:</b> This lab will help you to disable ‘Partitioning’ option via a lockdown profile.</p>
+				  <p><b>Database targets to be used:</b> cdb1</p>
+				  <p><font color="#FF0000">Please go through the following steps:</font></p>
+				  <ul>
+    			  	  <li><font color="#FF0000"><b>$</b> cd  /u01/HOL/lockdown_profiles</font></li>
+    				  <li><font color="#FF0000"><b>$</b> source cdb1.env</font></li>
+  					  <li><font color="#FF0000"><b>$</b> sqlplus /nolog</font></li>
+    				  <li><font color="#FF0000"><b>SQL</b>> @lab2.sql</font></li>
+				  </ul>
+				  <p> A summary of the steps executed by this lab is listed below. 
+				   
+				  <div>
+				  	   <table width="100%" border="1" cellpadding="6" bordercolor="#000000" cellspacing="2" bgcolor="#ffffff">
+                  	   		  <tr valign="top">
+                  			  	  <td style="width: 10%">
+                  				  	  <div align="center">Step</div>
+                  				  </td>
+                  				  <td style="width: 45%">
+								  	  <div align="center">Action</div>
+                  				  </td>
+								  <td style="width: 45%">
+								  	  <div align="center">Comments</div>
+                  				  </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">1</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> cd /u01/HOL/lockdown_profiles<br />
+										   <b>$</b> source cdb1.env
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will setup the Oracle environment so that cdb1 will be ready to run our lab script.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">2</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> sqlplus / as sysdba
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will login to SQLPlus and go through the following steps to complete our second lockdown profiles lab.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">3</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> set lines 200 pages 1000 <br />
+										   <b>SQL</b>> column PROFILE_NAME FORMAT A15 <br />
+										   <b>SQL</b>> column RULE_TYPE FORMAT A10<br />
+										   <b>SQL</b>> column RULE FORMAT A20 <br />
+										   <b>SQL</b>> column CLAUSE FORMAT A10 <br />
+										   <b>SQL</b>> column OPTION$ FORMAT A20 <br />
+										   <b>SQL</b>> column VALUE$ FORMAT A5 <br />
+										   <b>SQL</b>> column STATUS FORMAT A8 <br />
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will format the columns of DBA_LOCKDOWN_PROFILES table so that the available lockdown profiles can be displayed smoothly in the next steps.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">4</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div><b>SQL</b>> create pluggable database CUSTOMERS admin user admin identified by oracle12;</div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This will create a PDB named ‘CUSTOMERS’ in our CDB.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">5</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> create lockdown profile p2;<br />
+									       <b>SQL</b>> alter lockdown profile p2 disable option=('Partitioning');
+	 	   					   		  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>A lockdown profile named ‘p2’ will be created to disable the ‘Partitioning’ option. </div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">6</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> select * from DBA_LOCKDOWN_PROFILES;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>The current list of lockdown profiles including ‘p2’ will be displayed.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">7</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> alter session set container = CUSTOMERS;<br />
+										   <b>SQL</b>> select parameter, value from v$option where parameter = ‘Partitioning’;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will be connected to the PDB that we created earlier and shown the current value of the option ‘Partitioning’.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">8</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										   <b>SQL</b>> create table t1 (c1 number) partition by hash (c1);<br />
+										   <b>SQL</b>> drop table t1;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This will create a partitioned table and drop it. However, please remember that the lockdown profile ‘p2’ is not in effect yet.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">9</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> alter system set pdb_lockdown = p2;<br />
+										   <b>SQL</b>> alter pluggable database close;<br />
+										   <b>SQL</b>> alter pluggable database open;
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will set the current lockdown profile to ‘p2’ and bounce the database in order for the changes to take effect.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">10</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div><b>SQL</b>> create table t1 (c1 number) partition by hash (c1);</div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This time, you will run into the error “ORA-00439: feature not enabled : Partitioning” since the lockdown profile ‘p2’ is in effect.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">11</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+											<b>SQL</b>> alter session set container = cdb$root;<br />
+											<b>SQL</b>> drop lockdown profile p2;<br />
+											<b>SQL</b>> alter session set container = CUSTOMERS;<br />
+											<b>SQL</b>> alter pluggable database close;<br />
+											<b>SQL</b>> alter pluggable database open;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will connect to the root, drop  the lockdown profile ‘p2’, and connect back to the ‘CUSTOMERS’. In order to see the effect of dropped lockdown profile, it will bounce the database.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">12</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										<b>SQL</b>> create table t1 (c1 number) partition by hash (c1);<br />
+										<b>SQL</b>> drop table t1;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will successfully create a partitioned table and drop it since the lockdown profile ‘p2’ was dropped.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">13</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> alter pluggable database close;<br />
+									  <b>SQL</b>> exit;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This final step will close the PDB.</div>
+                  			      </td>
+                  			  </tr>
+                  	   </table>
+                  </div>
+				  
+				  <h2>Lab 3: Lockdown Profiles – Disable Feature ‘NETWORK_ACCESS’</h2>
+				  <p>In some cases, customers may want to restrict the operations within a PDB that use the network to communicate outside the PDB. This lab will demonstrate how a lockdown profile can disable the network access features and prevent the outgoing network traffic in a PDB.</p>
+				  <p><b>Lab Details:</b> This lab will help you to disable ‘NETWORK_ACCESS’ feature via a lockdown profile.</p>
+				  <p><b>Database targets to be used:</b> cdb1</p>
+				  <p><font color="#FF0000">Please go through the following steps:</font></p>
+				  <ul>
+    			  	  <li><font color="#FF0000"><b>$</b> cd  /u01/HOL/lockdown_profiles</font></li>
+    				  <li><font color="#FF0000"><b>$</b> source cdb1.env</font></li>
+  					  <li><font color="#FF0000"><b>$</b> sqlplus /nolog</font></li>
+    				  <li><font color="#FF0000"><b>SQL</b>> @lab3.sql</font></li>
+				  </ul>
+				  <p> The following table lists the summary of steps executed in this exercise. 
+				  <div>
+				  	   <table width="100%" border="1" cellpadding="6" bordercolor="#000000" cellspacing="2" bgcolor="#ffffff">
+                  	   		  <tr valign="top">
+                  			  	  <td style="width: 10%">
+                  				  	  <div align="center">Step</div>
+                  				  </td>
+                  				  <td style="width: 45%">
+								  	  <div align="center">Action</div>
+                  				  </td>
+								  <td style="width: 45%">
+								  	  <div align="center">Comments</div>
+                  				  </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">1</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> cd /u01/HOL/lockdown_profiles<br />
+										   <b>$</b> source cdb1.env
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will setup the Oracle environment so that cdb1 will be ready to run our lab script.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">2</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> sqlplus / as sysdba
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will login to SQLPlus and go through the following steps to complete our third lockdown profiles lab.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">3</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> set lines 200 pages 1000 <br />
+										   <b>SQL</b>> column PROFILE_NAME FORMAT A15 <br />
+										   <b>SQL</b>> column RULE_TYPE FORMAT A10<br />
+										   <b>SQL</b>> column RULE FORMAT A20 <br />
+										   <b>SQL</b>> column CLAUSE FORMAT A10 <br />
+										   <b>SQL</b>> column OPTION$ FORMAT A20 <br />
+										   <b>SQL</b>> column VALUE$ FORMAT A5 <br />
+										   <b>SQL</b>> column STATUS FORMAT A8 <br />
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will format the columns of DBA_LOCKDOWN_PROFILES table so that the available lockdown profiles can be displayed smoothly in the next steps.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">4</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div><b>SQL</b>> create pluggable database ORDERS admin user admin identified by oracle12;</div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This will create a PDB named ‘ORDERS’ in our CDB.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">5</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> create lockdown profile p3;<br />
+									       <b>SQL</b>> alter lockdown profile p3 disable feature=('NETWORK_ACCESS');
+	 	   					   		  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>A lockdown profile named ‘p3’ will be created to disable the ‘NETWORK_ACCESS’. </div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">6</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> select * from DBA_LOCKDOWN_PROFILES;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>The current list of lockdown profiles including ‘p3’ will be displayed.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">7</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> alter session set container = ORDERS;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will be connected to the PDB that we created earlier.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">8</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										   <b>SQL</b>> @sendmail.sql<br />
+										   <b>SQL</b>> execute send_mail('scott.tiger@oracle.com', 'Lockdown Lab 3', 'Testing network access.');
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This will create and execute a PL/SQL procedure to send email via ‘UTL_SMTP’ and ‘UTL_TCP’ which are part of  ‘NETWORK_ACCESS’. However, please remember that the lockdown profile ‘p3’ is not in effect yet.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">9</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> alter system set pdb_lockdown = p3;<br />
+										   <b>SQL</b>> alter pluggable database close;<br />
+										   <b>SQL</b>> alter pluggable database open;
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will set the current lockdown profile to ‘p3’ and bounce the database in order for the changes to take effect.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">10</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div><b>SQL</b>> execute send_mail('scott.tiger@oracle.com', 'Lockdown Lab 3', 'Testing network access.');</div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This time, you will run into the error “ORA-01031: insufficient privileges” since the lockdown profile ‘p3’ is in effect.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">11</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+											<b>SQL</b>> alter session set container = cdb$root;<br />
+											<b>SQL</b>> drop lockdown profile p3;<br />
+											<b>SQL</b>> alter session set container = ORDERS;<br />
+											<b>SQL</b>> alter pluggable database close;<br />
+											<b>SQL</b>> alter pluggable database open;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will connect to the root, drop  the lockdown profile ‘p3’, and connect back to the ‘ORDERS’. In order to see the effect of dropped lockdown profile, it will bounce the database.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">12</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										<b>SQL</b>> execute send_mail('scott.tiger@oracle.com', 'Lockdown Lab 3', 'Testing network access.');
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>It will successfully execute the procedure since the lockdown profile ‘p3’ was dropped.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">13</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> alter pluggable database close;<br />
+									  <b>SQL</b>> alter session set container = cdb$root;<br />
+									  <b>SQL</b>> drop pluggable database SALES including datafiles;<br />
+									  <b>SQL</b>> drop pluggable database CUSTOMERS including datafiles;<br />
+									  <b>SQL</b>> drop pluggable database ORDERS including datafiles;<br />
+									  <b>SQL</b>> exit;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>This final step will close the ORDERS PDB, connect to the root and drop all PDBs that we created previously.</div>
+                  			      </td>
+                  			  </tr>
+                  	   </table>
+                  </div>
+
+				  <br /><br /><br /> <br /><br /><br /><br /><br />
+			 </div>
+		</div>
+  </body>
+</html>

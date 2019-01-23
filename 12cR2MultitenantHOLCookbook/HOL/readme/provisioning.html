@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Provisioning</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+	
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+		   
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <h2> Provisioning: Hot Clone, Refresh and Relocate </h2>
+              <p> If you are looking to improve on your operational efficiency this is the section for you. In this section we will cover three very important features in a single lab.The first feature will cover PDB Hot clones, followed by PDB refresh and then finally a PDB relocate. 
+              <br> 
+              <h3> PDB Hot clones </h3>
+              <p> The time to provision a database can take days to weeks. The effort to keep that database in sync with critical, production data is yet another challenge, particularly as that data continues to grow. PDB hot cloning demonstrates the ease of online database provisioning of ‘hot’ data with little or no impact on the source database.OPEX saving with streamlined cloning operations, improved time to market through fast online database provisioning in sync with production data, CAPEX saving on robust, fully integrated cloning solution, easy integration with automation frameworks, DBaaS. OPEX saving with streamlined cloning operations, improved time to market through fast online database provisioning in sync with production data, CAPEX saving on robust, fully integrated cloning solution, easy integration with automation frameworks, DBaaS. </p>
+              <h3> PDB Refresh </h3>
+              <p> PDB Hot Cloning provides fast provisioning of hot data, however, to keep in sync with the source, hot cloning still requires one to drop and recreate the clone from source, or, unplug, archive and drop the PDB and then recreate from source. PDB hot cloning is a required technology for fast cloning on hot data, however, operationally speaking, hot clone by itself is cumbersome when there is a requirement to keep in sync with the source and incur little data copy costs. PDB refresh addresses this requirement. PDB refresh provides a means to hot clone a refreshable PDB master clone from which test, dev, UAT and BI environments can clone. A refreshable clone copies the base source once, and then maintains a synchronized copy based on iterative redo apply and transaction rollback at open to ensure transaction consistency. This lab walks you through creating a refreshable master clone and refreshing the master clone from a hot data source. In addition to the business benefits described above for PDB hot cloning, PDB refresh keeps a master clone in sync with an advancing hot data source with much less data copy than iterative hot clones. This allows agile development on hot data without impacting the source.</p>
+              <h3> PDB Relocation </h3>
+              <p> It is not uncommon that a database may go down for planned maintenance, or non-critical workload would need to be stopped to satisfy the compute resource requirements of more important workload. Or, you simply want to migrate your database to new hardware. PDB Near Zero Downtime (NZD) Relocate is intended to address these use cases by providing online relocation of a PDB from one physical server to another with little or no impact to the connected clients. </p> 
+			 <br>
+                        <p> <b> Steps for this lab </b></p>
+			  <ul>
+				<li> Open a terminal window </li>
+                                <li> change directory to <b>/u01/HOL/provisioning</b> </li>
+                                <li> source the environment. At command prompt execute <b>$source cdb1.env </b></li>
+                                <li> sqlplus /nolog </li>
+                                <li> At the SQL prompt execute <b> SQL>@01.provision_lab.sql </b> </li>
+                                <br><br>This is a self guided script that will walk you through the three features mentioned above.
+			  </ul>
+             </div>
+      </div>
+  </body>
+</html>

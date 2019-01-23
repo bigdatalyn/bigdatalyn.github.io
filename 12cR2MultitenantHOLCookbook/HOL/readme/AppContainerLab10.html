@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 10: Diagnosing and Correcting Problems, and Restarting
+Sync</h3>
+  			 <h4>Overview</h4>
+  			 <p>In Lab10 we explore the <span class=SpellE>restartability</span>
+of the patching process. To demonstrate this, we do the following:
+					<ol>
+ 						 <li>Deliberately make a manual change to NYC that
+will conflict with applying patch 301.
+						 </li>
+ 						 <li>Attempt to sync NYC to apply the patch – anticipating a failure.</li>
+  					    <li>Query relevant DBA views to identify the problem.</li>
+  					    <li>Resolve the problem and re-start the sync, which should now succeed.</li>
+					</ol>   
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab10.fld/image001.gif" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 <ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>@10.Diagnose_Restart.sql </b> </li>
+				</ul>
+			 
+			 <h4>Review of Application Container Lab10:</h4>
+			 <p class=MsoNormal>In this lab, we diagnosed a problem in applying a patch, resolved it, and successfully restarted the patch application process. The detailed steps were: 
+			 		<ol>
+ 						 <li>Deliberately make a manual change to NYC that will conflict with applying patch 301.
+						 </li>
+ 						 <li>Attempt to sync NYC to apply the patch – anticipating a failure.</li>
+  					    <li>Query relevant DBA views to identify the problem.</li>
+  					    <li>Resolve the problem and re-start the sync, which now succeeded.</li>
+					</ol> 
+			 </p>
+
+
+			<h4>Detailed Steps</h4>
+
+<h4>Phase 1. Manual change in NYC.</h4>
+
+<p class=MsoNormal>Here, we have deliberately added an index in NYC that we
+know will clash with patch 301. In the next <span class=GramE>step</span> we're
+going to apply that patch, to observe the conflict.</p>
+
+<h4>Phase 2. Sync Application PDB for franchise / tenant NYC to apply patch.</h4>
+
+<p class=MsoNormal>The patch application failed, with error message</p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Courier'>ORA-00955:
+name is already used by an existing object<o:p></o:p></span></p>
+
+<p class=MsoNormal>In the previous <span class=GramE>lab</span> we learned
+about some of the DBA views that are relevant to Application Container. Let's
+use that knowledge to pinpoint the specific problem encountered here.</p>
+
+
+<h4>Phase 3. Diagnose the problem.</h4>
+
+<p class=MsoNormal><span class=GramE>So</span> the failure was in step 2 –
+adding the index. As expected, this failed, because the index already exists in
+this PDB. We <span class=GramE>have to</span> fix this problem before we can
+proceed.</p>
+
+<h4>Phase 4. Fix the problem and restart the patch application.</h4>
+
+<p class=MsoNormal>The appropriate fix in this case is to drop the
+locally-created index. We'll do that, and then attempt to re-apply the patch.
+This time, the patch applied successfully. Recall again, however, the sequence
+of operations in Patch 301.</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l1 level1 lfo6;tab-stops:list -.25in'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Add column <span class=SpellE>wm_Orders.Financial_Quarter_Code</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-outline-level:1;mso-list:l1 level1 lfo6;tab-stops:
+list -.25in'><![if !supportLists]><span style='mso-bidi-font-family:Calibri;
+mso-bidi-theme-font:minor-latin'><span style='mso-list:Ignore'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Create
+index wm_Orders_M1 on <span class=SpellE>wm_Orders</span>.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-outline-level:1;mso-list:l1 level1 lfo6;tab-stops:
+list -.25in'><![if !supportLists]><span style='mso-bidi-font-family:Calibri;
+mso-bidi-theme-font:minor-latin'><span style='mso-list:Ignore'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><![endif]>Add
+rows to <span class=SpellE>wm_List_of_Values</span>.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-outline-level:1;mso-list:l1 level1 lfo6;tab-stops:list -.25in'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Update orders to specify the appropriate
+financial quarter.</p>
+
+<p class=MsoNormal>It's important to note that it was the second step that
+failed. The first had already succeeded. All we did was to restart the patch
+application. However, the previous failed partial patch application was
+recorded with enough information to know at which point to resume. <span
+class=GramE>This is why</span> the second attempt to apply the patch succeeded
+(and did not fail at step 1 because the column created in that step already
+exists).</p>
+
+					<a style="text-decoration: underline" href="AppContainerLab11.html"><b>Click Here to Go to Lab 11</b></a>
+			  
+			<br>
+			<br>
+			<br>
+			<br>
+			  
+			 </div>
+		</div>
+  </body>
+</html>

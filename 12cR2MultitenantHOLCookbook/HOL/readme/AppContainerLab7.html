@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Lab 7: Sharing Common Data</h3>
+  			 <h4>Overview</h4>
+  			 <p>In Lab7 we introduce the advanced concept of data sharing.
+We have already seen how Multitenant, with Application Containers, can provide an
+instant SaaS architecture for an application previously architected for
+standalone deployment. Technically this is done by installing a master
+application definition in an Application Root. Application PDBs for each tenant
+/ franchise are plugged into this Application Root and the metadata for the
+database components of the Application definition is served from the
+Application root. However, so <span class=GramE>far</span> all data, including
+data which may be considered part of the application definition (&quot;seed
+data&quot;) has been local. In other words, there's a replica of this seed data
+in every Application PDB. various franchise PDBs. In this lab we'll see how, in
+addition to metadata, common data may also be shared from Application Root. To
+do this we'll upgrade application <span class=SpellE>wmStore</span> to v3.0 and
+introduce various powerful data sharing capabilities.  
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLab07.fld/image001.gif" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <h4>Execution</h4>
+			 <ul>
+					<li> Open a terminal window </li>
+                	<li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                	<li> source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                	<li> <b>sqlplus /nolog</b> </li>
+               	 	<li> At the SQL prompt execute <b> SQL>@07.Data_Sharing.sql </b> </li>
+				</ul>
+			 
+			 <h4>Review of Application Container Lab7:</h4>
+			 <p class=MsoNormal>In this lab, we have explored the advanced concept of data
+sharing,</p>
+
+<p class=MsoNormal>through the following steps:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l1 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Upgrade Application <span class=SpellE>wmStore</span>
+to v3.0.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>a.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Add a new table to the application, defined as
+sharing = data.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>b.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Populated this table with a common set of data.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>c.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Change table <span class=SpellE>wm_Campaigns</span>
+to be sharing = data<br>
+(centrally-defined data only).</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>d.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Change table <span class=SpellE>wm_Products</span>
+to be sharing = extended data<br>
+(both centrally-defined and locally-defined data).</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>e.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>This upgrade requires careful timing of
+redefinition of seed data in these two tables. (The seed data needs to be
+removed from the Application PDBs and re-created in the Application Root.)</p>
+
+<p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in;mso-list:l3 level1 lfo4'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>f.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Update data in <span class=SpellE>wm_Orders</span>
+to set the appropriate value for the newly added <span class=SpellE>denormalized</span>
+column.</p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;mso-add-space:
+auto;text-indent:-.25in;mso-list:l1 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Propagate the Upgrade to all franchises.</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l1 level1 lfo2'><![if !supportLists]><span
+style='mso-bidi-font-family:Calibri;mso-bidi-theme-font:minor-latin'><span
+style='mso-list:Ignore'>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Query the <span class=SpellE>wm_Products</span>
+table in a franchise PDB to see the sources of data.</p>
+
+			<h4>Detailed Steps</h4>
+
+<h4>Phase 1: Upgrade <span class=SpellE>wmStore</span> application to v3.</h4>
+
+<p class=MsoNormal style='mso-outline-level:1'>Connect to <span class=SpellE>wmStore_Admin</span></p>
+
+<p class=MsoNormal style='mso-outline-level:1'><o:p>&nbsp;</o:p></p>
+
+<h4>Phase 2. Upgrade the application schema.</h4>
+
+<p class=MsoNormal>Create a new List of Values table. For the purposes of this
+demo, these values will be centrally defined only. (That is, they may be
+thought of as &quot;seed data&quot; that is part of the application
+definition.) Here we have created a new table, and specified that its data is
+to be centrally defined and shared from Application Root to all application
+PDBs. In the next <span class=GramE>step</span> we go through the routine
+exercise of adding data to this new table.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<h4>Phase 3. Add corresponding new common seed data.</h4>
+
+<p class=MsoNormal>Now, things get interesting! In the next section, we convert
+the sharing mode of two existing tables:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l2 level1 lfo6'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span class=SpellE>wm_Campaigns</span>:<span
+style='mso-tab-count:1'>&nbsp;&nbsp; </span>Centrally defined (sharing = data)</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l2 level1 lfo6'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]><span class=SpellE>wm_Products</span>:<span
+style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Centrally
+and locally defined (sharing = extended data)</p>
+
+<p class=MsoNormal>Notice how we handle the seed data. In each case, we must
+disable any constraints that reference data which is about to be
+&quot;moved&quot; from the application PDB to the Root. (Technically this is a
+delete from the application PDB, followed by an insert into Application Root.
+We need the delete to work.)</p>
+
+<h4>Phase 4. Convert sharing mode of tables:</h4>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-outline-level:1;mso-list:l0 level1 lfo8'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Campaigns are centrally defined</p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;mso-add-space:auto;
+text-indent:-.25in;mso-list:l0 level1 lfo8'><![if !supportLists]><span
+style='font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
+Symbol'><span style='mso-list:Ignore'>_<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><![endif]>Products are both centrally and locally defined</p>
+
+<h5>Phase 4a. Disable constraints.</h5>
+
+<p class=MsoNormal>This is required because in these steps we will be deleting
+data from the Application PDBs and re-creating it in Application Root. We don't
+want the delete statements to fail because of these constraints.</p>
+
+<h5>Phase 4b. Delete the seed data from these tables.</h5>
+
+<p class=MsoNormal>These statements will execute in the Application PDBs
+because the sharing mode of the tables is currently sharing=metadata.</p>
+
+<h5>Phase 4c. Change the sharing mode of these tables.</h5>
+
+<h5>Phase 4d. Re-insert the seed data. These statements will now execute in
+Application Root.</h5>
+
+<h5>Phase 4e. Re-enable constraints.</h5>
+
+<p class=MsoNormal>These steps need to be skipped until cross-container
+constraints are supported.</p>
+
+<p class=MsoNormal>In the previous section, we converted the sharing mode of
+two existing tables.</p>
+
+
+<h4>Phase 5. Declare the end of the upgrade.</h4>
+
+<p class=MsoNormal>We have now completed the definition of the upgrade to v3 of
+<span class=SpellE>wmStore</span>. As before, this upgrade script is defined in
+a &quot;begin / end&quot; block. Between the begin and end statements, much of
+the upgrade was a typical upgrade script. There was also some special handling
+to convert the data sharing mode of some of the tables. We have also seen how
+the steps in the upgrade script are captured in Application Root, to be
+replayed subsequently in the Application PDBs as they are <span class=SpellE>sync'ed</span>.
+The next step, therefore is to synchronize the Application PDBs for all
+tenants. In this lab, we'll do this by executing a script to do this in a
+single step.</p>
+
+<h4>Phase 6. Sync all Application PDBs.</h4>
+
+<p class=MsoNormal>This will be accomplished by executing a script. Application
+PDBs for all tenants / franchises have now been synchronized with the latest
+version of <span class=SpellE>wmStore</span>. In the next step, we'll connect
+to a <span class=GramE>particular franchise's</span> Application PDB and look
+at the data in table <span class=SpellE>wm_Products</span>. The &quot;sharing
+mode&quot; of this table was changed to &quot;sharing = extended data&quot; in
+an earlier step of this Lab. In the next <span class=GramE>step</span> we'll
+see the source of the data for the various rows in this table.</p>
+
+<h4>Phase 7: Query products and campaigns prior to upgrade.</h4>
+
+					<a style="text-decoration: underline" href="AppContainerLab8.html"><b>Click Here to Go to Lab 8</b></a>
+			  
+			<br>
+			<br>
+			<br>
+			<br>
+			  
+			 </div>
+		</div>
+  </body>
+</html>

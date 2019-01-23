@@ -1,0 +1,1 @@
+create database link proxy_pdb_link connect to system identified by oracle12 using '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = cdb1)))'

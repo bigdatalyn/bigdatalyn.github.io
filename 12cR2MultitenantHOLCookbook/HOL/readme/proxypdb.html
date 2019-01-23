@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Proxy PDBs</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+	
+		   a:link {color: white}
+           a:visited {color: white}
+           a:hover{color: black}
+		   
+    </style> 
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html"><b>Before you begin</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="appcontainer.html"><b>Application Containers</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="proxypdb.html"><b>Proxy PDBs</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="lockdown.html"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="provisioning.html"><b>Provisioning</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'>
+				  
+                                  <CENTER><u><h2> Proxy PDB </h2></u></CENTER>
+				  <p>A Proxy PDB provides a local context to operate a remote PDB, delivering location transparency as PDBs are moved for load balancing or migration to and from the cloud.</p>
+<p> This section has 2 labs. This second lab is optional and touches concepts in application containers as well.
+			          <CENTER><img src="proxyPDB.gif" alt="Proxy PDB" style="width:500px;height:300px;"></CENTER>
+				  <h2>Lab 1: Proxy PDBs – Basic Functionality</h2>
+				  <p>In this introductory lab we create a Proxy PDB and demonstrate how operations in the Proxy PDB are transparently applied to the remote PDB.</p>
+			 	  <p>Location transparency means allows application to run unchanged, while the underlying application database (a PDB), may be moved between servers or data centers for operational reasons.</p>
+				  <p><b>Lab Overview:</b></p>
+				  <ol>
+					<li>Connect to CDB$Root of CDB1</li>
+					<li>Create a PDB – snowsports</li>
+					<li>Begin to install an application schema in this PDB</li>
+					<li>Create a Proxy PDB of snowsports in CDB2</li>
+					<li>Connect to that Proxy PDB and continue installing the application</li>
+					<li>Note that the behavior is identical, whether connected directly to PDB snowsports, or to the Proxy PDB in a remote CDB</li>
+				  </ol>
+				  <p><b>Database targets to be used:</b> CDB1 and CDB2</p>
+				  <p><font color="#FF0000">Please go through the following steps:</font></p>
+				  <ul>
+    			  	  <li><font color="#FF0000"><b>$</b> cd  /u01/HOL/proxy_pdb</font></li>
+    				  <li><font color="#FF0000"><b>$</b> source cdb1.env</font></li>
+  					  <li><font color="#FF0000"><b>$</b> sqlplus /nolog</font></li>
+    				  <li><font color="#FF0000"><b>SQL</b>> @01.ProxyPDB_Basic.sql</font></li>
+				  </ul>
+				  
+				   
+				  <div>
+				  	   <table width="100%" border="1" cellpadding="6" bordercolor="#000000" cellspacing="2" bgcolor="#ffffff">
+                  	   		  <tr valign="top">
+                  			  	  <td style="width: 10%">
+                  				  	  <div align="center">Step</div>
+                  				  </td>
+                  				  <td style="width: 45%">
+								  	  <div align="center">Action</div>
+                  				  </td>
+								  <td style="width: 45%">
+								  	  <div align="center">Comments</div>
+                  				  </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">1</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> cd /u01/HOL/proxy_pdb<br />
+										   <b>$</b> source cdb1.env
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Set up the Oracle environment so that CDB1 will be ready to run our lab script.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">2</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> sqlplus /nolog
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will login to SQLPlus and go through the following steps to complete our first Proxy PDB lab.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">3</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> define PDB_Name = "snowsports"<br />
+										   <b>SQL</b>> create pluggable database &PDB_Name admin user app_owner identified by app_owner roles=(dba);<br />
+										   <b>SQL</b>> alter pluggable database &PDB_Name open;<br />
+										   <b>SQL</b>> alter session set container = &PDB_Name;
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Connect to CDB1 and create PDB snowsports.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">4</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										<b>SQL</b>> alter user app_owner quota unlimited on system;<br />
+										<b>SQL</b>> create table app_owner.sales_data(year number(4), region varchar2(10), quarter varchar2(4), revenue number);<br />
+										<b>SQL</b>> @populate1
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Begin to create the application schema.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">5</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> desc app_owner.sales_data<br />
+									       <b>SQL</b>> select * from app_owner.sales_data;
+	 	   					   		  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Review the progress so far. We have created and populated table sales_data.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">6</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> connect sys/oracle12@//localhost/cdb2 as sysdba
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Switch to CDB2.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">7</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> create pluggable database snowsports_proxy as proxy from snowsports@proxy_pdb_link;<br />
+										   <b>SQL</b>> alter pluggable database snowsports_proxy open;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Create and open a Proxy PDB in this CDB (CDB2) of PDB snowsports (in CDB1).</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">8</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										   <b>SQL</b>> connect app_owner/app_owner@//localhost/snowsports_proxy
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Switch to the proxy PDB.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">9</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> select table_name from all_tables where owner = 'APP_OWNER';<br />
+										   <b>SQL</b>> select * from app_owner.sales_data;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Show the tables in the schema and the data in the table. Note that it’s identical to the data created previously in the remote PDB.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">10</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										<b>SQL</b>> create table app_owner.country(country_id number, country_name varchar2(20));<br />
+										<b>SQL</b>> insert into app_owner.country values(1, 'usa');<br />
+										<b>SQL</b>> insert into app_owner.country values(44, 'uk');<br />
+										<b>SQL</b>> insert into app_owner.country values(86, 'china');<br />
+										<b>SQL</b>> insert into app_owner.country values(91, 'India');<br />
+										<b>SQL</b>> create table app_owner.zipcodes(code varchar2(5), country_id number, region varchar2(10));<br />
+										<b>SQL</b>> insert into app_owner.zipcodes values('08820','1','east');<br />
+										<b>SQL</b>> insert into app_owner.zipcodes values('10005','1','east');<br />
+										<b>SQL</b>> insert into app_owner.zipcodes values('44332','1','north');<br />
+										<b>SQL</b>> insert into app_owner.zipcodes values('94065','1','west');<br />
+										<b>SQL</b>> insert into app_owner.zipcodes values ('73301','1','south');<br />
+										<b>SQL</b>> commit
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Continue creating the application schema, and populating it with data – this time from inside the Proxy PDB.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">11</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+											<b>SQL</b>> select table_name from all_tables where owner = 'APP_OWNER'<br />
+											<b>SQL</b>> select * from app_owner.country;<br />
+											<b>SQL</b>> select * from app_owner.zipcodes;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Show tables in the schema. We should now see the extra two tables. Show the data in the two new tables.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">12</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> connect app_owner/app_owner@//localhost/snowsports
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Now connect back to PDB snowsports in CDB1.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">13</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> select table_name from all_tables where owner = 'APP_OWNER';<br />
+									  <b>SQL</b>> select * from app_owner.sales_data;<br />
+									  <b>SQL</b>> select * from app_owner.country;<br />
+									  <b>SQL</b>> select * from app_owner.zipcodes;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Show tables in the schema. We should now see the extra two tables. Show the data in these tables.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">14</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> @02.ProxyPDB_Cleanup_Basic.sql
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Cleanup after Lab 1.</div>
+                  			      </td>
+                  			  </tr>
+                  	   </table>
+                  </div>
+				  
+				  <h2>Lab 2: Proxy PDBs – Advanced Functionality</h2>
+				  <p><i>A Proxy PDB provides a local context to operate a remote PDB, delivering location transparency as PDBs are moved for load balancing or migration to and from the cloud.</i></p>
+				  <p>In this advanced lab we create an Application Container with two tenant PDBs. We create some application code which aggregates data across the Application Container. Then we migrate one of the tenant PDBs to an Application Container in a remote CDB, but create a Proxy PDB of this (now remote) PDB in the original Application Container. The application code runs unchanged, demonstrating location transparency.</p>
+				  <p><b>Lab Overview:</b></p>
+				  <ol>
+					<li>In CDB1:</li>
+					<ol type="a">
+						<li>Create application container wintersports</li>
+						<li>Create tenant PDBs skis and boards in wintersports</li>
+						<li>Write application code in wintersports (aggregates sales across all PDBs in container)</li>
+						<li>Unplug PDB boards</li>
+					</ol>
+					<li>In CDB2:</li>
+					<ol type="a">
+						<li>Create application container snowsports_abroad</li>
+						<li>Plug in PDB boards as boards_abroad</li>
+					</ol>
+					<li>In CDB1:</li>
+					<ol type="a">
+						<li>Create Proxy PDB boards from boards_abroad@CDB2</li>
+						<li>Execute application code</li>
+						<li>Note that this runs unchanged. This is an example of location transparency</li>
+					</ol>
+				  </ol>
+				  <p><b>Database targets to be used:</b> CDB1 and CDB2</p>
+				  <p><font color="#FF0000">Please note you can go through the following steps:</font></p>
+				  <ul>
+    			  	  <li><font color="#FF0000"><b>$</b> cd  /u01/HOL/proxy_pdb</font></li>
+    				  <li><font color="#FF0000"><b>$</b> source cdb1.env</font></li>
+  					  <li><font color="#FF0000"><b>$</b> sqlplus /nolog</font></li>
+    				  <li><font color="#FF0000"><b>SQL</b>> @03.ProxyPDB_AdvSetup_Full.sql</font></li>
+					  <li><font color="#FF0000"><b>SQL</b>> @04.ProxyPDB_Advanced.sql</font></li>
+				  </ul>
+				   <p> A summary of the steps executed in this lab is listed below in this table </p> 
+				   
+				  <div>
+				  	   <table width="100%" border="1" cellpadding="6" bordercolor="#000000" cellspacing="2" bgcolor="#ffffff">
+                  	   		  <tr valign="top">
+                  			  	  <td style="width: 10%">
+                  				  	  <div align="center">Step</div>
+                  				  </td>
+                  				  <td style="width: 45%">
+								  	  <div align="center">Action</div>
+                  				  </td>
+								  <td style="width: 45%">
+								  	  <div align="center">Comments</div>
+                  				  </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">1</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> cd /u01/HOL/proxy_pdb<br />
+										   <b>$</b> source cdb1.env
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Set up the Oracle environment so that CDB1 will be ready to run our lab script.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">2</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>$</b> sqlplus /nolog
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>You will login to SQLPlus and go through the following steps to complete our second Proxy PDB lab.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">3</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> @03.ProxyPDB_AdvSetup_Full.sql
+
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>
+										Setup for Lab2, which does the following:
+										<ol>
+											<li>Create application container wintersports</li>
+											<li>Create application snowsports</li>
+											<li>Create tenant PDBs skis and boards</li>
+										</ol>
+									   </div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">4</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										<b>SQL</b>> connect app_owner/app_owner@//localhost/wintersports
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Connect to application container wintersports in CDB1.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">5</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> @year_wise_sum_new.sql
+	 	   					   		  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Run this "application code" to look at the data in our two PDBs.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">6</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> connect sys/oracle12@//localhost/cdb1 as sysdba;<br />
+										   <b>SQL</b>> alter pluggable database boards close immediate;<br />
+										   <b>SQL</b>> host rm -rf /tmp/boards.pdb<br />
+										   <b>SQL</b>> alter pluggable database boards unplug into '/tmp/boards.pdb';<br />
+										   <b>SQL</b>> drop pluggable database boards including datafiles;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Unplug the boards PDB. Note the .pdb file extension creates a PDB archive, which is a self-contained unplugged PDB. (Think of this as a zipped up archive of the XML manifest and all the datafiles.)</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">7</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> connect sys/oracle12@//localhost/cdb2 as sysdba
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Switch to CDB$Root in CDB2.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">8</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										   <b>SQL</b>> create pluggable database wintersports_abroad as application container from wintersports@proxy_pdb_link;<br />
+										   <b>SQL</b>> alter pluggable database wintersports_abroad open;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Create application root wintersports_abroad in CDB2.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">9</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  	   <b>SQL</b>> alter session set container = wintersports_abroad;<br />
+										   <b>SQL</b>> create pluggable database boards_abroad using '/tmp/boards.pdb';<br />
+										   <b>SQL</b>> alter pluggable database boards_abroad open;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Switch to this application container. Plug in and open the PDB boards_abroad from the PDB archive.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">10</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+										<b>SQL</b>> connect sys/oracle12@//localhost/wintersports as sysdba
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Switch back to application root wintersports in CDB1.</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">11</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+											<b>SQL</b>> create database link wintersports_abroad_link connect to system identified by oracle12 using '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SERVICE_NAME = wintersports_abroad)))';
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Create a database link to wintersports_abroad in CDB2.</div>
+                  			      </td>
+                  			  </tr>
+                  		  	  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">12</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> create pluggable database boards as proxy from boards_abroad@wintersports_abroad_link;<br />
+									  <b>SQL</b>> alter pluggable database boards open;
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Create and open a Proxy PDB of the boards_abroad PDB.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">13</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> show pdbs
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Now show PDBs. Note that once again we have two PDBs in application container wintersports in CDB1 - SKIS and BOARDS. However, the base PDB BOARDS, was moved to CDB2 and renamed BOARDS_ABROAD. PDB BOARDS here is a Proxy PDB of that one.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">14</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> connect app_owner/app_owner@//localhost/wintersports
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Connect to the application root (not as sysdba).</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">15</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> @year_wise_sum_new.sql
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Now re-execute query to have another look at the data. Here we are executing the same "application code" as before. The use of the PDB allows this application code to run unchanged, even though the base PDB has moved to CDB2. This is an example of location transparency.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">16</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> 
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Please do some experimentation with this setup.</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center">17</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div>
+									  <b>SQL</b>> @05.ProxyPDB_Cleanup_Adv.sql
+									  </div>
+                  			      </td>
+								  <td>
+                  				  	  <div>Cleanup after Lab 2.</div>
+                  			      </td>
+                  			  </tr>
+                  	   </table>
+                  </div>
+			
+				  <br /><br /><br /> <br /><br /><br /><br /><br />
+			 </div>
+		</div>
+  </body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Fri, 09 Oct 2015 17:09:10 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Application Containers</title>
+    <style type='text/css'>
+    	   html, body {height: 100%; margin: 0; font-family: sans-serif}
+    	   #content {width: 100%; height: 100%}
+   		   #left {width: 250px; height: 100%; float: left; position:fixed; padding-left: 20px; padding-right: 40px; background-color: rgb(255, 37, 0); font-size: large}
+   		   #right {margin-left: 250px; height: 100%; padding-top: 30px; padding-right: 80px; padding-left:150px; font-size:medium}
+		   #list {margin-bottom: 40px; color: white}
+		   #list2 {margin-bottom: 10px; color: black}
+
+		   a.class1:link {color: white}
+           a.class1:visited {color: white}
+           a.class1:hover{color: black}
+           
+           a.class2:link {color: black}
+           a.class2:visited {color: black}
+           a.class2:hover{color: black}
+
+    </style>
+    <!--[if IE]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  		<div id='content'>
+   			 <div id='left'>
+				  <a href="http://www.oracle.com/index.html" target="_blank">
+					<img src="oracle.png" alt="Oracle" width="250" height="150">
+				  </a>
+			 	  <ul>
+				  	  <li id="list"><a style="text-decoration: none" href="index.html" class="class1"><b>Home</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="begin.html" class="class1"><b>Before you begin</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="provisioning.html" class="class1"><b>Provisioning</b></a></li>
+				  	  <li id="list"><a style="text-decoration: none" href="lockdown.html" class="class1"><b>Lockdown Profiles</b></a></li>
+					  <li id="list"><a style="text-decoration: none" href="AppContainer.html" class="class1"><b>Application Containers</b></a></li>
+				  </ul>
+			 </div>
+  			 <div id='right'> <CENTER><u><h2>Application Containers</h2></u></CENTER>
+  			 <h3>Introduction</h3>
+  			 <p>This is a series of 11 hands-on labs designed to familiarize
+			 you with the Application Container functionality of Oracle Multitenant. In
+			 these labs, we follow the journey of a notional company, Walt’s Malts as their
+			 business expands from a single store to a global powerhouse – “from startup to
+			 starship”. 
+			 <br>
+			 <br>
+			 <CENTER><img width=792 height=446 src="wmLabIntro.png" alt="Application Containers"></CENTER>
+			 </p>
+			 
+			 <p class=MsoNormal>These labs will be run in SQL Plus or <span class=SpellE>SQLcl</span>.
+			The lab scripts are in your VM in folder HOL/<span class=SpellE>app_containers</span>.
+			Each lab in this series is run from a single script. These are intended to be
+			run in sequence, as there are dependencies between the scripts. The eight
+			scripts are as follows:</p>
+			
+			<ul>
+				  	  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab1.html"><b>Lab 1 - 01.Instant_SaaS.sql</b></a></li>
+				  	  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab2.html"><b>Lab 2 - 02.Upgrade_v1_v2.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab3.html"><b>Lab 3 - 03.Containers_Queries.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab4.html"><b>Lab 4 - 04.Compatibility.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab5.html"><b>Lab 5 - 05.Expansion_ARRs.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab6.html"><b>Lab 6 - 06.Durable_Location_Transparency.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab7.html"><b>Lab 7 - 07.Data_Sharing.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab8.html"><b>Lab 8 - 08.Patch_301.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab9.html"><b>Lab 9 - 09.DBA_Views.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab10.html"><b>Lab 10 - 10.Diagnose_Restart.sql</b></a></li>
+					  <li id="list2"><a style="text-decoration: underline" href="AppContainerLab11.html"><b>Lab 11 - 11.Container_Map.sql</b></a></li>
+			</ul>
+
+			<h3>Format of Labs</h3>
+
+			<p class=MsoNormal>These labs are in the &quot;<span class=SpellE>EasyLab</span>&quot;
+			format, simulating what you might type in <span class=SpellE>SQLPlus</span> or <span
+			class=SpellE>SQLcl</span>, but saving you the effort and distraction of
+			transcribing from a workbook, so you can focus on what is happening. With <span
+			lass=SpellE>EasyLab</span> scripts, simply start the script, read what's
+			happening and press [Enter] when ready to execute the next batch of commands.
+			Ample explanation accompanies these commands to explain what we're doing. </p>
+			
+			<h3>Initialization</h3>
+			
+			<p class=MsoNormal>Before you begin, you need to set up the environment
+			properly; with the CDBs properly initialized and the required database users in
+			place. To do this, open a terminal window on your VM and issue the following
+			commands:</p>
+
+			<ul>
+				<li> Open a terminal window </li>
+                <li> Change directory to <b>/u01/HOL/app_containers/</b> </li>
+                <li> Source the environment. At command prompt execute <b>source cdb1.env </b></li>
+                <li> <b>sqlplus /nolog</b> </li>
+                <li> At the SQL prompt execute <b> SQL>@Setup_Lab0.sql </b> </li>
+			</ul>
+
+			<p class=MsoNormal>This will execute the scripts required to initialize the
+			environment properly.</p>
+			
+			<h3>Oracle Users</h3>
+			
+			<p class=MsoNormal>We follow Oracle security best practices in that the passwords for default users 
+			Sys and System are locked and expired and two surrogate users are defined to be used in their place. 
+			Security best practices notwithstanding, all passwords for users in these labs are “secret”! 
+			The various users are summarized below.</p>
+			
+			<div>
+				  	   <table width="100%" border="1" cellpadding="6" bordercolor="#000000" cellspacing="2" bgcolor="#ffffff">
+                  	   		  <tr valign="top">
+                  			  	  <td style="width: 20%;font-weight:bold">
+                  				  	  <div align="center">Username</div>
+                  				  </td>
+                  				  <td style="width: 20%;font-weight:bold"">
+								  	  <div align="center">Password</div>
+                  				  </td>
+								  <td style="width: 20%;font-weight:bold"">
+								  	  <div align="center">Common or Local</div>
+                  				  </td>
+                  				  <td style="width: 20%;font-weight:bold"">
+								  	  <div align="center">Scope</div>
+                  				  </td>
+                  				  <td style="width: 20%;font-weight:bold"">
+								  	  <div align="center">Admin Privileges</div>
+                  				  </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center" style="font-weight:bold">c##SysDBA</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div align="center">secret</div>
+                  			      </td>
+								  <td>
+                  				  	  <div align="center">Common</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center">CDB1 & CDB2</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center">SysDBA</div>
+                  			      </td>
+                  			  </tr>
+							  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center" style="font-weight:bold">c##System</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div align="center">secret</div>
+                  			      </td>
+								  <td>
+                  				  	  <div align="center">Common</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center">CDB1 & CDB2</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center">SysOper</div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center" style="font-weight:bold">wmStore_Admin</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div align="center">secret</div>
+                  			      </td>
+								  <td>
+                  				  	  <div align="center">Common</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center">Application wmStore</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center"></div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center" style="font-weight:bold">Terminal_Admin</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div align="center">secret</div>
+                  			      </td>
+								  <td>
+                  				  	  <div align="center">Common</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center">Application Terminal</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center"></div>
+                  			      </td>
+                  			  </tr>
+                  			  <tr valign="top">
+                  			  	  <td>
+                  				  	  <div align="center" style="font-weight:bold">wmAdmin</div>
+                  			      </td>
+                  				  <td>
+                  				  	  <div align="center">secret</div>
+                  			      </td>
+								  <td>
+                  				  	  <div align="center">Local</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center">Application PDBs</div>
+                  			      </td>
+                  			      <td>
+                  				  	  <div align="center"></div>
+                  			      </td>
+                  			  </tr>
+                  	   </table>
+                  </div>
+                  <br>
+				  <br>
+			
+			
+			  
+			 </div>
+		</div>
+  </body>
+</html>
