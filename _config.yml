@@ -65,3 +65,5 @@ excerpt_separator: "\n\n\n\n"
 gems: [jekyll-paginate]
 paginate: 8
 paginate_path: "blog/page:num"
+
+theme: jekyll-theme-slate
