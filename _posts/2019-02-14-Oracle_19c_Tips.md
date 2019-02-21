@@ -31,6 +31,17 @@ Attention: There is no support of Oracle 19c on OL6 or RHEL6!
 
 Both, OL6 and RHEL6 got released a long time ago. RHEL6 is available since November 2010, OL6 since February 2011.
 
+Oracle Database 19c New features
+
+	Automatic Indexing
+	Active Standby DML Redirect
+	Hybrid Partitioned Tables
+	JSON Enhancements
+	Memoptimized Rowstore
+	Quarantine SQL Statements
+	Real Time Statistics
+
+[Database features](https://apex.oracle.com/database-features/)
 
 Have a good work&life! 2019/02 via LinHong
 
