@@ -1,0 +1,139 @@
+
+
+
+
+
+[Building Oracle 19c Docker image](https://medium.com/@marcelo.ochoa/building-oracle-19c-docker-image-ba3027d5f18b)
+
+
+### Download the Exadata database 19c on Edelivery.
+
+[Oracle Software Delivery Cloud](https://edelivery.oracle.com/osdc/faces/SoftwareDelivery)
+
+	[oracle@oel72 oradata]$ tail -f wgetlog-02-21-19-03:15.log
+	153150K .......... .......... .......... .......... ..........  5% 4.98M 5m57s
+	153200K .......... .......... .......... .......... ..........  5% 5.51M 5m57s
+	153250K .......... .......... .......... .......... ..........  5% 9.19M 5m57s
+	153300K .......... .......... .......... .......... ..........  5% 4.53M 5m58s
+	153350K .......... .......... .......... .......... ..........  5% 5.38M 5m58s
+
+
+	[oracle@oel72 oradata]$ du -sm V981623-01.zip
+	2893    V981623-01.zip
+	[oracle@oel72 oradata]$
+### Install Docker on OL7
+
+Ref this documents.
+
+[Install Docker on Oracle Linux 7](https://blogs.oracle.com/virtualization/install-docker-on-oracle-linux-7-v2)
+
+
+	[root@oel72 ~]# systemctl start docker
+	A dependency job for docker.service failed. See 'journalctl -xe' for details.
+	[root@oel72 ~]# docker version
+	Client:
+	 Version:           18.09.1-ol
+	 API version:       1.39
+	 Go version:        go1.10.8
+	 Git commit:        c3ab8a8
+	 Built:             Mon Feb 11 23:20:32 2019
+	 OS/Arch:           linux/amd64
+	 Experimental:      false
+	Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+	[root@oel72 ~]# systemctl status docker.service
+	● docker.service - Docker Application Container Engine
+	   Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; vendor preset: disabled)
+	  Drop-In: /etc/systemd/system/docker.service.d
+			   └─docker-sysconfig.conf
+	   Active: inactive (dead) since Thu 2019-02-21 03:54:12 EST; 1min 32s ago
+		 Docs: https://docs.docker.com
+	  Process: 22859 ExecStart=/usr/bin/dockerd $OPTIONS $DOCKER_STORAGE_OPTIONS $DOCKER_NETWORK_OPTIONS $INSECURE_REGISTRY (code=killed, signal=TERM)
+	 Main PID: 22859 (code=killed, signal=TERM)
+
+	Feb 21 03:54:12 oel72.localdomain systemd[1]: Starting Docker Application Container Engine...
+	Feb 21 03:54:12 oel72.localdomain systemd[1]: Dependency failed for Docker Application Container Engine.
+	Feb 21 03:54:12 oel72.localdomain systemd[1]: Job docker.service/start failed with result 'dependency'.
+	Feb 21 03:54:12 oel72.localdomain systemd[1]: Stopped Docker Application Container Engine.
+	[root@oel72 ~]#
+
+Some error for docker.
+	
+[Can not start docker engine in Oracle Linux](https://stackoverflow.com/questions/48007755/can-not-start-docker-engine-in-oracle-linux)
+
+[3.1 Upgrading to the Latest UEK Release](https://docs.oracle.com/cd/E93554_01/E66808/html/uek3_upgrade.html)
+
+[Upgrading UEK kernel on Oracle Linux 7](https://geraldonit.com/2018/07/09/upgrading-uek-kernel-on-oracle-linux-7/)
+Reason:
+	$ yum list installed kernel*
+	Installed Packages
+	kernel.x86_64                                                                                       3.10.0-327.el7                                                                                @anaconda/7.2
+	kernel-headers.x86_64                                                                               3.10.0-862.14.4.el7                                                                           @ol7_latest
+	kernel-headers.x86_64                                                                               3.10.0-957.5.1.el7                                                                            installed
+	kernel-tools.x86_64                                                                                 3.10.0-327.el7                                                                                @anaconda/7.2
+	kernel-tools-libs.x86_64                                                                            3.10.0-327.el7                                                                                @anaconda/7.2
+	kernel-uek.x86_64                                                                                   3.8.13-98.7.1.el7uek                                                                          @anaconda/7.2
+	kernel-uek-firmware.noarch                                                                          3.8.13-98.7.1.el7uek                                                                          @anaconda/7.2
+	You have new mail in /var/spool/mail/oracle
+	$
+
+
+
+### Yum instal git tools and clone github file.
+
+	[root@oel72 oradata]# yum install git
+
+	[oracle@oel72 oradata]$ git clone https://github.com/marcelo-ochoa/docker-images.git
+	Cloning into 'docker-images'...
+	remote: Enumerating objects: 24, done.
+	remote: Counting objects: 100% (24/24), done.
+	remote: Compressing objects: 100% (20/20), done.
+	remote: Total 9111 (delta 7), reused 7 (delta 3), pack-reused 9087
+	Receiving objects: 100% (9111/9111), 10.01 MiB | 992.00 KiB/s, done.
+	Resolving deltas: 100% (5204/5204), done.
+	[oracle@oel72 oradata]$
+	[oracle@oel72 oradata]$ cd docker-images/OracleDatabase/SingleInstance/dockerfiles/
+	[oracle@oel72 dockerfiles]$ ls -ltr
+	total 32
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 11.2.0.2
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 12.2.0.1
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 12.1.0.2
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 18.4.0
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 18.3.0
+	-rwxr-xr-x 1 oracle oinstall 5145 Feb 21 03:27 buildDockerImage.sh
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 19.2.0
+	[oracle@oel72 dockerfiles]$
+	[oracle@oel72 dockerfiles]$ pwd
+	/u01/app/oracle/oradata/docker-images/OracleDatabase/SingleInstance/dockerfiles
+	[oracle@oel72 dockerfiles]$ cd -
+	/u01/app/oracle/oradata
+	[oracle@oel72 oradata]$ mv V981623-01.zip /u01/app/oracle/oradata/docker-images/OracleDatabase/SingleInstance/dockerfiles/19.2.0/
+	[oracle@oel72 oradata]$ cd -
+	[oracle@oel72 dockerfiles]$ ls -ltr
+	total 32
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 11.2.0.2
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 12.2.0.1
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 12.1.0.2
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 18.4.0
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:27 18.3.0
+	-rwxr-xr-x 1 oracle oinstall 5145 Feb 21 03:27 buildDockerImage.sh
+	drwxr-xr-x 2 oracle oinstall 4096 Feb 21 03:30 19.2.0
+	[oracle@oel72 dockerfiles]$ ls -ltr 19.2.0/
+	total 2961816
+	-rwxrwxr-x 1 oracle oinstall 3032822863 Feb 11 01:44 V981623-01.zip
+	-rwxr-xr-x 1 oracle oinstall       1015 Feb 21 03:27 runUserScripts.sh
+	-rwxr-xr-x 1 oracle oinstall       6526 Feb 21 03:27 runOracle.sh
+	-rwxr-xr-x 1 oracle oinstall       2526 Feb 21 03:27 installDBBinaries.sh
+	-rw-r--r-- 1 oracle oinstall       3405 Feb 21 03:27 Dockerfile
+	-rw-r--r-- 1 oracle oinstall       6878 Feb 21 03:27 db_inst.rsp
+	-rw-r--r-- 1 oracle oinstall       9204 Feb 21 03:27 dbca.rsp.tmpl
+	-rwxr-xr-x 1 oracle oinstall       3012 Feb 21 03:27 createDB.sh
+	-rw-r--r-- 1 oracle oinstall         49 Feb 21 03:27 Checksum.ee
+	-rwxr-xr-x 1 oracle oinstall        905 Feb 21 03:27 checkSpace.sh
+	-rwxr-xr-x 1 oracle oinstall       1148 Feb 21 03:27 checkDBStatus.sh
+	-rwxr-xr-x 1 oracle oinstall        678 Feb 21 03:27 startDB.sh
+	-rwxr-xr-x 1 oracle oinstall        932 Feb 21 03:27 setupLinuxEnv.sh
+	-rwxr-xr-x 1 oracle oinstall        758 Feb 21 03:27 setPassword.sh
+	[oracle@oel72 dockerfiles]$
+
+	
+	
