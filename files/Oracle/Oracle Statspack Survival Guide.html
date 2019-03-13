@@ -1,0 +1,1244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+  <meta name="generator" content="HTML Tidy for Linux/x86 (vers 25 March 2009), see www.w3.org">
+  <meta http-equiv="expires" content="86400">
+  <meta name="author" content="AKADIA Information Technology AG">
+  <meta name="description" content="AKADIA Information Technology AG, Bern, Schweiz">
+  <meta name="distribution" content="global">
+  <link rel="stylesheet" href="Oracle%20Statspack%20Survival%20Guide_files/website.css" type="text/css">
+  <title>Oracle Statspack Survival Guide</title>
+  <style type="text/css">
+<!--
+  .small2       { font-family:verdana,arial,helvetica,sans-serif; color:navy; font-size:7pt; }
+  -->
+  </style>
+</head>
+<body vlink="#0000FF" text="#000000" leftmargin="20" bgcolor="#FFFFFF" alink="#0000FF">
+  <table width="836" height="20" cellspacing="0" cellpadding="0" border="0">
+    <tbody><tr>
+      <td colspan="2" width="960" valign="top">&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="101" valign="top" height="51"><a href="javascript:history.back()"><img src="Oracle%20Statspack%20Survival%20Guide_files/zurueck.gif" alt="Zurück" width="76" height="19" border="0"></a></td>
+      <td width="859" valign="top" height="17">
+        <h1>Oracle Statspack Survival Guide</h1>
+        <hr noshade="noshade" color="#34B389">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" width="960" valign="top" height="10">
+        <h1><span lang="en-us">Overview</span></h1>
+        <blockquote>
+          <p><span lang="en-us">STATSPACK is a performance diagnosis tool, available since
+          Oracle8i. STATSPACK can be considered BSTAT/ESTAT's successor, incorporating many new
+          features. STATSPACK is a diagnosis tool for instance-wide performance problems; it also
+          supports application tuning activities<img src="Oracle%20Statspack%20Survival%20Guide_files/charts.jpg" width="300" vspace="10" hspace="10" height="300" border="0" align="left"> by providing data which
+          identifies high-load SQL statements. STATSPACK can be used both proactively to monitor
+          the changing load on a system, and also reactively to investigate a performance
+          problem.</span></p>
+          <p><span lang="en-us">Remember to set <b>timed_statistics to true</b> for your instance.
+          Setting this parameter provides timing data which is invaluable for performance
+          tuning.</span></p>
+          <p class="header"><span lang="en-us">The «more is better» approach is not
+          always better!</span></p>
+          <p><span lang="en-us">The single most common misuse of STATSPACK is the «more is
+          better» approach. Often STATSPACK reports spans hours or even days. The times
+          between the snapshots (the collection points) should, in general, be measured in minutes,
+          not hours and never days.</span></p>
+          <p><span lang="en-us">The STATSPACK reports we like are from 1 5-minute intervals during
+          a busy or peak time, when the performance is at its worst. That provides a very focused
+          look at what was going wrong at that exact moment in time. The problem with a very large
+          STATSPACK snapshot window, where the time between the two snapshots is measured in hours,
+          is that the events that caused serious performance issues for 20 minutes during peak
+          processing don't look so bad when they're spread out over an 8-hour window. It's also
+          true with STATSPACK that measuring things over too long of a period tends to level them
+          out over time. Nothing will stand out and strike you as being wrong. So, when taking
+          snapshots, schedule them about 15 to 30 minutes (maximum) apart. You might wait 3 or 4
+          hours between these two observations, but you should always do them in pairs and within
+          minutes of each other.</span></p>
+          <p class="header"><span lang="en-us">«Having a history of the good times is just as
+          important as having a history of the bad; you need both»</span></p>
+          <p><span lang="en-us">Another common mistake with STATSPACK is to gather snapshots only
+          when there is a problem. That is fine to a point, but how much better would it be to have
+          a STATSPACK report from when things were going good to compare it with when things are
+          bad. A simple STATSPACK report that shows a tremendous increase in physical 1/0 activity
+          or table scans (long tables) could help you track down that missing index. Or, if you see
+          your soft parse percentage value went from 99% to 70%, you know that someone introduced a
+          new feature into the system that isn't using bind variables (and is killing you). Having
+          a history of the good times is just as important as having a history of the bad; you need
+          both.</span></p>
+        </blockquote>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" width="960" valign="top" height="9">
+        <h1><span lang="en-us">Architecture</span></h1>
+        <blockquote>
+          <p><span lang="en-us">To fully understand the STATSPACK architecture, we have to look at
+          the basic nature of the STATSPACK utility. The STATSPACK utility is an outgrowth of the
+          Oracle UTLBSTAT and UTLESTAT utilities, which have been used with Oracle since the very
+          earliest versions.</span></p>
+        </blockquote>
+        <p class="header">UTLBSTAT - UTLESTAT</p>
+        <blockquote>
+          <p><span lang="en-us">The BSTAT-ESTAT utilities capture information directly from the
+          Oracle's in-memory structures and then compare the information from two snapshots in
+          order to produce an elapsed-time report showing the activity of the database.</span> If
+          we look inside utlbstat.sql and utlestat.sql, we see the SQL that samples directly from
+          the view: V$SYSSTAT;</p>
+          <p class="courier">insert into stats$begin_stats select * from v$sysstat;<br>
+          insert into stats$end_stats select * from v$sysstat;</p>
+          <p align="center"><img src="Oracle%20Statspack%20Survival%20Guide_files/ora_utlstat.gif" width="605" height="545" border="0"></p>
+        </blockquote>
+        <p class="header">STATSPACK</p>
+        <blockquote>
+          <p><span lang="en-us">When a snapshot is executed, the STATSPACK software will sample
+          from the RAM in-memory structures inside the SGA and transfer the values into the
+          corresponding STATSPACK tables. These values are then available for comparing with other
+          snapshots.</span></p>
+          <p align="center"><img src="Oracle%20Statspack%20Survival%20Guide_files/ora_statspack_tables.gif" width="464" height="624" border="0"></p>
+          <p><span lang="en-us">Note that in most cases, there is a direct correspondence between
+          the v$ view in the SGA and the corresponding STATSPACK table. For example, we see that
+          the <i>stats$sysstat</i> table is similar to the <i>v$sysstat</i> view.</span></p>
+          <p class="courier"><span lang="en-us">SQL&gt; <b>desc v$sysstat;</b><br>
+          &nbsp;<font color="#0000FF">Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          Null?&nbsp;&nbsp;&nbsp; Type<br>
+          &nbsp;----------------------------------------- -------- -----------------------<br>
+          
+&nbsp;STATISTIC#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NUMBER<br>
+          
+&nbsp;NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          VARCHAR2(64)<br>
+          
+&nbsp;CLASS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NUMBER<br>
+          
+&nbsp;VALUE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NUMBER<br>
+          
+&nbsp;STAT_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NUMBER</font><br>
+          <br>
+          SQL&gt; <b>desc stats$sysstat;</b><br>
+          <font color="#0000FF">&nbsp;Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          Null?&nbsp;&nbsp;&nbsp; Type<br>
+          &nbsp;----------------------------------------- -------- -----------------------<br>
+          
+&nbsp;SNAP_ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NOT NULL NUMBER<br>
+          
+&nbsp;DBID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NOT NULL NUMBER<br>
+          
+&nbsp;INSTANCE_NUMBER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NOT NULL NUMBER<br>
+          
+&nbsp;STATISTIC#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NOT NULL NUMBER<br>
+          
+&nbsp;NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NOT NULL VARCHAR2(64)<br>
+          
+&nbsp;VALUE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          NUMBER</font></span></p>
+          <p class="normal"><span lang="en-us">It is critical to your understanding of the
+          STATSPACK utility that you realize the information captured by a STATSPACK snapshot is
+          accumulated values. The information from the V$VIEWS collects database information at
+          startup time and continues to add the values until the instance is shutdown. In order to
+          get a meaningful elapsed-time report, you must run a STATSPACK report that compares two
+          snapshots as shown above. It is critical to understand that a report will be invalid if
+          the database is shut down between snapshots. This is because all of the accumulated
+          values will be reset, causing the second snapshot to have smaller values than the first
+          snapshot.</span></p>
+        </blockquote>
+        <h1><span lang="en-us">Installing and Configuring STATSPACK</span></h1>
+        <p class="big"><span lang="en-us">Create PERFSTAT Tablespace</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">The STATSPACK utility requires an isolated
+          tablespace to obtain all of the objects and data. For uniformity, it is suggested that
+          the tablespace be called PERFSTAT, the same name as the schema owner for the STATSPACK
+          tables. It is important to closely watch the STATSPACK data to ensure that the
+          stats$sql_summary table is not taking an inordinate amount of space.</span></p>
+          <p class="courier"><span lang="en-us">SQL&gt; <b>CREATE TABLESPACE</b></span>
+          <b>perfstat</b><span lang="en-us"><b><br>
+          &nbsp;&nbsp;&nbsp;&nbsp; DATAFILE
+          '/u01/oracle/db/AKI1_</b></span><b>perfstat</b><span lang="en-us"><b>.dbf'
+          SIZE</b></span> <b>10<span lang="en-us">00M REUSE<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; EXTENT MANAGEMENT LOCAL UNIFORM SIZE 512K<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; SEGMENT SPACE MANAGEMENT AUTO<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; PERMANENT<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; ONLINE;</span></b></p>
+        </blockquote>
+        <p class="big"><span lang="en-us">Run the Create Scripts</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">Now that the tablespace exists, we can begin the
+          installation process of the STATSPACK software. Note that you must have performed the
+          following before attempting to install STATSPACK.</span></p>
+          <ul>
+            <li>
+              <p class="normal"><span lang="en-us">Run <b><i>catdbsyn.sql</i></b> as SYS</span></p>
+            </li>
+            <li>
+              <p class="normal"><span lang="en-us">Run <b><i>dbmspool.sql</i></b> as SYS</span></p>
+            </li>
+          </ul>
+          <p class="courier">$ <b>cd $ORACLE_HOME/rdbms/admin<br></b> $ <b><span lang="en-us">sqlplus "/ as sysdba"</span></b><span lang="en-us"><br>
+          SQL&gt;</span> <b>start <span lang="en-us">spcreate</span>.sql</b></p>
+          <p class="courier"><font color="#0000FF">Choose the PERFSTAT user's password<br>
+          -----------------------------------<br>
+          Not specifying a password will result in the installation FAILING<br>
+          <br>
+          Enter value for perfstat_password: <b>perfstat</b></font></p>
+          <p class="courier"><font color="#0000FF">Choose the Default tablespace for the PERFSTAT
+          user<br>
+          ---------------------------------------------------<br>
+          Below is the list of online tablespaces in this database which can<br>
+          store user data. Specifying the SYSTEM tablespace for the user's<br>
+          default tablespace will result in the installation FAILING, as<br>
+          using SYSTEM for performance data is not supported.<br>
+          <br>
+          Choose the PERFSTAT users's default tablespace. This is the tablespace<br>
+          in which the STATSPACK tables and indexes will be created.<br>
+          <br>
+          TABLESPACE_NAME CONTENTS STATSPACK DEFAULT TABLESPACE<br>
+          ------------------------------ --------- ----------------------------<br>
+          PERFSTAT PERMANENT<br>
+          SYSAUX PERMANENT *<br>
+          USERS PERMANENT<br>
+          <br>
+          Pressing &lt;return&gt; will result in STATSPACK's recommended default<br>
+          tablespace (identified by *) being used.<br>
+          <br>
+          Enter value for default_tablespace: <b>PERFSTAT</b></font></p>
+          <p class="courier"><font color="#0000FF">Choose the Temporary tablespace for the PERFSTAT
+          user<br>
+          -----------------------------------------------------<br>
+          Below is the list of online tablespaces in this database which can<br>
+          store temporary data (e.g. for sort workareas). Specifying the SYSTEM<br>
+          tablespace for the user's temporary tablespace will result in the<br>
+          installation FAILING, as using SYSTEM for workareas is not supported.<br>
+          <br>
+          Choose the PERFSTAT user's Temporary tablespace.<br>
+          <br>
+          TABLESPACE_NAME CONTENTS DB DEFAULT TEMP TABLESPACE<br>
+          ------------------------------ --------- --------------------------<br>
+          TEMP TEMPORARY *<br>
+          <br>
+          Pressing &lt;return&gt; will result in the database's default Temporary<br>
+          tablespace (identified by *) being used.<br>
+          <br>
+          Enter value for temporary_tablespace: <b>TEMP</b></font></p>
+          <p class="courier"><font color="#0000FF"><b>.....<br>
+          .....<br></b> Creating Package STATSPACK...<br>
+          <br>
+          Package created.<br>
+          <br>
+          No errors.<br>
+          Creating Package Body STATSPACK...<br>
+          <br>
+          Package body created.<br>
+          <br>
+          No errors.<br>
+          <br>
+          NOTE:<br>
+          SPCPKG complete. Please check spcpkg.lis for any errors.</font></p>
+          <p>Check the Logfiles: <b><font face="Courier New">spcpkg.lis, spctab.lis,
+          spcusr.lis</font></b></p>
+        </blockquote>
+        <p class="big"><span lang="en-us">Adjusting the STATSPACK Collection Level</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">STATSPACK has two types of collection options, level
+          and threshold. The <i>level</i> parameter controls the type of data collected from
+          Oracle, while the <i>threshold</i> parameter acts as a filter for the collection of SQL
+          statements into the <i>stats$sql_summary</i> table.</span></p>
+          <p class="courier"><span lang="en-us">SQL&gt; <b>SELECT * FROM stats$level_description
+          ORDER BY snap_level;</b></span></p>
+          <table style="border-collapse: collapse" id="AutoNumber1" width="80%" cellspacing="3" cellpadding="3" bordercolor="#111111" border="0">
+            <tbody><tr>
+              <td width="14%" valign="top"><span lang="en-us"><b>Level 0</b></span></td>
+              <td width="86%" valign="top"><span lang="en-us">This level captures general
+              statistics, including rollback segment, row cache, SGA, system events, background
+              events, session events, system statistics, wait statistics, lock statistics, and
+              Latch information.</span></td>
+            </tr>
+            <tr>
+              <td width="14%" valign="top"><span lang="en-us"><b>Level 5</b></span></td>
+              <td width="86%" valign="top"><span lang="en-us">This level includes capturing high
+              resource usage SQL Statements, along with all data captured by lower
+              levels.</span></td>
+            </tr>
+            <tr>
+              <td width="14%" valign="top"><span lang="en-us"><b>Level 6</b></span></td>
+              <td width="86%" valign="top"><span lang="en-us">This level includes capturing SQL
+              plan and SQL plan usage information for high resource usage SQL Statements, along
+              with all data captured by lower levels.</span></td>
+            </tr>
+            <tr>
+              <td width="14%" valign="top"><span lang="en-us"><b>Level 7</b></span></td>
+              <td width="86%" valign="top"><span lang="en-us">This level captures segment level
+              statistics, including logical and physical reads, row lock, itl and buffer busy
+              waits, along with all data captured by lower levels.</span></td>
+            </tr>
+            <tr>
+              <td width="14%" valign="top"><span lang="en-us"><b>Level 10</b></span></td>
+              <td width="86%" valign="top"><span lang="en-us">This level includes capturing Child
+              Latch statistics, along with all data captured by lower levels.</span></td>
+            </tr>
+          </tbody></table>
+          <p class="normal"><span lang="en-us">You can change the default level of a snapshot with
+          the <font face="Courier New">statspack.snap</font> function. The</span> <font face="Courier New"><span lang="en-us">i_modify_parameter =&gt; 'true'</span></font>
+          <span lang="en-us">changes the level permanent for all snapshots in the
+          future.</span></p>
+          <p class="courier"><span lang="en-us">SQL&gt;</span> <b><span lang="en-us">exec
+          statspack.snap(i_snap_level =&gt;</span> 6<span lang="en-us">, i_modify_parameter =&gt;
+          'true');</span></b></p>
+        </blockquote>
+        <p class="big"><span lang="en-us"><b>Create, View and Delete Snapshots</b></span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us">sqlplus perfstat/perfstat<br>
+          SQL&gt; <b>exec statspack.snap;</b><br>
+          SQL&gt; <b>select name,snap_id,to_char(snap_time,'DD.MM.YYYY:HH24:MI:SS')<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; "Date/Time" from stats$snapshot,v$database;</b><br>
+          <br>
+          <font color="#0000FF">NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SNAP_ID
+          Date/Time<br>
+          --------- ---------- -------------------<br>
+          AKI1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          4 14.11.2004:10:56:01<br>
+          AKI1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          1 13.11.2004:08:48:47<br>
+          AKI1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          2 13.11.2004:09:00:01<br>
+          AKI1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          3 13.11.2004:09:01:48</font></span></p>
+          <p class="courier"><span lang="en-us">SQL&gt; <b>@?/rdbms/admin/sppurge;<br></b>
+          <font color="#0000FF">Enter the Lower and Upper Snapshot ID</font></span></p>
+        </blockquote>
+        <p class="big"><span lang="en-us">Create the Report</span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us"><b>sqlplus perfstat/perfstat</b><br>
+          SQL&gt; <b>@?/rdbms/admin/spreport.sql</b></span></p>
+        </blockquote>
+        <p class="big"><span lang="en-us">Statspack at a Glance</span></p>
+        <blockquote>
+          <p><span lang="en-us">What if you have this long STATSPACK report and you want to figure
+          out if everything is running smoothly? Here, we will review what we look for in the
+          report, section by section. We will use an actual STATSPACK report from our own Oracle
+          10g system.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">Statspack Report Header</span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">STATSPACK report for<br>
+          <br>
+          DB Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DB Id&nbsp;&nbsp;&nbsp;
+          Instance&nbsp;&nbsp;&nbsp;&nbsp; Inst Num Release&nbsp;&nbsp;&nbsp;&nbsp; RAC Host<br>
+          ------------ ----------- ------------ -------- ----------- --- ----------------<br>
+          AKI1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2006521736
+          AKI1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          1 10.1.0.2.0&nbsp; NO&nbsp; akira<br>
+          <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Snap
+          Id&nbsp;&nbsp;&nbsp;&nbsp; Snap Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sessions Curs/Sess
+          Comment<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ---------
+          ------------------ -------- --------- -------------------<br>
+          Begin Snap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 14-Nov-04
+          11:18:00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14.3<br>
+          &nbsp; End Snap:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6 14-Nov-04
+          11:33:00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10.2<br>
+          &nbsp;&nbsp;</font> <font color="#FF0000"><b>Elapsed:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          15.00 (mins)</b></font></span></p>
+          <p class="courier"><font color="#0000FF"><span lang="en-us">Cache Sizes (end)<br>
+          ~~~~~~~~~~~~~~~~~<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Buffer Cache:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 24M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Std Block Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4K<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Shared Pool
+          Size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          764M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Log
+          Buffer:&nbsp;&nbsp;&nbsp;&nbsp; 1,000K</span></font></p>
+          <p><span lang="en-us">Note that this section may appear slightly different depending on
+          your version of Oracle. For example, the Curs/Sess column, which shows the number of open
+          cursors per session, is new with Oracle9i (an 8i Statspack report would not show this
+          data).</span></p>
+          <p><span lang="en-us">Here, the item we are most interested in is the <b>elapsed
+          time</b>. We want that to be large enough to be meaningful, but small enough to be
+          relevant (15 to 30 minutes is OK). If we use longer times, we begin to <b>lose the needle
+          in the haystack</b>.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">Statspack Load Profile</span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">Load Profile<br>
+          
+~~~~~~~~~~~~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          Per Second&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Per Transaction<br>
+          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          ---------------&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+---------------<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Redo size:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          425,649.84&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16,600,343.64<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Logical
+          reads:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          1,679.69&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          65,508.00<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Block
+          changes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          2,546.17&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          99,300.45<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Physical
+          reads:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          77.81&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          3,034.55<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Physical
+          writes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          78.35&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          3,055.64<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          User
+          calls:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0.24&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          9.55<br>
+          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+Parses:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+2.90&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          113.00<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+          <font color="#FF0000"><b>Hard
+          parses:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0.16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          6.27</b></font><font color="#0000FF"><br>
+          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+Sorts:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0.76&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          29.82<br>
+          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+Logons:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0.01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          0.36<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+          <font color="#FF0000"><b>Executes:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          4.55&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          177.64</b><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <b>Transactions:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0.03</b></font><font color="#0000FF"><br>
+          <br>
+          &nbsp; % Blocks changed per Read:&nbsp; 151.59&nbsp;&nbsp;&nbsp; Recursive Call
+          %:&nbsp;&nbsp;&nbsp; 99.56<br>
+          &nbsp;Rollback per transaction %:&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rows per Sort:&nbsp;&nbsp;&nbsp;
+          65.61</font></span></p>
+          <p><span lang="en-us">Here, we are interested in a variety of things, but if we are
+          looking at a "health check", three items are important:</span></p>
+          <ul>
+            <li><span lang="en-us"><b>The Hard parses</b> (we want very few of them)</span></li>
+            <li><span lang="en-us"><b>Executes</b> (how many statements we are executing per second
+            / transaction)</span></li>
+            <li><span lang="en-us"><b>Transactions</b> (how many transactions per second we
+            process).</span></li>
+          </ul>
+          <p><span lang="en-us">This gives an <b>overall view of the load on the server</b>. In
+          this case, we are looking at a very good hard parse number and a fairly light system load
+          (1 - 4 transactions per second is low).</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">Statspack Instance Efficiency Percentage</span></p>
+        <blockquote>
+          <p><span lang="en-us">Next, we move onto the Instance Efficiency Percentages section,
+          which includes perhaps the only ratios we look at in any detail:</span></p>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">Instance Efficiency
+          Percentages (Target 100%)<br>
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Buffer Nowait %:&nbsp;
+          100.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Redo NoWait %:&nbsp;&nbsp; 99.99<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Buffer&nbsp;
+          Hit&nbsp;&nbsp; %:&nbsp;&nbsp; 95.39&nbsp;&nbsp;&nbsp; In-memory Sort %:&nbsp; 100.00<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font> <font color="#FF0000"><b>Library Hit&nbsp;&nbsp; %:&nbsp;&nbsp;
+          99.42</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Soft Parse %:&nbsp;&nbsp;
+          94.45</b></font><font color="#0000FF"><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font> <font color="#FF0000"><b>Execute
+          to Parse %:&nbsp;&nbsp; 36.39</b></font><font color="#0000FF">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Latch Hit %:&nbsp; 100.00<br>
+          Parse CPU to Parse Elapsd %:&nbsp;&nbsp; 59.15&nbsp;&nbsp;&nbsp;&nbsp; % Non-Parse
+          CPU:&nbsp;&nbsp; 99.31<br>
+          <br>
+          &nbsp;Shared Pool Statistics&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Begin&nbsp;&nbsp;
+          End<br>
+          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          ------&nbsp; ------<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Memory Usage
+          %:&nbsp;&nbsp; 10.28&nbsp;&nbsp; 10.45<br>
+          &nbsp;&nbsp;&nbsp; % SQL with executions&gt;1:&nbsp;&nbsp; 70.10&nbsp;&nbsp; 71.08<br>
+          &nbsp; % Memory for SQL w/exec&gt;1:&nbsp;&nbsp; 44.52&nbsp;&nbsp;
+          44.70</font></span></p>
+          <p><span lang="en-us">The three in bold are the most important: Library Hit, Soft Parse %
+          and Execute to Parse. All of these have to do with how well the shared pool is being
+          utilized. Time after time, we find this to be the area of greatest payback, where we can
+          achieve some real gains in performance.</span></p>
+          <p><span lang="en-us">Here, in this report, we are quite pleased with the Library Hit and
+          the Soft Parse % values. If the library <b>Hit ratio was low</b>, it could be indicative
+          of a <b>shared pool that is too small</b>, or just as likely, that the system <b>did not
+          make correct use of bind variables</b> in the application. It would be an indicator to
+          look at issues such as those.</span></p>
+        </blockquote>
+        <p><span lang="en-us">OLTP System</span></p>
+        <blockquote>
+          <p><span lang="en-us">The Soft Parse % value is <b>one of the most important</b> (if not
+          the only important) ratio in the database. For a typical OLTP system, <b>it should be as
+          near to 100%</b> as possible. You quite simply do not hard parse after the database has
+          been up for a while in your typical transactional / general-purpose database. The way you
+          achieve that is <b>with bind variables</b>. In a regular system like this, we are doing
+          many executions per second, and hard parsing is something to be avoided.</span></p>
+        </blockquote>
+        <p><span lang="en-us">Data Warehouse</span></p>
+        <blockquote>
+          <p><span lang="en-us">In a data warehouse, we would like to generally <b>see the Soft
+          Parse ratio lower</b>. We don't necessarily want to use bind variables in a data
+          warehouse. This is because they typically use materialized views, histograms, and other
+          things that are easily thwarted by bind variables. In a data warehouse, we may have many
+          seconds between executions, so hard parsing is not evil; in fact, it is good in those
+          environments.</span></p>
+        </blockquote>
+        <p><span lang="en-us">The moral of this is ...</span></p>
+        <blockquote>
+          <p><span lang="en-us">... to look at these ratios and look at how the system operates.
+          Then, using that knowledge, determine if the ratio is okay given the conditions. If we
+          just said that the execute-to-parse ratio for your system should be 95% or better, that
+          would be unachievable in many web-based systems. If you have a routine that will be
+          executed many times to generate a page, you should definitely parse once per page and
+          execute it over and over, closing the cursor if necessary before your connection is
+          returned to the connection pool.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">Statspack Top 5 Timed Events</span></p>
+        <blockquote>
+          <p><span lang="en-us">Moving on, we get to the Top 5 Timed Events section (in Oracle9i
+          Release 2 and later) or Top 5 Wait Events (in Oracle9i Release 1 and earlier).</span></p>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">Top 5 Timed Events<br>
+          
+~~~~~~~~~~~~~~~~~~&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          % Total<br>
+          
+Event&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          Waits&nbsp;&nbsp;&nbsp; Time (s) Call Time<br>
+          -------------------------------------------- ------------ -----------
+          ---------<br></font> <font color="#FF0000"><b>CPU
+          
+time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          122&nbsp;&nbsp;&nbsp;&nbsp; 91.65<br>
+          db file sequential
+          
+read&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+1,571&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.61<br>
+          db file scattered
+          
+read&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+1,174&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.59<br></b></font> <font color="#0000FF">log
+ file
+          sequential
+          
+read&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+342&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.39<br>
+          control file parallel
+          
+write&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+450&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.39<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          -------------------------------------------------------------<br>
+          Wait Events&nbsp; DB/Inst: AKI1/AKI1&nbsp; Snaps: 5-6<br>
+          <br>
+          -&gt; s&nbsp; - second<br>
+          -&gt; cs - centisecond -&nbsp;&nbsp;&nbsp;&nbsp; 100th of a second<br>
+          -&gt; ms - millisecond -&nbsp;&nbsp;&nbsp; 1000th of a second<br>
+          -&gt; us - microsecond - 1000000th of a second<br>
+          -&gt; ordered by wait time desc, waits desc (idle events last)</font></span></p>
+          <p><span lang="en-us">This section is among <b>the most important and relevant sections
+          in the Statspack report</b>. Here is where you find out what events (typically wait
+          events) are consuming the most time. In Oracle9i Release 2, this section is renamed and
+          includes a new event: <i>CPU time</i>.</span></p>
+          <ul>
+            <li><span lang="en-us"><b>CPU time</b> is not really a wait event (hence, the new
+            name), but rather the sum of the CPU used by this session, or the amount of CPU time
+            used during the snapshot window. In a heavily loaded system, if the CPU time event is
+            the biggest event, that could point to some CPU-intensive processing (for example,
+            forcing the use of an index when a full scan should have been used), which could be the
+            cause of the bottleneck.<br>
+            &nbsp;</span></li>
+            <li><span lang="en-us"><b>Db file sequential read</b> - This wait event will be
+            generated while waiting for writes to TEMP space generally (direct loads, Parallel DML
+            (PDML) such as parallel updates. You may tune the PGA AGGREGATE TARGET parameter to
+            reduce waits on sequential reads.<br>
+            &nbsp;</span></li>
+            <li><span lang="en-us"><b>Db file scattered read -</b> Next is the <i>db file scattered
+            read</i> wait value. That generally happens during a <b>full scan of a table</b>. You
+            can use the Statspack report to help identify the query in question and fix
+            it.</span></li>
+          </ul>
+        </blockquote>
+        <p class="header"><span lang="en-us">SQL ordered by Gets</span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us">Here you will find the most CPU-Time consuming SQL
+          statements</span></p>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">SQL ordered by Gets&nbsp;
+          DB/Inst: AKI1/AKI1&nbsp; Snaps: 5-6<br>
+          -&gt; Resources reported for PL/SQL code includes the resources used by all SQL<br>
+          &nbsp;&nbsp; statements called by the code.<br>
+          -&gt; End Buffer Gets Threshold:&nbsp;&nbsp;&nbsp;&nbsp; 10000 Total Buffer
+          Gets:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 720,588<br>
+          -&gt; Captured SQL accounts for&nbsp;&nbsp;&nbsp; 3.1% of Total Buffer Gets<br>
+          -&gt; SQL reported below exceeded&nbsp; 1.0% of Total Buffer Gets<br>
+          <br>
+          
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          CPU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+Elapsd&nbsp;&nbsp;&nbsp;&nbsp; Old<br>
+          &nbsp; Buffer Gets&nbsp;&nbsp;&nbsp; Executions&nbsp; Gets per Exec&nbsp; %Total Time
+          (s)&nbsp; Time (s) Hash Value<br>
+          --------------- ------------ -------------- ------ -------- --------- ----------<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          16,926&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16,926.0&nbsp;&nbsp;&nbsp;
+          2.3&nbsp;&nbsp;&nbsp;&nbsp; 2.36&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.46 1279400914<br>
+          Module: SQL*Plus<br></font> <b><font color="#FF0000">create table test as select * from
+          all_objects</font></b></span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">Tablespace IO Stats</span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">Tablespace<br>
+          ------------------------------<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Av&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Av&nbsp;&nbsp;&nbsp;&nbsp;
+          Av&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Av&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Buffer Av Buf<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reads Reads/s Rd(ms)
+          Blks/Rd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Writes Writes/s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Waits Wt(ms)<br>
+          -------------- ------- ------ ------- ------------ -------- ---------- ------<br>
+          TAB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1,643&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          4&nbsp;&nbsp;&nbsp; 1.0&nbsp;&nbsp;&nbsp; 19.2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          16,811&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          39&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br>
+          UNDO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 166&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp; 0.5&nbsp;&nbsp;&nbsp;&nbsp;
+          1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5,948&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br>
+          SYSTEM&nbsp;&nbsp;&nbsp;&nbsp; 813&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          2&nbsp;&nbsp;&nbsp; 2.5&nbsp;&nbsp;&nbsp;&nbsp;
+          1.6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          167&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br>
+          STATSPACK&nbsp; 146&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;
+          0.3&nbsp;&nbsp;&nbsp;&nbsp; 1.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          277&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br>
+          SYSAUX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;
+          1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br>
+          IDX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;
+          1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br>
+          USER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;
+          1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          -------------------------------------------------------------</font></span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">Rollback Segment Stats</span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">-&gt;A high value for "Pct
+          Waits" suggests more rollback segments may be required<br>
+          -&gt;RBS stats may not be accurate between begin and end snaps when using Auto Undo<br>
+          &nbsp; managment, as RBS may be dynamically created and dropped as needed<br>
+          <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Trans
+          Table&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pct&nbsp;&nbsp; Undo Bytes<br>
+          RBS No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Waits&nbsp;&nbsp;&nbsp;&nbsp; Written&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          Wraps&nbsp; Shrinks&nbsp; Extends<br>
+          ------ -------------- ------- --------------- -------- -------- --------<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8.0&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          3,923.0&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          14,812,586&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          5,092.0&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          19,408,996&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          19&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 19<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          295.0&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          586,760&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          1,312.0&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          4,986,920&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          5<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9.0&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9.0&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9.0&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9.0&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9.0&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+          &nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          9.0&nbsp;&nbsp;&nbsp;
+          0.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          -------------------------------------------------------------</font></span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">Rollback Segment Storage</span></p>
+        <blockquote>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">-&gt;Optimal Size should be
+          larger than Avg Active<br>
+          <br>
+          RBS No&nbsp;&nbsp;&nbsp; Segment Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Avg
+          Active&nbsp;&nbsp;&nbsp; Optimal Size&nbsp;&nbsp;&nbsp; Maximum Size<br>
+          ------ --------------- --------------- --------------- ---------------<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+364,544&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          364,544<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          17,952,768&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+8,343,482&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          17,952,768<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          25,292,800&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+11,854,857&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          25,292,800<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          4,321,280&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+617,292&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          6,418,432<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          8,515,584&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+1,566,623&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          8,515,584<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 
+5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+126,976&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          126,976<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 
+6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+126,976&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          126,976<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 
+7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+126,976&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          126,976<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 
+8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+126,976&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          126,976<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; 
+9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+126,976&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          126,976<br>
+          &nbsp;&nbsp;&nbsp; 
+10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+126,976&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          126,976<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          -------------------------------------------------------------</font></span></p>
+        </blockquote>
+        <p class="big"><span lang="en-us">Generate Execution Plan for given SQL
+        statement</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">If you have identified one or more problematic SQL
+          statement, you may want to check the execution plan. Remember the "Old Hash Value" from
+          the report above (1279400914), then execute the scrip to generate the execution
+          plan.</span></p>
+          <p class="courier"><span lang="en-us"><b>sqlplus perfstat/perfstat</b><br>
+          SQL&gt; <b>@?/rdbms/admin/sprepsql.sql<br></b> <font color="#0000FF">Enter the Hash
+          Value, in this example:</font> <b>1279400914</b></span></p>
+          <p class="courier"><span lang="en-us"><font color="#0000FF">SQL Text<br>
+          ~~~~~~~~<br>
+          create table test as select * from all_objects<br>
+          <br>
+          Known Optimizer Plan(s) for this Old Hash Value<br>
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br>
+          Shows all known Optimizer Plans for this database instance, and the Snap Id's<br>
+          they were first found in the shared pool.&nbsp; A Plan Hash Value will appear<br>
+          multiple times if the cost has changed<br>
+          -&gt; ordered by Snap Id<br>
+          <br>
+          &nbsp; First&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          First&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Plan<br>
+          &nbsp;Snap Id&nbsp;&nbsp;&nbsp;&nbsp; Snap Time&nbsp;&nbsp;&nbsp;&nbsp; Hash
+          Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cost<br>
+          --------- --------------- ------------ ----------<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6 14 Nov 04 11:26&nbsp;&nbsp;
+          1386862634&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 52<br>
+          <br>
+          Plans in shared pool between Begin and End Snap Ids<br>
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br>
+          Shows the Execution Plans found in the shared pool between the begin and end<br>
+          snapshots specified.&nbsp; The values for Rows, Bytes and Cost shown below are those<br>
+          which existed at the time the first-ever snapshot captured this plan - these<br>
+          values often change over time, and so may not be indicative of current values<br>
+          -&gt; Rows indicates Cardinality, PHV is Plan Hash Value<br>
+          -&gt; ordered by Plan Hash Value<br>
+          <br>
+          --------------------------------------------------------------------------------<br>
+          |
+          
+Operation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          | PHV/Object Name&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; Rows | 
+Bytes|&nbsp;&nbsp; Cost |<br>
+          --------------------------------------------------------------------------------<br>
+          |CREATE TABLE STATEMENT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |-----
+          1386862634 ----|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 52 |<br>
+          |LOAD AS
+          
+SELECT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>
+          |
+          
+VIEW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1K|&nbsp; 
+216K|&nbsp;&nbsp;&nbsp;&nbsp; 44 |<br>
+          |&nbsp;
+          
+FILTER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>
+          |&nbsp;&nbsp; HASH
+          
+JOIN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1K|&nbsp; 
+151K|&nbsp;&nbsp;&nbsp;&nbsp; 38 |<br>
+          |&nbsp;&nbsp;&nbsp; TABLE ACCESS
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |USER$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp; 29 |&nbsp; 464 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 |<br>
+          |&nbsp;&nbsp;&nbsp; TABLE ACCESS
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |OBJ$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 3K|&nbsp; 249K|&nbsp;&nbsp;&nbsp;&nbsp; 35 |<br>
+          |&nbsp;&nbsp; TABLE ACCESS BY INDEX ROWID&nbsp;
+          |IND$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp;&nbsp; 7 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 |<br>
+          |&nbsp;&nbsp;&nbsp; INDEX UNIQUE
+          SCAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |I_IND1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 |<br>
+          |&nbsp;&nbsp; NESTED
+          
+LOOPS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          |&nbsp;&nbsp;&nbsp;&nbsp; 5 |&nbsp; 115 
+|&nbsp;&nbsp;&nbsp;&nbsp; 16 |<br>
+          |&nbsp;&nbsp;&nbsp; INDEX RANGE
+          SCAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |I_OBJAUTH1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 10 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 |<br>
+          |&nbsp;&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSRO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 5 |&nbsp;&nbsp; 65 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp; FIXED TABLE
+          FULL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |X$KZSPR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 26 |&nbsp;&nbsp;&nbsp;&nbsp; 14 |<br>
+          |&nbsp;&nbsp;
+          
+VIEW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp; 13 
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 |<br>
+          |&nbsp;&nbsp;&nbsp; FAST
+          
+DUAL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+          |&nbsp;&nbsp;&nbsp;&nbsp; 1 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 |<br>
+          --------------------------------------------------------------------------------</font></span></p>
+        </blockquote>
+        <p class="big"><span lang="en-us">Resolving Your Wait Events</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">The following are 10 of the most common causes for
+          wait events, along with explanations and potential solutions:</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">1. DB File Scattered Read</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">This generally indicates waits related to <b>full
+          table scans</b>. As full table scans are pulled into memory, they rarely fall into
+          contiguous buffers but instead are scattered throughout the buffer cache. A large number
+          here indicates that your table may have missing or suppressed indexes. Although it may be
+          more efficient in your situation to perform a full table scan than an index scan, check
+          to ensure that full table scans are necessary when you see these waits. Try to cache
+          small tables to avoid reading them in over and over again, since a full table scan is put
+          at the cold end of the LRU (Least Recently Used) list.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">2. DB File Sequential Read</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">This event generally indicates a single block read
+          (an index read, for example). A large number of waits here could indicate poor joining
+          orders of tables, or <b>unselective indexing</b>. It is normal for this number to be
+          large for a high-transaction, well-tuned system, but it can indicate problems in some
+          circumstances. You should correlate this wait statistic with other known issues within
+          the Statspack report, such as inefficient SQL. Check to ensure that index scans are
+          necessary, and check join orders for multiple table joins. The DB_CACHE_SIZE will also be
+          a determining factor in how often these waits show up. Problematic hash-area joins should
+          show up in the PGA memory, but they're also memory hogs that could cause high wait
+          numbers for sequential reads. They can also show up as direct path read/write
+          waits.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">3. Free Buffer</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">This indicates your system is waiting for a buffer
+          in memory, because none is currently available. Waits in this category may indicate that
+          you need to <b>increase the DB_BUFFER_CACHE</b>, if all your SQL is tuned. Free buffer
+          waits could also indicate that unselective SQL is causing data to flood the buffer cache
+          with index blocks, leaving none for this particular statement that is waiting for the
+          system to process. This normally indicates that there is a substantial amount of DML
+          (insert/update/delete) being done and that the Database Writer (DBWR) is not writing
+          quickly enough; the buffer cache could be full of multiple versions of the same buffer,
+          causing great inefficiency. To address this, you may want to consider <b>accelerating
+          incremental checkpointing</b>, using more DBWR processes, or increasing the number of
+          physical disks.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">4. Buffer Busy</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">This is a wait for a buffer that is being used in an
+          unshareable way or is being read into the buffer cache. <b>Buffer busy waits should not
+          be greater than 1 percent</b>. Check the Buffer Wait Statistics section (or V$WAITSTAT)
+          to find out if the wait is on a segment header. If this is the case, increase the
+          freelist groups or increase the <i>pctused</i> to <i>pctfree</i> gap. If the wait is on
+          an undo header, you can address this by adding rollback segments; if it's on an undo
+          block, you need to reduce the data density on the table driving this consistent read or
+          increase the DB_CACHE_SIZE. If the wait is on a data block, you can move data to another
+          block to avoid this hot block, increase the freelists on the table, or use Locally
+          Managed Tablespaces (LMTs). If it's on an index block, you should rebuild the index,
+          partition the index, or use a reverse key index. To prevent buffer busy waits related to
+          data blocks, you can also use a smaller block size: fewer records fall within a single
+          block in this case, so it's not as "hot." When a DML (insert/update/ delete) occurs,
+          Oracle Database writes information into the block, including all users who are
+          "interested" in the state of the block (Interested Transaction List, ITL). To decrease
+          waits in this area, you can increase the <i>initrans</i>, which will create the space in
+          the block to allow multiple ITL slots. You can also increase the <i>pctfree</i> on the
+          table where this block exists (this writes the ITL information up to the number specified
+          by <i>maxtrans</i>, when there are not enough slots built with the <i>initrans</i> that
+          is specified).</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">5. Latch Free</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">Latches are low-level queuing mechanisms (they're
+          accurately referred to as mutual exclusion mechanisms) used to protect shared memory
+          structures in the system global area (SGA). Latches are like locks on memory that are
+          very quickly obtained and released. Latches are used to prevent <b>concurrent access to a
+          shared memory</b> structure. If the latch is not available, a latch free miss is
+          recorded. Most latch problems are related to the <b>failure to use bind variables</b>
+          (library cache latch), redo generation issues (redo allocation latch), buffer cache
+          contention issues (cache buffers LRU chain), and hot blocks in the buffer cache (cache
+          buffers chain). There are also latch waits related to bugs; check MetaLink for bug
+          reports if you suspect this is the case</span>. <span lang="en-us">When latch miss ratios
+          are greater than 0.5 percent, you should investigate the issue.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">6. Enqueue</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">An enqueue is a lock that protects a shared
+          resource. Locks protect shared resources, such as data in a record, to prevent two people
+          from updating the same data at the same time. An enqueue includes a queuing mechanism,
+          which is FIFO (first in, first out). Note that Oracle's latching mechanism is not FIFO.
+          Enqueue waits usually point to the ST enqueue, the HW enqueue, the TX4 enqueue, and the
+          TM enqueue. The ST enqueue is used for space management and allocation for
+          dictionary-managed tablespaces. Use LMTs, or try to preallocate extents or at least make
+          the next extent larger for problematic dictionary-managed tablespaces. HW enqueues are
+          used with the high-water mark of a segment; manually allocating the extents can
+          circumvent this wait. TX4s are the most common enqueue waits. TX4 enqueue waits are
+          usually the result of one of three issues. The first issue is duplicates in a unique
+          index; you need to commit/rollback to free the enqueue. The second is multiple updates to
+          the same bitmap index fragment. Since a single bitmap fragment may contain multiple
+          rowids, you need to issue a commit or rollback to free the enqueue when multiple users
+          are trying to update the same fragment. The third and most likely issue is when
+          <b>multiple users are updating the same block</b>. If there are no free ITL slots, a
+          block-level lock could occur. You can easily avoid this scenario by increasing the
+          <i>initrans</i> and/or <i>maxtrans</i> to allow multiple ITL slots and/or by increasing
+          the <i>pctfree</i> on the table. Finally, TM enqueues occur during DML to prevent DDL to
+          the affected object. If you have <b>foreign keys, be sure to index them</b> to avoid this
+          general locking issue.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">7. Log Buffer Space</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">This wait occurs because you are writing the log
+          buffer faster than LGWR can write it to the redo logs, or because <b>log switches are too
+          slow</b>. To address this problem, increase the size of the log files, or increase the
+          size of the log buffer, or get faster disks to write to. You might even consider using
+          solid-state disks, for their high speed.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">8. Log File Switch</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">All commit requests are waiting for "logfile switch
+          (archiving needed)" or "logfile switch (</span>Checkpoint<span lang="en-us">.
+          Incomplete)." Ensure that the archive disk is not full or slow. DBWR may be too slow
+          because of I/O. You may need to add more or larger redo logs, and you may potentially
+          need to add database writers if the DBWR is the problem.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">9. Log File Sync</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">When a user commits or rolls back data, the LGWR
+          flushes the session's redo from the log buffer to the redo logs. The log file sync
+          process must wait for this to successfully complete. To reduce wait events here, try to
+          commit more records <b>(try to commit a batch of 50 instead of one at a time, for
+          example)</b>. Put redo logs on a faster disk, or alternate redo logs on different
+          physical disks, to reduce the archiving effect on LGWR. Don't use RAID 5, since it is
+          very slow for applications that write a lot; potentially consider using file system
+          direct I/O or raw devices, which are very fast at writing information.</span></p>
+        </blockquote>
+        <p class="header"><span lang="en-us">10. Idle Event.</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">There are several idle wait events listed after the
+          output; you can ignore them. Idle events are generally listed at the bottom of each
+          section and include such things as SQL*Net message to/from client and other
+          background-related timings. Idle events are listed in the stats$idle_event
+          table.</span></p>
+        </blockquote>
+        <p class="big"><span lang="en-us">Remove STATSPACK from the Database</span></p>
+        <blockquote>
+          <p class="normal"><span lang="en-us">After a STATSPACK session you want to remove the
+          STATSPACK tables.</span></p>
+          <p class="courier"><span lang="en-us"><b>sqlplus "/ as sysdba"</b><br>
+          SQL&gt; <b>@?/rdbms/admin/spdrop.sql<br></b> SQL&gt; <b>DROP TABLESPACE perfstat
+          INCLUDING CONTENTS AND DATAFILES;</b></span></p>
+        </blockquote>
+      </td>
+    </tr>
+  </tbody></table>
+
+
+</body></html>

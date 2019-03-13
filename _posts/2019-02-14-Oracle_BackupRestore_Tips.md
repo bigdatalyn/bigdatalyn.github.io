@@ -1,0 +1,52 @@
+---
+layout: post
+title: "Oracle 缩短备份恢复时间 Tips"
+category: Oracle
+tags: Tips
+---
+
+* content
+{:toc}
+
+
+
+
+
+Oracle 缩短备份恢复的时间 Tips
+
+### 备份
+
+1. 增量备份和使用Block Change Tracking(BCT)
+
+设置BCT
+
+	SQL> ALTER DATABASE ENABLE BLOCK CHANGE TRACKING USING FILE '+DATA/RACDB_01/bct01.dbf' REUSE;
+
+可以通过下面sql来确认 BLOCKS_READ 的块数
+
+RMAN通过连接实例进行备份回动态在V$BACKUP_DATAFILE视图中统计性能信息
+
+	SELECT TO_CHAR( COMPLETION_TIME,'YYYY/MM/DD-HH24:MI:SS') as COMPLETION_TIME,FILE#,DATAFILE_BLOCKS,BLOCKS_READ,BLOCKS,INCREMENTAL_LEVEL,USED_CHANGE_TRACKING,USED_OPTIMIZATION FROM V$BACKUP_DATAFILE ORDER BY COMPLETION_TIME;
+
+2. 并行执行
+
+设置RMAN的PARALLELISM参数来开启并行数
+
+	RMAN> CONFIGURE DEVICE TYPE disk PARALLELISM 16;
+
+### 恢复
+
+1. RMAN restore 的并行
+
+	RMAN> CONFIGURE DEVICE TYPE disk PARALLELISM 16;
+
+2. RMAN recover 的并行
+
+	RMAN> RECOVER DATABASE [PARALLEL n];
+	
+
+
+Have a good work&life! 2019/02 via LinHong
+
+
+
