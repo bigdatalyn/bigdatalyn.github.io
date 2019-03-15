@@ -25,7 +25,7 @@ By the new DBMS_XPLAN.COMPARE_PLANS package, we can compare a 'reference' SQL ex
 
 ### Prepare 19c env and sample schemas
 
-[Oracle Database 19c Installation On Oracle Linux 7 (OL7))(https://oracle-base.com/articles/19c/oracle-db-19c-installation-on-oracle-linux-7)
+[Oracle Database 19c Installation On Oracle Linux 7 ](https://oracle-base.com/articles/19c/oracle-db-19c-installation-on-oracle-linux-7)
 
 [Sample Schema](https://github.com/oracle/db-sample-schemas/releases)
 
