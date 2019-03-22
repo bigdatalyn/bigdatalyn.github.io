@@ -145,7 +145,10 @@ The wallet_ADWDEMO01.zip is from ADW env.
 
 	Copyright (c) 1982, 2019, Oracle.  All rights reserved.
 
-
+	SQL> help set cloudconfig
+	SET CLOUDCONFIG
+	  set cloudconfig [ -proxy=<proxyhost>:<port> ] <wallet.zip location>
+	SQL>
 	SQL> set cloudconfig /home/opc/wallet_ADWDEMO01.zip
 	Operation is successfully completed.
 	Operation is successfully completed.
@@ -173,9 +176,9 @@ The wallet_ADWDEMO01.zip is from ADW env.
 	Elapsed: 00:00:00.043
 	SQL>
 
-### Other connect way via SQLdeveloper
+### Other connect way by SQLdeveloper
 
-Download the latest sqldeveloper tool and connect to ADW via CloudPDB.
+Download the latest sqldeveloper tool & use sqldeveloper to connect to ADW via CloudPDB.
 
 
 
