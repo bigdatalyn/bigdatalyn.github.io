@@ -290,11 +290,11 @@ ocicli通过compartment名获取bucket信息
 默认环境配置
 
 
-[oracle@oel72 ~]$ oci setup oci-cli-rc
-Predefined queries written under section OCI_CLI_CANNED_QUERIES
-Command aliases written under section OCI_CLI_COMMAND_ALIASES
-Parameter aliases written under section OCI_CLI_PARAM_ALIASES
-[oracle@oel72 ~]$
+	[oracle@oel72 ~]$ oci setup oci-cli-rc
+	Predefined queries written under section OCI_CLI_CANNED_QUERIES
+	Command aliases written under section OCI_CLI_COMMAND_ALIASES
+	Parameter aliases written under section OCI_CLI_PARAM_ALIASES
+	[oracle@oel72 ~]$
 
 编辑 ~\.oci\oci_cli_rc 追加：
 
