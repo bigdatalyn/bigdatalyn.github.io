@@ -26,7 +26,7 @@ Oracle ADW 备份相关 Tips
 
 #### ADW能否在特定时间点进行全备？如周五晚上做个全备.
 
-ADW是通过rman进行自动获取备份集(增量备份 Incremental)，如需全备特点时间点的备份的话，通过控制台手动进行备份是可以达到的。
+ADW是通过rman进行自动获取备份集(增量备份 Incremental)，如需全备特定时间点的备份的话，通过控制台手动进行备份是可以达到的。
 
 但手动备份是备份到ObjectStorage，所以需要设置Object Storage bucket，不然手动备份不了。
 
@@ -54,7 +54,8 @@ Tips:
 
 	Also, if the Display Name is different with Database Name, you need to use ADW Database Name! ADW Database Name! ADW Database Name!
 
-
+查看备份进度，可以通过ADW的控制台确认进度 Lifecycle State:  Backup In Progress...
+	
 #### 备份时间保留多久
 
 无论是自动备份还是手动备份，备份集最多保留60天，经过60天备份文件自动删除

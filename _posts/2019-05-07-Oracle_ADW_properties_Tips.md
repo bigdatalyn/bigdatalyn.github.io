@@ -137,6 +137,18 @@ ADW 18c 的 output
 
 区别：相差10个参数
 
+	[oracle@inst01 ~]$ diff oracle_adw18c_db_properties.txt oracle_19c_db_properties.txt
+	< AUTOMATIC_TABLESPACE_CALLOUT             PL/SQL function for automatic tablespace assignment during DDLs
+	< LOCAL_UNDO_ENABLED                       true if local undo is enabled
+	< MAX_PDB_STORAGE                          Maximum Space Usage of Datafiles and Local Tempfiles in Container
+	< NO_USERID_VERIFIER_SALT_COPY
+	< OLS_OID_STATUS                           OLS OID Status used for Label Security
+	< PATH_PREFIX                              All paths for objects such as directories are relative to this
+	< PDB_AUTO_UPGRADE                         upgrade a PDB on PDB open
+	< PDB_UPGRADE_SYNC                         upgrade a PDB using sync
+	< SSL_WALLET                               Location of SSL Wallet
+	< SYNC_ERROR_HANDLER                       schema.package.function of handler called by Application Sync
+	[oracle@inst01 ~]$
 
 
 	
