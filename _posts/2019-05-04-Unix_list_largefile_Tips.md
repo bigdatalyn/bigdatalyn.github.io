@@ -2,7 +2,7 @@
 layout: post
 title: "Linux/Unix list large file Tips"
 category: Unix
-tags: Unix ADW Tips
+tags: Unix Tips
 ---
 
 * content
