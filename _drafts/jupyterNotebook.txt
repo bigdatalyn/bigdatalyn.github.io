@@ -1,0 +1,240 @@
+(base) C:\Users\honglin>conda update conda
+Collecting package metadata: done
+Solving environment: done
+
+# All requested packages already installed.
+
+
+(base) C:\Users\honglin>conda install jupyter notebook
+Collecting package metadata: done
+Solving environment: done
+
+## Package Plan ##
+
+  environment location: d:\ProgramData\Miniconda2
+
+  added / updated specs:
+    - jupyter
+    - notebook
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    attrs-19.1.0               |           py27_1          56 KB
+    backports-1.0              |           py27_1           3 KB
+    backports.shutil_get_terminal_size-1.0.0|           py27_2           8 KB
+    backports.shutil_which-3.5.2|           py27_0           8 KB
+    backports_abc-0.5          |   py27h0ec6b72_0          12 KB
+    bleach-3.1.0               |           py27_0         233 KB
+    colorama-0.4.1             |           py27_0          24 KB
+    configparser-3.7.4         |           py27_0          42 KB
+    decorator-4.4.0            |           py27_1          18 KB
+    defusedxml-0.6.0           |             py_0          23 KB
+    entrypoints-0.3            |           py27_0          12 KB
+    functools32-3.2.3.2        |           py27_1          23 KB
+    ipykernel-4.10.0           |           py27_0         145 KB
+    ipython-5.8.0              |           py27_0         1.1 MB
+    ipython_genutils-0.2.0     |   py27hbe997df_0          38 KB
+    ipywidgets-7.4.2           |           py27_0         149 KB
+    jinja2-2.10.1              |           py27_0         182 KB
+    jsonschema-3.0.1           |           py27_0         105 KB
+    jupyter-1.0.0              |           py27_7           6 KB
+    jupyter_client-5.2.4       |           py27_0         200 KB
+    jupyter_console-5.2.0      |           py27_1          52 KB
+    jupyter_core-4.4.0         |           py27_0          85 KB
+    libsodium-1.0.16           |       h8b3e59e_0         437 KB
+    m2w64-gcc-libgfortran-5.3.0|                6         340 KB
+    m2w64-gcc-libs-5.3.0       |                7         518 KB
+    m2w64-gcc-libs-core-5.3.0  |                7         213 KB
+    m2w64-gmp-6.1.0            |                2         689 KB
+    m2w64-libwinpthread-git-5.0.0.4634.697f757|                2          30 KB
+    markupsafe-1.1.1           |   py27h0c8e037_0          30 KB
+    mistune-0.8.4              |   py27h0c8e037_0          53 KB
+    msys2-conda-epoch-20160418 |                1           2 KB
+    nbconvert-5.5.0            |             py_0         381 KB
+    nbformat-4.4.0             |   py27hf49b375_0         156 KB
+    notebook-5.7.8             |           py27_0         7.3 MB
+    pandoc-2.2.3.2             |                0        21.0 MB
+    pandocfilters-1.4.2        |           py27_1          13 KB
+    pathlib2-2.3.3             |           py27_0          32 KB
+    pickleshare-0.7.5          |           py27_0          13 KB
+    prometheus_client-0.6.0    |           py27_0          69 KB
+    prompt_toolkit-1.0.15      |   py27h3a8ec6a_0         334 KB
+    pygments-2.4.0             |             py_0         664 KB
+    pyqt-4.10.4                |           py27_1        31.2 MB
+    pyrsistent-0.14.11         |   py27h0c8e037_0          74 KB
+    python-dateutil-2.8.0      |           py27_0         279 KB
+    pywinpty-0.5.5             |        py27_1000          44 KB
+    pyzmq-18.0.0               |   py27hc56fc5f_0         409 KB
+    qtconsole-4.4.4            |             py_0          88 KB
+    scandir-1.10.0             |   py27h0c8e037_0          34 KB
+    send2trash-1.5.0           |           py27_0          16 KB
+    simplegeneric-0.8.1        |           py27_2          10 KB
+    singledispatch-3.4.0.3     |   py27h3f9d112_0          15 KB
+    terminado-0.8.2            |           py27_0          22 KB
+    testpath-0.4.2             |           py27_0          91 KB
+    tornado-5.1.1              |   py27h0c8e037_0         641 KB
+    traitlets-4.3.2            |   py27h1b1b3a5_0         126 KB
+    wcwidth-0.1.7              |   py27hb1a0d82_0          25 KB
+    webencodings-0.5.1         |           py27_1          20 KB
+    widgetsnbextension-3.4.2   |           py27_0         1.7 MB
+    win_unicode_console-0.5    |   py27hc037021_0          31 KB
+    winpty-0.4.3               |                4         1.1 MB
+    zeromq-4.3.1               |       h2880e7c_3        25.6 MB
+    ------------------------------------------------------------
+                                           Total:        96.3 MB
+
+The following NEW packages will be INSTALLED:
+
+  attrs              pkgs/main/win-64::attrs-19.1.0-py27_1
+  backports          pkgs/main/win-64::backports-1.0-py27_1
+  backports.shutil_~ pkgs/main/win-64::backports.shutil_get_terminal_size-1.0.0-py27_2
+  backports.shutil_~ pkgs/main/win-64::backports.shutil_which-3.5.2-py27_0
+  backports_abc      pkgs/main/win-64::backports_abc-0.5-py27h0ec6b72_0
+  bleach             pkgs/main/win-64::bleach-3.1.0-py27_0
+  colorama           pkgs/main/win-64::colorama-0.4.1-py27_0
+  configparser       pkgs/main/win-64::configparser-3.7.4-py27_0
+  decorator          pkgs/main/win-64::decorator-4.4.0-py27_1
+  defusedxml         pkgs/main/noarch::defusedxml-0.6.0-py_0
+  entrypoints        pkgs/main/win-64::entrypoints-0.3-py27_0
+  functools32        pkgs/main/win-64::functools32-3.2.3.2-py27_1
+  ipykernel          pkgs/main/win-64::ipykernel-4.10.0-py27_0
+  ipython            pkgs/main/win-64::ipython-5.8.0-py27_0
+  ipython_genutils   pkgs/main/win-64::ipython_genutils-0.2.0-py27hbe997df_0
+  ipywidgets         pkgs/main/win-64::ipywidgets-7.4.2-py27_0
+  jinja2             pkgs/main/win-64::jinja2-2.10.1-py27_0
+  jsonschema         pkgs/main/win-64::jsonschema-3.0.1-py27_0
+  jupyter            pkgs/main/win-64::jupyter-1.0.0-py27_7
+  jupyter_client     pkgs/main/win-64::jupyter_client-5.2.4-py27_0
+  jupyter_console    pkgs/main/win-64::jupyter_console-5.2.0-py27_1
+  jupyter_core       pkgs/main/win-64::jupyter_core-4.4.0-py27_0
+  libsodium          pkgs/main/win-64::libsodium-1.0.16-h8b3e59e_0
+  m2w64-gcc-libgfor~ pkgs/msys2/win-64::m2w64-gcc-libgfortran-5.3.0-6
+  m2w64-gcc-libs     pkgs/msys2/win-64::m2w64-gcc-libs-5.3.0-7
+  m2w64-gcc-libs-co~ pkgs/msys2/win-64::m2w64-gcc-libs-core-5.3.0-7
+  m2w64-gmp          pkgs/msys2/win-64::m2w64-gmp-6.1.0-2
+  m2w64-libwinpthre~ pkgs/msys2/win-64::m2w64-libwinpthread-git-5.0.0.4634.697f757-2
+  markupsafe         pkgs/main/win-64::markupsafe-1.1.1-py27h0c8e037_0
+  mistune            pkgs/main/win-64::mistune-0.8.4-py27h0c8e037_0
+  msys2-conda-epoch  pkgs/msys2/win-64::msys2-conda-epoch-20160418-1
+  nbconvert          pkgs/main/noarch::nbconvert-5.5.0-py_0
+  nbformat           pkgs/main/win-64::nbformat-4.4.0-py27hf49b375_0
+  notebook           pkgs/main/win-64::notebook-5.7.8-py27_0
+  pandoc             pkgs/main/win-64::pandoc-2.2.3.2-0
+  pandocfilters      pkgs/main/win-64::pandocfilters-1.4.2-py27_1
+  pathlib2           pkgs/main/win-64::pathlib2-2.3.3-py27_0
+  pickleshare        pkgs/main/win-64::pickleshare-0.7.5-py27_0
+  prometheus_client  pkgs/main/win-64::prometheus_client-0.6.0-py27_0
+  prompt_toolkit     pkgs/main/win-64::prompt_toolkit-1.0.15-py27h3a8ec6a_0
+  pygments           pkgs/main/noarch::pygments-2.4.0-py_0
+  pyqt               pkgs/free/win-64::pyqt-4.10.4-py27_1
+  pyrsistent         pkgs/main/win-64::pyrsistent-0.14.11-py27h0c8e037_0
+  python-dateutil    pkgs/main/win-64::python-dateutil-2.8.0-py27_0
+  pywinpty           pkgs/main/win-64::pywinpty-0.5.5-py27_1000
+  pyzmq              pkgs/main/win-64::pyzmq-18.0.0-py27hc56fc5f_0
+  qtconsole          pkgs/main/noarch::qtconsole-4.4.4-py_0
+  scandir            pkgs/main/win-64::scandir-1.10.0-py27h0c8e037_0
+  send2trash         pkgs/main/win-64::send2trash-1.5.0-py27_0
+  simplegeneric      pkgs/main/win-64::simplegeneric-0.8.1-py27_2
+  singledispatch     pkgs/main/win-64::singledispatch-3.4.0.3-py27h3f9d112_0
+  terminado          pkgs/main/win-64::terminado-0.8.2-py27_0
+  testpath           pkgs/main/win-64::testpath-0.4.2-py27_0
+  tornado            pkgs/main/win-64::tornado-5.1.1-py27h0c8e037_0
+  traitlets          pkgs/main/win-64::traitlets-4.3.2-py27h1b1b3a5_0
+  wcwidth            pkgs/main/win-64::wcwidth-0.1.7-py27hb1a0d82_0
+  webencodings       pkgs/main/win-64::webencodings-0.5.1-py27_1
+  widgetsnbextension pkgs/main/win-64::widgetsnbextension-3.4.2-py27_0
+  win_unicode_conso~ pkgs/main/win-64::win_unicode_console-0.5-py27hc037021_0
+  winpty             pkgs/main/win-64::winpty-0.4.3-4
+  zeromq             pkgs/main/win-64::zeromq-4.3.1-h2880e7c_3
+
+
+Proceed ([y]/n)? y
+
+
+Downloading and Extracting Packages
+simplegeneric-0.8.1  | 10 KB     | ############################################################################ | 100%
+msys2-conda-epoch-20 | 2 KB      | ############################################################################ | 100%
+traitlets-4.3.2      | 126 KB    | ############################################################################ | 100%
+tornado-5.1.1        | 641 KB    | ############################################################################ | 100%
+decorator-4.4.0      | 18 KB     | ############################################################################ | 100%
+wcwidth-0.1.7        | 25 KB     | ############################################################################ | 100%
+jupyter-1.0.0        | 6 KB      | ############################################################################ | 100%
+scandir-1.10.0       | 34 KB     | ############################################################################ | 100%
+pywinpty-0.5.5       | 44 KB     | ############################################################################ | 100%
+zeromq-4.3.1         | 25.6 MB   | ############################################################################ | 100%
+pygments-2.4.0       | 664 KB    | ############################################################################ | 100%
+jinja2-2.10.1        | 182 KB    | ############################################################################ | 100%
+backports-1.0        | 3 KB      | ############################################################################ | 100%
+configparser-3.7.4   | 42 KB     | ############################################################################ | 100%
+defusedxml-0.6.0     | 23 KB     | ############################################################################ | 100%
+backports.shutil_get | 8 KB      | ############################################################################ | 100%
+pyrsistent-0.14.11   | 74 KB     | ############################################################################ | 100%
+nbformat-4.4.0       | 156 KB    | ############################################################################ | 100%
+pandocfilters-1.4.2  | 13 KB     | ############################################################################ | 100%
+backports.shutil_whi | 8 KB      | ############################################################################ | 100%
+prometheus_client-0. | 69 KB     | ############################################################################ | 100%
+jupyter_core-4.4.0   | 85 KB     | ############################################################################ | 100%
+colorama-0.4.1       | 24 KB     | ############################################################################ | 100%
+ipython_genutils-0.2 | 38 KB     | ############################################################################ | 100%
+pandoc-2.2.3.2       | 21.0 MB   | ############################################################################ | 100%
+jupyter_client-5.2.4 | 200 KB    | ############################################################################ | 100%
+m2w64-gcc-libs-5.3.0 | 518 KB    | ############################################################################ | 100%
+terminado-0.8.2      | 22 KB     | ############################################################################ | 100%
+m2w64-libwinpthread- | 30 KB     | ############################################################################ | 100%
+pathlib2-2.3.3       | 32 KB     | ############################################################################ | 100%
+backports_abc-0.5    | 12 KB     | ############################################################################ | 100%
+jupyter_console-5.2. | 52 KB     | ############################################################################ | 100%
+notebook-5.7.8       | 7.3 MB    | ############################################################################ | 100%
+m2w64-gcc-libs-core- | 213 KB    | ############################################################################ | 100%
+m2w64-gmp-6.1.0      | 689 KB    | ############################################################################ | 100%
+winpty-0.4.3         | 1.1 MB    | ############################################################################ | 100%
+entrypoints-0.3      | 12 KB     | ############################################################################ | 100%
+ipython-5.8.0        | 1.1 MB    | ############################################################################ | 100%
+markupsafe-1.1.1     | 30 KB     | ############################################################################ | 100%
+mistune-0.8.4        | 53 KB     | ############################################################################ | 100%
+pickleshare-0.7.5    | 13 KB     | ############################################################################ | 100%
+bleach-3.1.0         | 233 KB    | ############################################################################ | 100%
+pyqt-4.10.4          | 31.2 MB   | ############################################################################ | 100%
+testpath-0.4.2       | 91 KB     | ############################################################################ | 100%
+webencodings-0.5.1   | 20 KB     | ############################################################################ | 100%
+win_unicode_console- | 31 KB     | ############################################################################ | 100%
+send2trash-1.5.0     | 16 KB     | ############################################################################ | 100%
+singledispatch-3.4.0 | 15 KB     | ############################################################################ | 100%
+widgetsnbextension-3 | 1.7 MB    | ############################################################################ | 100%
+libsodium-1.0.16     | 437 KB    | ############################################################################ | 100%
+attrs-19.1.0         | 56 KB     | ############################################################################ | 100%
+python-dateutil-2.8. | 279 KB    | ############################################################################ | 100%
+m2w64-gcc-libgfortra | 340 KB    | ############################################################################ | 100%
+prompt_toolkit-1.0.1 | 334 KB    | ############################################################################ | 100%
+nbconvert-5.5.0      | 381 KB    | ############################################################################ | 100%
+qtconsole-4.4.4      | 88 KB     | ############################################################################ | 100%
+functools32-3.2.3.2  | 23 KB     | ############################################################################ | 100%
+jsonschema-3.0.1     | 105 KB    | ############################################################################ | 100%
+ipykernel-4.10.0     | 145 KB    | ############################################################################ | 100%
+pyzmq-18.0.0         | 409 KB    | ############################################################################ | 100%
+ipywidgets-7.4.2     | 149 KB    | ############################################################################ | 100%
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+
+(base) C:\Users\honglin>jupyter notebook
+[I 14:34:10.150 NotebookApp] Writing notebook server cookie secret to C:\Users\honglin\AppData\Roaming\jupyter\runtime\notebook_cookie_secret
+[I 14:34:13.395 NotebookApp] Serving notebooks from local directory: C:\Users\honglin
+[I 14:34:49.841 NotebookApp] The Jupyter Notebook is running at:
+[I 14:34:49.842 NotebookApp] http://localhost:8888/?token=d296395f43ad61e1f966e03e9e4f41d01b9171fe4b9e4fa5
+[I 14:34:49.842 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 14:34:49.875 NotebookApp]
+
+    To access the notebook, open this file in a browser:
+        file:///C:/Users/honglin/AppData/Roaming/jupyter/runtime/nbserver-32316-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/?token=d296395f43ad61e1f966e03e9e4f41d01b9171fe4b9e4fa5
+[I 14:34:49.880 NotebookApp] 302 GET / (::1) 1.00ms
+[I 14:34:49.901 NotebookApp] 302 GET /tree? (::1) 2.00ms
+[I 14:36:49.700 NotebookApp] Interrupted...
+[I 14:36:49.713 NotebookApp] Shutting down 0 kernels
+
+(base) C:\Users\honglin>
