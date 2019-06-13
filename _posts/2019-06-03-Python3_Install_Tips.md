@@ -40,7 +40,7 @@ Some errors in installing python3.7
 
 [python package](https://www.python.org/downloads/)
 
-wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tgz
+	wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tgz
 
 ### Unzip&make install
 
@@ -67,15 +67,15 @@ Just like the following output in the end.
 	ln -s /usr/local/python3/bin/python3 /usr/bin/python3
 
 
->  vi ~/.bash_profile
->  .bash_profile
-> #Get the aliases and functions
-> if [ -f ~/.bashrc ]; then
-> . ~/.bashrc
-> fi
-> #User specific environment and startup programs
-> PATH=$PATH:$HOME/bin:/usr/local/python3/bin
-> export PATH
+	 vi ~/.bash_profile
+	 .bash_profile
+	#Get the aliases and functions
+	if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+	fi
+	#User specific environment and startup programs
+	PATH=$PATH:$HOME/bin:/usr/local/python3/bin
+	export PATH
 
 	source ~/.bash_profile
 	python3 -V
