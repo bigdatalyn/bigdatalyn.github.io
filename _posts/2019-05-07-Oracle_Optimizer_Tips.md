@@ -254,7 +254,27 @@ Database 19c
 
 	[oracle@db04 ~](KKB)$ 
 
+数据加载时候默认收集统计信息，可以通过如下参数查看和控制，如果想在load过程中收集直方图统计信息，也是有参数控制
 
+	[oracle@db04 ~](KKB)$ ora params optimizer | grep -i load
+	_optimizer_gather_stats_on_load 	      TRUE		   enable/disable online statistics gathering
+	_optimizer_gather_stats_on_load_all	      FALSE		   enable/disable online statistics gathering for nonempty segments
+	_optimizer_gather_stats_on_load_hist	      FALSE		   enable/disable online histogram gathering for loads
+	_optimizer_gather_stats_on_load_index	      TRUE		   enable/disable online index stats gathering for loads
+	_optimizer_key_vector_payload		      TRUE		   enables or disables dimension payloads in vector transform
+	_optimizer_key_vector_payload_dim_aggs	      FALSE		   enables or disables dimension payloading of aggregates in VT
+	_optimizer_vector_fact_payload_ratio	      20		   cost based vector transform payload dimension to fact ratio
+	[oracle@db04 ~](KKB)$ 
+
+可以通过下面两个产生控制hint和并行hint的有效开关，默认是false
+
+	[oracle@db04 ~](KKB)$ ora params optimizer | grep -i ignore
+	optimizer_ignore_hints			      FALSE		   enables the embedded hints to be ignored
+	optimizer_ignore_parallel_hints 	      FALSE		   enables embedded parallel hints to be ignored
+	[oracle@db04 ~](KKB)$ 
+
+
+	
 	
 Have a good work&life! 2019/05 via LinHong
 
