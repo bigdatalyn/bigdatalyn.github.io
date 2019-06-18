@@ -857,8 +857,18 @@ https://en.wikipedia.org/wiki/300_(number)
 	1 row updated.
 
 	SYS@KKB> commit;
-
 	Commit complete.
+
+	为什么设置成2？ 我觉得应该是跟 SQL Plan Management Tracing 的级别一样，参考如下：
+	
+	DEBUG_TRC_OFF = 0
+	DEBUG_TRC_FILE = 1
+	DEBUG_TRC_ALERT_LOG = 2
+	DEBUG_TRC_ALERT_TIMESTAMP = 4
+	DEBUG_TRC_ERROR_STACK = 8
+	DEBUG_TRC_TERM_OUTPUT = 16
+	DEBUG_TRC_V2PHV CONSTANT = 32
+	
 
 	SYS@KKB> select * from SMB$CONFIG;
 
