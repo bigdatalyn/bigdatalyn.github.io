@@ -1193,9 +1193,9 @@ https://en.wikipedia.org/wiki/300_(number)
 
 ### Appendix
 
-	[Oracle 19c Automatic Indexing](http://www.bigdatalyn.com/2019/02/19/Oracle_19c_AutomaticIndexing_Tips/)
-	[21.7 Managing Auto Indexes ](https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/managing-indexes.html#GUID-D1285CD5-95C0-4E74-8F26-A02018EA7999)
-	[Autonomous Indexing](https://blogs.oracle.com/oraclemagazine/autonomous-indexing)
+[Oracle 19c Automatic Indexing](http://www.bigdatalyn.com/2019/02/19/Oracle_19c_AutomaticIndexing_Tips/)
+[21.7 Managing Auto Indexes ](https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/managing-indexes.html#GUID-D1285CD5-95C0-4E74-8F26-A02018EA7999)
+[Autonomous Indexing](https://blogs.oracle.com/oraclemagazine/autonomous-indexing)
 
 
 
