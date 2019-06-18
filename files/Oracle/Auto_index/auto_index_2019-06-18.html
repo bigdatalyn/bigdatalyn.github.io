@@ -1,0 +1,2885 @@
+LIN@KKB> SELECT dbms_auto_index.report_activity(TO_TIMESTAMP('2019-06-18 16:40:00', 'YYYY-MM-DD hh24:mi:ss'), -- 开始时间(eg. sysdate-1)
+  2                                              null,       -- 结束时间
+  3                                              'html',     -- 报告种类 (TEXT,HTML,XML)
+  4                                              'all',      -- 出力报告内容 (ALL,SUMMARY,INDEX_DETAILS,VERIFICATION_DETAILS,ERRORS)
+  5                                              'all')     -- Level (BASIC,TYPICAL,ALL)
+  6                                              report FROM dual;
+
+REPORT
+------------------------------------------------------------------------------------------------------------------------
+<html>
+    <head>
+        <title>
+          Automatic Index Report
+        </title>
+        <style type="text/css">
+          body, table, input, select, textarea
+          {font:normal normal 8pt Verdana,Arial;text-decoration:none;color:#0
+00000;}
+          .s8 {font-size:8pt;color:#006699}
+          .s9 {font-size:10pt;color:#006699}
+          .s10 {font-size:14pt;color:#006699;}
+          .s16 {border-width : 1px; border-color : #CCCC99;
+          border-style: solid;color:#006699;font-size:8pt;}
+          .s17 {border-width : 1px; border-color : #CCCC99;
+          border-style: solid;font-size:8pt;}
+          .s27 {border-width : 1px; border-color : #CCCC99; border-style: solid;
+}
+
+        </style>
+    </head>
+    <body>
+
+
+
+        <a name="general"/>
+        <a href="#general" style="text-decoration:none">
+            <font class="s10">GENERAL INFORMATION</font>
+        </a>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0">
+            <tr>
+                <th align="left">Activity start</th>
+                <td>: 18-JUN-2019 16:40:00</td>
+            </tr>
+            <tr>
+                <th align="left">Activity end</th>
+                <td>: 18-JUN-2019 17:10:33</td>
+            </tr>
+            <tr>
+                <th align="left">Executions completed</th>
+                <td>: 2</td>
+            </tr>
+            <tr>
+                <th align="left">Executions interrupted</th>
+                <td>: 0</td>
+            </tr>
+            <tr>
+                <th align="left">Executions with fatal error</th>
+                <td>: 0</td>
+            </tr>
+        </table>
+        <hr size="3" width="550" align="left"/>
+        <br/>
+
+
+        <a name="summary-auto"/>
+        <a href="#summary-auto" style="text-decoration:none">
+            <font class="s10">SUMMARY (AUTO INDEXES)</font>
+        </a>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0">
+            <tr>
+                <th align="left">Index candidates</th>
+                <td ora_space_char="_">
+      :
+      0</td>
+            </tr>
+            <tr>
+                <th align="left">Indexes created
+        (visible
+          / invisible)
+      </th>
+                <td ora_space_char="_">
+      :
+      1
+        (1
+          /
+          0)
+      </td>
+            </tr>
+            <tr>
+                <th align="left">Space used
+        (visible
+          / invisible)
+      </th>
+                <td ora_space_char="_">
+      :
+      3.15_MB
+        (3.15_MB
+          /
+          0_B)
+      </td>
+            </tr>
+            <tr>
+                <th align="left">Indexes dropped</th>
+                <td ora_space_char="_">
+      :
+      0</td>
+            </tr>
+            <tr>
+                <th align="left">SQL statements verified</th>
+                <td ora_space_char="_">
+      :
+      10</td>
+            </tr>
+            <tr>
+                <th align="left">SQL statements improved
+        (improvement factor)
+      </th>
+                <td ora_space_char="_">
+      :
+      10
+        (2337.1x)
+      </td>
+            </tr>
+            <tr>
+                <th align="left">SQL plan baselines created</th>
+                <td ora_space_char="_">
+      :
+      0</td>
+            </tr>
+            <tr>
+                <th align="left">Overall improvement factor</th>
+                <td ora_space_char="_">
+      :
+      2337.1x</td>
+            </tr>
+        </table>
+        <hr size="3" width="550" align="left"/>
+        <br/>
+        <a name="summary-nonauto"/>
+        <a href="#summary-nonauto" style="text-decoration:none">
+            <font class="s10">SUMMARY (MANUAL INDEXES)</font>
+        </a>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0">
+            <tr>
+                <th align="left">Unused indexes</th>
+                <td ora_space_char="_">
+      :
+      0</td>
+            </tr>
+            <tr>
+                <th align="left">Space used</th>
+                <td ora_space_char="_">
+      :
+      0_B</td>
+            </tr>
+            <tr>
+                <th align="left">Unusable indexes</th>
+                <td ora_space_char="_">
+      :
+      0</td>
+            </tr>
+        </table>
+        <hr size="3" width="550" align="left"/>
+        <br/>
+
+
+        <a name="index_details"/>
+        <a href="#index_details" style="text-decoration:none">
+            <font class="s10">INDEX DETAILS</font>
+        </a>
+        <hr size="3" width="550" align="left"/>
+        <font class="s5">  1. The following indexes were created:</font>
+
+        <br/>
+          *: invisible
+        <hr size="3" width="550" align="left"/>
+        <table bordercolor="#000000" ora_borderstyle="headeronl
+y">
+            <tr>
+                <th align="left">Owner</th>
+                <th align="left">Table</th>
+                <th align="left">Index</th>
+                <th align="left">Key</th>
+                <th align="left">Type</th>
+                <th align="left">Properties</th>
+            </tr>
+            <tr>
+                <td>LIN</td>
+                <td>TEST_OBJ_AI</td>
+                <td>SYS_AI_829s8wj1jb4y4</td>
+                <td>OBJECT_ID</td>
+                <td>B-TREE</td>
+                <td>NONE</td>
+            </tr>
+        </table>
+        <hr size="3" width="550" align="left"/>
+        <br/>
+
+
+        <a name="verification_details"/>
+        <a href="#verification_details" style="text-decoration:none">
+
+            <font class="s10">VERIFICATION DETAILS</font>
+        </a>
+        <hr size="3" width="550" align="left"/>
+        <font class="s5">  1. The performance of the followi
+ng statements improved:</font>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 0f8z69z7jcp71</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select /*+ USE_AUTO_INDEXES */ object_name from test_obj_ai
+where object_id=1000</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9428</td>
+                <td>1202</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>8399</td>
+                <td>501</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Oper
+ation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Row
+s</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</
+th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td
+>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="header
+only">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id<
+/th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name
+</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</t
+h>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=1000)
+       </li>
+        </ul>
+
+     Hint Report (identified by operation id / Query Block Name / Obje
+ct Alias):
+        <br/>
+
+     Total hints for statement: 1
+             (E - Syntax Error (1))
+
+        <hr size="1" width="550" align="left"/>
+        <table border="0" bgcolor="#FFFFFF">
+            <tr>
+                <td/>
+                <td/>
+            </tr>
+            <tr>
+                <td align="right">1 -</td>
+                <td align="left">SEL$1</td>
+            </tr>
+            <tr>
+                <td/>
+                <td>
+                    <table border="0" bgcolor="#FFFFFF">
+                        <tr valign="bottom">
+                            <td>E -</td>
+                            <td>USE_AUTO_INDEXES</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_wid
+thc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 10k4qgkyf2vm9</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select object_name from test_obj_ai where object_
+id=101</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2336x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>17979</td>
+                <td>41</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>17075</td>
+                <td>41</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>4672</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>2</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>2</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">
+Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">N
+ame</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes
+</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th
+>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operati
+on</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</
+th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=101)
+       </li>
+        </ul>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80"
+>
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 1pzm5v0j0w4wh</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select object_name from test_obj_ai where object_id=100</
+td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9413</td>
+                <td>39</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>9068</td>
+                <td>39</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16"
+>Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16
+">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">C
+ost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMEN
+T</td>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16
+">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16"
+>Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Byt
+es</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</
+th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=100)
+       </li>
+        </ul>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+REPORT
+------------------------------------------------------------------------------------------------------------------------
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 4ph5a5m5skqhz</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select /*+ use_auto_indexes */ object_name from test_obj_ai where o
+bject_id = 10</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9425</td>
+                <td>38</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>8432</td>
+                <td>38</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">
+Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Tim
+e</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Op
+eration</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">R
+ows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost
+</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</
+td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=10)
+       </li>
+        </ul>
+
+     Hint Report (identified by operation id / Query Block Name / Object Alias):
+        <br/>
+
+     Total hints for statement: 1
+             (E - Syntax Error (1))
+
+        <hr size="1" width="550" align="left"/>
+        <table border="0" bgcolor="#FFFFFF">
+            <tr>
+                <td/>
+                <td/>
+            </tr>
+            <tr>
+                <td align="right">1 -</td>
+                <td align="left">SEL$1</td>
+            </tr>
+            <tr>
+                <td/>
+                <td>
+                    <table border="0" bgcolor="#FFFFFF">
+                        <tr valign="bottom">
+                            <td>E -</td>
+                            <td>use_auto_indexes</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 5a41x15j0nz69</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select /*+ USE_AUTO_INDEXES */ object_name from test_obj_ai w
+here object_id=1</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9477</td>
+                <td>37</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>9282</td>
+                <td>37</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</
+th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s1
+6">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">
+Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16"
+>Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16
+">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">C
+ost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMEN
+T</td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=1)
+       </li>
+        </ul>
+
+     Hint Report (identified by operation id / Query Block Name / Object Alias):
+
+        <br/>
+
+     Total hints for statement: 1
+             (E - Syntax Error (1))
+
+        <hr size="1" width="550" align="left"/>
+        <table border="0" bgcolor="#FFFFFF">
+            <tr>
+                <td/>
+                <td/>
+            </tr>
+            <tr>
+                <td align="right">1 -</td>
+                <td align="left">SEL$1</td>
+            </tr>
+            <tr>
+                <td/>
+                <td>
+                    <table border="0" bgcolor="#FFFFFF">
+                        <tr valign="bottom">
+                            <td>E -</td>
+                            <td>USE_AUTO_INDEXES</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 8h1r5cs6gtk10</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select object_name from test_obj_ai where object_id='999'</
+td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2338.5x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>19268</td>
+                <td>37</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>17271</td>
+                <td>37</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>4677</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>2</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>2</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronl
+y">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th
+>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</t
+h>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s1
+6">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STAT
+EMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th
+>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16"
+>Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Ti
+me</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=999)
+       </li>
+        </ul>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 920q656bfbs87</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select object_name from test_obj_ai where object_id='11'</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9521</td>
+                <td>37</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>9293</td>
+                <td>36</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Oper
+ation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Row
+s</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</
+th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td
+>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+
+REPORT
+------------------------------------------------------------------------------------------------------------------------
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="header
+only">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id<
+/th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name
+</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</t
+h>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=11)
+       </li>
+        </ul>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 9ffdunca53nfc</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select object_name from test_obj_ai where o
+bject_id='1'</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9605</td>
+                <td>35</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>8859</td>
+                <td>35</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s1
+6">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">B
+ytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time
+</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Ope
+ration</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Ro
+ws</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost<
+/th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</t
+d>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=1)
+       </li>
+        </ul>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="8
+0">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: 9r4snusbhyn82</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select object_name /*+ USE_AUTO_INDEXES */ from test_ob
+j_ai where object_id=1</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9391</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>8369</td>
+                <td>31</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Opera
+tion</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows
+</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</t
+h>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headero
+nly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</
+th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name<
+/th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th
+>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT ST
+ATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=1)
+       </li>
+        </ul>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <table class="ex" cellspacing="0" border="0" ora_widthc="80">
+            <tr>
+                <th align="left">Parsing Schema Name</th>
+                <td>: LIN</td>
+            </tr>
+            <tr>
+                <th align="left">SQL ID</th>
+                <td>: gzz3n7h7jmv3n</td>
+            </tr>
+            <tr>
+                <th align="left">SQL Text</th>
+                <td>: select object_name from test_obj_ai where obj
+ect_id='10'</td>
+            </tr>
+            <tr>
+                <th align="left">Improvement Factor</th>
+                <td>: 2337x</td>
+            </tr>
+        </table>
+        <br/>
+        <font class="s7">
+            <b> Execution Statistics: </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0" ora_widthc="80">
+            <tr>
+                <td>
+                    <font class="s8">
+                        <b/>
+                    </font>
+                </td>
+                <td>
+                    <b>Original Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+                <td>
+                    <b>Auto Index Plan</b>
+                    <hr size="1" width="250" align="left"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Elapsed Time (s):</b>
+                </td>
+                <td>9473</td>
+                <td>35</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>CPU Time (s):</b>
+                </td>
+                <td>8341</td>
+                <td>35</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Buffer Gets:</b>
+                </td>
+                <td>2337</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Optimizer Cost:</b>
+                </td>
+                <td>32</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Disk Reads:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Direct Writes:</b>
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Rows Processed:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Executions:</b>
+                </td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <br/>
+        <a name="details"/>
+        <a href="#details" style="text-decoration:none">
+            <font class="s10">
+                <br/>
+
+        PLANS SECTION
+
+            </font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <br/>
+        <font class="s8">
+            <b> - Original </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       1599946467</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s1
+6">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Operation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16
+">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Rows</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">By
+tes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time<
+/th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td>
+                <td class="s27"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right"/>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS STORAGE FULL
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">6</td>
+                <td class="s27" align="right">474</td>
+                <td class="s27" align="right">32</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+        <br/>
+        <br/>
+        <font class="s8">
+            <b> - With Auto Indexes </b>
+        </font>
+        <hr size="1" width="200" align="left"/>
+        <table border="0">
+            <tr>
+                <th align="left">Plan Hash Value </th>
+                <td>:
+       3630496781</td>
+            </tr>
+        </table>
+        <br/>
+        <table bordercolor="#000000" ora_borderstyle="headeronly">
+            <tr>
+                <th align="left" bgcolor="#CCCC99" class="s16">Id</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Oper
+ation</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Name</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Row
+s</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Bytes</th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Cost</
+th>
+                <th align="left" bgcolor="#CCCC99" class="s16">Time</th>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">0</td>
+                <td class="s27" ora_space_char=".">SELECT STATEMENT</td
+>
+                <td class="s27"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right">1</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">.</font>
+                    TABLE ACCESS BY INDEX ROWID BATCHED
+                </td>
+                <td class="s27">TEST_OBJ_AI</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">79</td>
+                <td class="s27" align="right">2</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+            <tr bgcolor="#F7F777" valign="bottom">
+                <td class="s27" align="right"> * 2</td>
+                <td class="s27" ora_space_char=".">
+                    <font color="#F7F777">..</font>
+                    INDEX RANGE SCAN
+                </td>
+                <td class="s27">SYS_AI_829s8wj1jb4y4</td>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right"/>
+                <td class="s27" align="right">1</td>
+                <td class="s27" align="right">00:00:01 </td>
+            </tr>
+        </table>
+        <br/>
+        Predicate Information (identified by operation id):
+
+        <hr size="1" width="290" align="left"/>
+        <ul>
+            <li>2 -
+         access("OBJECT_ID"=10)
+       </li>
+        </ul>
+        <br/>
+        Notes
+
+
+        <hr size="1" width="30" align="left"/>
+
+             -
+             optimizer_use_stats_on_conventional_dml =
+             yes
+        <br/>
+
+           - Dynamic sampling used for this statement
+
+              ( level = 11 )
+
+        <br/>
+        <br/>
+        <hr size="3" width="550" align="left"/>
+        <hr size="3" width="550" align="left"/>
+        <br/>
+
+
+        <a name="errors"/>
+        <a href="#errors" style="text-decoration:none">
+            <font class="s10">ERRORS</font>
+        </a>
+        <hr size="3" width="650" align="left"/>
+        <tr>No errors found.</tr>
+        <hr size="3" width="650" align="left"/>
+
+
+    </body>
+</html>
+
+
+
+LIN@KKB> spool off
