@@ -1188,7 +1188,8 @@ https://en.wikipedia.org/wiki/300_(number)
 
 ![Auto_index_report01]({{ "/files/Oracle/Auto_index/Sample.png"}})
 
-![Auto_index_report02]({{ "/files/Oracle/Auto_index/auto_index_2019-06-18.html"}})
+[Auto index Report](/files/Oracle/Auto_index/auto_index_2019-06-18.html)
+
 
 ### Appendix
 
