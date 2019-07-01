@@ -807,7 +807,9 @@ https://en.wikipedia.org/wiki/300_(number)
 	PL/SQL procedure successfully completed.
 
 	LIN@KKB> 
-
+	
+	为啥叫secondary index，在auto index概念中，主外键约束的索引涉及的是数据整合性和唯一性，而secondary index是为了性能方面的，这个是不是很容易理解？
+	
 ### Test trace Auto Index
 
 通过设置SMB$CONFIG一些参数可以trace 创建auto index的一些过程(后台j000进程继续捕获和创建.)
