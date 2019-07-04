@@ -37,7 +37,7 @@ ATP/ADWC
 [oracle/learning-library](https://github.com/oracle/learning-library/tree/master/workshops)
 
 
-
+![Certification]({{ "/files/Oracle/1z0-931.png"}})
 
 
 	
