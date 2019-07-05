@@ -1,0 +1,108 @@
+After fiddling around some more I found a work around and was able to set a specific HTTPS port for XEPDB1 by following documentation for 12c multi-tenant architecture.
+
+ 
+
+Resources (In order used):
+
+    https://docs.oracle.com/database/121/ADMQS/GUID-06C767B0-B435-4C6B-9123-C39C030DF457.htm#ADMQS12485
+    https://docs.oracle.com/database/121/ADMQS/GUID-EB851101-07BE-4038-BB9D-06E01CC7F5D5.htm#ADMQS032
+    https://docs.oracle.com/en/database/oracle/oracle-database/18/xeinl/making-oracle-database-em-express-available-remote-c… 
+
+ 
+
+You can configure EM Express on a separate port that is specific to the PDB you're trying to access by doing the following:
+
+    Connect to sqlplus as sysdba
+        alter session set container=XEPDB1;
+        select dbms_xdb_config.gethttpsport() from dual;
+    If port returned is zero, then you need to manually configure an HTTPS port for the PDB
+        exec DBMS_XDB_CONFIG.SETHTTPSPORT(5502);
+    Allow access to EM Express from non-local address
+        sqlplus system
+        EXEC DBMS_XDB.SETLISTENERLOCALACCESS(FALSE);
+        Run 2. again, but first alter your session to use xepdb1 container
+    You should now be able to access EM Express at the new port and only see information for XEPDB1 by logging in as SYS or another privileged user.
+
+ 
+
+Note: This is what worked for me, I may not have had to enable listener access at the CDB level and only at the PDB level, but it works now so I'm going to work on getting ORDS and APEX installed next.
+
+
+ English follows Japanese:
+
+Oracle Database 12c ではコンテナDBと一緒にPDBを作成するとコンテナDBにしかEMが自動構成されない。
+
+なので、プラガブルDBに手動でEM Expressを構成する。
+
+1) OS上でEM Expressに使用するポートが空いていることを確認する。
+netstat –an | grep 5510
+何もかえってこなければ現在使用されていないのでOK。
+現在使用されているようであれば、5511とか使用されていないことが確認できたポートを使用することにする。
+
+2)　SYSDBA権限でプラガブルDBへ接続
+
+3) EM Express用のHTTPsポートを指定
+exec DBMS_XDB_CONFIG.SETHTTPSPORT(5510)
+
+4) XDBユーザのパスワードを再設定
+##EM ExpressではXDBディスパッチャを使用しWebアプリとしてのEM Expressを提供している。
+##PDBにEM Expressを設定するとXDBのパスワードを再設定する必要がある。
+   4-1) SYSDBA権限でコンテナDBへ接続
+   4-2) select username,account_status from dba_users;でLOCKされているかEXPIREされているか確認
+   4-3) alter user XDB account unlock identified by ******;で再設定
+
+5) EM Expressへアクセス
+https://localhost:5510/em
+
+--------------------------------------------------------------
+
+When created a pluggable DB with a container DB with DBCA, a EM Express has been configured for only the container DB.
+
+The following is to configure EM Express for the pluggable DB
+
+1) make sure the port you want to set for EM Express is not occupied
+#for instance, I have used 5510 port
+netstat –an | grep 5510
+No reply means your machine is not using the port.
+If the port has already used for some other application, you need to change the port like 5511...
+
+2)　Login to the pluggable DB as sysdba
+
+3) set the port number to EM Express
+exec DBMS_XDB_CONFIG.SETHTTPSPORT(5510)
+
+4) reconfigure the password for XDB user on the container DB
+##EM Express uses XML DB dispatcher as HTML/HTTP dispatcher for EM Express
+##You need to set new password for XML DB user(XDB)
+   4-1) login to the container DB as SYSDBA
+   4-2) confirm if XDB user has not been locked nor expired.
+         select username,account_status from dba_users;
+   4-3) alter user XDB account unlock identified by ******;
+
+5) Access to the EM Express for the pluggable DB
+https://localhost:5510/em
+##if the site required XDB user id and password, enter XDB and the password you have set.
+
+
+
+ WITH
+ FUNCTION b2vc (in_bool_expr VARCHAR2) RETURN VARCHAR2 IS
+    l_bool  BOOLEAN;
+    l_plsql VARCHAR2(32767);
+    l_ret   VARCHAR2(5);
+ BEGIN
+    l_plsql := 'BEGIN :l_bool := ' || in_bool_expr || '; END;';
+    EXECUTE IMMEDIATE l_plsql USING OUT l_bool;
+    IF l_bool IS NOT NULL THEN
+       IF l_bool THEN
+          l_ret := 'TRUE';
+       ELSE
+          l_ret := 'FALSE';
+       END IF;
+    END IF;
+    RETURN l_ret;
+ END b2vc;
+ SELECT b2vc('DBMS_XDB_CONFIG.ISGLOBALPORTENABLED') FROM dual;
+ /
+
+Hope this helps!

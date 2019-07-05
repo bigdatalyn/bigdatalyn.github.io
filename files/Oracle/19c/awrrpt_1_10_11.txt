@@ -1,0 +1,2086 @@
+
+WORKLOAD REPOSITORY PDB report (root snapshots)
+
+DB Name         DB Id    Unique Name DB Role          Edition Release    RAC CDB
+------------ ----------- ----------- ---------------- ------- ---------- --- ---
+ORCL          1539813185 orcl        PRIMARY          EE      19.0.0.0.0 NO  YES
+
+Instance     Inst Num Startup Time
+------------ -------- ---------------
+orcl                1 04-Jul-19 03:13
+
+Container DB Id  Container Name       Open Time
+--------------- --------------- ---------------
+     2431424541 PDB1            04-Jul-19 03:25
+
+Host Name        Platform                         CPUs Cores Sockets Memory(GB)
+---------------- -------------------------------- ---- ----- ------- ----------
+localhost.locald Linux x86 64-bit                    2     2       1       1.69
+
+              Snap Id      Snap Time      Sessions Curs/Sess
+            --------- ------------------- -------- ---------
+Begin Snap:        10 04-Jul-19 04:00:57         0        .0
+  End Snap:        11 04-Jul-19 05:00:39         1      12.0
+   Elapsed:               59.69 (mins)
+   DB Time:                0.10 (mins)
+
+Load Profile                    Per Second   Per Transaction  Per Exec  Per Call
+~~~~~~~~~~~~~~~            ---------------   --------------- --------- ---------
+             DB Time(s):               0.0               0.0      0.00      0.04
+              DB CPU(s):               0.0               0.0      0.00      0.03
+      Background CPU(s):               0.0               0.1      0.00      0.00
+      Redo size (bytes):           3,536.8          30,743.6
+  Logical read (blocks):             138.7           1,205.7
+          Block changes:              23.4             203.4
+ Physical read (blocks):               2.8              24.4
+Physical write (blocks):               0.0               0.1
+       Read IO requests:               1.5              12.8
+      Write IO requests:               0.0               0.0
+           Read IO (MB):               0.0               0.2
+          Write IO (MB):               0.0               0.0
+           IM scan rows:               0.0               0.0
+Session Logical Read IM:               0.0               0.0
+             User calls:               0.0               0.4
+           Parses (SQL):               5.2              44.9
+      Hard parses (SQL):               0.9               7.8
+     SQL Work Area (MB):               0.0               0.2
+                 Logons:               0.0               0.1
+            User logons:               0.0               0.0
+         Executes (SQL):              23.5             204.3
+              Rollbacks:               0.0               0.0
+           Transactions:               0.1
+
+Top 10 Foreground Events by Total Wait Time
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                           Total Wait       Avg   % DB Wait
+Event                                Waits Time (sec)      Wait   time Class
+------------------------------ ----------- ---------- --------- ------ --------
+DB CPU                                            5.1             86.3
+SGA: allocation forcing compon         394        4.3   10.81ms   71.6 Other
+db file sequential read              1,581          1  653.40us   17.4 User I/O
+cursor: pin S wait on X                  9         .5   57.78ms    8.7 Concurre
+virtual circuit wait                   116         .4    3.48ms    6.8 Network
+library cache load lock                 11         .3   28.74ms    5.3 Concurre
+ADR block file read                     14         .1   10.46ms    2.5 Other
+library cache lock                       6         .1   19.68ms    2.0 Concurre
+log file sync                            4         .1   28.93ms    1.9 Commit
+kksfbc child completion                  2         .1   51.05ms    1.7 Other
+
+Wait Classes by Total Wait Time
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                          Avg             Avg
+                                        Total Wait       Wait   % DB   Active
+Wait Class                  Waits       Time (sec)       Time   time Sessions
+---------------- ---------------- ---------------- ---------- ------ --------
+User I/O                    6,836               21     3.02ms  346.9      0.0
+DB CPU                                           5              86.3      0.0
+Other                       3,670                5     1.31ms   81.0      0.0
+System I/O                    938                3     2.93ms   46.2      0.0
+Concurrency                   182                2     9.01ms   27.6      0.0
+Network                       125                0     3.23ms    6.8      0.0
+Scheduler                      11                0    11.19ms    2.1      0.0
+Commit                          4                0    28.93ms    1.9      0.0
+Application                     5                0     5.35ms     .4      0.0
+Configuration                   2                0     5.17ms     .2      0.0
+
+IO Profile                  Read+Write/Second     Read/Second    Write/Second
+~~~~~~~~~~                  ----------------- --------------- ---------------
+            Total Requests:               1.5             1.5             0.0
+         Database Requests:               1.5             1.5             0.0
+        Optimized Requests:               0.0             0.0             0.0
+             Redo Requests:
+                Total (MB):               0.0             0.0             0.0
+             Database (MB):               0.0             0.0             0.0
+      Optimized Total (MB):               0.0             0.0             0.0
+                 Redo (MB):
+         Database (blocks):               2.8             2.8             0.0
+ Via Buffer Cache (blocks):               2.8             2.8             0.0
+           Direct (blocks):               0.0             0.0             0.0
+
+
+Time Model Statistics                         DB/Inst: ORCL/orcl  Snaps: 10-11
+-> DB Time represents total time in user calls
+-> DB CPU represents CPU time of foreground processes
+-> Total CPU Time represents foreground and background processes
+-> Statistics including the word "background" measure background process
+   time, therefore do not contribute to the DB time statistic
+-> Ordered by % of DB time in descending order, followed by Statistic Name
+
+                                                                % of  % of Total
+Statistic Name                                       Time (s) DB Time   CPU Time
+------------------------------------------ ------------------ ------- ----------
+sql execute elapsed time                                  5.3    89.8
+DB CPU                                                    5.1    86.3       15.3
+parse time elapsed                                        2.7    46.2
+hard parse elapsed time                                   2.7    45.1
+PL/SQL execution elapsed time                             2.1    35.0
+hard parse (sharing criteria) elapsed time                1.3    22.1
+PL/SQL compilation elapsed time                           0.1     1.1
+repeated bind elapsed time                                0.0      .1
+connection management call elapsed time                   0.0      .0
+DB time                                                   5.9
+background elapsed time                                  51.0
+background cpu time                                      28.5               84.7
+total CPU time                                           33.6
+                          ------------------------------------------------------
+
+Foreground Wait Class                         DB/Inst: ORCL/orcl  Snaps: 10-11
+-> s  - second, ms - millisecond, us - microsecond, ns - nanosecond
+-> ordered by wait time desc, waits desc
+-> %Timeouts: value of 0 indicates value was < .5%.  Value of null is truly 0
+-> Captured Time accounts for        207.7%  of Total DB time           5.95 (s)
+-> Total FG Wait Time:                 7.23 (s)  DB CPU time:           5.13 (s)
+
+                                     %Time      Total Wait
+Wait Class                     Waits -outs        Time (s)   Avg wait  %DB time
+-------------------- --------------- ----- --------------- ---------- ---------
+DB CPU                                                   5                 86.3
+Other                          2,239    53               5     2.06ms      77.5
+User I/O                       2,142     0               1   526.35us      19.0
+Concurrency                       40     0               1    23.95ms      16.1
+Network                          125     0               0     3.23ms       6.8
+Commit                             4     0               0    28.93ms       1.9
+Scheduler                          2     0               0     5.64ms       0.2
+System I/O                       297     0               0     6.45us       0.0
+Application                        4     0               0    81.00us       0.0
+Configuration                      0                     0                  0.0
+                          ------------------------------------------------------
+
+
+Foreground Wait Events                        DB/Inst: ORCL/orcl  Snaps: 10-11
+-> s  - second, ms - millisecond, us - microsecond, ns - nanosecond
+-> Only events with Total Wait Time (s) >= .001 are shown
+-> ordered by wait time desc, waits desc (idle events last)
+-> %Timeouts: value of 0 indicates value was < .5%.  Value of null is truly 0
+
+                                                Total
+                                       %Time     Wait              Waits   % DB
+Event                            Waits -outs Time (s)  Avg wait     /txn   time
+-------------------------- ----------- ----- -------- --------- -------- ------
+SGA: allocation forcing co         394    96        4   10.81ms      1.0   71.6
+db file sequential read          1,581              1  653.40us      3.8   17.4
+cursor: pin S wait on X              9              1   57.78ms      0.0    8.7
+virtual circuit wait               116              0    3.48ms      0.3    6.8
+library cache load lock             11              0   28.74ms      0.0    5.3
+ADR block file read                 14              0   10.46ms      0.0    2.5
+library cache lock                   6              0   19.68ms      0.0    2.0
+log file sync                        4              0   28.93ms      0.0    1.9
+kksfbc child completion              2   100        0   51.05ms      0.0    1.7
+direct path read                   111              0  513.54us      0.3    1.0
+PX Deq: Slave Session Stat          47              0  862.81us      0.1     .7
+PX qref latch                      800   100        0   26.64us      1.9     .4
+Disk file operations I/O           423              0   49.91us      1.0     .4
+PGA memory operation               919              0   21.73us      2.2     .3
+read by other session                1              0   15.76ms      0.0     .3
+resmgr:cpu quantum                   2              0    5.64ms      0.0     .2
+PX Deq: Join ACK                    22              0  474.91us      0.1     .2
+latch: shared pool                  13              0  280.23us      0.0     .1
+enq: PS - contention                13              0  276.31us      0.0     .1
+PX Deq: Signal ACK EXT              22              0  145.14us      0.1     .1
+control file sequential re         297              0    6.45us      0.7     .0
+SQL*Net message from clien           9            508   56.46 s      0.0
+virtual circuit next reque           4              5 1348.33ms      0.0
+PX Deq: Execute Reply               44              1   11.64ms      0.1
+PX Deq: Parse Reply                 22              0    5.08ms      0.1
+PX Deq: Execution Msg              100              0  592.60us      0.2
+                          ------------------------------------------------------
+
+
+Service Statistics                            DB/Inst: ORCL/orcl  Snaps: 10-11
+-> ordered by DB Time
+
+                                                           Physical      Logical
+Service Name                  DB Time (s)   DB CPU (s)    Reads (K)    Reads (K)
+---------------------------- ------------ ------------ ------------ ------------
+pdb1                                    4            4            1           62
+                          ------------------------------------------------------
+
+Service Wait Class Stats                      DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Wait Class info for services in the Service Statistics section.
+-> Total Waits and Time Waited displayed for the following wait
+   classes:  User I/O, Concurrency, Administrative, Network
+-> Time Waited (Wt Time) in seconds
+
+Service Name
+----------------------------------------------------------------
+ User I/O  User I/O  Concurcy  Concurcy     Admin     Admin   Network   Network
+Total Wts   Wt Time Total Wts   Wt Time Total Wts   Wt Time Total Wts   Wt Time
+--------- --------- --------- --------- --------- --------- --------- ---------
+pdb1
+     1032         1        11         0         0         0        21         0
+                          ------------------------------------------------------
+
+
+Top Process Types by Wait Class               DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+
+Top Process Types by CPU Used                 DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+
+SQL ordered by Elapsed Time                   DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> % Total DB Time is the Elapsed Time of the SQL statement divided
+   into the Total Database Time multiplied by 100
+-> %Total - Elapsed Time  as a percentage of Total DB time
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Captured SQL account for  163.9% of Total DB Time (s):               6
+-> Captured PL/SQL account for  691.8% of Total DB Time (s):               6
+
+        Elapsed                  Elapsed Time
+        Time (s)    Executions  per Exec (s)  %Total   %CPU    %IO    SQL Id
+---------------- -------------- ------------- ------ ------ ------ -------------
+            41.2              0           N/A  691.8   63.0   31.9 b6usrg82hwsa3
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+call dbms_stats.gather_database_stats_job_proc ( )
+
+             1.0            523          0.00   16.9   82.4   11.9 34rznuxy8h2a4
+   PDB: PDB1
+insert into histgrm$(obj#,intcol#,row#,bucket,endpoint,col#,epvalue_raw,ep_repea
+t_count,endpoint_enc) values(:1,:2,:3,:4,:5,:6,:7,:8,:9)
+
+             0.9          7,055          0.00   15.1   59.7   37.9 2sxqgx5hx76qr
+   PDB: PDB1
+select /*+ rule */ bucket, endpoint, col#, epvalue, epvalue_raw, ep_repeat_count
+, endpoint_enc from histgrm$ where obj#=:1 and intcol#=:2 and row#=:3 order by b
+ucket
+
+             0.9         14,859          0.00   14.5   52.3   48.6 0sbbcuruzd66f
+   PDB: PDB1
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, sample_
+size, minimum, maximum, distcnt, lowval, hival, density, col#, spare1, spare2, a
+vgcln, minimum_enc, maximum_enc from hist_head$ where obj#=:1 and intcol#=:2
+
+             0.8            283          0.00   14.0   12.6   83.8 3un99a0zwp4vd
+   PDB: PDB1
+select owner#,name,namespace,remoteowner,linkname,p_timestamp,p_obj#, nvl(proper
+ty,0),subname,type#,flags,d_attrs from dependency$ d, obj$ o where d_obj#=:1 and
+ p_obj#=obj#(+) order by order#
+
+             0.7          1,373          0.00   12.0   38.8   45.8 ft7wcqu3hzvca
+   PDB: PDB1
+insert /* QOSH:OPEN_COL_STATS */ into sys.wri$_optstat_histhead_history (obj#,i
+ntcol#,savtime,flags, null_cnt,minimum,maximum,distcnt,density,lowval,hival,avgc
+ln,sample_distcnt, sample_size,timestamp#,colname,minimum_enc,maximum_enc) sele
+ct h.obj#, h.intcol#, :3, bitand(h.spare2, 7) + 8 + decode(h.cache_cnt,0,0,64) +
+
+             0.6          1,061          0.00    9.3   74.3   15.3 121ffmrc95v7g
+   PDB: PDB1
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i.property,i.pctf
+ree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.distkey,i.lblkkey,i.dblkkey,i.cl
+ufac,i.cols,i.analyzetime,i.samplesize,i.dataobj#,nvl(i.degree,1),nvl(i.instance
+s,1),i.rowcnt,mod(i.pctthres$,256),i.indmethod#,i.trunccnt,nvl(c.unicols,0),nvl(
+
+             0.5          1,115          0.00    8.3   47.3   51.0 g0t052az3rx44
+   PDB: PDB1
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decode(type#,2,nvl(sc
+ale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180,scale,181,scale,182,scale,183,s
+cale,231,scale,0),null$,fixedstorage,nvl(deflength,0),default$,rowid,col#,proper
+ty, nvl(charsetid,0),nvl(charsetform,0),spare1,spare2,nvl(spare3,0), nvl(evaledi
+
+             0.4             97          0.00    7.3   95.3     .0 3qkhfbf2kyvhk
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT POS+1 POS, VAL, NONNULLS, NDV, SPLIT, RSIZE, ROWCNT, TOPNCNT, TOPN, NULL
+MINFREQ, NULL MAXFREQ, NULL AVGFREQ, NULL STDDEVFREQ FROM XMLTABLE( '/process_re
+sult/select_list_item' PASSING :B1 COLUMNS POS NUMBER PATH 'pos', VAL VARCHAR2(2
+40) PATH 'value', NONNULLS NUMBER PATH 'nonnulls', NDV NUMBER PATH 'ndv', SPLIT
+
+             0.3             10          0.03    5.8   96.4     .0 4bugmu5z8szn5
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+
+SQL ordered by Elapsed Time                   DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> % Total DB Time is the Elapsed Time of the SQL statement divided
+   into the Total Database Time multiplied by 100
+-> %Total - Elapsed Time  as a percentage of Total DB time
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Captured SQL account for  163.9% of Total DB Time (s):               6
+-> Captured PL/SQL account for  691.8% of Total DB Time (s):               6
+
+        Elapsed                  Elapsed Time
+        Time (s)    Executions  per Exec (s)  %Total   %CPU    %IO    SQL Id
+---------------- -------------- ------------- ------ ------ ------ -------------
+SELECT /*+ ordered push_pred(v) OPT_PARAM('_parallel_syspls_o
+bey_force' 'false') */ U.NAME, OT.NAME, DECODE(OT.TYPE#, 34, V.COMPART, OT.SUBNA
+ME) PART, DECODE(OT.TYPE#, 34, OT.SUBNAME, NULL) SPART, V.COL, V.GLOB_ST, V.USER
+_ST, V.DIST, V.DENS, V.SDIST, V.SSIZE, V.NCNT, V.TSTAMP, V.CLEN, V.MINVAL, V.MAX
+
+             0.3          2,776          0.00    4.5   73.0   25.6 7azxftvubufnj
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT COUNT(UNQ) UNQ, COUNT(PFX) PFX FROM (SELECT /*+ first_rows(1) leading(cc)
+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ CD.TYPE#
+UNQ, NULL PFX FROM SYS.CCOL$ CC, SYS.CDEF$ CD WHERE CC.OBJ# = :B2 AND CC.INTCOL#
+ = :B1 AND CD.CON# = CC.CON# AND CD.OBJ# = CC.OBJ# AND CD.ENABLED IS NOT NULL AN
+
+             0.3          1,382          0.00    4.5   90.3    5.6 dp0vgyb1hsfjb
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+ A.STATSTYPE#, C.INTCOL# FROM ASSOCIATION$ A, OBJ$ O, USER$ U, COL$ C, OBJ$ SO,
+USER$ SU, COLTYPE$ CT, OBJ$ TY WHERE O.OWNER#=U.USER# AND A.OBJ#=TY.OBJ# AND O.O
+BJ#=C.OBJ# AND C.INTCOL#=CT.INTCOL# AND O.OBJ#=CT.OBJ# AND CT.TOID=TY.OID$ AND A
+
+             0.3          8,688          0.00    4.4   96.0     .0 b9nbhsbx8tqz5
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SPARE4 FROM SYS.O
+PTSTAT_HIST_CONTROL$ WHERE SNAME = :B1
+
+             0.3             96          0.00    4.4   87.0     .5 3wh9htctp7199
+   PDB: PDB1
+insert /* KSXM:TAKE_SNPSHOT */ into sys.optstat_snapshot$ (obj#, inserts, update
+s, deletes, timestamp, flags) (select m.obj#, m.inserts, m.updates, m.deletes, s
+ystimestamp, dbms_stats_advisor.compute_volatile_flag( m.obj#, m.flags, :fla
+gs, m.inserts, m.updates, m.deletes, s.inserts, s.updates, s.deletes, null,
+
+             0.2            128          0.00    4.0   15.9   83.6 9f5qcupfvj260
+   PDB: PDB1
+insert /* QOSH:SAVE_STAS */ into sys.wri$_optstat_ind_history (obj#,rowcnt,leafc
+nt,distkey, lblkkey, dblkkey,clufac,blevel,analyzetime,samplesize,guessq,cachedb
+lk, cachehit,logicalread,savtime,flags) values (:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,
+:11,:12,:13,:14,:15,:16)
+
+             0.2            195          0.00    3.7   82.3   13.8 5j3ram21g5s8r
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered use_nl(o c cu h) index(u i_user1) index(o i_obj2)
+ index(ci_obj#) index(cu i_col_usage$) index(h i_hh_obj#_intco
+l#) OPT_PARAM('_parallel_syspls_obey_force' 'false') */ C.NAME C
+OL_NAME, C.TYPE# COL_TYPE, C.CHARSETFORM COL_CSF, CASE WHEN C.DEFLENGTH <= 32767
+
+             0.2            806          0.00    3.3   33.7   65.7 9zbjgq87hy6uv
+   PDB: PDB1
+select t.ts#,t.file#,t.block#,nvl(t.bobj#,0),nvl(t.tab#,0),t.intcols,nvl(t.cluco
+ls,0),t.flags,t.pctfree$,t.pctused$,t.initrans,t.maxtrans,t.rowcnt,t.blkcnt,t.em
+pcnt,t.avgspc,t.chncnt,t.avgrln,t.analyzetime,t.samplesize,t.cols,t.property,nvl
+(t.degree,1),nvl(t.instances,1),t.avgspc_flb,t.flbcnt,t.kernelcols,nvl(t.trigfla
+
+             0.2          1,382          0.00    3.1   87.0   10.8 50kcsz2gh1w84
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+ A.STATSTYPE#, A.INTCOL# FROM ASSOCIATION$ A, OBJ$ O, USER$ U, COL$ C, OBJ$ SO,
+
+SQL ordered by Elapsed Time                   DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> % Total DB Time is the Elapsed Time of the SQL statement divided
+   into the Total Database Time multiplied by 100
+-> %Total - Elapsed Time  as a percentage of Total DB time
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Captured SQL account for  163.9% of Total DB Time (s):               6
+-> Captured PL/SQL account for  691.8% of Total DB Time (s):               6
+
+        Elapsed                  Elapsed Time
+        Time (s)    Executions  per Exec (s)  %Total   %CPU    %IO    SQL Id
+---------------- -------------- ------------- ------ ------ ------ -------------
+USER$ SU WHERE O.OWNER#=U.USER# AND A.OBJ#=O.OBJ# AND O.OBJ#=C.OBJ# AND C.INTCOL
+#=A.INTCOL# AND A.STATSTYPE#=SO.OBJ# AND SO.OWNER#=SU.USER# AND O.NAMESPACE = 1
+
+             0.2          4,038          0.00    3.1   75.9   16.6 62yyzw3309d6a
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT VALUE FROM V$SESSION_FIX_CONTROL WHERE BUGNO = :B1 AND SESSION_ID = USERE
+NV('SID')
+
+             0.2          1,248          0.00    2.6   88.9     .0 04kug40zbu4dm
+   PDB: PDB1
+select policy#, action# from aud_object_opt$ where object# = :1 and type = 2
+
+             0.1            283          0.00    2.4   29.6   64.9 8swypbbr0m372
+   PDB: PDB1
+select order#,columns,types from access$ where d_obj#=:1
+
+             0.1            161          0.00    2.2   24.3   68.8 1fm07xd16u5nr
+   PDB: PDB1
+insert /* QOSH:REC_STS */ into sys.wri$_optstat_opr_tasks (op_id, job_name, sta
+tus, start_time, end_time, target, target_type, target_size, estimated_cost, bat
+ching_coeff, actions, priority, notes, flags, target_objn) values (:1,:2,:3,:4,
+:5,:6,:7, :8,:9,:10,:11,:12,:13,:1
+
+             0.1          3,116          0.00    2.1   89.2     .1 2s9bghg5agn03
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ P.VALCHAR FROM SY
+S.OPTSTAT_USER_PREFS$ P, OBJ$ O, USER$ U WHERE P.OBJ#=O.OBJ# AND U.USER#=O.OWNER
+# AND U.NAME=:B3 AND O.NAME=:B2 AND O.NAMESPACE = 1 AND O.REMOTEOWNER IS NULL AN
+D O.LINKNAME IS NULL AND O.SUBNAME IS NULL AND O.TYPE# = 2 AND P.PNAME=:B1
+
+             0.1             97          0.00    2.1   76.2   22.7 cb13z404z3uak
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+select /* QOSLIVE */ intcol# from sys.wri$_optstat_histhead_history where obj#
+= :1 and savtime = timestamp '4000-12-01 01:00:00 -0:0'
+
+             0.1          1,179          0.00    2.0   80.3   12.5 acmvv4fhdc9zh
+   PDB: PDB1
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oid$, spare1, spar
+e2, spare3, signature, spare7, spare8, spare9, nvl(dflcollid, 16382), creappid,
+creverid, modappid, modverid, crepatchid, modpatchid from obj$ where owner#=:1 a
+nd name=:2 and namespace=:3 and remoteowner is null and linkname is null and sub
+
+             0.1            128          0.00    1.9   98.5     .0 547jpjrdb959a
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT OBJ# FROM ( SELECT O.OBJ# OBJ# FROM SYS.OBJ$ O, SYS.IND$ I WHERE O.OBJ# =
+ I.BO# AND I.OBJ# = :B1 UNION ALL SELECT O.OBJ# OBJ# FROM SYS.OBJ$ O, SYS.IND$ I
+, SYS.INDPART$ IP WHERE O.OBJ# = I.BO# AND I.OBJ# = IP.BO# AND IP.OBJ# = :B1 UNI
+ON ALL SELECT O.OBJ# OBJ# FROM SYS.OBJ$ O, SYS.IND$ I, SYS.INDCOMPART$ IP WHERE
+
+                          ------------------------------------------------------
+
+
+SQL ordered by CPU Time                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> %Total - CPU Time      as a percentage of Total DB CPU
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Captured SQL account for  122.5% of Total CPU Time (s):               5
+-> Captured PL/SQL account for  504.9% of Total CPU Time (s):               5
+
+    CPU                   CPU per           Elapsed
+  Time (s)  Executions    Exec (s) %Total   Time (s)   %CPU    %IO    SQL Id
+---------- ------------ ---------- ------ ---------- ------ ------ -------------
+      25.9            0        N/A  504.9       41.2   63.0   31.9 b6usrg82hwsa3
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+call dbms_stats.gather_database_stats_job_proc ( )
+
+       0.8          523       0.00   16.2        1.0   82.4   11.9 34rznuxy8h2a4
+   PDB: PDB1
+insert into histgrm$(obj#,intcol#,row#,bucket,endpoint,col#,epvalue_raw,ep_repea
+t_count,endpoint_enc) values(:1,:2,:3,:4,:5,:6,:7,:8,:9)
+
+       0.5        7,055       0.00   10.4        0.9   59.7   37.9 2sxqgx5hx76qr
+   PDB: PDB1
+select /*+ rule */ bucket, endpoint, col#, epvalue, epvalue_raw, ep_repeat_count
+, endpoint_enc from histgrm$ where obj#=:1 and intcol#=:2 and row#=:3 order by b
+ucket
+
+       0.4       14,859       0.00    8.8        0.9   52.3   48.6 0sbbcuruzd66f
+   PDB: PDB1
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, sample_
+size, minimum, maximum, distcnt, lowval, hival, density, col#, spare1, spare2, a
+vgcln, minimum_enc, maximum_enc from hist_head$ where obj#=:1 and intcol#=:2
+
+       0.4           97       0.00    8.1        0.4   95.3     .0 3qkhfbf2kyvhk
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT POS+1 POS, VAL, NONNULLS, NDV, SPLIT, RSIZE, ROWCNT, TOPNCNT, TOPN, NULL
+MINFREQ, NULL MAXFREQ, NULL AVGFREQ, NULL STDDEVFREQ FROM XMLTABLE( '/process_re
+sult/select_list_item' PASSING :B1 COLUMNS POS NUMBER PATH 'pos', VAL VARCHAR2(2
+40) PATH 'value', NONNULLS NUMBER PATH 'nonnulls', NDV NUMBER PATH 'ndv', SPLIT
+
+       0.4        1,061       0.00    8.0        0.6   74.3   15.3 121ffmrc95v7g
+   PDB: PDB1
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i.property,i.pctf
+ree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.distkey,i.lblkkey,i.dblkkey,i.cl
+ufac,i.cols,i.analyzetime,i.samplesize,i.dataobj#,nvl(i.degree,1),nvl(i.instance
+s,1),i.rowcnt,mod(i.pctthres$,256),i.indmethod#,i.trunccnt,nvl(c.unicols,0),nvl(
+
+       0.3           10       0.03    6.4        0.3   96.4     .0 4bugmu5z8szn5
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered push_pred(v) OPT_PARAM('_parallel_syspls_o
+bey_force' 'false') */ U.NAME, OT.NAME, DECODE(OT.TYPE#, 34, V.COMPART, OT.SUBNA
+ME) PART, DECODE(OT.TYPE#, 34, OT.SUBNAME, NULL) SPART, V.COL, V.GLOB_ST, V.USER
+_ST, V.DIST, V.DENS, V.SDIST, V.SSIZE, V.NCNT, V.TSTAMP, V.CLEN, V.MINVAL, V.MAX
+
+       0.3        1,373       0.00    5.4        0.7   38.8   45.8 ft7wcqu3hzvca
+   PDB: PDB1
+insert /* QOSH:OPEN_COL_STATS */ into sys.wri$_optstat_histhead_history (obj#,i
+ntcol#,savtime,flags, null_cnt,minimum,maximum,distcnt,density,lowval,hival,avgc
+ln,sample_distcnt, sample_size,timestamp#,colname,minimum_enc,maximum_enc) sele
+ct h.obj#, h.intcol#, :3, bitand(h.spare2, 7) + 8 + decode(h.cache_cnt,0,0,64) +
+
+       0.3        8,688       0.00    4.9        0.3   96.0     .0 b9nbhsbx8tqz5
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SPARE4 FROM SYS.O
+PTSTAT_HIST_CONTROL$ WHERE SNAME = :B1
+
+       0.2        1,382       0.00    4.7        0.3   90.3    5.6 dp0vgyb1hsfjb
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+
+SQL ordered by CPU Time                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> %Total - CPU Time      as a percentage of Total DB CPU
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Captured SQL account for  122.5% of Total CPU Time (s):               5
+-> Captured PL/SQL account for  504.9% of Total CPU Time (s):               5
+
+    CPU                   CPU per           Elapsed
+  Time (s)  Executions    Exec (s) %Total   Time (s)   %CPU    %IO    SQL Id
+---------- ------------ ---------- ------ ---------- ------ ------ -------------
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+ A.STATSTYPE#, C.INTCOL# FROM ASSOCIATION$ A, OBJ$ O, USER$ U, COL$ C, OBJ$ SO,
+USER$ SU, COLTYPE$ CT, OBJ$ TY WHERE O.OWNER#=U.USER# AND A.OBJ#=TY.OBJ# AND O.O
+BJ#=C.OBJ# AND C.INTCOL#=CT.INTCOL# AND O.OBJ#=CT.OBJ# AND CT.TOID=TY.OID$ AND A
+
+       0.2        1,115       0.00    4.5        0.5   47.3   51.0 g0t052az3rx44
+   PDB: PDB1
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decode(type#,2,nvl(sc
+ale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180,scale,181,scale,182,scale,183,s
+cale,231,scale,0),null$,fixedstorage,nvl(deflength,0),default$,rowid,col#,proper
+ty, nvl(charsetid,0),nvl(charsetform,0),spare1,spare2,nvl(spare3,0), nvl(evaledi
+
+       0.2           96       0.00    4.4        0.3   87.0     .5 3wh9htctp7199
+   PDB: PDB1
+insert /* KSXM:TAKE_SNPSHOT */ into sys.optstat_snapshot$ (obj#, inserts, update
+s, deletes, timestamp, flags) (select m.obj#, m.inserts, m.updates, m.deletes, s
+ystimestamp, dbms_stats_advisor.compute_volatile_flag( m.obj#, m.flags, :fla
+gs, m.inserts, m.updates, m.deletes, s.inserts, s.updates, s.deletes, null,
+
+       0.2        2,776       0.00    3.8        0.3   73.0   25.6 7azxftvubufnj
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT COUNT(UNQ) UNQ, COUNT(PFX) PFX FROM (SELECT /*+ first_rows(1) leading(cc)
+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ CD.TYPE#
+UNQ, NULL PFX FROM SYS.CCOL$ CC, SYS.CDEF$ CD WHERE CC.OBJ# = :B2 AND CC.INTCOL#
+ = :B1 AND CD.CON# = CC.CON# AND CD.OBJ# = CC.OBJ# AND CD.ENABLED IS NOT NULL AN
+
+       0.2          195       0.00    3.6        0.2   82.3   13.8 5j3ram21g5s8r
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered use_nl(o c cu h) index(u i_user1) index(o i_obj2)
+ index(ci_obj#) index(cu i_col_usage$) index(h i_hh_obj#_intco
+l#) OPT_PARAM('_parallel_syspls_obey_force' 'false') */ C.NAME C
+OL_NAME, C.TYPE# COL_TYPE, C.CHARSETFORM COL_CSF, CASE WHEN C.DEFLENGTH <= 32767
+
+       0.2        1,382       0.00    3.2        0.2   87.0   10.8 50kcsz2gh1w84
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+ A.STATSTYPE#, A.INTCOL# FROM ASSOCIATION$ A, OBJ$ O, USER$ U, COL$ C, OBJ$ SO,
+USER$ SU WHERE O.OWNER#=U.USER# AND A.OBJ#=O.OBJ# AND O.OBJ#=C.OBJ# AND C.INTCOL
+#=A.INTCOL# AND A.STATSTYPE#=SO.OBJ# AND SO.OWNER#=SU.USER# AND O.NAMESPACE = 1
+
+       0.1        4,038       0.00    2.7        0.2   75.9   16.6 62yyzw3309d6a
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT VALUE FROM V$SESSION_FIX_CONTROL WHERE BUGNO = :B1 AND SESSION_ID = USERE
+NV('SID')
+
+       0.1        1,248       0.00    2.7        0.2   88.9     .0 04kug40zbu4dm
+   PDB: PDB1
+select policy#, action# from aud_object_opt$ where object# = :1 and type = 2
+
+       0.1        3,116       0.00    2.2        0.1   89.2     .1 2s9bghg5agn03
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ P.VALCHAR FROM SY
+S.OPTSTAT_USER_PREFS$ P, OBJ$ O, USER$ U WHERE P.OBJ#=O.OBJ# AND U.USER#=O.OWNER
+# AND U.NAME=:B3 AND O.NAME=:B2 AND O.NAMESPACE = 1 AND O.REMOTEOWNER IS NULL AN
+D O.LINKNAME IS NULL AND O.SUBNAME IS NULL AND O.TYPE# = 2 AND P.PNAME=:B1
+
+SQL ordered by CPU Time                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> %Total - CPU Time      as a percentage of Total DB CPU
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Captured SQL account for  122.5% of Total CPU Time (s):               5
+-> Captured PL/SQL account for  504.9% of Total CPU Time (s):               5
+
+    CPU                   CPU per           Elapsed
+  Time (s)  Executions    Exec (s) %Total   Time (s)   %CPU    %IO    SQL Id
+---------- ------------ ---------- ------ ---------- ------ ------ -------------
+
+       0.1          128       0.00    2.1        0.1   98.5     .0 547jpjrdb959a
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT OBJ# FROM ( SELECT O.OBJ# OBJ# FROM SYS.OBJ$ O, SYS.IND$ I WHERE O.OBJ# =
+ I.BO# AND I.OBJ# = :B1 UNION ALL SELECT O.OBJ# OBJ# FROM SYS.OBJ$ O, SYS.IND$ I
+, SYS.INDPART$ IP WHERE O.OBJ# = I.BO# AND I.OBJ# = IP.BO# AND IP.OBJ# = :B1 UNI
+ON ALL SELECT O.OBJ# OBJ# FROM SYS.OBJ$ O, SYS.IND$ I, SYS.INDCOMPART$ IP WHERE
+
+       0.1          283       0.00    2.0        0.8   12.6   83.8 3un99a0zwp4vd
+   PDB: PDB1
+select owner#,name,namespace,remoteowner,linkname,p_timestamp,p_obj#, nvl(proper
+ty,0),subname,type#,flags,d_attrs from dependency$ d, obj$ o where d_obj#=:1 and
+ p_obj#=obj#(+) order by order#
+
+       0.1        1,179       0.00    1.8        0.1   80.3   12.5 acmvv4fhdc9zh
+   PDB: PDB1
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oid$, spare1, spar
+e2, spare3, signature, spare7, spare8, spare9, nvl(dflcollid, 16382), creappid,
+creverid, modappid, modverid, crepatchid, modpatchid from obj$ where owner#=:1 a
+nd name=:2 and namespace=:3 and remoteowner is null and linkname is null and sub
+
+       0.1           97       0.00    1.8        0.1   76.2   22.7 cb13z404z3uak
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+select /* QOSLIVE */ intcol# from sys.wri$_optstat_histhead_history where obj#
+= :1 and savtime = timestamp '4000-12-01 01:00:00 -0:0'
+
+       0.1          806       0.00    1.3        0.2   33.7   65.7 9zbjgq87hy6uv
+   PDB: PDB1
+select t.ts#,t.file#,t.block#,nvl(t.bobj#,0),nvl(t.tab#,0),t.intcols,nvl(t.cluco
+ls,0),t.flags,t.pctfree$,t.pctused$,t.initrans,t.maxtrans,t.rowcnt,t.blkcnt,t.em
+pcnt,t.avgspc,t.chncnt,t.avgrln,t.analyzetime,t.samplesize,t.cols,t.property,nvl
+(t.degree,1),nvl(t.instances,1),t.avgspc_flb,t.flbcnt,t.kernelcols,nvl(t.trigfla
+
+       0.1          267       0.00    1.1        0.1   98.1     .0 5p1kuxnngr62n
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ all_rows OPT_PARAM('_parallel_syspls_obey_force' 'fal
+se') */ C.NAME ICNAME,IC.POS# ICPOS,IC.SPARE1 ICFLAGS, C.PROPERTY ICPROP, CASE W
+HEN C.DEFLENGTH <= 32767 THEN C.DEFAULT$ ELSE NULL END ICEXPR, C.DEFLENGTH ICELE
+N FROM ICOL$ IC,COL$ C WHERE (:B2 IS NULL) AND IC.OBJ#=:B1 AND IC.BO#=C.OBJ# AND
+
+       0.1          447       0.00    1.1        0.1   97.9     .0 45019qrb7da32
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered index(u) index(o) OPT_PARAM('_parallel_syspls_ob
+ey_force' 'false') */ COUNT(*) FROM USER$ U, OBJ$ O WHERE U.NAME = :B4 AND O.OWN
+ER# = U.USER# AND O.NAME = :B3 AND O.NAMESPACE = :B2 AND O.REMOTEOWNER IS NULL A
+ND O.LINKNAME IS NULL AND O.SUBNAME IS NULL AND O.TYPE# = :B1 AND ROWNUM < 2
+
+       0.1          148       0.00    1.0        0.1   94.8     .0 dq5ash5k7v8pr
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered use_nl(u io i ito t itu po) OPT_PARAM('_paral
+lel_syspls_obey_force' 'false') */ IO.OBJ# IOBJN,I.TYPE# ITYPE,I.FLAGS IFLAGS,I.
+PROPERTY IPROP, I.INTCOLS IINTCOLS, NVL(I.DEGREE,1), I.ANALYZETIME, ITU.NAME TOW
+N,ITO.NAME TAB,I.BO# TOBJN,T.FLAGS TFLAGS,T.PROPERTY TPROP, ITO.TYPE# TTYPE, CAS
+
+                          ------------------------------------------------------
+
+
+SQL ordered by User I/O Wait Time             DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> %Total - User I/O Time as a percentage of Total User I/O Wait time
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Captured SQL account for   14.3% of Total User I/O Wait Time (s):
+-> Captured PL/SQL account for   63.7% of Total User I/O Wait Time (s):
+
+  User I/O                UIO per           Elapsed
+  Time (s)  Executions    Exec (s) %Total   Time (s)   %CPU    %IO    SQL Id
+---------- ------------ ---------- ------ ---------- ------ ------ -------------
+      13.1            0        N/A   63.7       41.2   63.0   31.9 b6usrg82hwsa3
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+call dbms_stats.gather_database_stats_job_proc ( )
+
+       0.7          283       0.00    3.4        0.8   12.6   83.8 3un99a0zwp4vd
+   PDB: PDB1
+select owner#,name,namespace,remoteowner,linkname,p_timestamp,p_obj#, nvl(proper
+ty,0),subname,type#,flags,d_attrs from dependency$ d, obj$ o where d_obj#=:1 and
+ p_obj#=obj#(+) order by order#
+
+       0.4       14,859       0.00    2.0        0.9   52.3   48.6 0sbbcuruzd66f
+   PDB: PDB1
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, sample_
+size, minimum, maximum, distcnt, lowval, hival, density, col#, spare1, spare2, a
+vgcln, minimum_enc, maximum_enc from hist_head$ where obj#=:1 and intcol#=:2
+
+       0.3        7,055       0.00    1.6        0.9   59.7   37.9 2sxqgx5hx76qr
+   PDB: PDB1
+select /*+ rule */ bucket, endpoint, col#, epvalue, epvalue_raw, ep_repeat_count
+, endpoint_enc from histgrm$ where obj#=:1 and intcol#=:2 and row#=:3 order by b
+ucket
+
+       0.3        1,373       0.00    1.6        0.7   38.8   45.8 ft7wcqu3hzvca
+   PDB: PDB1
+insert /* QOSH:OPEN_COL_STATS */ into sys.wri$_optstat_histhead_history (obj#,i
+ntcol#,savtime,flags, null_cnt,minimum,maximum,distcnt,density,lowval,hival,avgc
+ln,sample_distcnt, sample_size,timestamp#,colname,minimum_enc,maximum_enc) sele
+ct h.obj#, h.intcol#, :3, bitand(h.spare2, 7) + 8 + decode(h.cache_cnt,0,0,64) +
+
+       0.3        1,115       0.00    1.2        0.5   47.3   51.0 g0t052az3rx44
+   PDB: PDB1
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decode(type#,2,nvl(sc
+ale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180,scale,181,scale,182,scale,183,s
+cale,231,scale,0),null$,fixedstorage,nvl(deflength,0),default$,rowid,col#,proper
+ty, nvl(charsetid,0),nvl(charsetform,0),spare1,spare2,nvl(spare3,0), nvl(evaledi
+
+       0.2          128       0.00    1.0        0.2   15.9   83.6 9f5qcupfvj260
+   PDB: PDB1
+insert /* QOSH:SAVE_STAS */ into sys.wri$_optstat_ind_history (obj#,rowcnt,leafc
+nt,distkey, lblkkey, dblkkey,clufac,blevel,analyzetime,samplesize,guessq,cachedb
+lk, cachehit,logicalread,savtime,flags) values (:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,
+:11,:12,:13,:14,:15,:16)
+
+       0.1          806       0.00    0.6        0.2   33.7   65.7 9zbjgq87hy6uv
+   PDB: PDB1
+select t.ts#,t.file#,t.block#,nvl(t.bobj#,0),nvl(t.tab#,0),t.intcols,nvl(t.cluco
+ls,0),t.flags,t.pctfree$,t.pctused$,t.initrans,t.maxtrans,t.rowcnt,t.blkcnt,t.em
+pcnt,t.avgspc,t.chncnt,t.avgrln,t.analyzetime,t.samplesize,t.cols,t.property,nvl
+(t.degree,1),nvl(t.instances,1),t.avgspc_flb,t.flbcnt,t.kernelcols,nvl(t.trigfla
+
+       0.1          523       0.00    0.6        1.0   82.4   11.9 34rznuxy8h2a4
+   PDB: PDB1
+insert into histgrm$(obj#,intcol#,row#,bucket,endpoint,col#,epvalue_raw,ep_repea
+t_count,endpoint_enc) values(:1,:2,:3,:4,:5,:6,:7,:8,:9)
+
+       0.1          283       0.00    0.5        0.1   29.6   64.9 8swypbbr0m372
+   PDB: PDB1
+select order#,columns,types from access$ where d_obj#=:1
+
+                          ------------------------------------------------------
+
+
+SQL ordered by Gets                           DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> %Total - Buffer Gets   as a percentage of Total Buffer Gets
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Total Buffer Gets:         496,756
+-> Captured SQL account for   58.8% of Total
+
+     Buffer                 Gets              Elapsed
+      Gets   Executions   per Exec   %Total   Time (s)  %CPU   %IO    SQL Id
+----------- ----------- ------------ ------ ---------- ----- ----- -------------
+    398,244           0          N/A   80.2       41.2    63  31.9 b6usrg82hwsa3
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+call dbms_stats.gather_database_stats_job_proc ( )
+
+     43,544      14,859          2.9    8.8        0.9  52.3  48.6 0sbbcuruzd66f
+   PDB: PDB1
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, sample_
+size, minimum, maximum, distcnt, lowval, hival, density, col#, spare1, spare2, a
+vgcln, minimum_enc, maximum_enc from hist_head$ where obj#=:1 and intcol#=:2
+
+     40,081         523         76.6    8.1        1.0  82.4  11.9 34rznuxy8h2a4
+   PDB: PDB1
+insert into histgrm$(obj#,intcol#,row#,bucket,endpoint,col#,epvalue_raw,ep_repea
+t_count,endpoint_enc) values(:1,:2,:3,:4,:5,:6,:7,:8,:9)
+
+     34,013       2,776         12.3    6.8        0.3    73  25.6 7azxftvubufnj
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT COUNT(UNQ) UNQ, COUNT(PFX) PFX FROM (SELECT /*+ first_rows(1) leading(cc)
+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ CD.TYPE#
+UNQ, NULL PFX FROM SYS.CCOL$ CC, SYS.CDEF$ CD WHERE CC.OBJ# = :B2 AND CC.INTCOL#
+ = :B1 AND CD.CON# = CC.CON# AND CD.OBJ# = CC.OBJ# AND CD.ENABLED IS NOT NULL AN
+
+     22,348       7,055          3.2    4.5        0.9  59.7  37.9 2sxqgx5hx76qr
+   PDB: PDB1
+select /*+ rule */ bucket, endpoint, col#, epvalue, epvalue_raw, ep_repeat_count
+, endpoint_enc from histgrm$ where obj#=:1 and intcol#=:2 and row#=:3 order by b
+ucket
+
+     18,696       3,116          6.0    3.8        0.1  89.2    .1 2s9bghg5agn03
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ P.VALCHAR FROM SY
+S.OPTSTAT_USER_PREFS$ P, OBJ$ O, USER$ U WHERE P.OBJ#=O.OBJ# AND U.USER#=O.OWNER
+# AND U.NAME=:B3 AND O.NAME=:B2 AND O.NAMESPACE = 1 AND O.REMOTEOWNER IS NULL AN
+D O.LINKNAME IS NULL AND O.SUBNAME IS NULL AND O.TYPE# = 2 AND P.PNAME=:B1
+
+     17,410       8,688          2.0    3.5        0.3    96     0 b9nbhsbx8tqz5
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SPARE4 FROM SYS.O
+PTSTAT_HIST_CONTROL$ WHERE SNAME = :B1
+
+     14,486       1,373         10.6    2.9        0.7  38.8  45.8 ft7wcqu3hzvca
+   PDB: PDB1
+insert /* QOSH:OPEN_COL_STATS */ into sys.wri$_optstat_histhead_history (obj#,i
+ntcol#,savtime,flags, null_cnt,minimum,maximum,distcnt,density,lowval,hival,avgc
+ln,sample_distcnt, sample_size,timestamp#,colname,minimum_enc,maximum_enc) sele
+ct h.obj#, h.intcol#, :3, bitand(h.spare2, 7) + 8 + decode(h.cache_cnt,0,0,64) +
+
+     14,361       1,382         10.4    2.9        0.3  90.3   5.6 dp0vgyb1hsfjb
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+ A.STATSTYPE#, C.INTCOL# FROM ASSOCIATION$ A, OBJ$ O, USER$ U, COL$ C, OBJ$ SO,
+USER$ SU, COLTYPE$ CT, OBJ$ TY WHERE O.OWNER#=U.USER# AND A.OBJ#=TY.OBJ# AND O.O
+BJ#=C.OBJ# AND C.INTCOL#=CT.INTCOL# AND O.OBJ#=CT.OBJ# AND CT.TOID=TY.OID$ AND A
+
+     10,468       1,248          8.4    2.1        0.2  88.9     0 04kug40zbu4dm
+   PDB: PDB1
+
+SQL ordered by Gets                           DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Resources reported for PL/SQL code includes the resources used by all SQL
+   statements called by the code.
+-> %Total - Buffer Gets   as a percentage of Total Buffer Gets
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Total Buffer Gets:         496,756
+-> Captured SQL account for   58.8% of Total
+
+     Buffer                 Gets              Elapsed
+      Gets   Executions   per Exec   %Total   Time (s)  %CPU   %IO    SQL Id
+----------- ----------- ------------ ------ ---------- ----- ----- -------------
+select policy#, action# from aud_object_opt$ where object# = :1 and type = 2
+
+      8,544          96         89.0    1.7        0.3    87    .5 3wh9htctp7199
+   PDB: PDB1
+insert /* KSXM:TAKE_SNPSHOT */ into sys.optstat_snapshot$ (obj#, inserts, update
+s, deletes, timestamp, flags) (select m.obj#, m.inserts, m.updates, m.deletes, s
+ystimestamp, dbms_stats_advisor.compute_volatile_flag( m.obj#, m.flags, :fla
+gs, m.inserts, m.updates, m.deletes, s.inserts, s.updates, s.deletes, null,
+
+      8,296         195         42.5    1.7        0.2  82.3  13.8 5j3ram21g5s8r
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered use_nl(o c cu h) index(u i_user1) index(o i_obj2)
+ index(ci_obj#) index(cu i_col_usage$) index(h i_hh_obj#_intco
+l#) OPT_PARAM('_parallel_syspls_obey_force' 'false') */ C.NAME C
+OL_NAME, C.TYPE# COL_TYPE, C.CHARSETFORM COL_CSF, CASE WHEN C.DEFLENGTH <= 32767
+
+      7,705       1,061          7.3    1.6        0.6  74.3  15.3 121ffmrc95v7g
+   PDB: PDB1
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i.property,i.pctf
+ree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.distkey,i.lblkkey,i.dblkkey,i.cl
+ufac,i.cols,i.analyzetime,i.samplesize,i.dataobj#,nvl(i.degree,1),nvl(i.instance
+s,1),i.rowcnt,mod(i.pctthres$,256),i.indmethod#,i.trunccnt,nvl(c.unicols,0),nvl(
+
+                          ------------------------------------------------------
+
+
+SQL ordered by Reads                          DB/Inst: ORCL/orcl  Snaps: 10-11
+-> %Total - Physical Reads as a percentage of Total Disk Reads
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Total Disk Reads:          10,048
+-> Captured SQL account for   13.4% of Total
+
+   Physical              Reads              Elapsed
+      Reads  Executions per Exec   %Total   Time (s)   %CPU    %IO    SQL Id
+----------- ----------- ---------- ------ ---------- ------ ------ -------------
+      7,507           0        N/A   74.7       41.2   63.0   31.9 b6usrg82hwsa3
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+call dbms_stats.gather_database_stats_job_proc ( )
+
+        484       7,055        0.1    4.8        0.9   59.7   37.9 2sxqgx5hx76qr
+   PDB: PDB1
+select /*+ rule */ bucket, endpoint, col#, epvalue, epvalue_raw, ep_repeat_count
+, endpoint_enc from histgrm$ where obj#=:1 and intcol#=:2 and row#=:3 order by b
+ucket
+
+        220      14,859        0.0    2.2        0.9   52.3   48.6 0sbbcuruzd66f
+   PDB: PDB1
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, sample_
+size, minimum, maximum, distcnt, lowval, hival, density, col#, spare1, spare2, a
+vgcln, minimum_enc, maximum_enc from hist_head$ where obj#=:1 and intcol#=:2
+
+        135          96        1.4    1.3        0.3   87.0     .5 3wh9htctp7199
+   PDB: PDB1
+insert /* KSXM:TAKE_SNPSHOT */ into sys.optstat_snapshot$ (obj#, inserts, update
+s, deletes, timestamp, flags) (select m.obj#, m.inserts, m.updates, m.deletes, s
+ystimestamp, dbms_stats_advisor.compute_volatile_flag( m.obj#, m.flags, :fla
+gs, m.inserts, m.updates, m.deletes, s.inserts, s.updates, s.deletes, null,
+
+        116         283        0.4    1.2        0.8   12.6   83.8 3un99a0zwp4vd
+   PDB: PDB1
+select owner#,name,namespace,remoteowner,linkname,p_timestamp,p_obj#, nvl(proper
+ty,0),subname,type#,flags,d_attrs from dependency$ d, obj$ o where d_obj#=:1 and
+ p_obj#=obj#(+) order by order#
+
+         55       1,179        0.0    0.5        0.1   80.3   12.5 acmvv4fhdc9zh
+   PDB: PDB1
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oid$, spare1, spar
+e2, spare3, signature, spare7, spare8, spare9, nvl(dflcollid, 16382), creappid,
+creverid, modappid, modverid, crepatchid, modpatchid from obj$ where owner#=:1 a
+nd name=:2 and namespace=:3 and remoteowner is null and linkname is null and sub
+
+         47       1,373        0.0    0.5        0.7   38.8   45.8 ft7wcqu3hzvca
+   PDB: PDB1
+insert /* QOSH:OPEN_COL_STATS */ into sys.wri$_optstat_histhead_history (obj#,i
+ntcol#,savtime,flags, null_cnt,minimum,maximum,distcnt,density,lowval,hival,avgc
+ln,sample_distcnt, sample_size,timestamp#,colname,minimum_enc,maximum_enc) sele
+ct h.obj#, h.intcol#, :3, bitand(h.spare2, 7) + 8 + decode(h.cache_cnt,0,0,64) +
+
+         44         195        0.2    0.4        0.2   82.3   13.8 5j3ram21g5s8r
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered use_nl(o c cu h) index(u i_user1) index(o i_obj2)
+ index(ci_obj#) index(cu i_col_usage$) index(h i_hh_obj#_intco
+l#) OPT_PARAM('_parallel_syspls_obey_force' 'false') */ C.NAME C
+OL_NAME, C.TYPE# COL_TYPE, C.CHARSETFORM COL_CSF, CASE WHEN C.DEFLENGTH <= 32767
+
+         41         283        0.1    0.4        0.1   29.6   64.9 8swypbbr0m372
+   PDB: PDB1
+select order#,columns,types from access$ where d_obj#=:1
+
+         31       1,061        0.0    0.3        0.6   74.3   15.3 121ffmrc95v7g
+   PDB: PDB1
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i.property,i.pctf
+ree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.distkey,i.lblkkey,i.dblkkey,i.cl
+
+SQL ordered by Reads                          DB/Inst: ORCL/orcl  Snaps: 10-11
+-> %Total - Physical Reads as a percentage of Total Disk Reads
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Total Disk Reads:          10,048
+-> Captured SQL account for   13.4% of Total
+
+   Physical              Reads              Elapsed
+      Reads  Executions per Exec   %Total   Time (s)   %CPU    %IO    SQL Id
+----------- ----------- ---------- ------ ---------- ------ ------ -------------
+ufac,i.cols,i.analyzetime,i.samplesize,i.dataobj#,nvl(i.degree,1),nvl(i.instance
+s,1),i.rowcnt,mod(i.pctthres$,256),i.indmethod#,i.trunccnt,nvl(c.unicols,0),nvl(
+
+                          ------------------------------------------------------
+
+
+SQL ordered by Physical Reads (UnOptimized)   DB/Inst: ORCL/orcl  Snaps: 10-11
+-> UnOptimized Read Reqs = Physical Read Reqs -
+     (Optimized Read Reqs - Cell Flash Cache Read Hits for Controlfile)
+-> %Opt   - Optimized Reads as percentage of SQL Read Requests
+-> %Total - UnOptimized Read Reqs as a percentage of Total UnOptimized Read Reqs
+-> Total Physical Read Requests:           5,279
+-> Captured SQL account for   20.3% of Total
+-> Total UnOptimized Read Requests:           5,279
+-> Captured SQL account for   20.3% of Total
+-> Total Optimized Read Requests:               1
+-> Captured SQL account for    0.0% of Total
+
+UnOptimized   Physical              UnOptimized
+  Read Reqs   Read Reqs Executions Reqs per Exe   %Opt %Total    SQL Id
+----------- ----------- ---------- ------------ ------ ------ -------------
+      3,399       3,399          0          N/A    0.0   64.4 b6usrg82hwsa3
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+call dbms_stats.gather_database_stats_job_proc ( )
+
+        484         484      7,055          0.1    0.0    9.2 2sxqgx5hx76qr
+   PDB: PDB1
+select /*+ rule */ bucket, endpoint, col#, epvalue, epvalue_raw, ep_repeat_count
+, endpoint_enc from histgrm$ where obj#=:1 and intcol#=:2 and row#=:3 order by b
+ucket
+
+        220         220     14,859          0.0    0.0    4.2 0sbbcuruzd66f
+   PDB: PDB1
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, sample_
+size, minimum, maximum, distcnt, lowval, hival, density, col#, spare1, spare2, a
+vgcln, minimum_enc, maximum_enc from hist_head$ where obj#=:1 and intcol#=:2
+
+        129         129         96          1.3    0.0    2.4 3wh9htctp7199
+   PDB: PDB1
+insert /* KSXM:TAKE_SNPSHOT */ into sys.optstat_snapshot$ (obj#, inserts, update
+s, deletes, timestamp, flags) (select m.obj#, m.inserts, m.updates, m.deletes, s
+ystimestamp, dbms_stats_advisor.compute_volatile_flag( m.obj#, m.flags, :fla
+gs, m.inserts, m.updates, m.deletes, s.inserts, s.updates, s.deletes, null,
+
+         47          47      1,373          0.0    0.0    0.9 ft7wcqu3hzvca
+   PDB: PDB1
+insert /* QOSH:OPEN_COL_STATS */ into sys.wri$_optstat_histhead_history (obj#,i
+ntcol#,savtime,flags, null_cnt,minimum,maximum,distcnt,density,lowval,hival,avgc
+ln,sample_distcnt, sample_size,timestamp#,colname,minimum_enc,maximum_enc) sele
+ct h.obj#, h.intcol#, :3, bitand(h.spare2, 7) + 8 + decode(h.cache_cnt,0,0,64) +
+
+         44          44        195          0.2    0.0    0.8 5j3ram21g5s8r
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered use_nl(o c cu h) index(u i_user1) index(o i_obj2)
+ index(ci_obj#) index(cu i_col_usage$) index(h i_hh_obj#_intco
+l#) OPT_PARAM('_parallel_syspls_obey_force' 'false') */ C.NAME C
+OL_NAME, C.TYPE# COL_TYPE, C.CHARSETFORM COL_CSF, CASE WHEN C.DEFLENGTH <= 32767
+
+         24          24        128          0.2    0.0    0.5 9f5qcupfvj260
+   PDB: PDB1
+insert /* QOSH:SAVE_STAS */ into sys.wri$_optstat_ind_history (obj#,rowcnt,leafc
+nt,distkey, lblkkey, dblkkey,clufac,blevel,analyzetime,samplesize,guessq,cachedb
+lk, cachehit,logicalread,savtime,flags) values (:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,
+:11,:12,:13,:14,:15,:16)
+
+         19          19        523          0.0    0.0    0.4 34rznuxy8h2a4
+   PDB: PDB1
+insert into histgrm$(obj#,intcol#,row#,bucket,endpoint,col#,epvalue_raw,ep_repea
+t_count,endpoint_enc) values(:1,:2,:3,:4,:5,:6,:7,:8,:9)
+
+         19          19      1,179          0.0    0.0    0.4 acmvv4fhdc9zh
+   PDB: PDB1
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oid$, spare1, spar
+e2, spare3, signature, spare7, spare8, spare9, nvl(dflcollid, 16382), creappid,
+creverid, modappid, modverid, crepatchid, modpatchid from obj$ where owner#=:1 a
+nd name=:2 and namespace=:3 and remoteowner is null and linkname is null and sub
+
+         14          14      1,061          0.0    0.0    0.3 121ffmrc95v7g
+   PDB: PDB1
+
+SQL ordered by Physical Reads (UnOptimized)   DB/Inst: ORCL/orcl  Snaps: 10-11
+-> UnOptimized Read Reqs = Physical Read Reqs -
+     (Optimized Read Reqs - Cell Flash Cache Read Hits for Controlfile)
+-> %Opt   - Optimized Reads as percentage of SQL Read Requests
+-> %Total - UnOptimized Read Reqs as a percentage of Total UnOptimized Read Reqs
+-> Total Physical Read Requests:           5,279
+-> Captured SQL account for   20.3% of Total
+-> Total UnOptimized Read Requests:           5,279
+-> Captured SQL account for   20.3% of Total
+-> Total Optimized Read Requests:               1
+-> Captured SQL account for    0.0% of Total
+
+UnOptimized   Physical              UnOptimized
+  Read Reqs   Read Reqs Executions Reqs per Exe   %Opt %Total    SQL Id
+----------- ----------- ---------- ------------ ------ ------ -------------
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i.property,i.pctf
+ree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.distkey,i.lblkkey,i.dblkkey,i.cl
+ufac,i.cols,i.analyzetime,i.samplesize,i.dataobj#,nvl(i.degree,1),nvl(i.instance
+s,1),i.rowcnt,mod(i.pctthres$,256),i.indmethod#,i.trunccnt,nvl(c.unicols,0),nvl(
+
+                          ------------------------------------------------------
+
+
+SQL ordered by Executions                     DB/Inst: ORCL/orcl  Snaps: 10-11
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Total Executions:          84,164
+-> Captured SQL account for   67.5% of Total
+
+                                              Elapsed
+ Executions   Rows Processed  Rows per Exec   Time (s)  %CPU   %IO    SQL Id
+------------ --------------- -------------- ---------- ----- ----- -------------
+      14,859          13,779            0.9        0.9  52.3  48.6 0sbbcuruzd66f
+   PDB: PDB1
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, sample_
+size, minimum, maximum, distcnt, lowval, hival, density, col#, spare1, spare2, a
+vgcln, minimum_enc, maximum_enc from hist_head$ where obj#=:1 and intcol#=:2
+
+       8,688           8,688            1.0        0.3    96     0 b9nbhsbx8tqz5
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SPARE4 FROM SYS.O
+PTSTAT_HIST_CONTROL$ WHERE SNAME = :B1
+
+       7,055         115,805           16.4        0.9  59.7  37.9 2sxqgx5hx76qr
+   PDB: PDB1
+select /*+ rule */ bucket, endpoint, col#, epvalue, epvalue_raw, ep_repeat_count
+, endpoint_enc from histgrm$ where obj#=:1 and intcol#=:2 and row#=:3 order by b
+ucket
+
+       4,038           4,038            1.0        0.2  75.9  16.6 62yyzw3309d6a
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT VALUE FROM V$SESSION_FIX_CONTROL WHERE BUGNO = :B1 AND SESSION_ID = USERE
+NV('SID')
+
+       3,116               0            0.0        0.1  89.2    .1 2s9bghg5agn03
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ P.VALCHAR FROM SY
+S.OPTSTAT_USER_PREFS$ P, OBJ$ O, USER$ U WHERE P.OBJ#=O.OBJ# AND U.USER#=O.OWNER
+# AND U.NAME=:B3 AND O.NAME=:B2 AND O.NAMESPACE = 1 AND O.REMOTEOWNER IS NULL AN
+D O.LINKNAME IS NULL AND O.SUBNAME IS NULL AND O.TYPE# = 2 AND P.PNAME=:B1
+
+       2,776           2,776            1.0        0.3    73  25.6 7azxftvubufnj
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT COUNT(UNQ) UNQ, COUNT(PFX) PFX FROM (SELECT /*+ first_rows(1) leading(cc)
+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ CD.TYPE#
+UNQ, NULL PFX FROM SYS.CCOL$ CC, SYS.CDEF$ CD WHERE CC.OBJ# = :B2 AND CC.INTCOL#
+ = :B1 AND CD.CON# = CC.CON# AND CD.OBJ# = CC.OBJ# AND CD.ENABLED IS NOT NULL AN
+
+       1,382               0            0.0        0.2    87  10.8 50kcsz2gh1w84
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+ A.STATSTYPE#, A.INTCOL# FROM ASSOCIATION$ A, OBJ$ O, USER$ U, COL$ C, OBJ$ SO,
+USER$ SU WHERE O.OWNER#=U.USER# AND A.OBJ#=O.OBJ# AND O.OBJ#=C.OBJ# AND C.INTCOL
+#=A.INTCOL# AND A.STATSTYPE#=SO.OBJ# AND SO.OWNER#=SU.USER# AND O.NAMESPACE = 1
+
+       1,382               0            0.0        0.3  90.3   5.6 dp0vgyb1hsfjb
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+ A.STATSTYPE#, C.INTCOL# FROM ASSOCIATION$ A, OBJ$ O, USER$ U, COL$ C, OBJ$ SO,
+USER$ SU, COLTYPE$ CT, OBJ$ TY WHERE O.OWNER#=U.USER# AND A.OBJ#=TY.OBJ# AND O.O
+BJ#=C.OBJ# AND C.INTCOL#=CT.INTCOL# AND O.OBJ#=CT.OBJ# AND CT.TOID=TY.OID$ AND A
+
+       1,373           1,373            1.0        0.7  38.8  45.8 ft7wcqu3hzvca
+   PDB: PDB1
+insert /* QOSH:OPEN_COL_STATS */ into sys.wri$_optstat_histhead_history (obj#,i
+ntcol#,savtime,flags, null_cnt,minimum,maximum,distcnt,density,lowval,hival,avgc
+ln,sample_distcnt, sample_size,timestamp#,colname,minimum_enc,maximum_enc) sele
+
+SQL ordered by Executions                     DB/Inst: ORCL/orcl  Snaps: 10-11
+-> %CPU   - CPU Time      as a percentage of Elapsed Time
+-> %IO    - User I/O Time as a percentage of Elapsed Time
+-> Total Executions:          84,164
+-> Captured SQL account for   67.5% of Total
+
+                                              Elapsed
+ Executions   Rows Processed  Rows per Exec   Time (s)  %CPU   %IO    SQL Id
+------------ --------------- -------------- ---------- ----- ----- -------------
+ct h.obj#, h.intcol#, :3, bitand(h.spare2, 7) + 8 + decode(h.cache_cnt,0,0,64) +
+
+       1,248               0            0.0        0.2  88.9     0 04kug40zbu4dm
+   PDB: PDB1
+select policy#, action# from aud_object_opt$ where object# = :1 and type = 2
+
+       1,179           1,146            1.0        0.1  80.3  12.5 acmvv4fhdc9zh
+   PDB: PDB1
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oid$, spare1, spar
+e2, spare3, signature, spare7, spare8, spare9, nvl(dflcollid, 16382), creappid,
+creverid, modappid, modverid, crepatchid, modpatchid from obj$ where owner#=:1 a
+nd name=:2 and namespace=:3 and remoteowner is null and linkname is null and sub
+
+       1,115          15,649           14.0        0.5  47.3    51 g0t052az3rx44
+   PDB: PDB1
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decode(type#,2,nvl(sc
+ale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180,scale,181,scale,182,scale,183,s
+cale,231,scale,0),null$,fixedstorage,nvl(deflength,0),default$,rowid,col#,proper
+ty, nvl(charsetid,0),nvl(charsetform,0),spare1,spare2,nvl(spare3,0), nvl(evaledi
+
+       1,061           1,802            1.7        0.6  74.3  15.3 121ffmrc95v7g
+   PDB: PDB1
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i.property,i.pctf
+ree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.distkey,i.lblkkey,i.dblkkey,i.cl
+ufac,i.cols,i.analyzetime,i.samplesize,i.dataobj#,nvl(i.degree,1),nvl(i.instance
+s,1),i.rowcnt,mod(i.pctthres$,256),i.indmethod#,i.trunccnt,nvl(c.unicols,0),nvl(
+
+                          ------------------------------------------------------
+
+
+SQL ordered by Parse Calls                    DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Parse Calls:          18,496
+-> Captured SQL account for   28.9% of Total
+
+                            % Total
+ Parse Calls  Executions     Parses    SQL Id
+------------ ------------ --------- -------------
+         611          611      3.30 35ra2cdwvqg1w
+   PDB: PDB1
+select parttype, partcnt, partkeycols, flags, defts#, defpctfree, defpctused, de
+finitrans, defmaxtrans, deftiniexts, defextsize, defminexts, defmaxexts, defextp
+ct, deflists, defgroups, deflogging, spare1, mod(spare2, 256) subparttype, mod(t
+runc(spare2/256), 256) subpartkeycols, mod(trunc(spare2/65536), 65536) defsubpar
+
+         419          419      2.27 c8h20n1d0k95m
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+select /*+ no_parallel */ spare4 from sys.optstat_hist_control$ where sname=:1
+
+         283          283      1.53 3un99a0zwp4vd
+   PDB: PDB1
+select owner#,name,namespace,remoteowner,linkname,p_timestamp,p_obj#, nvl(proper
+ty,0),subname,type#,flags,d_attrs from dependency$ d, obj$ o where d_obj#=:1 and
+ p_obj#=obj#(+) order by order#
+
+         283          283      1.53 8swypbbr0m372
+   PDB: PDB1
+select order#,columns,types from access$ where d_obj#=:1
+
+         254          254      1.37 38243c4tqrkxm
+   PDB: PDB1
+select u.name, o.name, o.namespace, o.type#, decode(bitand(i.property,1024),0,0,
+1), o.obj# from ind$ i,obj$ o,user$ u where i.obj#=:1 and o.obj#=i.bo# and o.own
+er#=u.user#
+
+         226          226      1.22 grtn638qp1fhg
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT SHARDING_TYPE FROM gsmadmin_internal.CLOUD
+
+         225          225      1.22 3kywng531fcxu
+   PDB: PDB1
+delete from tab_stats$ where obj#=:1
+
+         225          225      1.22 gsfnqdfcvy33q
+   PDB: PDB1
+delete from superobj$ where subobj# = :1
+
+         160          161      0.87 1fm07xd16u5nr
+   PDB: PDB1
+insert /* QOSH:REC_STS */ into sys.wri$_optstat_opr_tasks (op_id, job_name, sta
+tus, start_time, end_time, target, target_type, target_size, estimated_cost, bat
+ching_coeff, actions, priority, notes, flags, target_objn) values (:1,:2,:3,:4,
+:5,:6,:7, :8,:9,:10,:11,:12,:13,:1
+
+         144          226      0.78 gxm18860ab67a
+   PDB: PDB1
+update tab$ set ts#=:2,file#=:3,block#=:4,bobj#=decode(:5,0,null,:5),tab#=decode
+(:6,0,null,:6),intcols=:7,kernelcols=:8,clucols=decode(:9,0,null,:9),audit$=:10,
+flags=:11,pctfree$=:12,pctused$=:13,initrans=:14,maxtrans=:15,rowcnt=:16,blkcnt=
+:17,empcnt=:18,avgspc=:19,chncnt=:20,avgrln=:21,analyzetime=:22,samplesize=:23,c
+
+                          ------------------------------------------------------
+
+
+SQL ordered by Sharable Memory                DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Only Statements with Sharable Memory greater than 1048576 are displayed
+
+Sharable Mem (b)  Executions   % Total    SQL Id
+---------------- ------------ -------- -------------
+       1,587,880           10     4.95 4bugmu5z8szn5
+Module: DBMS_SCHEDULER
+   PDB: PDB1
+SELECT /*+ ordered push_pred(v) OPT_PARAM('_parallel_syspls_o
+bey_force' 'false') */ U.NAME, OT.NAME, DECODE(OT.TYPE#, 34, V.COMPART, OT.SUBNA
+ME) PART, DECODE(OT.TYPE#, 34, OT.SUBNAME, NULL) SPART, V.COL, V.GLOB_ST, V.USER
+_ST, V.DIST, V.DENS, V.SDIST, V.SSIZE, V.NCNT, V.TSTAMP, V.CLEN, V.MINVAL, V.MAX
+
+                          ------------------------------------------------------
+
+
+SQL ordered by Version Count                  DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+
+Key Instance Activity Stats                   DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Ordered by statistic name
+
+Statistic                                     Total     per Second     per Trans
+-------------------------------- ------------------ -------------- -------------
+db block changes                             83,781           23.4         203.4
+execute count                                84,164           23.5         204.3
+logons cumulative                                32            0.0           0.1
+opened cursors cumulative                    81,699           22.8         198.3
+parse count (total)                          18,496            5.2          44.9
+parse time elapsed                              892            0.3           2.2
+physical reads                               10,048            2.8          24.4
+redo size                                12,666,356        3,536.8      30,743.6
+session cursor cache hits                    97,706           27.3         237.2
+session logical reads                       496,756          138.7       1,205.7
+user calls                                      155            0.0           0.4
+user commits                                    412            0.1           1.0
+workarea executions - optimal                 6,164            1.7          15.0
+                          ------------------------------------------------------
+
+
+Instance Activity Stats                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Ordered by statistic name
+
+Statistic                                     Total     per Second     per Trans
+-------------------------------- ------------------ -------------- -------------
+ASSM cbk:blocks examined                        747            0.2           1.8
+ASSM cbk:blocks marked full                      77            0.0           0.2
+ASSM gsp:L1 bitmaps examined                    701            0.2           1.7
+ASSM gsp:L2 bitmap full                           2            0.0           0.0
+ASSM gsp:L2 bitmaps examined                    341            0.1           0.8
+ASSM gsp:Search all                              14            0.0           0.0
+ASSM gsp:Search hint                              8            0.0           0.0
+ASSM gsp:Search steal                            14            0.0           0.0
+ASSM gsp:bump HWM                                14            0.0           0.0
+ASSM gsp:get free block                         674            0.2           1.6
+ASSM gsp:get free data block                      0            0.0           0.0
+ASSM gsp:good hint                              561            0.2           1.4
+ASSM rsv:fill reserve                            16            0.0           0.0
+ASSM wasted db state change                       1            0.0           0.0
+Batched IO (bound) vector count                   9            0.0           0.0
+Batched IO block miss count                      65            0.0           0.2
+Batched IO buffer defrag count                    1            0.0           0.0
+Batched IO double miss count                      3            0.0           0.0
+Batched IO same unit count                       32            0.0           0.1
+Batched IO single block count                     8            0.0           0.0
+Batched IO vector block count                    25            0.0           0.1
+Batched IO vector read count                      4            0.0           0.0
+Block Cleanout Optim referenced                   3            0.0           0.0
+CCursor + sql area evicted                    1,837            0.5           4.5
+CPU used by this session                      3,406            1.0           8.3
+CPU used when call started                      501            0.1           1.2
+CR blocks created                                20            0.0           0.1
+Cached Commit SCN referenced                    116            0.0           0.3
+Commit SCN cached                                 3            0.0           0.0
+DFO trees parallelized                            1            0.0           0.0
+DML statements retried                            0            0.0           0.0
+HSC Heap Segment Block Changes               16,771            4.7          40.7
+Heap Segment Array Inserts                      248            0.1           0.6
+Heap Segment Array Updates                       91            0.0           0.2
+IMU Flushes                                      93            0.0           0.2
+IMU Redo allocation size                     11,592            3.2          28.1
+IMU commits                                     391            0.1           1.0
+IMU ktichg flush                                  1            0.0           0.0
+IMU undo allocation size                    744,976          208.0       1,808.2
+KTFB alloc req                                   29            0.0           0.1
+KTFB alloc space (block)                  5,111,808        1,427.4      12,407.3
+KTFB alloc time (ms)                         19,127            5.3          46.4
+KTFB apply req                                    2            0.0           0.0
+KTFB apply time (ms)                             16            0.0           0.0
+LOB table id lookup cache misses                  6            0.0           0.0
+PX local messages recv'd                         81            0.0           0.2
+PX local messages sent                           82            0.0           0.2
+Parallel operations not downgrad                  1            0.0           0.0
+Requests to/from client                           9            0.0           0.0
+SQL*Net roundtrips to/from clien                  9            0.0           0.0
+active txn count during cleanout                162            0.1           0.4
+blocks cleaned out using minact                 439            0.1           1.1
+buffer is not pinned count                  295,892           82.6         718.2
+buffer is pinned count                       35,119            9.8          85.2
+bytes received via SQL*Net from               2,886            0.8           7.0
+bytes sent via SQL*Net to client              3,877            1.1           9.4
+calls to get snapshot scn: kcmgs            125,037           34.9         303.5
+calls to kcmgas                               1,632            0.5           4.0
+calls to kcmgcs                              16,716            4.7          40.6
+cell physical IO interconnect by         82,922,496       23,154.2     201,268.2
+
+Instance Activity Stats                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Ordered by statistic name
+
+Statistic                                     Total     per Second     per Trans
+-------------------------------- ------------------ -------------- -------------
+change write time                               157            0.0           0.4
+cleanout - number of ktugct call                232            0.1           0.6
+cleanouts and rollbacks - consis                  4            0.0           0.0
+cleanouts only - consistent read                 45            0.0           0.1
+cluster key scan block gets                  45,934           12.8         111.5
+cluster key scans                            33,090            9.2          80.3
+commit batch/immediate performed                  1            0.0           0.0
+commit batch/immediate requested                  1            0.0           0.0
+commit cleanout failures: callba                  9            0.0           0.0
+commit cleanouts                              4,845            1.4          11.8
+commit cleanouts successfully co              4,836            1.4          11.7
+commit immediate performed                        1            0.0           0.0
+commit immediate requested                        1            0.0           0.0
+commit txn count during cleanout                144            0.0           0.4
+consistent changes                            6,700            1.9          16.3
+consistent gets                             422,199          117.9       1,024.8
+consistent gets examination                 180,421           50.4         437.9
+consistent gets examination (fas            179,769           50.2         436.3
+consistent gets from cache                  422,199          117.9       1,024.8
+consistent gets pin                         241,778           67.5         586.8
+consistent gets pin (fastpath)              237,174           66.2         575.7
+cursor authentications                          775            0.2           1.9
+cursor reload failures                          403            0.1           1.0
+data blocks consistent reads - u                  4            0.0           0.0
+db block changes                             83,781           23.4         203.4
+db block gets                                74,557           20.8         181.0
+db block gets direct                             48            0.0           0.1
+db block gets from cache                     74,509           20.8         180.9
+db block gets from cache (fastpa             49,853           13.9         121.0
+deferred (CURRENT) block cleanou              3,071            0.9           7.5
+dirty buffers inspected                         485            0.1           1.2
+enqueue conversions                              20            0.0           0.1
+enqueue releases                              8,778            2.5          21.3
+enqueue requests                              8,786            2.5          21.3
+enqueue waits                                     3            0.0           0.0
+execute count                                84,164           23.5         204.3
+file io service time                         11,659            3.3          28.3
+free buffer inspected                        14,947            4.2          36.3
+free buffer requested                        12,550            3.5          30.5
+heap block compress                             267            0.1           0.7
+hot buffers moved to head of LRU              9,066            2.5          22.0
+immediate (CR) block cleanout ap                 49            0.0           0.1
+immediate (CURRENT) block cleano              1,283            0.4           3.1
+index fast full scans (full)                     39            0.0           0.1
+index fetch by key                           84,703           23.7         205.6
+index range scans                            45,341           12.7         110.1
+leaf node 90-10 splits                           23            0.0           0.1
+leaf node splits                                 78            0.0           0.2
+lob reads                                       806            0.2           2.0
+lob writes                                    4,844            1.4          11.8
+lob writes unaligned                          4,844            1.4          11.8
+logical read bytes from cache         4,069,031,936    1,136,183.8   9,876,291.1
+logons cumulative                                32            0.0           0.1
+messages sent                                   908            0.3           2.2
+no work - consistent read gets              216,809           60.5         526.2
+non-idle wait count                           7,562            2.1          18.4
+opened cursors cumulative                    81,699           22.8         198.3
+parse count (describe)                            8            0.0           0.0
+parse count (failures)                           56            0.0           0.1
+parse count (hard)                            3,218            0.9           7.8
+
+Instance Activity Stats                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Ordered by statistic name
+
+Statistic                                     Total     per Second     per Trans
+-------------------------------- ------------------ -------------- -------------
+parse count (total)                          18,496            5.2          44.9
+parse time cpu                                  659            0.2           1.6
+parse time elapsed                              892            0.3           2.2
+physical read IO requests                     5,279            1.5          12.8
+physical read bytes                      82,313,216       22,984.1     199,789.4
+physical read total IO requests               5,298            1.5          12.9
+physical read total bytes                82,529,280       23,044.4     200,313.8
+physical read total multi block                  72            0.0           0.2
+physical reads                               10,048            2.8          24.4
+physical reads cache                         10,048            2.8          24.4
+physical reads cache prefetch                 4,788            1.3          11.6
+physical write IO requests                        2            0.0           0.0
+physical write bytes                        393,216          109.8         954.4
+physical write total IO requests                  2            0.0           0.0
+physical write total bytes                  393,216          109.8         954.4
+physical write total multi block                  2            0.0           0.0
+physical writes                                  48            0.0           0.1
+physical writes direct                           48            0.0           0.1
+physical writes direct temporary                 48            0.0           0.1
+physical writes non checkpoint                   48            0.0           0.1
+pinned buffers inspected                          1            0.0           0.0
+pinned cursors current                            8            0.0           0.0
+prefetched blocks aged out befor                  5            0.0           0.0
+process last non-idle time            1,562,216,401      436,213.1   3,791,787.4
+recursive calls                             271,284           75.8         658.5
+recursive cpu usage                             804            0.2           2.0
+redo entries                                 38,027           10.6          92.3
+redo ordering marks                              14            0.0           0.0
+redo size                                12,666,356        3,536.8      30,743.6
+redo subscn max counts                          237            0.1           0.6
+redo synch long waits                             0            0.0           0.0
+redo synch time                                  11            0.0           0.0
+redo synch time (usec)                      115,838           32.4         281.2
+redo synch time overhead (usec)                 342            0.1           0.8
+redo synch time overhead count (                  4            0.0           0.0
+redo synch time overhead count (                  0            0.0           0.0
+redo synch time overhead count (                  0            0.0           0.0
+redo synch writes                                 5            0.0           0.0
+redo write info find                              4            0.0           0.0
+rollback changes - undo records                   0            0.0           0.0
+rollbacks only - consistent read                  0            0.0           0.0
+rows fetched via callback                    18,895            5.3          45.9
+securefile bytes non-transformed              4,354            1.2          10.6
+securefile number of non-transfo                  4            0.0           0.0
+session connect time                  1,562,216,401      436,213.1   3,791,787.4
+session cursor cache hits                    97,706           27.3         237.2
+session logical reads                       496,756          138.7       1,205.7
+shared hash latch upgrades - no               1,013            0.3           2.5
+shared hash latch upgrades - wai                  0            0.0           0.0
+sorts (memory)                               11,759            3.3          28.5
+sorts (rows)                                479,527          133.9       1,163.9
+sql area evicted                              2,316            0.7           5.6
+sql area purged                                  67            0.0           0.2
+switch current caused by our pin                808            0.2           2.0
+switch current to new buffer                    808            0.2           2.0
+table fetch by rowid                         69,525           19.4         168.8
+table fetch continued row                       937            0.3           2.3
+table scan blocks gotten                     71,211           19.9         172.8
+table scan disk non-IMC rows got          2,122,333          592.6       5,151.3
+table scan rows gotten                    2,257,002          630.2       5,478.2
+
+Instance Activity Stats                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Ordered by statistic name
+
+Statistic                                     Total     per Second     per Trans
+-------------------------------- ------------------ -------------- -------------
+table scans (long tables)                       127            0.0           0.3
+table scans (short tables)                   12,292            3.4          29.8
+total number of cf enq holders                    1            0.0           0.0
+transaction rollbacks                             0            0.0           0.0
+undo change vector size                   4,338,384        1,211.4      10,530.1
+user calls                                      155            0.0           0.4
+user commits                                    412            0.1           1.0
+workarea executions - optimal                 6,164            1.7          15.0
+write clones created in foregrou                  5            0.0           0.0
+                          ------------------------------------------------------
+
+
+Instance Activity Stats - Absolute Values     DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Statistics with absolute values (should not be diffed)
+
+Statistic                            Begin Value       End Value
+-------------------------------- --------------- ---------------
+session cursor cache count                 1,542           2,231
+session uga memory                    34,590,696      70,151,936
+session uga memory max               134,157,144     225,590,096
+                          ------------------------------------------------------
+
+IOStat by Filetype summary                    DB/Inst: ORCL/orcl  Snaps: 10-11
+-> 'Data' columns suffixed with M,G,T,P are in multiples of 1024
+    other columns suffixed with K,M,G,T,P are in multiples of 1000
+-> Small Read and Large Read are average service times
+-> Ordered by (Data Read + Write) desc
+
+                Reads:  Reqs    Data   Writes:  Reqs    Data      Small    Large
+Filetype Name     Data per sec per sec    Data per sec per sec     Read     Read
+-------------- ------- ------- ------- ------- ------- ------- -------- --------
+Data File         116M     1.7   .032M     10M     0.1   .003M   2.89ms   9.65ms
+Temp File           0M     0.0      0M      0M     0.0      0M    .00ns    .00ns
+TOTAL:            116M     1.7   .032M     10M     0.1   .003M   2.89ms   9.50ms
+                          ------------------------------------------------------
+
+
+Tablespace IO Stats                           DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+
+File IO Stats                                 DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+Buffer Wait Statistics                        DB/Inst: ORCL/orcl  Snaps: 10-11
+-> ordered by wait time desc, waits desc
+
+Class                    Waits Total Wait Time (s)  Avg Time (ms)
+------------------ ----------- ------------------- --------------
+data block                  69                   1             17
+                          ------------------------------------------------------
+
+
+Undo Segment Summary                          DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+Undo Segment Stats                            DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+
+Segments by Logical Reads                     DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Logical Reads:         496,756
+-> Captured Segments account for   75.6% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                             Logical
+Object Name            Name     Type        Obj#   Dataobj#        Reads  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+TYPE_MISC$                      TABLE        737          2       78,176   15.74
+   PDB: PDB1
+SYS                  SYSTEM
+I_HH_OBJ#_INTCOL#               INDEX         70         70       36,752    7.40
+   PDB: PDB1
+SYS                  SYSTEM
+I_OBJ#                          INDEX          3          3       35,840    7.21
+   PDB: PDB1
+SYS                  SYSTEM
+I_OBJ2                          INDEX         37         37       34,480    6.94
+   PDB: PDB1
+SYS                  SYSTEM
+I_OBJ#_INTCOL#                  INDEX         65         65       30,624    6.16
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by Physical Reads                    DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Physical Reads:          10,048
+-> Captured Segments account for   68.1% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                            Physical
+Object Name            Name     Type        Obj#   Dataobj#        Reads  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+TYPE_MISC$                      TABLE        737          2        1,910   19.01
+   PDB: PDB1
+SYS                  SYSTEM
+OBJ$                            TABLE         18         18        1,269   12.63
+   PDB: PDB1
+SYS                  SYSTEM
+I_OBJ2                          INDEX         37         37          988    9.83
+   PDB: PDB1
+SYS                  SYSTEM
+HISTGRM$                        TABLE         66         64          878    8.74
+   PDB: PDB1
+SYS                  SYSTEM
+HIST_HEAD$                      TABLE         68         68          662    6.59
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by Physical Read Requests            DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Physical Read Requests:           5,279
+-> Captured Segments account for   52.0% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                           Phys Read
+Object Name            Name     Type        Obj#   Dataobj#     Requests  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+HISTGRM$                        TABLE         66         64          562   10.65
+   PDB: PDB1
+SYS                  SYSTEM
+TYPE_MISC$                      TABLE        737          2          345    6.54
+   PDB: PDB1
+SYS                  SYSTEM
+OBJ$                            TABLE         18         18          311    5.89
+   PDB: PDB1
+SYS                  SYSAUX
+I_WRI$_OPTSTAT_HH_OB            INDEX      14869      14869          303    5.74
+   PDB: PDB1
+SYS                  SYSTEM
+HIST_HEAD$                      TABLE         68         68          280    5.30
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by UnOptimized Reads                 DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total UnOptimized Read Requests:           5,279
+-> Captured Segments account for   52.0% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                         UnOptimized
+Object Name            Name     Type        Obj#   Dataobj#        Reads  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+HISTGRM$                        TABLE         66         64          562   10.65
+   PDB: PDB1
+SYS                  SYSTEM
+TYPE_MISC$                      TABLE        737          2          345    6.54
+   PDB: PDB1
+SYS                  SYSTEM
+OBJ$                            TABLE         18         18          311    5.89
+   PDB: PDB1
+SYS                  SYSAUX
+I_WRI$_OPTSTAT_HH_OB            INDEX      14869      14869          303    5.74
+   PDB: PDB1
+SYS                  SYSTEM
+HIST_HEAD$                      TABLE         68         68          280    5.30
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by Optimized Reads                   DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+Segments by Direct Physical Reads             DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+Segments by Physical Writes                   DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Physical Writes:              48
+-> Captured Segments account for  837.5% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                            Physical
+Object Name            Name     Type        Obj#   Dataobj#       Writes  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+HISTGRM$                        TABLE         66         64          116  241.67
+   PDB: PDB1
+SYS                  SYSTEM
+I_H_OBJ#_COL#                   INDEX         67         67           64  133.33
+   PDB: PDB1
+** MISSING **        TEMP
+** MISSING: 73090/41 MISSING ** UNDEF      73090    4194951           48  100.00
+   PDB: PDB1
+SYS                  SYSAUX
+I_WRI$_OPTSTAT_H_OBJ            INDEX      14874      14874           40   83.33
+   PDB: PDB1
+SYS                  SYSTEM
+TYPE_MISC$                      TABLE        737          2           26   54.17
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by Physical Write Requests           DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Physical Write Requests:               2
+-> Captured Segments account for   4.5E+03% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                          Phys Write
+Object Name            Name     Type        Obj#   Dataobj#     Requests  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+I_H_OBJ#_COL#                   INDEX         67         67           22 1.1E+03
+   PDB: PDB1
+SYS                  SYSTEM
+HISTGRM$                        TABLE         66         64           15  750.00
+   PDB: PDB1
+SYS                  SYSTEM
+TYPE_MISC$                      TABLE        737          2           15  750.00
+   PDB: PDB1
+SYS                  SYSAUX
+I_WRI$_OPTSTAT_HH_OB            INDEX      14869      14869            9  450.00
+   PDB: PDB1
+SYS                  SYSAUX
+I_WRI$_OPTSTAT_OPR_T            INDEX        690        690            7  350.00
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by Direct Physical Writes            DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Direct Physical Writes:              48
+-> Captured Segments account for  100.0% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                              Direct
+Object Name            Name     Type        Obj#   Dataobj#       Writes  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+** MISSING **        TEMP
+** MISSING: 73090/41 MISSING ** UNDEF      73090    4194951           48  100.00
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by Table Scans                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Total Table Scans:             166
+-> Captured Segments account for   77.7% of Total
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                               Table
+Object Name            Name     Type        Obj#   Dataobj#        Scans  %Total
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+TYPE_MISC$                      TABLE        737          2           81   48.80
+   PDB: PDB1
+SYS                  SYSTEM
+OBJ$                            TABLE         18         18           46   27.71
+   PDB: PDB1
+SYS                  SYSTEM
+I_HH_OBJ#_INTCOL#               INDEX         70         70            1     .60
+   PDB: PDB1
+SYS                  SYSTEM
+I_OBJ2                          INDEX         37         37            1     .60
+   PDB: PDB1
+                          ------------------------------------------------------
+
+Segments by DB Blocks Changes                 DB/Inst: ORCL/orcl  Snaps: 10-11
+-> % of Capture shows % of DB Block Changes for each top segment compared
+-> with total DB Block Changes for all segments captured by the Snapshot
+-> When ** MISSING ** occurs, some of the object attributes may not be available
+
+                     Tablespace
+Owner                   Name
+-------------------- ----------
+                     Subobject  Obj.                            DB Block    % of
+Object Name            Name     Type        Obj#   Dataobj#      Changes Capture
+-------------------- ---------- ----- ---------- ---------- ------------ -------
+SYS                  SYSTEM
+HISTGRM$                        TABLE         66         64       13,280   34.16
+   PDB: PDB1
+SYS                  SYSTEM
+I_H_OBJ#_COL#                   INDEX         67         67       12,480   32.10
+   PDB: PDB1
+** MISSING **        TEMP
+** MISSING: 73090/41 MISSING ** UNDEF      73090    4194951        6,272   16.13
+   PDB: PDB1
+SYS                  SYSAUX
+WRI$_OPTSTAT_HISTHEA SYS_P321   TABLE      73085      73085        1,504    3.87
+   PDB: PDB1
+SYS                  SYSTEM
+HIST_HEAD$                      TABLE         68         68        1,344    3.46
+   PDB: PDB1
+                          ------------------------------------------------------
+
+
+Segments by Row Lock Waits                    DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+Segments by ITL Waits                         DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+Segments by Buffer Busy Waits                 DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+
+Parameters modified by this container         DB/Inst: ORCL/orcl  Snaps: 10-11
+-> This section shows all the modified initialization parameters that
+were in effect during the entire snapshot interval
+-> End Value is displayed only if the parameter value was modified within
+the snapshot interval
+
+                                                                End value
+Parameter Name                Begin value                       (if different)
+----------------------------- --------------------------------- --------------
+resource_manager_plan                                           SCHEDULER[0x4D
+   PDB: PDB1
+undo_tablespace               UNDOTBS1
+   PDB: PDB1
+                          ------------------------------------------------------
+
+
+Parameters modified by other containers       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> This section shows all the modified initialization parameters that
+were in effect during the snapshot interval
+-> End Value is displayed only if the parameter value was changed within
+the snapshot interval
+
+                                                                End value
+Parameter Name                Begin value                       (if different)
+----------------------------- --------------------------------- --------------
+audit_file_dest               /u01/app/oracle/admin/orcl/adump
+audit_trail                   DB
+compatible                    19.0.0
+control_files                 /u01/app/oracle/oradata/ORCL/cont
+db_block_size                 8192
+db_name                       orcl
+diagnostic_dest               /u01/app/oracle
+dispatchers                   (PROTOCOL=TCP) (SERVICE=orclXDB)
+enable_pluggable_database     TRUE
+local_listener                LISTENER_ORCL
+memory_target                 725614592
+nls_language                  AMERICAN
+nls_territory                 AMERICA
+open_cursors                  300
+processes                     300
+remote_login_passwordfile     EXCLUSIVE
+undo_tablespace               UNDOTBS1
+                          ------------------------------------------------------
+
+
+Multi-Valued Parameters modified by this containerDB/Inst: ORCL/orcl  Snaps: 1
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+
+Multi-Valued Parameters modified by other containersDB/Inst: ORCL/orcl  Snaps:
+-> This section only displays parameters that have more than one value
+->'(NULL)' indicates a missing parameter value
+-> A blank in the 'End Snapshot' indicates the same value as the 'Begin Snapshot
+
+                                                                End value
+Parameter Name                Begin value                       (if different)
+----------------------------- --------------------------------- --------------
+control_files                 /u01/app/oracle/oradata/ORCL/cont
+                              /u01/app/oracle/oradata/ORCL/cont
+                          ------------------------------------------------------
+
+Top SQL with Top Events                       DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Top SQL statements by DB Time along with the top events by DB Time
+   for those SQLs.
+-> % Activity is the percentage of DB Time due to the SQL.
+-> % Event is the percentage of DB Time due to the event that the SQL is
+   waiting on.
+-> % Row Source is the percentage of DB Time due to the row source for the
+   SQL waiting on the event.
+-> Executions is the number of executions of the SQL that were sampled in ASH.
+
+                 SQL ID            Plan Hash           Executions     % Activity
+----------------------- -------------------- -------------------- --------------
+                                                                           % Row
+Event                          % Event Top Row Source                     Source
+------------------------------ ------- --------------------------------- -------
+                              Container Name
+ -------------------------------------------
+          34rznuxy8h2a4                  N/A                    1           8.33
+CPU + Wait for CPU                8.33 ** Row Source Not Available **       8.33
+insert into histgrm$(obj#,intcol#,row#,bucket,endpoint,col#,epvalue_raw,ep_repea
+t_count,endpoint_enc) values(:1,:2,:3,:4,:5,:6,:7,:8,:9)
+                                        PDB1
+
+          4du03zn9gsy1r                  N/A                    0           8.33
+CPU + Wait for CPU                8.33 ** Row Source Not Available **       8.33
+** SQL Text Not Available **
+                                        PDB1
+
+                                  1805578015                    0           8.33
+library cache lock                8.33 SELECT STATEMENT                     8.33
+** SQL Text Not Available **
+                                        PDB1
+
+          4m7m0t6fjcs5x           1935744642                    0           8.33
+CPU + Wait for CPU                8.33 ** Row Source Not Available **       8.33
+** SQL Text Not Available **
+                                        PDB1
+
+          95jt8r142r0xx           1388734953                    1           8.33
+CPU + Wait for CPU                8.33 SELECT STATEMENT                     8.33
+** SQL Text Not Available **
+                                        PDB1
+
+                          ------------------------------------------------------
+
+Top SQL with Top Row Sources                  DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Top SQL statements by DB Time along with the top row sources by DB Time
+   for those SQLs.
+-> % Activity is the percentage of DB Time due to the SQL.
+-> % Row Source is the percentage of DB Time spent on the row source by
+   that SQL.
+-> % Event is the percentage of DB Time spent on the event by the
+   SQL executing the row source.
+-> Executions is the number of executions of the SQL that were sampled in ASH.
+
+                 SQL ID            Plan Hash           Executions     % Activity
+----------------------- -------------------- -------------------- --------------
+                                           % Row
+Row Source                                Source Top Event               % Event
+---------------------------------------- ------- ----------------------- -------
+                              Container Name
+ -------------------------------------------
+          34rznuxy8h2a4                  N/A                    1           8.33
+** Row Source Not Available **              8.33 CPU + Wait for CPU         8.33
+insert into histgrm$(obj#,intcol#,row#,bucket,endpoint,col#,epvalue_raw,ep_repea
+t_count,endpoint_enc) values(:1,:2,:3,:4,:5,:6,:7,:8,:9)
+                                        PDB1
+
+          4du03zn9gsy1r                  N/A                    0           8.33
+** Row Source Not Available **              8.33 CPU + Wait for CPU         8.33
+** SQL Text Not Available **
+                                        PDB1
+
+                                  1805578015                    0           8.33
+SELECT STATEMENT                            8.33 library cache lock         8.33
+** SQL Text Not Available **
+                                        PDB1
+
+          4m7m0t6fjcs5x           1935744642                    0           8.33
+** Row Source Not Available **              8.33 CPU + Wait for CPU         8.33
+** SQL Text Not Available **
+                                        PDB1
+
+          95jt8r142r0xx           1388734953                    1           8.33
+SELECT STATEMENT                            8.33 CPU + Wait for CPU         8.33
+** SQL Text Not Available **
+                                        PDB1
+
+                          ------------------------------------------------------
+
+Top Sessions                                  DB/Inst: ORCL/orcl  Snaps: 10-11
+-> '# Samples Active' shows the number of ASH samples in which the session
+      was found waiting for that particular event. The percentage shown
+      in this column is calculated with respect to wall clock time
+      and not total database activity.
+-> 'XIDs' shows the number of distinct transaction IDs sampled in ASH
+      when the session was waiting for that particular event
+
+   Sid, Serial# % Activity Event                             % Event
+--------------- ---------- ------------------------------ ----------
+User                 Program                          # Samples Active     XIDs
+-------------------- ------------------------------ ------------------ --------
+        4,34975      16.67 CPU + Wait for CPU                  16.67
+SYS                  oracle@localho...domain (GEN1)       2/358 [  1%]        0
+
+       44,30149      16.67 CPU + Wait for CPU                  16.67
+SYS                  oracle@localho...domain (J001)       2/358 [  1%]        1
+
+      269,14857      16.67 CPU + Wait for CPU                  16.67
+SYS                  sqlplus@localh...n (TNS V1-V3)       2/358 [  1%]        0
+
+       33,21965       8.33 CPU + Wait for CPU                   8.33
+SYS                  oracle@localho...domain (P001)       1/358 [  0%]        0
+
+       38,56587       8.33 CPU + Wait for CPU                   8.33
+SYS                  oracle@localho...domain (P003)       1/358 [  0%]        0
+
+                          ------------------------------------------------------
+
+Top Blocking Sessions                         DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Blocking session activity percentages are calculated with respect to
+      waits on enqueues, latches and "buffer busy" only
+-> '% Activity' represents the load on the database caused by
+      a particular blocking session
+-> '# Samples Active' shows the number of ASH samples in which the
+      blocking session was found active.
+-> 'XIDs' shows the number of distinct transaction IDs sampled in ASH
+      when the blocking session was found active.
+
+ Blocking Sid (Inst) % Activity Event Caused                      % Event
+-------------------- ---------- ------------------------------ ----------
+User                 Program                          # Samples Active     XIDs
+-------------------- ------------------------------ ------------------ --------
+    33,21965(     1)       8.33 library cache lock                   8.33
+SYS                  oracle@localho...domain (P001)       1/358 [  0%]        0
+
+   240, 8750(     1)       8.33 SGA: allocation forcing compon       8.33
+** NOT FOUND **      BLOCKING SESSION NOT FOUND           0/358 [  0%]      N/A
+
+                          ------------------------------------------------------
+
+Top PL/SQL Procedures                         DB/Inst: ORCL/orcl  Snaps: 10-11
+-> 'PL/SQL entry subprogram' represents the application's top-level
+      entry-point (procedure, function, trigger, package initialization
+      or RPC call) into PL/SQL.
+-> 'PL/SQL current subprogram' is the PL/SQL subprogram being executed
+      at the point of sampling . If the value is 'SQL', it represents
+      the percentage of time spent executing SQL for the particular
+      PL/SQL entry subprogram
+
+PL/SQL Entry Subprogram                                           % Activity
+----------------------------------------------------------------- ----------
+PL/SQL Current Subprogram                                          % Current
+----------------------------------------------------------------- ----------
+                             Container Name
+-------------------------------------------
+UNKNOWN_PLSQL_ID <13796,169>                                           16.67
+   SQL                                                                 16.67
+                                       PDB1
+UNKNOWN_PLSQL_ID <13809,19>                                            16.67
+   SQL                                                                 16.67
+                                       PDB1
+UNKNOWN_PLSQL_ID <21655,9>                                              8.33
+   UNKNOWN_PLSQL_ID <21653,36>                                          8.33
+                                       PDB1
+UNKNOWN_PLSQL_ID <21655,45>                                             8.33
+   UNKNOWN_PLSQL_ID <21653,36>                                          8.33
+                                       PDB1
+                          ------------------------------------------------------
+
+Top Events                                    DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Top Events by DB Time
+-> % Activity is the percentage of DB Time due to the event
+
+Event                               Event Class     Session Type
+----------------------------------- --------------- ---------------
+           Avg Active
+% Activity   Sessions
+---------- ----------
+CPU + Wait for CPU                  CPU             BACKGROUND
+     41.67       0.01
+CPU + Wait for CPU                  CPU             FOREGROUND
+                 0.01
+SGA: allocation forcing component g Other           FOREGROUND
+      8.33       0.00
+library cache lock                  Concurrency     FOREGROUND
+                 0.00
+                          ------------------------------------------------------
+
+Top Event P1/P2/P3 Values                     DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Top Events by DB Time and the top P1/P2/P3 values for those events.
+-> % Event is the percentage of DB Time due to the event
+-> % Activity is the percentage of DB Time due to the event with the given
+   P1,P2,P3 Values.
+
+Event                          % Event             P1, P2, P3 Values % Activity
+------------------------------ ------- ----------------------------- ----------
+Parameter 1                Parameter 2                Parameter 3
+-------------------------- -------------------------- --------------------------
+library cache lock                8.33 "1760361320","1882552440","53       8.33
+handle address             lock address               100*mode+namespace
+
+                          ------------------------------------------------------
+
+Top DB Objects                                DB/Inst: ORCL/orcl  Snaps: 10-11
+
+                  No data exists for this section of the report.
+                          ------------------------------------------------------
+
+Activity Over Time                            DB/Inst: ORCL/orcl  Snaps: 10-11
+-> Analysis period is divided into smaller time slots as indicated
+   in the 'Slot Time (Duration)'.
+-> Top 3 events are reported in each of those slots
+-> 'Slot Count' shows the number of ASH samples in that slot
+-> 'Event Count' shows the number of ASH samples waiting for
+   that event in that slot
+-> '% Event' is 'Event Count' over all ASH samples in the analysis period
+
+                         Slot                                   Event
+Slot Time (Duration)    Count Event                             Count % Event
+-------------------- -------- ------------------------------ -------- -------
+04:00:57   (4.1 min)        1 CPU + Wait for CPU                    1    8.33
+04:05:00   (5.0 min)        5 CPU + Wait for CPU                    3   25.00
+                              SGA: allocation forcing compon        1    8.33
+                              library cache lock                    1    8.33
+04:15:00   (5.0 min)        1 CPU + Wait for CPU                    1    8.33
+04:20:00   (5.0 min)        1 CPU + Wait for CPU                    1    8.33
+04:30:00   (5.0 min)        1 CPU + Wait for CPU                    1    8.33
+04:55:00   (5.0 min)        1 CPU + Wait for CPU                    1    8.33
+05:00:00   (39 secs)        2 CPU + Wait for CPU                    2   16.67
+                          ------------------------------------------------------
+
+End of Report
