@@ -70,17 +70,17 @@ Session01: Exec the following test SQL
 
 Session02: Check Top 10 CPU 
 
-SYS@orcl> !ps -e -o pcpu -o pid -o user -o args | sort -k 1 | tail -10
- 0.0     9 root     [rcu_bh]
- 0.1  6776 oracle   ora_mmon_orcl
- 0.1  6791 oracle   ora_m000_orcl
- 0.1  7135 oracle   ora_m002_orcl
- 0.1  8096 oracle   /bin/rlwrap -i -b ()=!<>&+-*|:;, /u01/app/oracle/product/19.0.0/dbhome_1/bin/sqlplus / as sysdba
- 0.1  8282 oracle   ora_m004_orcl
- 0.3  7137 oracle   ora_m003_orcl
- 1.1  6721 oracle   ora_vktm_orcl
-16.3  8098 oracle   oracleorcl (DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq)))
-%CPU   PID USER     COMMAND
+	SYS@orcl> !ps -e -o pcpu -o pid -o user -o args | sort -k 1 | tail -10
+	 0.0     9 root     [rcu_bh]
+	 0.1  6776 oracle   ora_mmon_orcl
+	 0.1  6791 oracle   ora_m000_orcl
+	 0.1  7135 oracle   ora_m002_orcl
+	 0.1  8096 oracle   /bin/rlwrap -i -b ()=!<>&+-*|:;, /u01/app/oracle/product/19.0.0/dbhome_1/bin/sqlplus / as sysdba
+	 0.1  8282 oracle   ora_m004_orcl
+	 0.3  7137 oracle   ora_m003_orcl
+	 1.1  6721 oracle   ora_vktm_orcl
+	16.3  8098 oracle   oracleorcl (DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq)))
+	%CPU   PID USER     COMMAND
 
 
 Session02: Check the Program via spid in sqlplus 
