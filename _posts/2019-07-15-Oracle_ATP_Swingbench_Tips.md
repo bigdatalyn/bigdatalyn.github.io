@@ -40,6 +40,8 @@ ATP Swingbench
 
 Sample:
 
+It took 1:33 hours (Total Run Time) to complete...
+
 	[oracle@inst_demo bin]$ ./oewizard -cf ~/Wallet_ATPDEMO.zip \
 	>            -cs ATPDEMO_MEDIUM \
 	>            -ts DATA \
@@ -59,7 +61,6 @@ Sample:
 	Connected
 	Running script ../sql/soedgcreateuser.sql
 	The following statement failed : GRANT MANAGE SCHEDULER to soe : Due to : ORA-01031: insufficient privileges
-
 	The following statement failed : BEGIN
 	  $IF DBMS_DB_VERSION.VER_LE_11_2
 	  $THEN
@@ -76,7 +77,6 @@ Sample:
 	PLS-00201: identifier 'DBMS_RESOURCE_MANAGER_PRIVS' must be declared
 	ORA-06550: line 8, column 3:
 	PL/SQL: Statement ignored
-
 	Script completed in 0 hour(s) 0 minute(s) 0 second(s) 974 millisecond(s)
 	Starting run
 	Starting script ../sql/soedgdrop2.sql
@@ -91,8 +91,136 @@ Sample:
 	Inserting data into table ADDRESSES_2
 	Inserting data into table CUSTOMERS_2500001
 	Inserting data into table CUSTOMERS_2
-	Run time 0:01:44 : Running threads (4/4) : Percentage completed : 7.12
-	~....~
+	Completed processing table CUSTOMERS_2 in 0:05:04
+	Inserting data into table ORDER_ITEMS_3574475
+	Inserting data into table ORDERS_3574476
+	Completed processing table CUSTOMERS_2500001 in 0:05:14
+	Completed processing table ADDRESSES_3750001 in 0:06:32
+	Inserting data into table ORDER_ITEMS_1
+	Inserting data into table ORDERS_2
+	Completed processing table ADDRESSES_2 in 0:06:44
+	Run time 0:12:18 : Running threads (4/4) : Percentage completed : 35.06
+	Completed processing table ORDERS_3574476 in 0:18:19
+	Inserting data into table CARD_DETAILS_3750001
+	Completed processing table ORDER_ITEMS_3574475 in 0:18:22
+	Inserting data into table CARD_DETAILS_2
+	Completed processing table ORDERS_2 in 0:17:08
+	Inserting data into table LOGON_5957461
+	Completed processing table ORDER_ITEMS_1 in 0:17:08
+	Inserting data into table LOGON_2
+	Inserting data into table PRODUCT_INFORMATION
+	Completed processing table CARD_DETAILS_3750001 in 0:06:00
+	Inserting data into table INVENTORIES
+	Completed processing table PRODUCT_INFORMATION in 0:00:00
+	Completed processing table CARD_DETAILS_2 in 0:05:59
+	Inserting data into table PRODUCT_DESCRIPTIONS
+	Completed processing table PRODUCT_DESCRIPTIONS in 0:00:00
+	Inserting data into table WAREHOUSES
+	Completed processing table WAREHOUSES in 0:00:00
+	Completed processing table INVENTORIES in 0:00:08
+	Completed processing table LOGON_2 in 0:07:21
+	Connection cache closed
+	Starting script ../sql/soedganalyzeschema2.sql
+	The following statement failed : begin
+		declare
+			   jobs_count number := 0;
+		begin
+			select value into jobs_count from v$parameter
+			jobs_count where name='job_queue_processes';
+			$IF DBMS_DB_VERSION.VER_LE_10_2
+			$THEN
+			-- Use the default stats collection approach
+				dbms_stats.gather_schema_stats(
+					OWNNAME=> 'SOE'
+					,ESTIMATE_PERCENT=>DBMS_STATS.AUTO_SAMPLE_SIZE
+					,BLOCK_SAMPLE=>TRUE
+					,METHOD_OPT=>'FOR ALL COLUMNS SIZE SKEWONLY'
+					,DEGREE=> 16
+					,GRANULARITY=>'ALL'
+					,CASCADE=>TRUE);
+			$ELSIF DBMS_DB_VERSION.VER_LE_11_2
+			$THEN
+				 -- Oracle Database 11g release 2. Enable concurrent stats collection
+				 dbms_output.put_line('database version is less than or equal to 11.2');
+				 DBMS_STATS.SET_GLOBAL_PREFS('CONCURRENT','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','WAREHOUSES','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','INVENTORIES','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','PRODUCT_INFORMATION','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','PRODUCT_DESCRIPTIONS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ORDERENTRY_METADATA','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','CUSTOMERS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ADDRESSES','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ORDER_ITEMS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ORDERS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','LOGON','INCREMENTAL','TRUE');
+				 DBMS_STATS.GATHER_SCHEMA_STATS('SOE');
+			$ELSE
+				 -- Oracle Database 12c and Oracle Database 18c. Concurrent Stats collection work slightly different in this release
+				 execute immediate q'[ALTER SYSTEM SET RESOURCE_MANAGER_PLAN = 'DEFAULT_PLAN']';
+				 if jobs_count < 16 then
+					execute immediate q'[ALTER SYSTEM SET JOB_QUEUE_PROCESSES = 16 ]';
+				 end if;
+				 execute immediate q'[ALTER SYSTEM SET JOB_QUEUE_PROCESSES = 16 ]';
+				 DBMS_STATS.SET_GLOBAL_PREFS('CONCURRENT','MANUAL');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','WAREHOUSES','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','INVENTORIES','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','PRODUCT_INFORMATION','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','PRODUCT_DESCRIPTIONS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ORDERENTRY_METADATA','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','CUSTOMERS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ADDRESSES','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ORDER_ITEMS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','ORDERS','INCREMENTAL','TRUE');
+				 DBMS_STATS.SET_TABLE_PREFS('SOE','LOGON','INCREMENTAL','TRUE');
+				 DBMS_STATS.GATHER_SCHEMA_STATS('SOE');
+			$END
+		end;
+	end; : Due to : ORA-01031: insufficient privileges
+	ORA-06512: at line 36
+	Script completed in 0 hour(s) 0 minute(s) 0 second(s) 74 millisecond(s)
+	Starting script ../sql/soedgconstraints2.sql
+	Script completed in 0 hour(s) 20 minute(s) 31 second(s) 879 millisecond(s)
+	Starting script ../sql/soedgindexes2.sql
+	Script completed in 0 hour(s) 41 minute(s) 21 second(s) 639 millisecond(s)
+	Starting script ../sql/soedgsequences2.sql
+	Script completed in 0 hour(s) 0 minute(s) 20 second(s) 343 millisecond(s)
+	Starting script ../sql/soedgpackage2_header.sql
+	Script completed in 0 hour(s) 0 minute(s) 0 second(s) 419 millisecond(s)
+	Starting script ../sql/soedgpackage2_body.sql
+	Script completed in 0 hour(s) 0 minute(s) 0 second(s) 325 millisecond(s)
+	Starting script ../sql/soedgsetupmetadata.sql
+	Script completed in 0 hour(s) 0 minute(s) 2 second(s) 830 millisecond(s)
+
+	============================================
+	|           Datagenerator Run Stats        |
+	============================================
+	Connection Time                        0:00:00.002
+	Data Generation Time                   0:31:04.614
+	DDL Creation Time                      1:02:19.205
+	Total Run Time                         1:33:23.825
+	Rows Inserted per sec                       32,454
+	Data Generated (MB) per sec                    2.6
+	Actual Rows Generated                   61,228,985
+	Commits Completed                            3,082
+	Batch Updates Completed                    306,168
+
+	Connecting to : jdbc:oracle:thin:@ATPDEMO_MEDIUM
+	Connected
+
+	Post Creation Validation Report
+	===============================
+	The schema appears to have been created successfully.
+
+	Valid Objects
+	=============
+	Valid Tables : 'ORDERS','ORDER_ITEMS','CUSTOMERS','WAREHOUSES','ORDERENTRY_METADATA','INVENTORIES','PRODUCT_INFORMATION','PRODUCT_DESCRIPTIONS','ADDRESSES','CARD_DETAILS'
+	Valid Indexes : 'PRD_DESC_PK','PROD_NAME_IX','PRODUCT_INFORMATION_PK','PROD_SUPPLIER_IX','PROD_CATEGORY_IX','INVENTORY_PK','INV_PRODUCT_IX','INV_WAREHOUSE_IX','ORDER_PK','ORD_SALES_REP_IX','ORD_CUSTOMER_IX','ORD_ORDER_DATE_IX','ORD_WAREHOUSE_IX','ORDER_ITEMS_PK','ITEM_ORDER_IX','ITEM_PRODUCT_IX','WAREHOUSES_PK','WHS_LOCATION_IX','CUSTOMERS_PK','CUST_EMAIL_IX','CUST_ACCOUNT_MANAGER_IX','CUST_FUNC_LOWER_NAME_IX','ADDRESS_PK','ADDRESS_CUST_IX','CARD_DETAILS_PK','CARDDETAILS_CUST_IX'
+	Valid Views : 'PRODUCTS','PRODUCT_PRICES'
+	Valid Sequences : 'CUSTOMER_SEQ','ORDERS_SEQ','ADDRESS_SEQ','LOGON_SEQ','CARD_DETAILS_SEQ'
+	Valid Code : 'ORDERENTRY'
+	Schema Created
+	[oracle@inst_demo bin]$
+
 	
 
 
@@ -127,6 +255,53 @@ sql connect atp
 	SQL> connect admin/Welcome#2019@atpdemo_tp
 	Connected.
 	SQL>
+
+About the size of soe tables/indexes
+
+	[opc@inst_demo bin]$ ora segsize soe
+
+	TABLESPACE_NAME                SEGMENT_NAME                                SIZE_MB
+	------------------------------ ---------------------------------------- ----------
+	DATA                           PROD_CATEGORY_IX[Idx]                             0
+	DATA                           WHS_LOCATION_IX[Idx]                              0
+	DATA                           PROD_SUPPLIER_IX[Idx]                             0
+	DATA                           WAREHOUSES[Tab]                                   0
+	DATA                           WAREHOUSES_PK[Idx]                                0
+	DATA                           PRODUCT_INFORMATION_PK[Idx]                       0
+	DATA                           ORDERENTRY_METADATA[Tab]                          0
+	DATA                           PRD_DESC_PK[Idx]                                  0
+	DATA                           PROD_NAME_IX[Idx]                                 0
+	DATA                           PRODUCT_INFORMATION[Tab]                          0
+	DATA                           PRODUCT_DESCRIPTIONS[Tab]                         0
+	DATA                           INV_WAREHOUSE_IX[Idx]                            15
+	DATA                           INV_PRODUCT_IX[Idx]                              15
+	DATA                           INVENTORY_PK[Idx]                                18
+	DATA                           INVENTORIES[Tab]                                 19
+	DATA                           CUST_ACCOUNT_MANAGER_IX[Idx]                    106
+	DATA                           CUSTOMERS_PK[Idx]                               112
+	DATA                           CUST_DOB_IX[Idx]                                128
+	DATA                           ORD_SALES_REP_IX[Idx]                           151
+	DATA                           CUST_FUNC_LOWER_NAME_IX[Idx]                    159
+	DATA                           ORDER_PK[Idx]                                   160
+	DATA                           ORD_CUSTOMER_IX[Idx]                            165
+	DATA                           ADDRESS_PK[Idx]                                 168
+	DATA                           CARD_DETAILS_PK[Idx]                            168
+	DATA                           CARDDETAILS_CUST_IX[Idx]                        173
+	DATA                           ADDRESS_CUST_IX[Idx]                            173
+	DATA                           ORD_WAREHOUSE_IX[Idx]                           173
+	DATA                           ORD_ORDER_DATE_IX[Idx]                          182
+	DATA                           CUST_EMAIL_IX[Idx]                              218
+	DATA                           ITEM_PRODUCT_IX[Idx]                            445
+	DATA                           ITEM_ORDER_IX[Idx]                              488
+	DATA                           LOGON                                           512
+	DATA                           CARD_DETAILS                                    512
+	DATA                           ORDER_ITEMS_PK[Idx]                             536
+	DATA                           ADDRESSES                                       768
+	DATA                           CUSTOMERS                                       768
+	DATA                           ORDERS                                          976
+	DATA                           ORDER_ITEMS                                    1536
+	[opc@inst_demo bin]$
+
 
 ### parameters in SwingBench
 
