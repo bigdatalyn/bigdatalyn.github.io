@@ -301,6 +301,42 @@ About the size of soe tables/indexes
 	DATA                           ORDERS                                          976
 	DATA                           ORDER_ITEMS                                    1536
 	[opc@inst_demo bin]$
+	[opc@inst_demo bin]$ ./sbutil -soe -cf ~/Wallet_ATPDEMO.zip -cs ATPDEMO_MEDIUM -u soe -p Welcome#2019 -val
+	Operation is successfully completed.
+	Operation is successfully completed.
+	The Order Entry Schema appears to be valid.
+	--------------------------------------------------
+	|Object Type    |     Valid|   Invalid|   Missing|
+	--------------------------------------------------
+	|Table          |        10|         0|         0|
+	|Index          |        26|         0|         0|
+	|Sequence       |         5|         0|         0|
+	|View           |         2|         0|         0|
+	|Code           |         1|         0|         0|
+	--------------------------------------------------
+
+	[opc@inst_demo bin]$
+	[opc@inst_demo bin]$ ./sbutil -soe -cf ~/Wallet_ATPDEMO.zip -cs ATPDEMO_MEDIUM -u soe -p Welcome#2019 -tables
+	Operation is successfully completed.
+	Operation is successfully completed.
+	Order Entry Schemas Tables
+	----------------------------------------------------------------------------------------------------------------------
+	|Table Name                  |                Rows|              Blocks|           Size|   Compressed?|  Partitioned?|
+	----------------------------------------------------------------------------------------------------------------------
+	|ORDER_ITEMS                 |                   0|                   0|          1.5GB|              |           Yes|
+	|ORDERS                      |                   0|                   0|        976.0MB|              |           Yes|
+	|CUSTOMERS                   |                   0|                   0|        768.0MB|              |           Yes|
+	|ADDRESSES                   |                   0|                   0|        768.0MB|              |           Yes|
+	|LOGON                       |                   0|                   0|        512.0MB|              |           Yes|
+	|CARD_DETAILS                |                   0|                   0|        512.0MB|              |           Yes|
+	|INVENTORIES                 |                   0|                   0|         19.0MB|      Disabled|            No|
+	|PRODUCT_DESCRIPTIONS        |                   0|                   0|          320KB|      Disabled|            No|
+	|PRODUCT_INFORMATION         |                   0|                   0|          256KB|      Disabled|            No|
+	|WAREHOUSES                  |                   0|                   0|           64KB|      Disabled|            No|
+	|ORDERENTRY_METADATA         |                   0|                   0|           64KB|      Disabled|            No|
+	----------------------------------------------------------------------------------------------------------------------
+																Total Space           5.0GB
+	[opc@inst_demo bin]$
 
 
 ### parameters in SwingBench
@@ -318,6 +354,10 @@ About the size of soe tables/indexes
     -create tells swingbench to create the schema (-drop will delete the schema)
     -cl tells swingbech to run in character mode
     -v tells swingbench to output whats going on (verbose mode)
+
+### Test ScaleUp cpu cores
+
+![ATP]({{ "/files/Oracle/ADB/charbench_scaleup.png"}})
 
 
 	
