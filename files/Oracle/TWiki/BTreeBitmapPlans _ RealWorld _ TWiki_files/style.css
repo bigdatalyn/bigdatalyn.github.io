@@ -1,0 +1,21 @@
+/* style sheet for reddots */
+
+.redDot a {
+  color:red;
+  font-weight:bold;
+  padding-left:2px;
+  padding-right:2px;
+  line-height:100%;
+  font-size:18px;
+  text-decoration:none;
+}
+
+/* pattern skin support */
+#patternScreen h1 .redDot a,
+#patternScreen h1 .redDot a:link,
+#patternScreen h1 .redDot a:visited,
+#patternLeftBarContents .redDot a:link,
+#patternLeftBarContents .redDot a:visited {
+   color:#f00;
+   font-size:110%;
+}

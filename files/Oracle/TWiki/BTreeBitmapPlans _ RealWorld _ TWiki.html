@@ -1,0 +1,532 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0072)http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<link rel="stylesheet" href="./BTreeBitmapPlans _ RealWorld _ TWiki_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="./BTreeBitmapPlans _ RealWorld _ TWiki_files/jquery-all.css" type="text/css" media="all">
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/jquery-all.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<title> BTreeBitmapPlans &lt; RealWorld &lt; TWiki</title>
+
+<link rel="icon" href="http://realworld.us.oracle.com/twiki/pub/RealWorld/WebPreferences/rwp.ico" type="image/x-icon">
+<link rel="alternate" href="http://realworld.us.oracle.com/twiki/bin/edit/RealWorld/BTreeBitmapPlans?_T=17%20Jul%202019" type="application/x-wiki" title="edit BTreeBitmapPlans">
+<link rel="shortcut icon" href="http://realworld.us.oracle.com/twiki/pub/RealWorld/WebPreferences/rwp.ico" type="image/x-icon">
+<meta name="SCRIPTURLPATH" content="/twiki/bin">
+<meta name="SCRIPTSUFFIX" content="">
+<meta name="TEXT_JUMP" content="Jump">
+<meta name="TEXT_SEARCH" content="Search">
+<meta name="TEXT_NUM_TOPICS" content="Number of topics:">
+<meta name="TEXT_MODIFY_SEARCH" content="Modify search">
+<meta name="robots" content="noindex"><link rel="alternate" type="application/rss+xml" title="RSS Feed" href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebRss">
+<!--<base href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans">--><base href=".">
+<!--BEHAVIOURCONTRIB--><script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/behaviour.compressed.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/twikilib.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/twikiWindow.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/twikiEvent.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/twikiHTML.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/twikiCSS.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/twikiForm.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/pattern.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script>
+<style type="text/css" media="all">
+@import url('/twiki/pub/TWiki/TWikiTemplates/base.css');
+</style>
+<style type="text/css" media="all">
+#patternTopBar,
+#patternClearHeaderCenter,
+#patternClearHeaderLeft,
+#patternClearHeaderRight,
+#patternTopBarContentsOuter,
+#patternTopBarContents {
+	height:64px; /* top bar height; make room for header columns */
+	overflow:hidden;
+}
+#patternOuter {
+	margin-left:14em;
+}
+#patternLeftBar {
+	width:14em;
+	margin-left:-14em;
+}
+</style>
+<style type="text/css" media="all">
+@import url('/twiki/pub/TWiki/PatternSkin/layout.css');
+@import url('/twiki/pub/TWiki/PatternSkin/style.css');
+@import url('/twiki/pub/TWiki/PatternSkin/colors.css');
+</style>
+<style type="text/css" media="all">
+	/* Styles that are set using variables */
+	.patternBookView .twikiTopRow,
+	.patternWebIndicator a img,
+	.patternWebIndicator a:hover img {
+		background-color:#D0D0D0;
+	}
+	#patternTopBarContents { background-image:url(/twiki/pub/TWiki/PatternSkin/TWiki_header.gif); background-repeat:no-repeat;}
+	
+	.patternBookView {
+		border-color:#D0D0D0;
+	}
+	.patternPreviewPage #patternMain {
+		/* uncomment to set the preview image */
+		/*background-image:url("/twiki/pub/TWiki/PreviewBackground/preview2bg.gif");*/
+	}
+	
+</style><style type="text/css" media="all">
+
+
+
+</style>
+<style type="text/css" media="all">
+	@import url("/twiki/pub/TWiki/PatternSkin/print.css");
+</style>
+<!--[if IE]><style type="text/css" media="screen">
+pre {
+	overflow-x:auto;
+	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
+}
+</style>
+<![endif]-->
+<!--[if lte IE 6]> 
+<style type="text/css">
+#patternLeftBar {
+	position:relative; /* IE 5.5 needs this or the contents won't show outside the parent container on print. IE 6.0 needs it only during printable copy! */
+}
+</style><![endif]-->
+<script type="text/javascript" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/twikiStyles.js.&#12480;&#12454;&#12531;&#12525;&#12540;&#12489;"></script><style type="text/css" media="all">.twikiMakeVisible{display:inline;}.twikiMakeVisibleInline{display:inline;}.twikiMakeVisibleBlock{display:block;}.twikiMakeHidden{display:none;}</style>
+
+</head>
+<body class="patternViewPage">
+<a name="PageTop"></a>
+<div id="patternScreen">
+<div id="patternPageShadow">
+<div id="patternPage">
+<div id="patternWrapper"><div id="patternOuter">
+<div id="patternFloatWrap">
+<div id="patternMain"><div id="patternClearHeaderCenter"></div>
+<div id="patternMainContents"><div class="patternTop"><span class="patternHomePath twikiLeft"><a href="http://realworld.us.oracle.com/twiki/bin/view/Main/WebHome" class="twikiLink">TWiki</a><span class="twikiSeparator">&gt;</span><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg-small.gif" border="0" alt="" width="13" height="13" style="background-color:#D0D0D0">&nbsp;<a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebHome">RealWorld Web</a><span class="twikiSeparator">&gt;</span><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/RealWorldOptimizer" class="twikiLink">RealWorldOptimizer</a><span class="twikiSeparator">&gt;</span><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans" title="Topic revision: 1 (19 Jul 2018 - 14:55:29)">BTreeBitmapPlans</a> <span class="patternRevInfo">(19 Jul 2018, <a href="http://realworld.us.oracle.com/twiki/bin/view/Main/MichaelHallas" class="twikiLink">MichaelHallas</a>)</span></span><!-- /patternHomePath--><span class="patternToolBar twikiRight"><span><a href="http://realworld.us.oracle.com/twiki/bin/edit/RealWorld/BTreeBitmapPlans?t=1563343528" rel="nofollow" title="Edit this topic text" accesskey="e"><span class="twikiAccessKey">E</span>dit</a></span><span><a href="http://realworld.us.oracle.com/twiki/bin/attach/RealWorld/BTreeBitmapPlans" rel="nofollow" title="Attach an image or document to this topic" accesskey="a"><span class="twikiAccessKey">A</span>ttach</a></span></span><!-- /patternToolBar--><br class="twikiClear"></div><!--/patternTop--><div class="twikiContentHeader"></div><div class="patternContent"><div class="patternTopic"> <h1><a name="Combining_B_Tree_Indexes"></a>  Combining  B-Tree Indexes </h1>
+<p>
+</p><div class="twikiToc"> <ul>
+<li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?skin=clean.nat%2cpattern#Abstract"> Abstract</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?skin=clean.nat%2cpattern#Examples"> Examples</a> <ul>
+<li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?skin=clean.nat%2cpattern#B_Tree_Indexes"> B-Tree Indexes</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?skin=clean.nat%2cpattern#B_Tree_and_Bitmap_Indexes"> B-Tree and Bitmap Indexes</a>
+</li></ul> 
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?skin=clean.nat%2cpattern#Test_Case"> Test Case</a>
+</li></ul> 
+</div>
+<p>
+</p><h2><a name="Abstract"></a> Abstract </h2>
+<p>
+This article describes different methods of combining information from B-Tree indexes at runtime. These methods provide new access paths that can be more efficient than using just one of the indexes albeit less efficient than an appropriate multi-column B-Tree index or equivalent bitmap indexes.
+</p><p>
+</p><h2><a name="Examples"></a> Examples </h2>
+<p>
+The examples use a table with two columns <code>m</code> and <code>n</code>, each having 1000 unique values, producing 1000000 rows in total. .
+</p><p>
+</p><h3><a name="B_Tree_Indexes"></a> B-Tree Indexes </h3>
+<p>
+In the following examples, there is a single column B-Tree index on column <code>m</code> and on column <code>n</code>.
+</p><p>
+In the first query, the ROWIDs from the <code>INDEX RANGE SCAN</code> operations are converted to bitmaps, and the bitmaps are combined using <code>BITMAP AND</code>. 
+</p><p>
+The second query demonstrates that it is also possible for a suitable query to use <code>BITMAP OR</code>. 
+</p><p>
+The third query returns column values rather than a count. The  bitmap result from <code>BITMAP AND</code> is converted to ROWIDs using a <code>BITMAP CONVERSION TO ROWIDS</code> operation before retrieving rows by ROWID in the usual way using <code>TABLE ACCESS BY INDEX ROWID [BATCHED]</code>.
+</p><p>
+</p><pre>SQL&gt; create index jz_m on jz(m);
+
+Index created.
+
+SQL&gt; create index jz_n on jz(n);
+
+Index created.
+
+SQL&gt; set autotrace traceonly explain
+SQL&gt; select count(*) from jz where m = 123 and n = 321;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3492310422
+
+-----------------------------------------------------------------------------------------
+| Id  | Operation                        | Name | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                 |      |     1 |     8 |    10   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE                  |      |     1 |     8 |            |          |
+|   2 |   BITMAP CONVERSION COUNT        |      |     1 |     8 |    10   (0)| 00:00:01 |
+|   3 |    BITMAP AND                    |      |       |       |            |          |
+|   4 |     BITMAP CONVERSION FROM ROWIDS|      |       |       |            |          |
+|*  5 |      INDEX RANGE SCAN            | JZ_M |  1000 |       |     5   (0)| 00:00:01 |
+|   6 |     BITMAP CONVERSION FROM ROWIDS|      |       |       |            |          |
+|*  7 |      INDEX RANGE SCAN            | JZ_N |  1000 |       |     5   (0)| 00:00:01 |
+-----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   5 - access("M"=123)
+   7 - access("N"=321)
+
+SQL&gt; select count(*) from jz where m = 123 or n = 321;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3330300816
+
+-----------------------------------------------------------------------------------------
+| Id  | Operation                        | Name | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                 |      |     1 |     8 |    10   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE                  |      |     1 |     8 |            |          |
+|   2 |   BITMAP CONVERSION COUNT        |      |  1999 | 15992 |    10   (0)| 00:00:01 |
+|   3 |    BITMAP OR                     |      |       |       |            |          |
+|   4 |     BITMAP CONVERSION FROM ROWIDS|      |       |       |            |          |
+|*  5 |      INDEX RANGE SCAN            | JZ_M |       |       |     5   (0)| 00:00:01 |
+|   6 |     BITMAP CONVERSION FROM ROWIDS|      |       |       |            |          |
+|*  7 |      INDEX RANGE SCAN            | JZ_N |       |       |     5   (0)| 00:00:01 |
+-----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   5 - access("M"=123)
+   7 - access("N"=321)
+
+SQL&gt; select * from jz where m = 123 and n = 321;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1752588995
+
+--------------------------------------------------------------------------------------------
+| Id  | Operation                           | Name | Rows  | Bytes | Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                    |      |     1 |    73 |    10   (0)| 00:00:01 |
+|   1 |  TABLE ACCESS BY INDEX ROWID BATCHED| JZ   |     1 |    73 |    10   (0)| 00:00:01 |
+|   2 |   BITMAP CONVERSION TO ROWIDS       |      |       |       |            |          |
+|   3 |    BITMAP AND                       |      |       |       |            |          |
+|   4 |     BITMAP CONVERSION FROM ROWIDS   |      |       |       |            |          |
+|*  5 |      INDEX RANGE SCAN               | JZ_M |  1000 |       |     5   (0)| 00:00:01 |
+|   6 |     BITMAP CONVERSION FROM ROWIDS   |      |       |       |            |          |
+|*  7 |      INDEX RANGE SCAN               | JZ_N |  1000 |       |     5   (0)| 00:00:01 |
+--------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   5 - access("M"=123)
+   7 - access("N"=321)
+</pre>
+<p>
+It is commonplace for many complex applications to specify <code>_b_tree_bitmap_plans=false</code> at database-level. It is still possible for queries that do not require additional information from the table to be performed using a so-called index join operation.
+</p><p>
+</p><pre>SQL&gt; select /*+ OPT_PARAM('_b_tree_bitmap_plans' 'false') */ count(*) from jz where m = 123 and n = 321;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 4041174427
+
+----------------------------------------------------------------------------------------
+| Id  | Operation           | Name             | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT    |                  |     1 |     8 |    10   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE     |                  |     1 |     8 |            |          |
+|*  2 |   VIEW              | index$_join$_001 |     1 |     8 |    10   (0)| 00:00:01 |
+|*  3 |    HASH JOIN        |                  |       |       |            |          |
+|*  4 |     INDEX RANGE SCAN| JZ_M             |     1 |     8 |     5   (0)| 00:00:01 |
+|*  5 |     INDEX RANGE SCAN| JZ_N             |     1 |     8 |     5   (0)| 00:00:01 |
+----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - filter("M"=123 AND "N"=321)
+   3 - access(ROWID=ROWID)
+   4 - access("M"=123)
+   5 - access("N"=321)
+</pre>
+<p>
+</p><h3><a name="B_Tree_and_Bitmap_Indexes"></a> B-Tree and Bitmap Indexes </h3>
+<p>
+In the following examples, there is a single column B-Tree index on column <code>n- and the B-Tree index on column =m</code> is replaced by a bitmap index on column <code>m</code>.
+</p><p>
+In the first query, the ROWIDs from the <code>INDEX RANGE SCAN</code> operation are converted to bitmaps, and the bitmaps are combined using <code>BITMAP AND</code>. 
+</p><p>
+It is commonplace for many complex applications to specify <code>_b_tree_bitmap_plans=false</code> at database-level. The parameter is specified in the second query but it is ineffective. Why?
+</p><p>
+When there is one or more bitmap indexes on the table, Oracle will continue to consider plans involving bitmaps created from index range scans of B-Tree indexes. The parameter is effective for tables with only B-Tree indexes:
+</p><p> </p><ul>
+<li> From the description of the parameter: <code>enable the use of bitmap plans for tables w. only B-tree indexes</code>
+</li> <li> Not-a-bug <a href="http://bug.us.oracle.com/pls/bug/webbug_print.show?c_rptno=4309271" target="_top">BUG#4309271</a>
+</li></ul> 
+<p>
+</p><pre>SQL&gt; drop index jz_m;
+
+Index dropped.
+
+SQL&gt; create bitmap index jz_m on jz(m);
+
+Index created.
+
+SQL&gt; select count(*) from jz where m = 123 and n = 321;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2403520436
+
+-----------------------------------------------------------------------------------------
+| Id  | Operation                        | Name | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                 |      |     1 |     8 |     6   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE                  |      |     1 |     8 |            |          |
+|   2 |   BITMAP CONVERSION COUNT        |      |     1 |     8 |     6   (0)| 00:00:01 |
+|   3 |    BITMAP AND                    |      |       |       |            |          |
+|*  4 |     BITMAP INDEX SINGLE VALUE    | JZ_M |       |       |            |          |
+|   5 |     BITMAP CONVERSION FROM ROWIDS|      |       |       |            |          |
+|*  6 |      INDEX RANGE SCAN            | JZ_N |  1000 |       |     5   (0)| 00:00:01 |
+-----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   4 - access("M"=123)
+   6 - access("N"=321)
+
+SQL&gt; select /*+ OPT_PARAM('_b_tree_bitmap_plans' 'false') */ count(*) from jz where m = 123 and n = 321;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2403520436
+
+-----------------------------------------------------------------------------------------
+| Id  | Operation                        | Name | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                 |      |     1 |     8 |     6   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE                  |      |     1 |     8 |            |          |
+|   2 |   BITMAP CONVERSION COUNT        |      |     1 |     8 |     6   (0)| 00:00:01 |
+|   3 |    BITMAP AND                    |      |       |       |            |          |
+|*  4 |     BITMAP INDEX SINGLE VALUE    | JZ_M |       |       |            |          |
+|   5 |     BITMAP CONVERSION FROM ROWIDS|      |       |       |            |          |
+|*  6 |      INDEX RANGE SCAN            | JZ_N |  1000 |       |     5   (0)| 00:00:01 |
+-----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   4 - access("M"=123)
+   6 - access("N"=321)
+</pre>
+<p>
+</p><h2><a name="Test_Case"></a> Test Case </h2>
+<p>
+</p><pre>drop table jz purge;
+create table jz as
+with q as (select rownum r from dual connect by rownum &lt;= 1e3)
+select /*+ LEADING(q1) USE_NL(q2) */ q1.r as m, q2.r as n, cast('filler' as char(64)) as filler from q q1 cross join q q2;
+REM select * from table(dbms_xplan.display_cursor);
+set echo on
+create index jz_m on jz(m);
+create index jz_n on jz(n);
+set autotrace traceonly explain
+select count(*) from jz where m = 123 and n = 321;
+select count(*) from jz where m = 123 or n = 321;
+select * from jz where m = 123 and n = 321;
+select /*+ OPT_PARAM('_b_tree_bitmap_plans' 'false') */ count(*) from jz where m = 123 and n = 321;
+drop index jz_m;
+create bitmap index jz_m on jz(m);
+select count(*) from jz where m = 123 and n = 321;
+select /*+ OPT_PARAM('_b_tree_bitmap_plans' 'false') */ count(*) from jz where m = 123 and n = 321;
+set autotrace off echo off
+</pre>
+<p>
+-- <a href="http://realworld.us.oracle.com/twiki/bin/view/Main/MichaelHallas" class="twikiLink">MichaelHallas</a> - 19 Jul 2018 </p></div><!-- /patternTopic-->
+<div class="twikiContentFooter"></div></div><!-- /patternContent-->
+<a name="topic-actions"></a><div class="patternTopicActions"><div class="patternTopicAction"><span class="patternActionButtons"><span><a href="http://realworld.us.oracle.com/twiki/bin/edit/RealWorld/BTreeBitmapPlans?t=1563343528" rel="nofollow" title="Edit this topic text" accesskey="e"><span class="twikiAccessKey">E</span>dit</a></span><span class="twikiSeparator">&nbsp;|&nbsp;</span><span><a href="http://realworld.us.oracle.com/twiki/bin/attach/RealWorld/BTreeBitmapPlans" rel="nofollow" title="Attach an image or document to this topic" accesskey="a"><span class="twikiAccessKey">A</span>ttach</a></span><span class="twikiSeparator">&nbsp;|&nbsp;</span><span><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?cover=print;skin=clean.nat%2cpattern" rel="nofollow" title="Printable version of this topic" accesskey="p"><span class="twikiAccessKey">P</span>rint version</a></span><span class="twikiSeparator">&nbsp;|&nbsp;</span><span><span><a href="http://realworld.us.oracle.com/twiki/bin/rdiff/RealWorld/BTreeBitmapPlans?type=history" rel="nofollow" title="View total topic history" accesskey="h"><span class="twikiAccessKey">H</span>istory</a></span>: r1</span><span class="twikiSeparator">&nbsp;|&nbsp;</span><span><a href="http://realworld.us.oracle.com/twiki/bin/oops/RealWorld/BTreeBitmapPlans?template=backlinksweb" rel="nofollow" title="Search the RealWorld Web for topics that link to here" accesskey="b"><span class="twikiAccessKey">B</span>acklinks</a></span><span class="twikiSeparator">&nbsp;|&nbsp;</span><span><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?raw=on" rel="nofollow" title="View raw text without formatting" accesskey="r"><span class="twikiAccessKey">R</span>aw View</a></span><span class="twikiSeparator">&nbsp;|&nbsp;</span><span><a href="http://realworld.us.oracle.com/twiki/bin/edit/RealWorld/BTreeBitmapPlans?t=1563343528;nowysiwyg=1" rel="nofollow" title="Raw Edit this topic text" accesskey="w">Ra<span class="twikiAccessKey">w</span> edit</a></span><span class="twikiSeparator">&nbsp;|&nbsp;</span><span><a href="http://realworld.us.oracle.com/twiki/bin/oops/RealWorld/BTreeBitmapPlans?template=oopsmore&amp;param1=1&amp;param2=1" rel="nofollow" title="Delete or rename this topic; set parent topic; view and compare revisions" accesskey="m"><span class="twikiAccessKey">M</span>ore topic actions</a></span></span></div><!--/patternTopicAction--></div><!--/patternTopicActions--><div class="patternInfo twikiGrayText"><div class="patternRevInfo">Topic revision: r1 - 19 Jul 2018 - 14:55:29 - <a href="http://realworld.us.oracle.com/twiki/bin/view/Main/MichaelHallas" class="twikiLink">MichaelHallas</a></div><!-- /patternRevInfo--><div class="patternMoved"></div><!-- /patternMoved--></div><!-- /patternInfo-->
+</div><!-- /patternMainContents-->
+</div><!-- /patternMain--><div id="patternLeftBar"><div id="patternClearHeaderLeft"></div>
+<div id="patternLeftBarContents"><div class="patternWebIndicator"> <ul>
+<li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebHome" class="twikiCurrentWebHomeLink twikiLink"><img width="16" alt="web-bg-small" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg-small.gif" height="16" border="0"> RealWorld</a>
+</li></ul> 
+</div>
+<div class="patternLeftBarPersonal">
+Hello <a href="http://realworld.us.oracle.com/twiki/bin/view/Main/LinHong701983" class="twikiLink">Lin Hong 701983</a><br> <ul><li class="patternLogOut"><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans?logout=1">Log Out</a></li></ul>
+<div class="patternLeftBarPersonalContent">
+<ul><li><a href="http://realworld.us.oracle.com/twiki/bin/edit/Main/LinHong701983LeftBar?templatetopic=TWiki.WebLeftBarPersonalTemplate&amp;topicparent=LinHong701983">Create personal sidebar</a></li></ul>
+</div><!--/patternLeftBarPersonalContent--></div><!--/patternLeftBarPersonal-->
+<div class="patternMetaMenu"><ul>
+<li><form name="jumpForm" action="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans"><input id="jumpFormField" type="text" class="twikiInputField patternFormFieldDefaultColor twikiInputFieldBeforeFocus" name="topic" size="14" value="Jump" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this);"></form></li>
+<li><form name="quickSearchForm" action="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebSearch"><input type="text" class="twikiInputField patternFormFieldDefaultColor" name="search" value="Search" size="14" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this);"></form></li>
+<li></li></ul>
+</div>
+<hr> <ul>
+<li> <b><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebHome" class="twikiCurrentWebHomeLink twikiLink"> <img width="16" alt="home" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/home.gif" height="16" border="0"> RealWorld Web</a></b>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebTopicCreator?parent=BTreeBitmapPlans" target="_top"> <img width="16" alt="newtopic" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/newtopic.gif" height="16" border="0"> Create New Topic</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebTopicList" class="twikiLink"> <img width="16" alt="index" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/index.gif" height="16" border="0"> Index</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebSearch" class="twikiLink"> <img width="16" alt="searchtopic" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/searchtopic.gif" height="16" border="0"> Search</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebChanges" class="twikiLink"> <img width="16" alt="changes" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/changes.gif" height="16" border="0"> Changes</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebNotify" class="twikiLink"> <img width="16" alt="notify" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/notify.gif" height="16" border="0"> Notifications</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebStatistics" class="twikiLink"> <img width="16" alt="statistics" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/statistics.gif" height="16" border="0"> Statistics</a>
+</li> <li> <a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebPreferences" class="twikiLink"> <img width="16" alt="wrench" align="top" src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/wrench.gif" height="16" border="0"> Preferences</a>
+</li></ul> 
+<p>
+</p><hr> <ul>
+<li> <strong>Webs</strong>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ACFS/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;ACFS</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ADO/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;ADO</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ASM/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFFFC0">&nbsp;ASM</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/AccessAdvisor/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCFFFF">&nbsp;AccessAdvisor</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ApplicationMigration/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;ApplicationMigration</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Architecture/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FF0000">&nbsp;Architecture</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/AuditVault/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;AuditVault</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/BerkeleyDB/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCCC00">&nbsp;BerkeleyDB</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/CAT/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#996666">&nbsp;CAT</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ChangeDataCapture/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;ChangeDataCapture</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Cluster/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFFF66">&nbsp;Cluster</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Cluster/DCSCommandMappings/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>DCSCommandMappings</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Cluster/RacSystemTestingGroup/DWCS_POD/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>DWCS_POD</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Cluster/TFAHome/TFATriage/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>TFATriage</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ClusterExternal/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;ClusterExternal</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/CollegeOnBoarding/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;CollegeOnBoarding</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ColumnarStore/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCCCFF">&nbsp;ColumnarStore</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DBFS/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DBFS</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DBInst/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DBInst</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DBPlatformDev/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DBPlatformDev</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DBPlatformDev/Manoj/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>Manoj</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DBsec/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DBsec</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DMLExecution/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#009900">&nbsp;DMLExecution</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DST/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DST</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DataAccess/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DataAccess</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DataAccess/Node/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>Node</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DataLayer/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DataLayer</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DataMining/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCFFFF ">&nbsp;DataMining</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DataProtection/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#6600CC">&nbsp;DataProtection</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DatabaseAuditing/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCCCCC">&nbsp;DatabaseAuditing</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DatabaseFirewall/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DatabaseFirewall</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DatabaseNewHire/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DatabaseNewHire</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DatabaseVault/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DatabaseVault</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DbDevTwelveG/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DbDevTwelveG</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DevImprovement/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DevImprovement</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Devenv/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33FFFF">&nbsp;Devenv</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Diagnosability/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFFFC0">&nbsp;Diagnosability</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Diagnosability/STDiagnosability/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>STDiagnosability</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DirectNFSClient/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DirectNFSClient</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/DistinguishedLectures/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;DistinguishedLectures</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/EMS/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;EMS</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/EM_RUEI/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FF0000 ">&nbsp;EM_RUEI</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/ExadataExternal/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;ExadataExternal</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Fusion/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#0066CC">&nbsp;Fusion</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Globalization/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;Globalization</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/GoldenGate/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;GoldenGate</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Hadoop/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;Hadoop</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/InMemory/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;InMemory</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/InMemoryExternal/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;InMemoryExternal</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/LibCache/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33CC00">&nbsp;LibCache</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/LibCache/DbConsolidation/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>DbConsolidation</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/LogMiner/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;LogMiner</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/LogicalStandby/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;LogicalStandby</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Main/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFEFA6">&nbsp;Main</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Main/BillBurton/TFATransactions/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>TFATransactions</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Main/ChingTai/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>ChingTai</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Main/LeonidNilva/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFEFA6">&nbsp;<span class="twikiWebIndent"></span>LeonidNilva</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Main/SreedeviAggarwal/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>SreedeviAggarwal</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/MaterializedViews/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;MaterializedViews</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/OOW/Projects/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>Projects</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/OWI/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;OWI</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/OracleR/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;OracleR</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/PQ/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CC9999">&nbsp;PQ</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Performance/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CC6666">&nbsp;Performance</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Performance/OLTP/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>OLTP</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/RAS/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCFFCC">&nbsp;RAS</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/RacCertification/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;RacCertification</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Racporting/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;Racporting</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;RealWorld</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/PGECDWPOC/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>PGECDWPOC</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/SMPPM/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;SMPPM</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/SQLExecution/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCFFCC">&nbsp;SQLExecution</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/SThomepages/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;SThomepages</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FF9900">&nbsp;Sage</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/ExadataMgHaPerf/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>ExadataMgHaPerf</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/Main/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>Main</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/Performance/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>Performance</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/S111S112/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFD8AA">&nbsp;<span class="twikiWebIndent"></span>S111S112</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/UpgradeS11/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFD8AA">&nbsp;<span class="twikiWebIndent"></span>UpgradeS11</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/UpgradeS11/S11/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>S11</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sage/WebHome/UpgradeS11/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFD8AA">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>UpgradeS11</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Sandbox/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#B9DAFF">&nbsp;Sandbox</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Saturn/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;Saturn</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/SecureFiles/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;SecureFiles</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33FF99">&nbsp;Smpdev</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/CDBPDBTargetInfrastructure/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>CDBPDBTargetInfrastructure</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/CdcEmgc/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33FF99">&nbsp;<span class="twikiWebIndent"></span>CdcEmgc</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/ConfProvPMDev/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33FF99">&nbsp;<span class="twikiWebIndent"></span>ConfProvPMDev</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/ConfProvProdMgmt/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>ConfProvProdMgmt</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/DeployTools/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>DeployTools</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Deployments/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#006666">&nbsp;<span class="twikiWebIndent"></span>Deployments</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMAgent/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>EMAgent</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMCloudManagementReferenceDoc/VTJobConfDialogIntegration/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>VTJobConfDialogIntegration</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMCloudManagementReferenceDoc/VTJobConfDialogIntg/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>VTJobConfDialogIntg</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMDeploy/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>EMDeploy</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMJobSystem/NewADFResultsUISignoff/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>NewADFResultsUISignoff</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMOMSRepos/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>EMOMSRepos</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMOMSRepos/Assoc/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>Assoc</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EMUpgradeww/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>EMUpgradeww</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/EmSchemaArchitectureTeam/SchemaDocumentation/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>SchemaDocumentation</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/End2End/OcammNotes/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>OcammNotes</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/GCDBReplayTimezones/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>GCDBReplayTimezones</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/JUnitTestIn11_2/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>JUnitTestIn11_2</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/LH_12/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>LH_12</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/LH_122_Amans_Team/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>LH_122_Amans_Team</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/OPCWebService12_1_0_6SSA/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>OPCWebService12_1_0_6SSA</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/OPatch/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>OPatch</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/OPatch/GINonRolling/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>GINonRolling</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/OpatchFusionAppsQA/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33FF99">&nbsp;<span class="twikiWebIndent"></span>OpatchFusionAppsQA</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/OpatchQA/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33FF99">&nbsp;<span class="twikiWebIndent"></span>OpatchQA</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/OpatchQA/Main/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>Main</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Patching/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCFFFF">&nbsp;<span class="twikiWebIndent"></span>Patching</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Patching/AdfCutover/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>AdfCutover</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Patching/PatchingCentralFramework/AnalysisResult/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#CCFFFF">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>AnalysisResult</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Patching/PatchingCentralFramework/OHPatching/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>OHPatching</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Patching/PatchingCentralFramework/OHPatchingDP/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>OHPatchingDP</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Patching/PatchingCentralFramework/Rollback/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>Rollback</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/PatchingQA/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>PatchingQA</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Provisioning/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFFF99 ">&nbsp;<span class="twikiWebIndent"></span>Provisioning</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/ProvisioningApplns/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>ProvisioningApplns</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/ProvisioningApplns/ProfileBuilder/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFFFFF">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>ProfileBuilder</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/QABaseTests/JobSystem/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span><span class="twikiWebIndent"></span>JobSystem</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/ReleaseManagement/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>ReleaseManagement</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/SMPQA/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>SMPQA</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/SmpTest/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>SmpTest</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/TicketingConnector/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>TicketingConnector</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/VijayKantanavar/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#33FF99">&nbsp;<span class="twikiWebIndent"></span>VijayKantanavar</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Smpdev/Virtualization/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>Virtualization</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/SoftwareAssurance/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;SoftwareAssurance</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/SpaceManagement/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;SpaceManagement</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Spatial/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;Spatial</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/SupportTools/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#339999 ">&nbsp;SupportTools</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/TDS/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;TDS</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/TWiki/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#FFD8AA">&nbsp;TWiki</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/TimesTen/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#00FFFF">&nbsp;TimesTen</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Tracking/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:">&nbsp;Tracking</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/TransactionLayer/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;TransactionLayer</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/VOS/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;VOS</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/VOS/InifnibandStackConfigurationInfo/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>InifnibandStackConfigurationInfo</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/VOS/OVMExadataStatus/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;<span class="twikiWebIndent"></span>OVMExadataStatus</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/VOSMDC/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#D0D0D0">&nbsp;VOSMDC</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/WLM/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#990000 ">&nbsp;WLM</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/WebTwoDotOh/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#996633">&nbsp;WebTwoDotOh</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/WindowsDotNet/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#666699">&nbsp;WindowsDotNet</a></span>
+</li> <li> <span style="white-space:nowrap"><a href="http://realworld.us.oracle.com/twiki/bin/view/Xmlquery/WebHome"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/web-bg.gif" border="0" alt="" width="16" height="16" style="background-color:#0066FF">&nbsp;Xmlquery</a></span>
+</li></ul> 
+</div><!-- /patternLeftBarContents--></div><!-- /patternLeftBar-->
+</div><!-- /patternFloatWrap-->
+<div class="clear">&nbsp;</div>
+</div><!-- /patternOuter--></div><!-- /patternWrapper--><div id="patternTopBar"><div id="patternTopBarContents"><table border="0" cellpadding="0" cellspacing="0" style="width:100%; margin-top:12px;">
+<tbody><tr><td valign="middle"><span id="twikiLogo" class="twikiImage"><a href="http://twiki.org/"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/T-logo-140x40-t.gif" border="0" alt="Powered by TWiki" style="border:none;"></a></span></td>
+<td align="right" valign="top" class="patternMetaMenu">
+ <ul>
+<li> <form name="jumpForm" action="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/BTreeBitmapPlans"><input id="jumpFormField" type="text" class="twikiInputField twikiInputFieldBeforeFocus" name="topic" value="" size="18"><noscript>&nbsp;<input type="submit" class="twikiButton" size="5" name="submit" value="Jump" />&nbsp;</noscript>   </form>
+</li> <li> <form name="quickSearchForm" action="http://realworld.us.oracle.com/twiki/bin/view/RealWorld/WebSearch"><input type="text" class="twikiInputField twikiInputFieldBeforeFocus" id="quickSearchBox" name="search" value="" size="18"><input type="hidden" name="scope" value="all"><input type="hidden" name="web" value="RealWorld"><noscript>&nbsp;<input type="submit" size="5" class="twikiButton" name="submit" value="Search" />&nbsp;</noscript>   </form>
+</li> <li> 
+</li></ul> 
+</td></tr></tbody></table></div></div><!-- /patternTopBar--><div id="patternBottomBar"><div id="patternBottomBarContents"><div id="patternWebBottomBar"><span class="twikiRight"> <a href="http://twiki.org/"><img src="./BTreeBitmapPlans _ RealWorld _ TWiki_files/T-badge-88x31.gif" alt="This site is powered by the TWiki collaboration platform" width="88" height="31" title="This site is powered by the TWiki collaboration platform" border="0"></a></span>Copyright &amp;© by the contributing authors. All material on this collaboration platform is the property of the contributing authors. <br> Ideas, requests, problems regarding TWiki? <a href="mailto:john.ciminski@oracle.com?subject=TWiki%20Feedback%20on%20RealWorld.BTreeBitmapPlans">Send feedback</a> </div><!--/patternWebBottomBar--></div><!-- /patternBottomBarContents--></div><!-- /patternBottomBar-->
+</div><!-- /patternPage-->
+</div><!-- /patternPageShadow-->
+</div><!-- /patternScreen-->
+</body></html>
