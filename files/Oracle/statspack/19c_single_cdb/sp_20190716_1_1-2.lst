@@ -1,0 +1,2475 @@
+
+STATSPACK report for
+
+Database    DB Id    Instance     Inst Num  Startup Time   Release     RAC
+~~~~~~~~ ----------- ------------ -------- --------------- ----------- ---
+          1539813185 orcl                1 16-Jul-19 02:23 19.0.0.0.0  NO
+
+Host Name             Platform                CPUs Cores Sockets   Memory (G)
+~~~~ ---------------- ---------------------- ----- ----- ------- ------------
+     localhost.locald Linux x86 64-bit           2     2       1          1.7
+
+Snapshot       Snap Id     Snap Time      Sessions Curs/Sess Comment
+~~~~~~~~    ---------- ------------------ -------- --------- ------------------
+Begin Snap:          1 16-Jul-19 02:33:31       72       1.3
+  End Snap:          2 16-Jul-19 02:35:39       55       1.3
+   Elapsed:       2.13 (mins) Av Act Sess:       0.3
+   DB time:       0.56 (mins)      DB CPU:       0.54 (mins)
+
+Cache Sizes            Begin        End
+~~~~~~~~~~~       ---------- ----------
+    Buffer Cache:        84M              Std Block Size:         8K
+     Shared Pool:       284M                  Log Buffer:     7,128K
+
+Load Profile              Per Second    Per Transaction    Per Exec    Per Call
+~~~~~~~~~~~~      ------------------  ----------------- ----------- -----------
+      DB time(s):                0.3                8.5        0.00        1.78
+       DB CPU(s):                0.3                8.1        0.00        1.70
+       Redo size:           52,810.4        1,689,932.0
+   Logical reads:              687.3           21,993.3
+   Block changes:              179.1            5,732.3
+  Physical reads:               25.3              809.8
+ Physical writes:               26.8              856.0
+      User calls:                0.2                4.8
+          Parses:               25.0              800.8
+     Hard parses:                6.1              193.5
+W/A MB processed:                0.6               19.4
+          Logons:                0.0                0.8
+        Executes:              102.7            3,285.3
+       Rollbacks:                0.0                0.0
+    Transactions:                0.0
+
+Instance Efficiency Indicators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Buffer Nowait %:  100.00       Redo NoWait %:  100.00
+            Buffer  Hit   %:   97.65  Optimal W/A Exec %:  100.00
+            Library Hit   %:   85.01        Soft Parse %:   75.84
+         Execute to Parse %:   75.63         Latch Hit %:   99.94
+Parse CPU to Parse Elapsd %:   70.34     % Non-Parse CPU:   95.73
+
+ Shared Pool Statistics        Begin   End
+                               ------  ------
+             Memory Usage %:   87.63   88.44
+    % SQL with executions>1:   73.36   61.83
+  % Memory for SQL w/exec>1:   77.08   61.41
+
+Top 5 Timed Events                                                    Avg %Total
+~~~~~~~~~~~~~~~~~~                                                   wait   Call
+Event                                            Waits    Time (s)   (ms)   Time
+----------------------------------------- ------------ ----------- ------ ------
+Data Guard: Timer                                    1         600 ######   66.1
+pman timer                                          42         127   3017   14.0
+Data Guard: Gap Manager                              2         121  60415   13.3
+CPU time                                                        39           4.3
+db file sequential read                          1,772           9      5    1.0
+          -------------------------------------------------------------
+Host CPU  (CPUs: 2  Cores: 2  Sockets: 1)
+~~~~~~~~              Load Average
+                      Begin     End      User  System    Idle     WIO     WCPU
+                    ------- -------   ------- ------- ------- ------- --------
+                       0.43    0.74     14.34    0.71   84.50    4.07
+
+Instance CPU
+~~~~~~~~~~~~                                       % Time (seconds)
+                                            -------- --------------
+                     Host: Total time (s):                    246.3
+                  Host: Busy CPU time (s):                     38.2
+                   % of time Host is Busy:      15.5
+             Instance: Total CPU time (s):                     42.1
+          % of Busy CPU used for Instance:     110.3
+        Instance: Total Database time (s):                     63.5
+  %DB time waiting for CPU (Resource Mgr):       0.0
+
+Memory Statistics                       Begin          End
+~~~~~~~~~~~~~~~~~                ------------ ------------
+                  Host Mem (MB):      1,726.8      1,726.8
+                   SGA use (MB):        692.0        692.0
+                   PGA use (MB):        289.5        231.3
+    % Host Mem used for SGA+PGA:         56.8         53.5
+          -------------------------------------------------------------
+
+Time Model System Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Ordered by % of DB time desc, Statistic name
+
+Statistic                                       Time (s) % DB time
+----------------------------------- -------------------- ---------
+sql execute elapsed time                            33.8      99.8
+DB CPU                                              32.2      95.1
+PL/SQL execution elapsed time                       30.2      89.2
+parse time elapsed                                   2.0       6.0
+hard parse elapsed time                              2.0       5.9
+hard parse (sharing criteria) elaps                  0.0        .0
+PL/SQL compilation elapsed time                      0.0        .0
+repeated bind elapsed time                           0.0        .0
+DB time                                             33.9
+background elapsed time                             29.6
+background cpu time                                  9.9
+          -------------------------------------------------------------
+Foreground Wait Events  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Only events with Total Wait Time (s) >= .001 are shown
+-> ordered by Total Wait Time desc, Waits desc (idle events last)
+
+                                                             Avg          %Total
+                                          %Tim Total Wait   wait    Waits   Call
+Event                               Waits  out   Time (s)   (ms)     /txn   Time
+---------------------------- ------------ ---- ---------- ------ -------- ------
+enq: KO - fast object checkp            1    0          0    346      0.3     .0
+db file sequential read                48    0          0      2     12.0     .0
+direct path read                       83    0          0      1     20.8     .0
+log file sync                           1    0          0     25      0.3     .0
+PGA memory operation                  173    0          0      0     43.3     .0
+control file sequential read          712    0          0      0    178.0     .0
+PX Deq: Slave Session Stats             2    0          0      1      0.5     .0
+watchdog main loop                     84    0        253   3017     21.0
+SQL*Net message from client             3    0         94  31179      0.8
+PX Deq: Execution Msg                   8    0          0      2      2.0
+          -------------------------------------------------------------
+
+Background Wait Events  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Only events with Total Wait Time (s) >= .001 are shown
+-> ordered by Total Wait Time desc, Waits desc (idle events last)
+
+                                                             Avg          %Total
+                                          %Tim Total Wait   wait    Waits   Call
+Event                               Waits  out   Time (s)   (ms)     /txn   Time
+---------------------------- ------------ ---- ---------- ------ -------- ------
+Data Guard: Timer                       1    0        600 ######      0.3   66.1
+pman timer                             42  100        127   3017     10.5   14.0
+Data Guard: Gap Manager                 2    0        121  60415      0.5   13.3
+db file sequential read             1,724    0          9      5    431.0    1.0
+db file async I/O submit               21    0          6    275      5.3     .6
+log file parallel write               189    0          4     20     47.3     .4
+LGWR any worker group                 107    0          1     11     26.8     .1
+control file parallel write            58    0          1     10     14.5     .1
+db file scattered read                 48    0          0      9     12.0     .0
+LGWR all worker groups                  9    0          0     20      2.3     .0
+direct path write                       1    0          0     22      0.3     .0
+oracle thread bootstrap                 1    0          0     20      0.3     .0
+cursor: pin S wait on X                 1    0          0     18      0.3     .0
+LGWR worker group ordering             11    0          0      1      2.8     .0
+latch free                             21    0          0      0      5.3     .0
+latch: shared pool                     25    0          0      0      6.3     .0
+control file sequential read          658    0          0      0    164.5     .0
+PGA memory operation                  158    0          0      0     39.5     .0
+PX qref latch                         100  100          0      0     25.0     .0
+Disk file operations I/O               33    0          0      0      8.3     .0
+LGWR wait for redo copy                 9    0          0      0      2.3     .0
+os thread creation                      1    0          0      2      0.3     .0
+class slave wait                       13    0      2,408 ######      3.3
+rdbms ipc message                     998   78      1,776   1780    249.5
+Space Manager: slave idle wa          362    0      1,025   2830     90.5
+PX Idle Wait                            2    0        512 ######      0.5
+smon timer                              1  100        300 ######      0.3
+DIAG idle wait                        249  100        255   1024     62.3
+pmon timer                             84  100        254   3020     21.0
+LGWR worker group idle                175    0        202   1157     43.8
+Streams AQ: qmn slave idle w            5    0        140  28028      1.3
+Streams AQ: qmn coordinator            10    0        140  14014      2.5
+OFS idle                               43  100        130   3021     10.8
+lreg timer                             45   96        129   2872     11.3
+heartbeat redo informer               128    0        128   1004     32.0
+wait for unread message on b          124  100        127   1026     31.0
+AQPC idle                               4  100        121  30209      1.0
+dispatcher timer                        2  100        120  60014      0.5
+jobq slave wait                       100  100         51    509     25.0
+PX Deq: Execute Reply                   4    0          0      2      1.0
+KSV master wait                        12  100          0      0      3.0
+          -------------------------------------------------------------
+
+Wait Events (fg and bg) DB/Inst: ORCL/orcl  Snaps: 1-2
+-> s - second, cs - centisecond,  ms - millisecond, us - microsecond
+-> %Timeouts:  value of 0 indicates value was < .5%.  Value of null is truly 0
+-> Only events with Total Wait Time (s) >= .001 are shown
+-> ordered by Total Wait Time desc, Waits desc (idle events last)
+
+                                                             Avg          %Total
+                                          %Tim Total Wait   wait    Waits   Call
+Event                               Waits  out   Time (s)   (ms)     /txn   Time
+---------------------------- ------------ ---- ---------- ------ -------- ------
+Data Guard: Timer                       1    0        600 ######      0.3   66.1
+pman timer                             42  100        127   3017     10.5   14.0
+Data Guard: Gap Manager                 2    0        121  60415      0.5   13.3
+db file sequential read             1,772    0          9      5    443.0    1.0
+db file async I/O submit               21    0          6    275      5.3     .6
+log file parallel write               189    0          4     20     47.3     .4
+LGWR any worker group                 107    0          1     11     26.8     .1
+control file parallel write            58    0          1     10     14.5     .1
+db file scattered read                 49    0          0      9     12.3     .0
+enq: KO - fast object checkp            1    0          0    346      0.3     .0
+LGWR all worker groups                  9    0          0     20      2.3     .0
+direct path read                       83    0          0      1     20.8     .0
+log file sync                           1    0          0     25      0.3     .0
+direct path write                       1    0          0     22      0.3     .0
+oracle thread bootstrap                 1    0          0     20      0.3     .0
+cursor: pin S wait on X                 1    0          0     18      0.3     .0
+PGA memory operation                  331    0          0      0     82.8     .0
+LGWR worker group ordering             11    0          0      1      2.8     .0
+control file sequential read        1,370    0          0      0    342.5     .0
+latch free                             21    0          0      0      5.3     .0
+latch: shared pool                     25    0          0      0      6.3     .0
+PX Deq: Slave Session Stats             4    0          0      1      1.0     .0
+PX qref latch                         100  100          0      0     25.0     .0
+Disk file operations I/O               33    0          0      0      8.3     .0
+LGWR wait for redo copy                 9    0          0      0      2.3     .0
+os thread creation                      1    0          0      2      0.3     .0
+class slave wait                       13    0      2,408 ######      3.3
+rdbms ipc message                     998   78      1,776   1780    249.5
+Space Manager: slave idle wa          362    0      1,025   2830     90.5
+PX Idle Wait                            2    0        512 ######      0.5
+smon timer                              1  100        300 ######      0.3
+DIAG idle wait                        249  100        255   1024     62.3
+pmon timer                             84  100        254   3020     21.0
+watchdog main loop                     84    0        253   3017     21.0
+LGWR worker group idle                175    0        202   1157     43.8
+Streams AQ: qmn slave idle w            5    0        140  28028      1.3
+Streams AQ: qmn coordinator            10    0        140  14014      2.5
+OFS idle                               43  100        130   3021     10.8
+lreg timer                             45   96        129   2872     11.3
+heartbeat redo informer               128    0        128   1004     32.0
+wait for unread message on b          124  100        127   1026     31.0
+AQPC idle                               4  100        121  30209      1.0
+dispatcher timer                        2  100        120  60014      0.5
+SQL*Net message from client             3    0         94  31179      0.8
+jobq slave wait                       100  100         51    509     25.0
+PX Deq: Execution Msg                   8    0          0      2      2.0
+PX Deq: Execute Reply                   4    0          0      2      1.0
+KSV master wait                        12  100          0      0      3.0
+
+Wait Events (fg and bg) DB/Inst: ORCL/orcl  Snaps: 1-2
+-> s - second, cs - centisecond,  ms - millisecond, us - microsecond
+-> %Timeouts:  value of 0 indicates value was < .5%.  Value of null is truly 0
+-> Only events with Total Wait Time (s) >= .001 are shown
+-> ordered by Total Wait Time desc, Waits desc (idle events last)
+
+                                                             Avg          %Total
+                                          %Tim Total Wait   wait    Waits   Call
+Event                               Waits  out   Time (s)   (ms)     /txn   Time
+---------------------------- ------------ ---- ---------- ------ -------- ------
+          -------------------------------------------------------------
+Wait Event Histogram  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Total Waits - units: K is 1000, M is 1000000, G is 1000000000
+-> % of Waits - column heading: <=1s is truly <1024ms, >1s is truly >=1024ms
+-> % of Waits - value: .0 indicates value was <.05%, null is truly 0
+-> Ordered by Event (idle events last)
+
+                           Total ----------------- % of Waits ------------------
+Event                      Waits  <1ms  <2ms  <4ms  <8ms <16ms <32ms  <=1s   >1s
+-------------------------- ----- ----- ----- ----- ----- ----- ----- ----- -----
+AWR Flush                     1  100.0
+Data Guard: Gap Manager       2                                            100.0
+Data Guard: Timer             1                                            100.0
+Disk file operations I/O     33  100.0
+LGWR all worker groups        9   11.1  22.2  22.2              22.2  22.2
+LGWR any worker group       107   19.6  21.5  20.6   5.6   9.3  15.0   8.4
+LGWR wait for redo copy       9  100.0
+LGWR worker group ordering   11   72.7  27.3
+PGA memory operation        331   99.7          .3
+PX Deq: Signal ACK EXT        2  100.0
+PX Deq: Slave Session Stat    4   75.0  25.0
+PX qref latch               100   99.0   1.0
+SQL*Net break/reset to cli    1  100.0
+asynch descriptor resize     12  100.0
+control file parallel writ   58         10.3  62.1   8.6   3.4   8.6   6.9
+control file sequential re 1370  100.0
+cursor: pin S wait on X       1                                100.0
+db file async I/O submit     21         14.3               4.8   9.5  61.9   9.5
+db file scattered read       49   42.9  14.3  14.3   2.0   8.2  12.2   6.1
+db file sequential read    1771   66.0   9.3   3.0   2.3   7.2   8.7   3.5
+direct path read             83   98.8                                 1.2
+direct path write             1                                100.0
+enq: KO - fast object chec    1                                      100.0
+enq: PS - contention          1  100.0
+latch free                   21   90.5   4.8   4.8
+latch: cache buffers lru c    1  100.0
+latch: redo allocation        1  100.0
+latch: shared pool           25   96.0   4.0
+log file parallel write     189         13.8  23.3  14.8  10.6  18.5  19.0
+log file sync                 1                                100.0
+oracle thread bootstrap       1                                100.0
+os thread creation            1        100.0
+pman timer                   42                                            100.0
+reliable message              1  100.0
+AQPC idle                     4                                            100.0
+DIAG idle wait              249                                       98.8   1.2
+KSV master wait              12  100.0
+LGWR worker group idle      175   56.0   6.3   3.4   1.7   4.6   5.7  13.7   8.6
+OFS idle                     43                                            100.0
+PX Deq: Execute Reply         4   50.0        25.0  25.0
+PX Deq: Execution Msg         8   62.5  12.5        12.5  12.5
+PX Deq: Join ACK              2  100.0
+PX Deq: Parse Reply           2  100.0
+PX Idle Wait                  2                                            100.0
+SQL*Net message from clien    3   33.3                                      66.7
+SQL*Net message to client     3  100.0
+Space Manager: slave idle   362    9.1    .3          .3          .3  23.8  66.3
+Streams AQ: qmn coordinato   10   50.0                                      50.0
+Streams AQ: qmn slave idle    5                                            100.0
+class slave wait             27    3.7                           7.4        88.9
+dispatcher timer              2                                            100.0
+Wait Event Histogram  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Total Waits - units: K is 1000, M is 1000000, G is 1000000000
+-> % of Waits - column heading: <=1s is truly <1024ms, >1s is truly >=1024ms
+-> % of Waits - value: .0 indicates value was <.05%, null is truly 0
+-> Ordered by Event (idle events last)
+
+                           Total ----------------- % of Waits ------------------
+Event                      Waits  <1ms  <2ms  <4ms  <8ms <16ms <32ms  <=1s   >1s
+-------------------------- ----- ----- ----- ----- ----- ----- ----- ----- -----
+heartbeat redo informer     128                                       99.2    .8
+jobq slave wait             100                                      100.0
+lreg timer                   45    4.4                                      95.6
+pmon timer                   84                                            100.0
+rdbms ipc message           996    7.6   4.1   1.7   1.0   1.4   1.6  39.7  42.9
+smon timer                    1                                            100.0
+wait for unread message on  124                                       97.6   2.4
+watchdog main loop           84                                            100.0
+          -------------------------------------------------------------
+
+SQL ordered by CPU  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Total DB CPU (s):              32
+-> Captured SQL accounts for    9.9% of Total DB CPU
+-> SQL reported below exceeded  1.0% of Total DB CPU
+
+    CPU                  CPU per             Elapsd                     Old
+  Time (s)   Executions  Exec (s)  %Total   Time (s)    Buffer Gets  Hash Value
+---------- ------------ ---------- ------ ---------- --------------- ----------
+      2.13            1       2.13    6.6       2.83          20,106 2912400228
+Module: SQL*Plus
+BEGIN statspack.snap; END;
+
+      0.40        3,582       0.00    1.3       2.33          13,918 1495667577
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oi
+d$, spare1, spare2, spare3, signature, spare7, spare8, spare9, n
+vl(dflcollid, 16382), creappid, creverid, modappid, modverid, cr
+epatchid, modpatchid from obj$ where owner#=:1 and name=:2 and n
+
+      0.36           27       0.01    1.1       0.96             323 3322665590
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i
+.property,i.pctfree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.
+distkey,i.lblkkey,i.dblkkey,i.clufac,i.cols,i.analyzetime,i.samp
+lesize,i.dataobj#,nvl(i.degree,1),nvl(i.instances,1),i.rowcnt,mo
+
+          -------------------------------------------------------------
+SQL ordered by Elapsed time for DB: ORCL  Instance: orcl  Snaps: 1 -2
+-> Total DB Time (s):              34
+-> Captured SQL accounts for   18.0% of Total DB Time
+-> SQL reported below exceeded  1.0% of Total DB Time
+
+  Elapsed                Elap per            CPU                        Old
+  Time (s)   Executions  Exec (s)  %Total   Time (s)  Physical Reads Hash Value
+---------- ------------ ---------- ------ ---------- --------------- ----------
+      5.46          230       0.02   16.1       0.06             108  925184782
+select cols,audit$,textlength,intcols,nvl(property,0),flags,rowi
+d from view$ where obj#=:1
+
+      2.83            1       2.83    8.4       2.13           1,205 2912400228
+Module: SQL*Plus
+BEGIN statspack.snap; END;
+
+      2.33          628       0.00    6.9       0.22              32 4216638155
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decod
+e(type#,2,nvl(scale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180
+,scale,181,scale,182,scale,183,scale,231,scale,0),null$,fixedsto
+rage,nvl(deflength,0),default$,rowid,col#,property, nvl(charseti
+
+      2.33        3,582       0.00    6.9       0.40             181 1495667577
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oi
+d$, spare1, spare2, spare3, signature, spare7, spare8, spare9, n
+vl(dflcollid, 16382), creappid, creverid, modappid, modverid, cr
+epatchid, modpatchid from obj$ where owner#=:1 and name=:2 and n
+
+      1.19          116       0.01    3.5       0.00              58 1341842309
+select col#, grantee#, privilege#,max(mod(nvl(option$,0),2)), ma
+x(bitand(nvl(option$,0), 8) /8), max(bitand(nvl(option$,0), 16)
+/16), max(bitand(nvl(option$,0),64) /64), max(bitand(nvl(option$
+,0), 128) /128) from objauth$ where obj#=:1 and col# is not null
+
+      0.96           27       0.04    2.8       0.36              47 3322665590
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i
+.property,i.pctfree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.
+distkey,i.lblkkey,i.dblkkey,i.clufac,i.cols,i.analyzetime,i.samp
+lesize,i.dataobj#,nvl(i.degree,1),nvl(i.instances,1),i.rowcnt,mo
+
+      0.68            1       0.68    2.0       0.28           1,199 4061365063
+Module: SQL*Plus
+INSERT INTO STATS$SEG_STAT_OBJ ( TS# , OBJ# , DATAOBJ# , DBID ,
+OWNER , OBJECT_NAME , SUBOBJECT_NAME , OBJECT_TYPE , TABLESPACE_
+NAME ) SELECT /*+ ordered index(ss1) */ VS.TS# , VS.OBJ# , VS.DA
+TAOBJ# , :B2 , VS.OWNER , VS.OBJECT_NAME , VS.SUBOBJECT_NAME , V
+
+      0.61          903       0.00    1.8       0.15              26 2517826363
+update /* KSXM:FLUSH COL */ sys.col_usage$ set
+equality_preds    = equality_preds    + decode(bitand(:flag,1),0
+,0,1),   equijoin_preds    = equijoin_preds    + decode(bitand(:
+flag,2),0,0,1),   nonequijoin_preds = nonequijoin_preds + decode
+
+      0.36          298       0.00    1.1       0.04              19 1833009648
+select position#,sequence#,level#,argument,type#,charsetid,chars
+etform,properties,nvl(length, 0), nvl(precision#, 0),nvl(scale,
+0),nvl(radix, 0), type_owner,type_name,type_subname,type_linknam
+e,pls_type,type_type# from argument$ where obj#=:1 and procedure
+
+SQL ordered by Elapsed time for DB: ORCL  Instance: orcl  Snaps: 1 -2
+-> Total DB Time (s):              34
+-> Captured SQL accounts for   18.0% of Total DB Time
+-> SQL reported below exceeded  1.0% of Total DB Time
+
+  Elapsed                Elap per            CPU                        Old
+  Time (s)   Executions  Exec (s)  %Total   Time (s)  Physical Reads Hash Value
+---------- ------------ ---------- ------ ---------- --------------- ----------
+          -------------------------------------------------------------
+SQL ordered by Gets  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Buffer Gets Threshold:     10000 Total Buffer Gets:          87,973
+-> Captured SQL accounts for   47.1% of Total Buffer Gets
+-> SQL reported below exceeded  1.0% of Total Buffer Gets
+
+                                                     CPU      Elapsd     Old
+  Buffer Gets    Executions  Gets per Exec  %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+         20,106            1       20,106.0   23.2     2.13      2.83 2912400228
+Module: SQL*Plus
+BEGIN statspack.snap; END;
+
+         13,918        3,582            3.9   16.0     0.40      2.33 1495667577
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oi
+d$, spare1, spare2, spare3, signature, spare7, spare8, spare9, n
+vl(dflcollid, 16382), creappid, creverid, modappid, modverid, cr
+epatchid, modpatchid from obj$ where owner#=:1 and name=:2 and n
+
+          6,757        2,522            2.7    7.8     0.09      0.30 2566028731
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, tim
+estamp#, sample_size, minimum, maximum, distcnt, lowval, hival,
+density, col#, spare1, spare2, avgcln, minimum_enc, maximum_enc
+from hist_head$ where obj#=:1 and intcol#=:2
+
+          6,156        1,209            5.1    7.1     0.03      0.05 2482976222
+select intcol#,nvl(pos#,0),col#,nvl(spare1,0) from ccol$ where c
+on#=:1
+
+          4,538          105           43.2    5.2     0.06      0.06 4118814203
+select decode(u.type#, 2, u.ext_username, u.name), o.name,
+  t.update$, t.insert$, t.delete$, t.enabled,        decode(bita
+nd(t.property, 8192),8192, 1, 0),        decode(bitand(t.propert
+y, 65536), 65536, 1, 0),       decode(bitand(t.property, 131072)
+
+          4,456          557            8.0    5.1     0.07      0.07 3146063334
+select policy#, action# from aud_object_opt$ where object# = :1
+and type = 2
+
+          3,169          298           10.6    3.7     0.04      0.36 1833009648
+select position#,sequence#,level#,argument,type#,charsetid,chars
+etform,properties,nvl(length, 0), nvl(precision#, 0),nvl(scale,
+0),nvl(radix, 0), type_owner,type_name,type_subname,type_linknam
+e,pls_type,type_type# from argument$ where obj#=:1 and procedure
+
+          2,906          903            3.2    3.3     0.15      0.61 2517826363
+update /* KSXM:FLUSH COL */ sys.col_usage$ set
+equality_preds    = equality_preds    + decode(bitand(:flag,1),0
+,0,1),   equijoin_preds    = equijoin_preds    + decode(bitand(:
+flag,2),0,0,1),   nonequijoin_preds = nonequijoin_preds + decode
+
+          2,292          628            3.6    2.6     0.22      2.33 4216638155
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decod
+e(type#,2,nvl(scale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180
+,scale,181,scale,182,scale,183,scale,231,scale,0),null$,fixedsto
+rage,nvl(deflength,0),default$,rowid,col#,property, nvl(charseti
+
+          2,185            1        2,185.0    2.5     0.13      0.06 2126185116
+select /*+ index(idl_sb4$ i_idl_sb41) */ piece#,length,piece fro
+m idl_sb4$ where obj#=:1 and part=:2 and version=:3 order by pie
+ce#
+SQL ordered by Gets  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Buffer Gets Threshold:     10000 Total Buffer Gets:          87,973
+-> Captured SQL accounts for   47.1% of Total Buffer Gets
+-> SQL reported below exceeded  1.0% of Total Buffer Gets
+
+                                                     CPU      Elapsd     Old
+  Buffer Gets    Executions  Gets per Exec  %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+
+          2,002          208            9.6    2.3     0.01      0.04 2030260024
+select pos#,intcol#,col#,spare1,bo#,spare2,spare3 from icol$ whe
+re obj#=:1
+
+          2,002            1        2,002.0    2.3     0.28      0.68 4061365063
+Module: SQL*Plus
+INSERT INTO STATS$SEG_STAT_OBJ ( TS# , OBJ# , DATAOBJ# , DBID ,
+OWNER , OBJECT_NAME , SUBOBJECT_NAME , OBJECT_TYPE , TABLESPACE_
+NAME ) SELECT /*+ ordered index(ss1) */ VS.TS# , VS.OBJ# , VS.DA
+TAOBJ# , :B2 , VS.OWNER , VS.OBJECT_NAME , VS.SUBOBJECT_NAME , V
+
+          1,844          221            8.3    2.1     0.02      0.02  947984246
+select con#,type#,condlength,intcols,robj#,rcon#,match#,refact,n
+vl(enabled,0),rowid,cols,nvl(defer,0),mtime,nvl(spare1,0),spare2
+,spare3 from cdef$ where obj#=:1
+
+          1,326          540            2.5    1.5     0.06      0.07 2018736380
+select timestamp, flags from fixed_obj$ where obj#=:1
+
+          1,152          141            8.2    1.3     0.07      0.09 3544535890
+merge /* KSXM:OPTIM_DML_INF */  into sys.mon_mods_all$ m
+           using dual
+                      on (m.obj# = :objn and
+                                     (:pobjn = 0 or
+
+            907          306            3.0    1.0     0.03      0.03 2926525797
+select type#,blocks,extents,minexts,maxexts,extsize,extpct,user#
+,iniexts,NVL(lists,65535),NVL(groups,65535),cachehint,hwmincr, N
+VL(spare1,0),NVL(scanhint,0),NVL(bitmapranges,0) from seg$ where
+ ts#=:1 and file#=:2 and block#=:3
+
+          -------------------------------------------------------------
+SQL ordered by Reads  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Disk Reads Threshold:      1000  Total Disk Reads:           3,239
+-> Captured SQL accounts for   44.6% of Total Disk Reads
+-> SQL reported below exceeded  1.0% of Total Disk Reads
+
+                                                     CPU      Elapsd
+  Physical Rds   Executions  Rds per Exec   %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+          1,205            1        1,205.0   37.2     2.13      2.83 2912400228
+Module: SQL*Plus
+BEGIN statspack.snap; END;
+
+          1,199            1        1,199.0   37.0     0.28      0.68 4061365063
+Module: SQL*Plus
+INSERT INTO STATS$SEG_STAT_OBJ ( TS# , OBJ# , DATAOBJ# , DBID ,
+OWNER , OBJECT_NAME , SUBOBJECT_NAME , OBJECT_TYPE , TABLESPACE_
+NAME ) SELECT /*+ ordered index(ss1) */ VS.TS# , VS.OBJ# , VS.DA
+TAOBJ# , :B2 , VS.OWNER , VS.OBJECT_NAME , VS.SUBOBJECT_NAME , V
+
+            181        3,582            0.1    5.6     0.40      2.33 1495667577
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oi
+d$, spare1, spare2, spare3, signature, spare7, spare8, spare9, n
+vl(dflcollid, 16382), creappid, creverid, modappid, modverid, cr
+epatchid, modpatchid from obj$ where owner#=:1 and name=:2 and n
+
+            108          230            0.5    3.3     0.06      5.46  925184782
+select cols,audit$,textlength,intcols,nvl(property,0),flags,rowi
+d from view$ where obj#=:1
+
+             80            1           80.0    2.5     0.01      0.29 1408814657
+select /*+ index(idl_ub1$ i_idl_ub11) */ piece#,length,piece fro
+m idl_ub1$ where obj#=:1 and part=:2 and version=:3 order by pie
+ce#
+
+             58          116            0.5    1.8     0.00      1.19 1341842309
+select col#, grantee#, privilege#,max(mod(nvl(option$,0),2)), ma
+x(bitand(nvl(option$,0), 8) /8), max(bitand(nvl(option$,0), 16)
+/16), max(bitand(nvl(option$,0),64) /64), max(bitand(nvl(option$
+,0), 128) /128) from objauth$ where obj#=:1 and col# is not null
+
+             51          116            0.4    1.6     0.02      0.03 1403518453
+select grantee#,privilege#,nvl(col#,0),max(mod(nvl(option$,0),2)
+),max(bitand(nvl(option$,0), 8) /8), max(bitand(nvl(option$,0),
+16) /16), max(bitand(nvl(option$,0),64) /64), max(bitand(nvl(opt
+ion$,0), 128) /128) from objauth$ where obj#=:1 group by grantee
+
+             47           27            1.7    1.5     0.36      0.96 3322665590
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i
+.property,i.pctfree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.
+distkey,i.lblkkey,i.dblkkey,i.clufac,i.cols,i.analyzetime,i.samp
+lesize,i.dataobj#,nvl(i.degree,1),nvl(i.instances,1),i.rowcnt,mo
+
+             44        2,522            0.0    1.4     0.09      0.30 2566028731
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, tim
+estamp#, sample_size, minimum, maximum, distcnt, lowval, hival,
+density, col#, spare1, spare2, avgcln, minimum_enc, maximum_enc
+from hist_head$ where obj#=:1 and intcol#=:2
+
+             34            1           34.0    1.0     0.00      0.06  379381160
+select /*+ index(idl_ub2$ i_idl_ub21) */ piece#,length,piece fro
+SQL ordered by Reads  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Disk Reads Threshold:      1000  Total Disk Reads:           3,239
+-> Captured SQL accounts for   44.6% of Total Disk Reads
+-> SQL reported below exceeded  1.0% of Total Disk Reads
+
+                                                     CPU      Elapsd
+  Physical Rds   Executions  Rds per Exec   %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+m idl_ub2$ where obj#=:1 and part=:2 and version=:3 order by pie
+ce#
+
+          -------------------------------------------------------------
+SQL ordered by Executions  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Executions Threshold:       100  Total Executions:          13,141
+-> Captured SQL accounts for   65.2% of Total Executions
+-> SQL reported below exceeded  1.0% of Total Executions
+
+                                                CPU per    Elap per     Old
+ Executions   Rows Processed   Rows per Exec    Exec (s)   Exec (s)  Hash Value
+------------ --------------- ---------------- ----------- ---------- ----------
+       3,582           3,166              0.9       0.00        0.00  1495667577
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oi
+d$, spare1, spare2, spare3, signature, spare7, spare8, spare9, n
+vl(dflcollid, 16382), creappid, creverid, modappid, modverid, cr
+epatchid, modpatchid from obj$ where owner#=:1 and name=:2 and n
+
+       2,522           1,663              0.7       0.00        0.00  2566028731
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, tim
+estamp#, sample_size, minimum, maximum, distcnt, lowval, hival,
+density, col#, spare1, spare2, avgcln, minimum_enc, maximum_enc
+from hist_head$ where obj#=:1 and intcol#=:2
+
+       1,209           1,866              1.5       0.00        0.00  2482976222
+select intcol#,nvl(pos#,0),col#,nvl(spare1,0) from ccol$ where c
+on#=:1
+
+         903             736              0.8       0.00        0.00  2517826363
+update /* KSXM:FLUSH COL */ sys.col_usage$ set
+equality_preds    = equality_preds    + decode(bitand(:flag,1),0
+,0,1),   equijoin_preds    = equijoin_preds    + decode(bitand(:
+flag,2),0,0,1),   nonequijoin_preds = nonequijoin_preds + decode
+
+         628           8,435             13.4       0.00        0.00  4216638155
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decod
+e(type#,2,nvl(scale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180
+,scale,181,scale,182,scale,183,scale,231,scale,0),null$,fixedsto
+rage,nvl(deflength,0),default$,rowid,col#,property, nvl(charseti
+
+         557               0              0.0       0.00        0.00  3146063334
+select policy#, action# from aud_object_opt$ where object# = :1
+and type = 2
+
+         540             234              0.4       0.00        0.00  2018736380
+select timestamp, flags from fixed_obj$ where obj#=:1
+
+         414               0              0.0       0.00        0.00   944980084
+select 1 from sensitive_fixed$ where name=:1 and flag=:2
+
+         306             295              1.0       0.00        0.00  2926525797
+select type#,blocks,extents,minexts,maxexts,extsize,extpct,user#
+,iniexts,NVL(lists,65535),NVL(groups,65535),cachehint,hwmincr, N
+VL(spare1,0),NVL(scanhint,0),NVL(bitmapranges,0) from seg$ where
+ ts#=:1 and file#=:2 and block#=:3
+
+         298             991              3.3       0.00        0.00  1833009648
+select position#,sequence#,level#,argument,type#,charsetid,chars
+etform,properties,nvl(length, 0), nvl(precision#, 0),nvl(scale,
+0),nvl(radix, 0), type_owner,type_name,type_subname,type_linknam
+e,pls_type,type_type# from argument$ where obj#=:1 and procedure
+
+         284             284              1.0       0.00        0.00  2059053111
+select toid from type$ where package_obj#=:1 and typ_name=:2
+SQL ordered by Executions  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Executions Threshold:       100  Total Executions:          13,141
+-> Captured SQL accounts for   65.2% of Total Executions
+-> SQL reported below exceeded  1.0% of Total Executions
+
+                                                CPU per    Elap per     Old
+ Executions   Rows Processed   Rows per Exec    Exec (s)   Exec (s)  Hash Value
+------------ --------------- ---------------- ----------- ---------- ----------
+
+         274             159              0.6       0.00        0.00   214372507
+select o.owner#,o.name,o.namespace,o.remoteowner,o.linkname,o.su
+bname from obj$ o where o.obj#=:1
+
+         230             230              1.0       0.00        0.02   925184782
+select cols,audit$,textlength,intcols,nvl(property,0),flags,rowi
+d from view$ where obj#=:1
+
+         221               4              0.0       0.00        0.00   388788700
+select con#,obj#,rcon#,enabled,nvl(defer,0),spare2,spare3,refact
+ from cdef$ where robj#=:1
+
+         221           1,209              5.5       0.00        0.00   947984246
+select con#,type#,condlength,intcols,robj#,rcon#,match#,refact,n
+vl(enabled,0),rowid,cols,nvl(defer,0),mtime,nvl(spare1,0),spare2
+,spare3 from cdef$ where obj#=:1
+
+         208             793              3.8       0.00        0.00  2030260024
+select pos#,intcol#,col#,spare1,bo#,spare2,spare3 from icol$ whe
+re obj#=:1
+
+         186             186              1.0       0.00        0.00   340778183
+select audit$,options from procedure$ where obj#=:1
+
+         176              10              0.1       0.00        0.00  1501061143
+select user#,password,datats#,tempts#,type#,defrole,resource$,pt
+ime,decode(defschclass,NULL,'DEFAULT_CONSUMER_GROUP',defschclass
+),spare1,spare4,ext_username,spare2,nvl(spare3,16382),spare9,spa
+re10 from user$ where name=:1
+
+         167             167              1.0       0.00        0.00   476435637
+insert /* KSXM:FLUSH COL */ into sys.col_usage$ (obj#, intcol#,
+equality_preds, equijoin_preds, nonequijoin_preds, range_preds,
+like_preds, null_preds, flags, timestamp) values (   :objn, :col
+n,   decode(bitand(:flag,1),0,0,1),   decode(bitand(:flag,2),0,0
+
+         160              16              0.1       0.00        0.00  3271782358
+select /* QOSD */ /*+ index(do) */ dir_cnt from opt_directive_ow
+n$ do where dir_own# = :1
+
+         144           2,194             15.2       0.00        0.00  2496170463
+select '"'||name||'" '||decode(type#,1,decode(charsetform,2,'NVA
+RCHAR2('||decode(bitand(property,8388608),8388608,decode(spare3,
+0,1,spare3)||')','BYTECOUNT=>'||decode(length,0,1,length)||')'),
+'VARCHAR2('||decode(bitand(property,8388608),8388608,decode(spar
+
+         141             141              1.0       0.00        0.00  3544535890
+merge /* KSXM:OPTIM_DML_INF */  into sys.mon_mods_all$ m
+           using dual
+                      on (m.obj# = :objn and
+                                     (:pobjn = 0 or
+SQL ordered by Executions  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Executions Threshold:       100  Total Executions:          13,141
+-> Captured SQL accounts for   65.2% of Total Executions
+-> SQL reported below exceeded  1.0% of Total Executions
+
+                                                CPU per    Elap per     Old
+ Executions   Rows Processed   Rows per Exec    Exec (s)   Exec (s)  Hash Value
+------------ --------------- ---------------- ----------- ---------- ----------
+
+          -------------------------------------------------------------
+SQL ordered by Parse Calls  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Parse Calls Threshold:      1000 Total Parse Calls:           3,203
+-> Captured SQL accounts for   44.4% of Total Parse Calls
+-> SQL reported below exceeded  1.0% of Total Parse Calls
+
+                           % Total    Old
+ Parse Calls   Executions   Parses Hash Value
+------------ ------------ -------- ----------
+         540          540    16.86 2018736380
+select timestamp, flags from fixed_obj$ where obj#=:1
+
+         414          414    12.93  944980084
+select 1 from sensitive_fixed$ where name=:1 and flag=:2
+
+         312          167     9.74  476435637
+insert /* KSXM:FLUSH COL */ into sys.col_usage$ (obj#, intcol#,
+equality_preds, equijoin_preds, nonequijoin_preds, range_preds,
+like_preds, null_preds, flags, timestamp) values (   :objn, :col
+n,   decode(bitand(:flag,1),0,0,1),   decode(bitand(:flag,2),0,0
+
+         312          903     9.74 2517826363
+update /* KSXM:FLUSH COL */ sys.col_usage$ set
+equality_preds    = equality_preds    + decode(bitand(:flag,1),0
+,0,1),   equijoin_preds    = equijoin_preds    + decode(bitand(:
+flag,2),0,0,1),   nonequijoin_preds = nonequijoin_preds + decode
+
+         284          284     8.87 2059053111
+select toid from type$ where package_obj#=:1 and typ_name=:2
+
+         186          186     5.81  340778183
+select audit$,options from procedure$ where obj#=:1
+
+         144          144     4.50 2496170463
+select '"'||name||'" '||decode(type#,1,decode(charsetform,2,'NVA
+RCHAR2('||decode(bitand(property,8388608),8388608,decode(spare3,
+0,1,spare3)||')','BYTECOUNT=>'||decode(length,0,1,length)||')'),
+'VARCHAR2('||decode(bitand(property,8388608),8388608,decode(spar
+
+         141          141     4.40 3544535890
+merge /* KSXM:OPTIM_DML_INF */  into sys.mon_mods_all$ m
+           using dual
+                      on (m.obj# = :objn and
+                                     (:pobjn = 0 or
+
+         117          117     3.65 3040921633
+select /* KSXM:LOAD_DML_INF *//*+ leading(o) index(m) use_nl(m)
+*/            nvl(m.inserts, 0) ins, nvl(m.updates, 0) upd, nvl(
+m.deletes, 0) del,          nvl(m.drop_segments, 0) dropseg, nvl
+(m.flags, 0) flags,                       nvl(rowcnt, 0) rowcnt,
+
+         110          110     3.43 3895062447
+select count(*) from col$ where obj#=:1 and name=:2
+
+         105          105     3.28 4118814203
+select decode(u.type#, 2, u.ext_username, u.name), o.name,
+  t.update$, t.insert$, t.delete$, t.enabled,        decode(bita
+nd(t.property, 8192),8192, 1, 0),        decode(bitand(t.propert
+y, 65536), 65536, 1, 0),       decode(bitand(t.property, 131072)
+
+          62           62     1.94 1232162599
+SQL ordered by Parse Calls  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Parse Calls Threshold:      1000 Total Parse Calls:           3,203
+-> Captured SQL accounts for   44.4% of Total Parse Calls
+-> SQL reported below exceeded  1.0% of Total Parse Calls
+
+                           % Total    Old
+ Parse Calls   Executions   Parses Hash Value
+------------ ------------ -------- ----------
+select l.col#, l.intcol#, l.lobj#, l.ind#, l.ts#, l.file#, l.blo
+ck#, l.chunk, l.pctversion$, l.flags, l.property, l.retention, l
+.freepools from lob$ l where l.obj# = :1 order by l.intcol# asc
+
+          58           58     1.81   32716704
+select parttype, partcnt, partkeycols, flags, defts#, defpctfree
+, defpctused, definitrans, defmaxtrans, deftiniexts, defextsize,
+ defminexts, defmaxexts, defextpct, deflists, defgroups, deflogg
+ing, spare1, mod(spare2, 256) subparttype, mod(trunc(spare2/256)
+
+          55           55     1.72 3468666020
+select text from view$ where rowid=:1
+
+          -------------------------------------------------------------
+SQL ordered by Sharable Memory  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Sharable Memory Threshold(KB):      1024
+
+    Max         End
+ Sharable    Sharable                                        Old
+Memory (KB) Memory (KB)  Parse Calls  Executions  % Total Hash Value
+----------- ----------- ------------ ------------ ------- ----------
+      1,113         986            2        3,582     0.4 1495667577
+select obj#,type#,ctime,mtime,stime, status, dataobj#, flags, oi
+d$, spare1, spare2, spare3, signature, spare7, spare8, spare9, n
+vl(dflcollid, 16382), creappid, creverid, modappid, modverid, cr
+epatchid, modpatchid from obj$ where owner#=:1 and name=:2 and n
+
+      1,066         607            1           27     0.4 3322665590
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i
+.property,i.pctfree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.
+distkey,i.lblkkey,i.dblkkey,i.clufac,i.cols,i.analyzetime,i.samp
+lesize,i.dataobj#,nvl(i.degree,1),nvl(i.instances,1),i.rowcnt,mo
+
+          -------------------------------------------------------------
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+ASSM bg: segment fix monitor                       1            0.0          0.3
+ASSM cbk:blocks examined                         616            4.8        154.0
+ASSM cbk:blocks marked full                      181            1.4         45.3
+ASSM gsp:L1 bitmaps examined                     524            4.1        131.0
+ASSM gsp:L2 bitmap full                            3            0.0          0.8
+ASSM gsp:L2 bitmaps examined                     446            3.5        111.5
+ASSM gsp:Search all                               17            0.1          4.3
+ASSM gsp:Search hint                              13            0.1          3.3
+ASSM gsp:Search steal                             17            0.1          4.3
+ASSM gsp:bump HWM                                 17            0.1          4.3
+ASSM gsp:get free block                          474            3.7        118.5
+ASSM gsp:get free data block                     328            2.6         82.0
+ASSM gsp:get free index block                    107            0.8         26.8
+ASSM gsp:good hint                               298            2.3         74.5
+ASSM rsv:fill reserve                              6            0.1          1.5
+ASSM wasted db state change                        2            0.0          0.5
+Batched IO (bound) vector count                  163            1.3         40.8
+Batched IO block miss count                        0            0.0          0.0
+Batched IO buffer defrag count                     0            0.0          0.0
+Batched IO double miss count                       0            0.0          0.0
+Batched IO same unit count                         0            0.0          0.0
+Batched IO single block count                    163            1.3         40.8
+Batched IO vector block count                      0            0.0          0.0
+Batched IO vector read count                       0            0.0          0.0
+Block Cleanout Optim referenced                   20            0.2          5.0
+CCursor + sql area evicted                       577            4.5        144.3
+CPU used by this session                       3,888           30.4        972.0
+CPU used when call started                     3,302           25.8        825.5
+CR blocks created                                 20            0.2          5.0
+Cached Commit SCN referenced                       0            0.0          0.0
+DB time                                        3,487           27.2        871.8
+DBWR checkpoint buffers written                   38            0.3          9.5
+DBWR checkpoints                                   1            0.0          0.3
+DBWR parallel query checkpoint bu                 25            0.2          6.3
+DBWR transaction table writes                      3            0.0          0.8
+DBWR undo block writes                           235            1.8         58.8
+DFO trees parallelized                             1            0.0          0.3
+DML statements retried                            38            0.3          9.5
+Effective IO time                                  0            0.0          0.0
+HSC Heap Segment Block Changes                 2,653           20.7        663.3
+Heap Segment Array Inserts                       352            2.8         88.0
+Heap Segment Array Updates                         0            0.0          0.0
+Heatmap BlkLevel Flushed                          38            0.3          9.5
+Heatmap BlkLevel Flushed to BF                    38            0.3          9.5
+Heatmap BlkLevel Ranges Flushed                   38            0.3          9.5
+Heatmap Blklevel Flush Task Count                  0            0.0          0.0
+IMU CR rollbacks                                   0            0.0          0.0
+IMU Flushes                                        4            0.0          1.0
+IMU Redo allocation size                       7,168           56.0      1,792.0
+IMU commits                                        0            0.0          0.0
+IMU contention                                     0            0.0          0.0
+IMU ktichg flush                                   0            0.0          0.0
+IMU undo allocation size                       6,792           53.1      1,698.0
+KTFB alloc req                                   106            0.8         26.5
+KTFB alloc space (block)                  97,386,496      760,832.0 ############
+KTFB alloc time (ms)                          93,309          729.0     23,327.3
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+KTFB apply req                                     1            0.0          0.3
+KTFB apply time (ms)                              14            0.1          3.5
+LOB table id lookup cache misses                   0            0.0          0.0
+Number of read IOs issued                         83            0.7         20.8
+PX local messages recv'd                          12            0.1          3.0
+PX local messages sent                            12            0.1          3.0
+Parallel operations not downgrade                  1            0.0          0.3
+Requests to/from client                            2            0.0          0.5
+RowCR attempts                                     1            0.0          0.3
+RowCR hits                                         1            0.0          0.3
+SQL*Net roundtrips to/from client                  3            0.0          0.8
+active txn count during cleanout                 265            2.1         66.3
+application wait time                             35            0.3          8.8
+background timeouts                              783            6.1        195.8
+blocks cleaned out using minact                  203            1.6         50.8
+buffer is not pinned count                    45,693          357.0     11,423.3
+buffer is pinned count                        40,799          318.7     10,199.8
+bytes received via SQL*Net from c                789            6.2        197.3
+bytes sent via SQL*Net to client                 385            3.0         96.3
+calls to get snapshot scn: kcmgss             16,840          131.6      4,210.0
+calls to kcmgas                                1,421           11.1        355.3
+calls to kcmgcs                                3,641           28.5        910.3
+cell physical IO interconnect byt         85,305,856      666,452.0 ############
+change write time                                 26            0.2          6.5
+cleanout - number of ktugct calls                268            2.1         67.0
+cleanouts and rollbacks - consist                  0            0.0          0.0
+cleanouts only - consistent read                   3            0.0          0.8
+cluster key scan block gets                    3,625           28.3        906.3
+cluster key scans                              2,093           16.4        523.3
+commit batch/immediate performed                  14            0.1          3.5
+commit batch/immediate requested                  14            0.1          3.5
+commit cleanout failures: block l                  0            0.0          0.0
+commit cleanout failures: buffer                   0            0.0          0.0
+commit cleanout failures: callbac                 23            0.2          5.8
+commit cleanouts                               2,240           17.5        560.0
+commit cleanouts successfully com              2,217           17.3        554.3
+commit immediate performed                        14            0.1          3.5
+commit immediate requested                        14            0.1          3.5
+commit txn count during cleanout                  99            0.8         24.8
+concurrency wait time                              3            0.0          0.8
+consistent changes                               243            1.9         60.8
+consistent gets                               63,474          495.9     15,868.5
+consistent gets direct                         1,196            9.3        299.0
+consistent gets examination                   20,605          161.0      5,151.3
+consistent gets examination (fast             20,465          159.9      5,116.3
+consistent gets from cache                    62,278          486.6     15,569.5
+consistent gets pin                           41,673          325.6     10,418.3
+consistent gets pin (fastpath)                40,415          315.7     10,103.8
+cursor authentications                            82            0.6         20.5
+cursor reload failures                           114            0.9         28.5
+data blocks consistent reads - un                  7            0.1          1.8
+db block changes                              22,929          179.1      5,732.3
+db block gets                                 24,499          191.4      6,124.8
+db block gets from cache                      24,499          191.4      6,124.8
+db block gets from cache (fastpat             17,788          139.0      4,447.0
+deferred (CURRENT) block cleanout              1,170            9.1        292.5
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+dirty buffers inspected                        3,047           23.8        761.8
+enqueue conversions                              225            1.8         56.3
+enqueue releases                               5,302           41.4      1,325.5
+enqueue requests                               5,302           41.4      1,325.5
+enqueue timeouts                                   0            0.0          0.0
+enqueue waits                                      2            0.0          0.5
+execute count                                 13,141          102.7      3,285.3
+file io service time                             391            3.1         97.8
+file io wait time                         15,483,537      120,965.1  3,870,884.3
+free buffer inspected                          3,906           30.5        976.5
+free buffer requested                          3,934           30.7        983.5
+heap block compress                               18            0.1          4.5
+hot buffers moved to head of LRU                 790            6.2        197.5
+immediate (CR) block cleanout app                  3            0.0          0.8
+immediate (CURRENT) block cleanou                405            3.2        101.3
+in call idle wait time                       848,973        6,632.6    212,243.3
+index crx upgrade (positioned)                     0            0.0          0.0
+index fast full scans (full)                       1            0.0          0.3
+index fetch by key                             6,745           52.7      1,686.3
+index range scans                             20,565          160.7      5,141.3
+leaf node 90-10 splits                             5            0.0          1.3
+leaf node splits                                  99            0.8         24.8
+lob reads                                         76            0.6         19.0
+lob writes                                        80            0.6         20.0
+lob writes unaligned                              80            0.6         20.0
+logical read bytes from cache            710,877,184    5,553,728.0 ############
+logons cumulative                                  3            0.0          0.8
+max cf enq hold time                              48            0.4         12.0
+messages received                                225            1.8         56.3
+messages sent                                    225            1.8         56.3
+min active SCN optimization appli                  4            0.0          1.0
+no buffer to keep pinned count                     5            0.0          1.3
+no work - consistent read gets                39,162          306.0      9,790.5
+non-idle wait count                            4,575           35.7      1,143.8
+non-idle wait time                             2,155           16.8        538.8
+opened cursors cumulative                     12,621           98.6      3,155.3
+parse count (describe)                             0            0.0          0.0
+parse count (failures)                             0            0.0          0.0
+parse count (hard)                               774            6.1        193.5
+parse count (total)                            3,203           25.0        800.8
+parse time cpu                                   166            1.3         41.5
+parse time elapsed                               236            1.8         59.0
+physical read IO requests                      1,890           14.8        472.5
+physical read bytes                       26,533,888      207,296.0  6,633,472.0
+physical read total IO requests                3,272           25.6        818.0
+physical read total bytes                 49,078,272      383,424.0 ############
+physical read total multi block r                 66            0.5         16.5
+physical reads                                 3,239           25.3        809.8
+physical reads cache                           2,043           16.0        510.8
+physical reads cache prefetch                    236            1.8         59.0
+physical reads direct                          1,196            9.3        299.0
+physical reads direct (lob)                        0            0.0          0.0
+physical write IO requests                     2,377           18.6        594.3
+physical write bytes                      28,049,408      219,136.0  7,012,352.0
+physical write total IO requests               2,650           20.7        662.5
+physical write total bytes                36,227,584      283,028.0  9,056,896.0
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+physical write total multi block                  46            0.4         11.5
+physical writes                                3,424           26.8        856.0
+physical writes direct                             3            0.0          0.8
+physical writes direct (lob)                       3            0.0          0.8
+physical writes from cache                     3,421           26.7        855.3
+physical writes non checkpoint                 3,408           26.6        852.0
+pinned buffers inspected                           0            0.0          0.0
+prefetched blocks aged out before                  0            0.0          0.0
+process last non-idle time                       118            0.9         29.5
+recovery blocks read                               0            0.0          0.0
+recursive calls                               38,709          302.4      9,677.3
+recursive cpu usage                              839            6.6        209.8
+redo KB read                                       0            0.0          0.0
+redo blocks checksummed by FG (ex              6,533           51.0      1,633.3
+redo blocks read for recovery                      0            0.0          0.0
+redo blocks written                           13,973          109.2      3,493.3
+redo blocks written (group 0)                 12,985          101.5      3,246.3
+redo blocks written (group 1)                    988            7.7        247.0
+redo entries                                  12,733           99.5      3,183.3
+redo k-bytes read for recovery                     0            0.0          0.0
+redo ordering marks                                0            0.0          0.0
+redo size                                  6,759,728       52,810.4  1,689,932.0
+redo subscn max counts                           136            1.1         34.0
+redo synch long waits                              0            0.0          0.0
+redo synch time                                    2            0.0          0.5
+redo synch time (usec)                        24,701          193.0      6,175.3
+redo synch time overhead (usec)                   28            0.2          7.0
+redo synch time overhead count (                   1            0.0          0.3
+redo synch time overhead count (                   0            0.0          0.0
+redo synch time overhead count (                   0            0.0          0.0
+redo synch time overhead count (i                  0            0.0          0.0
+redo synch writes                                  2            0.0          0.5
+redo wastage                                  49,856          389.5     12,464.0
+redo write active strands                        192            1.5         48.0
+redo write finish time                     3,720,655       29,067.6    930,163.8
+redo write gather time                        24,750          193.4      6,187.5
+redo write info find                               1            0.0          0.3
+redo write schedule time                      25,423          198.6      6,355.8
+redo write size count (   4KB)                   126            1.0         31.5
+redo write size count (   8KB)                    17            0.1          4.3
+redo write size count (  16KB)                     9            0.1          2.3
+redo write size count (  32KB)                    15            0.1          3.8
+redo write size count ( 128KB)                    14            0.1          3.5
+redo write size count ( 256KB)                     4            0.0          1.0
+redo write size count ( 512KB)                     1            0.0          0.3
+redo write size count (1024KB)                     1            0.0          0.3
+redo write size count (inf)                        2            0.0          0.5
+redo write time                                  372            2.9         93.0
+redo write time (usec)                     3,725,530       29,105.7    931,382.5
+redo write total time                      3,738,129       29,204.1    934,532.3
+redo write worker delay (usec)                20,866          163.0      5,216.5
+redo write worker delay count                    189            1.5         47.3
+redo writes                                      189            1.5         47.3
+redo writes (group 0)                            113            0.9         28.3
+redo writes (group 1)                             76            0.6         19.0
+redo writes adaptive all                         189            1.5         47.3
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+redo writes adaptive worker                      189            1.5         47.3
+rollback changes - undo records a                  0            0.0          0.0
+rollbacks only - consistent read                   7            0.1          1.8
+rows fetched via callback                      1,622           12.7        405.5
+securefile allocation bytes                   24,576          192.0      6,144.0
+securefile allocation chunks                       1            0.0          0.3
+securefile bytes non-transformed              56,354          440.3     14,088.5
+securefile direct read bytes                       0            0.0          0.0
+securefile direct read ops                         0            0.0          0.0
+securefile direct write bytes                 24,576          192.0      6,144.0
+securefile direct write ops                        1            0.0          0.3
+securefile number of non-transfor                 34            0.3          8.5
+segment chunks allocation from di                  1            0.0          0.3
+segment dispenser allocations                      1            0.0          0.3
+segment dispenser load tasks                       1            0.0          0.3
+segment prealloc ops                               2            0.0          0.5
+segment prealloc tasks                             1            0.0          0.3
+segment prealloc time (ms)                       200            1.6         50.0
+session connect time                               0            0.0          0.0
+session cursor cache hits                     18,446          144.1      4,611.5
+session logical reads                         87,973          687.3     21,993.3
+session uga memory                         1,465,464       11,448.9    366,366.0
+session uga memory max                    44,511,312      347,744.6 ############
+shared hash latch upgrades - no w                547            4.3        136.8
+shared hash latch upgrades - wait                  0            0.0          0.0
+shared io pool buffer get success                  1            0.0          0.3
+sorts (memory)                                 1,913           15.0        478.3
+sorts (rows)                                  54,009          422.0     13,502.3
+sql area evicted                                 720            5.6        180.0
+sql area purged                                    0            0.0          0.0
+summed dirty queue length                      3,488           27.3        872.0
+switch current caused by our pin                 147            1.2         36.8
+switch current to new buffer                     147            1.2         36.8
+table fetch by rowid                          30,549          238.7      7,637.3
+table fetch continued row                        337            2.6         84.3
+table scan blocks gotten                      10,357           80.9      2,589.3
+table scan disk non-IMC rows gott            361,574        2,824.8     90,393.5
+table scan rows gotten                       361,574        2,824.8     90,393.5
+table scans (direct read)                          1            0.0          0.3
+table scans (long tables)                          3            0.0          0.8
+table scans (short tables)                       836            6.5        209.0
+total cf enq hold time                           156            1.2         39.0
+total number of cf enq holders                     4            0.0          1.0
+total number of times SMON posted                  0            0.0          0.0
+transaction rollbacks                              0            0.0          0.0
+undo change vector size                    2,206,496       17,238.3    551,624.0
+user I/O wait time                               972            7.6        243.0
+user calls                                        19            0.2          4.8
+user commits                                       4            0.0          1.0
+user logons cumulative                             0            0.0          0.0
+user logouts cumulative                            0            0.0          0.0
+user rollbacks                                     0            0.0          0.0
+workarea executions - optimal                  1,330           10.4        332.5
+write clones created in backgroun                  0            0.0          0.0
+write clones created in foregroun                  2            0.0          0.5
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+          -------------------------------------------------------------
+
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Statistics with absolute values (should not be diffed)
+
+Statistic                             Begin Value       End Value
+--------------------------------- --------------- ---------------
+logons current                                 72              55
+opened cursors current                         92              72
+session cursor cache count                  3,234           3,517
+          -------------------------------------------------------------
+
+Instance Activity Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Statistics identified by '(derived)' come from sources other than SYSSTAT
+
+Statistic                                      Total  per Hour
+--------------------------------- ------------------ ---------
+log switches (derived)                             0       .00
+          -------------------------------------------------------------
+
+OS Statistics  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> ordered by statistic type (CPU use, Virtual Memory, Hardware Config), Name
+
+Statistic                                  Total
+------------------------- ----------------------
+FREE_MEMORY_BYTES                    107,216,896
+SWAP_FREE_BYTES                    4,294,963,200
+BUSY_TIME                                  3,818
+IDLE_TIME                                 20,814
+IOWAIT_TIME                                1,002
+SYS_TIME                                     174
+USER_TIME                                  3,533
+PHYSICAL_MEMORY_BYTES              1,810,653,184
+NUM_CPUS                                       2
+NUM_CPU_CORES                                  2
+NUM_CPU_SOCKETS                                1
+GLOBAL_RECEIVE_SIZE_MAX                4,194,304
+GLOBAL_SEND_SIZE_MAX                   1,048,576
+TCP_RECEIVE_SIZE_DEFAULT                  87,380
+TCP_RECEIVE_SIZE_MAX                   6,291,456
+TCP_RECEIVE_SIZE_MIN                       4,096
+TCP_SEND_SIZE_DEFAULT                     16,384
+TCP_SEND_SIZE_MAX                      4,194,304
+TCP_SEND_SIZE_MIN                          4,096
+          -------------------------------------------------------------
+
+OS Statistics - detail  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+  Snap Snapshot
+    Id Day Time          Load  %Busy  %User %System   %WIO  %WCPU
+------ --------------- ------ ------ ------ ------- ------ ------
+     1 Tue 16 02:33:31     .4
+     2 Tue 16 02:35:39     .7   15.5   14.3      .7    4.1
+          -------------------------------------------------------------
+IO Stat by Function - summary  DB/Inst: ORCL/orcl  Snaps: 1-2
+->Data Volume values suffixed with   M,G,T,P are in multiples of 1024,
+  other values suffixed with       K,M,G,T,P are in multiples of 1000
+->ordered by Data Volume (Read+Write) desc
+
+               ---------- Read --------- --------- Write -------- --- Wait ----
+                 Data  Requests    Data   Data  Requests    Data          Avg
+Function        Volume     /sec  Vol/sec Volume     /sec  Vol/sec  Count Tm(ms)
+--------------- ------ -------- -------- ------ -------- -------- ------ ------
+Others             21M    10.8       .2M     2M      .9       .0M  1440     0.0
+Buffer Cache Re    16M    14.2       .1M                           1818     0.0
+Direct Reads        9M      .6       .1M                             83     0.0
+          -------------------------------------------------------------
+
+IO Stat by Function - detail  DB/Inst: ORCL/orcl  Snaps: 1-2
+->ordered by Data Volume (Read+Write) desc
+
+                   ----------- Read ---------- ----------- Write ---------
+                    Small  Large  Small  Large  Small  Large  Small  Large
+                     Read   Read   Data   Data  Write  Write   Data   Data
+Function             Reqs   Reqs   Read   Read   Reqs   Reqs  Writn  Writn
+------------------ ------ ------ ------ ------ ------ ------ ------ ------
+Others              1382            21M          117             2M
+Buffer Cache Reads  1819            16M
+Direct Reads          17     66      1M     8M
+          -------------------------------------------------------------
+Tablespace IO Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+->ordered by IOs (Reads + Writes) desc
+
+Tablespace
+------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+SYSTEM
+           685       5    4.3     2.7        1,464       11          0    0.0
+SYSAUX
+         1,068       8    5.7     1.2            3        0          0    0.0
+STATS
+             0       0    0.0                  778        6          0    0.0
+UNDOTBS1
+             1       0   10.0     1.0           87        1          0    0.0
+          -------------------------------------------------------------
+File IO Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+->Mx Rd Bkt: Max bucket time for single block read
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+                        Av   Mx                                             Av
+                 Av     Rd   Rd    Av                    Av        Buffer BufWt
+         Reads Reads/s (ms)  Bkt Blks/Rd       Writes Writes/s      Waits  (ms)
+-------------- ------- ----- --- ------- ------------ -------- ---------- ------
+STATS                    /u01/app/oracle/oradata/ORCL/stats.dbf
+             0       0                            778        6          0
+
+SYSAUX                   /u01/app/oracle/oradata/ORCL/sysaux01.dbf
+         1,068       8   5.7   1     1.2            3        0          0
+
+SYSTEM                   /u01/app/oracle/oradata/ORCL/system01.dbf
+           685       5   4.3   1     2.7        1,464       11          0
+
+UNDOTBS1                 /u01/app/oracle/oradata/ORCL/undotbs01.dbf
+             1       0  10.0         1.0           87        1          0
+
+          -------------------------------------------------------------
+File Read Histogram Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+->Number of single block reads in each time range
+->Tempfiles are not included
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+    0 - 2 ms     2 - 4 ms    4 - 8 ms     8 - 16 ms   16 - 32 ms       32+ ms
+------------ ------------ ------------ ------------ ------------ ------------
+SYSTEM                   /u01/app/oracle/oradata/ORCL/system01.dbf
+         411            0            0            0            0            0
+
+SYSAUX                   /u01/app/oracle/oradata/ORCL/sysaux01.dbf
+         633            0            0            0            0            0
+
+          -------------------------------------------------------------
+IO Stats Function Detail  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+                            Small   Small   Large   Large
+Function     FileType        Read   Write    Read   Write             Wait Time
+Name         Name            (MB)    (MB)    (MB)    (MB)     Waits        (ms)
+------------ ------------ ------- ------- ------- ------- --------- -----------
+DBWR         Control File       0       0       0       0         0           0
+DBWR         Data File          0      21       0       5         0           0
+DBWR         Temp File          0       0       0       0         0           0
+DBWR         Other(8)           0       0       0       0        21           5
+LGWR         Control File       0       0       0       0         0           0
+LGWR         Data File          0       0       0       0         0           0
+LGWR         Log File           0       1       0       6         0           0
+LGWR         Other(8)           0       0       0       0       189           2
+Streams AQ   Data File          0       0       0       0         0           0
+Recovery     Control File       0       0       0       0         0           0
+Recovery     Data File          0       0       0       0         0           0
+Recovery     Log File           0       0       0       0         0           0
+Recovery     Other(8)           0       0       0       0         0           0
+Buffer Cache Data File         16       0       0       0      1820        9667
+Buffer Cache Temp File          0       0       0       0         0           0
+Buffer Cache Other(8)           0       0       0       0         0           0
+Inmemory Pop Data File          1       0       8       0         0           0
+Inmemory Pop Other(8)           0       0       0       0        83           0
+Direct Reads Other(8)           0       0       0       0         1           0
+Archive Mana Control File      21       2       0       0      1370           8
+Archive Mana Data File          0       0       0       0        12           0
+Archive Mana Log File           0       0       0       0         0           0
+Archive Mana Other(8)           0       0       0       0        58           0
+Archive Mana Parameter Fi       0       0       0       0         0           0
+Archive Mana Password Fil       0       0       0       0         0           0
+Archive Mana External Tab       0       0       0       0         0           0
+          -------------------------------------------------------------
+Instance Recovery Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> B: Begin snapshot,  E: End snapshot
+
+  Targt Estd                                  Log File  Log Ckpt    Log Ckpt
+  MTTR  MTTR   Recovery   Actual    Target      Size     Timeout    Interval
+   (s)   (s)   Estd IOs  Redo Blks Redo Blks Redo Blks  Redo Blks  Redo Blks
+- ----- ----- ---------- --------- --------- ---------- --------- ------------
+B     0    30       3545     23831    663552     663552
+E     0    30       1880     33670    663552     663552
+          -------------------------------------------------------------
+Memory Target Advice  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Advice Reset: if this is null, the data shown has been diffed between
+   the Begin and End snapshots.  If this is 'Y', the advisor has been
+   reset during this interval due to memory resize operations, and
+   the data shown is since the reset operation.
+
+                Memory Size     Est.     Advice
+Memory Size (M)      Factor DB time (s)  Reset
+--------------- ----------- ------------ ------
+            865         1.3           61
+          1,038         1.5           60
+          1,211         1.8           60
+          1,384         2.0           60
+          -------------------------------------------------------------
+
+Memory Dynamic Components  DB/Inst: ORCL/orcl  Snaps: 1-2
+->  Op - memory resize Operation
+->  Cache:    D: Default,  K: Keep,  R:  Recycle
+->   Mode:  DEF: DEFerred mode,  IMM: IMMediate mode
+
+                       Begin Snap End Snap   Op    Last Op
+Cache                    Size (M) Size (M)  Count  Type/Mode   Last Op Time
+---------------------- ---------- -------- ------- ---------- ---------------
+D:buffer cache                 84                0 GROW/MAN
+PGA Target                    284                0 SHRINK/MAN 16-Jul 02:32:15
+SGA Target                    408                0 GROW/DEF   16-Jul 02:32:15
+Shared IO Pool                 12                0 STATIC
+java pool                       4                0 STATIC
+large pool                      8                0 STATIC
+shared pool                   284                0 STATIC
+          -------------------------------------------------------------
+
+Buffer Pool Advisory  DB/Inst: ORCL/orcl  End Snap: 2
+-> Only rows with estimated physical reads >0 are displayed
+-> ordered by Pool, Block Size, Buffers For Estimate
+
+                                   Est
+                                  Phys      Estimated                   Est
+    Size for  Size      Buffers   Read     Phys Reads     Est Phys % dbtime
+P    Est (M) Factr  (thousands)  Factr    (thousands)    Read Time  for Rds
+--- -------- ----- ------------ ------ -------------- ------------ --------
+D          8    .1            1    2.1             54          862    357.7
+D         16    .2            2    1.8             45          707    293.4
+D         24    .3            3    1.6             39          593    246.1
+D         32    .4            4    1.4             35          520    215.8
+D         40    .5            5    1.3             33          473    196.3
+D         48    .6            6    1.2             31          439    182.2
+D         56    .7            7    1.2             29          405    168.0
+D         64    .8            8    1.1             28          387    160.6
+D         72    .9            9    1.1             27          368    152.7
+D         80   1.0           10    1.0             26          337    139.8
+D         84   1.0           10    1.0             25          330    136.9
+D         88   1.0           11    1.0             25          322    133.6
+D         96   1.1           12    0.9             24          304    126.1
+D        104   1.2           13    0.9             22          276    114.5
+D        112   1.3           14    0.9             22          263    109.1
+D        120   1.4           15    0.8             21          250    103.7
+D        128   1.5           16    0.8             20          237     98.3
+D        136   1.6           17    0.8             20          225     93.4
+D        144   1.7           18    0.8             19          212     88.0
+D        152   1.8           19    0.7             18          199     82.6
+D        160   1.9           20    0.7             18          186     77.2
+          -------------------------------------------------------------
+
+Buffer Pool Statistics  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Standard block size Pools  D: default,  K: keep,  R: recycle
+-> Default Pools for other block sizes: 2k, 4k, 8k, 16k, 32k
+-> Buffers: the number of buffers.  Units of K, M, G are divided by 1000
+
+                                                            Free Writ     Buffer
+            Pool         Buffer     Physical    Physical  Buffer Comp       Busy
+P   Buffers Hit%           Gets        Reads      Writes   Waits Wait      Waits
+--- ------- ---- -------------- ------------ ----------- ------- ---- ----------
+D       10K   98         88,442        2,052       3,314       0    0          0
+          -------------------------------------------------------------
+PGA Aggr Target Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> B: Begin snap   E: End snap (rows identified with B or E contain data
+   which is absolute i.e. not diffed over the interval)
+-> PGA cache hit % - percentage of W/A (WorkArea) data processed only in-memory
+-> Auto PGA Target - actual workarea memory target
+-> W/A PGA Used    - amount of memory used for all WorkAreas (manual + auto)
+-> %PGA W/A Mem    - percentage of PGA memory allocated to WorkAreas
+-> %Auto W/A Mem   - percentage of WorkArea memory controlled by Auto Mem Mgmt
+-> %Man W/A Mem    - percentage of WorkArea memory under Manual control
+
+PGA Cache Hit % W/A MB Processed Extra W/A MB Read/Written
+--------------- ---------------- -------------------------
+          100.0               78                         0
+
+PGA Aggr Target Histogram  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Optimal Executions are purely in-memory operations
+
+    Low    High
+Optimal Optimal    Total Execs Optimal Execs 1-Pass Execs M-Pass Execs
+------- ------- -------------- ------------- ------------ ------------
+     2K      4K          1,288         1,288            0            0
+    64K    128K              8             8            0            0
+   128K    256K             12            12            0            0
+   256K    512K              8             8            0            0
+   512K   1024K             24            24            0            0
+     1M      2M             33            33            0            0
+     4M      8M              1             1            0            0
+          -------------------------------------------------------------
+
+PGA Memory Advisory  DB/Inst: ORCL/orcl  End Snap: 2
+-> When using Auto Memory Mgmt, minimally choose a pga_aggregate_target value
+   where Estd PGA Overalloc Count is 0
+
+                                   Estd Extra                Estd
+  PGA Aggr                           W/A MB      Estd Time    PGA   Estd PGA
+    Target   Size         W/A MB  Read/Written  to Process  Cache  Overalloc
+  Est (MB)  Factr      Processed    to Disk      Bytes (s)  Hit %      Count
+---------- ------ -------------- -------------- ---------- ------ ----------
+        36    0.1            125              0        0.0  100.0          1
+        71    0.3            125              0        0.0  100.0          1
+       142    0.5            125              0        0.0  100.0          1
+       213    0.8            125              0        0.0  100.0          1
+       284    1.0            125              0        0.0  100.0          0
+       341    1.2            125              0        0.0  100.0          0
+       398    1.4            125              0        0.0  100.0          0
+       454    1.6            125              0        0.0  100.0          0
+       511    1.8            125              0        0.0  100.0          0
+       568    2.0            125              0        0.0  100.0          0
+       852    3.0            125              0        0.0  100.0          0
+     1,136    4.0            125              0        0.0  100.0          0
+     1,704    6.0            125              0        0.0  100.0          0
+     2,272    8.0            125              0        0.0  100.0          0
+          -------------------------------------------------------------
+Process Memory Summary Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> B: Begin snap   E: End snap
+-> All rows below contain absolute values (i.e. not diffed over the interval)
+-> Max Alloc is Maximum PGA Allocation size at snapshot time
+   Hist Max Alloc is the Historical Max Allocation for still-connected processes
+-> Num Procs or Allocs:  For Begin/End snapshot lines, it is the number of
+   processes. For Category lines, it is the number of allocations
+-> ordered by Begin/End snapshot, Alloc (MB) desc
+
+                                                                  Hist   Num
+                                          Avg    Std Dev   Max    Max   Procs
+             Alloc     Used    Freeabl   Alloc    Alloc   Alloc  Alloc    or
+  Category   (MB)      (MB)      (MB)     (MB)    (MB)    (MB)    (MB)  Allocs
+- -------- --------- --------- -------- -------- ------- ------- ------ ------
+B --------     289.5     210.1     40.3      3.7     5.1      28     78     78
+  Other        245.2                         3.1     4.2      26     66     78
+  Freeable      40.4        .0               3.1     5.4      20            13
+  PL/SQL         2.4       2.2                .0      .1       1      2     72
+  SQL            1.5        .3                .1      .1       0     20     18
+E --------     231.3     183.5     12.9      3.7     4.9      28     78     62
+  Other        214.2                         3.5     4.6      26     66     62
+  Freeable      13.0        .0                .9     1.0       3            14
+  SQL            2.3       1.0                .1      .1       1     34     18
+  PL/SQL         1.8       1.7                .0      .1       1      2     56
+          -------------------------------------------------------------
+
+Top Process Memory (by component)  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> ordered by Begin/End snapshot, Alloc (MB) desc
+
+                        Alloc   Used   Freeabl     Max      Hist Max
+     PId Category       (MB)    (MB)     (MB)   Alloc (MB) Alloc (MB)
+- ------ ------------- ------- ------- -------- ---------- ----------
+B    109 M003 --------    27.7    25.8       .4       27.7       78.3
+         Other            26.2                        26.2       66.4
+         PL/SQL             .9      .9                  .9        1.7
+         Freeable           .4      .0                  .4
+         SQL                .2      .0                  .2        9.8
+      35 TNS V1-V3 ---    26.0     4.7     20.1       26.0       26.0
+         Freeable         20.2      .0                20.2
+         Other             5.4                         5.4        5.4
+         SQL                .2      .0                  .2       19.6
+         PL/SQL             .2      .2                  .2         .2
+      31 MMON --------    24.0     5.9       .3       24.0       27.1
+         Other            23.2                        23.2       24.0
+         PL/SQL             .3      .3                  .3         .4
+         Freeable           .3      .0                  .3
+         SQL                .2      .0                  .2        2.4
+      39 TT00 --------    19.7    18.2       .0       19.7       19.7
+         Other            19.7                        19.7       19.7
+         PL/SQL             .0      .0                  .0         .0
+      18 DBW0 --------    10.2     8.4      1.6       10.2       10.3
+         Other             8.6                         8.6        8.6
+         Freeable          1.6      .0                 1.6
+         PL/SQL             .0      .0                  .0         .0
+     102 M001 --------     8.3     2.6      5.6        8.3        8.3
+         Freeable          5.6      .0                 5.6
+         Other             2.6                         2.6        2.6
+         SQL                .1      .0                  .1        2.9
+         PL/SQL             .0      .0                  .0         .0
+      75 J000 --------     8.2     1.9      4.4        8.2        8.2
+         Freeable          4.4      .0                 4.4
+         Other             3.8                         3.8        3.8
+         PL/SQL             .0      .0                  .0         .0
+         SQL                .0      .0                  .0        2.0
+      62 Q00D --------     5.5     3.0      2.3        5.5        5.5
+         Other             3.2                         3.2        3.2
+         Freeable          2.3      .0                 2.3
+         SQL                .1      .0                  .1        2.4
+         PL/SQL             .0      .0                  .0         .0
+      76 J001 --------     5.2     1.8      2.9        5.2        5.2
+         Freeable          2.9      .0                 2.9
+         Other             2.2                         2.2        2.2
+         PL/SQL             .0      .0                  .0         .0
+         SQL                .0      .0                  .0         .6
+      73 CJQ0 --------     5.0     3.6       .8        5.0        7.0
+         Other             4.1                         4.1        5.1
+         Freeable           .8      .0                  .8
+         SQL                .1      .0                  .1        1.0
+         PL/SQL             .0      .0                  .0         .0
+      17 DIA0 --------     4.9     4.7       .0        4.9        4.9
+         Other             4.9                         4.9        4.9
+         PL/SQL             .0      .0                  .0         .0
+     103 M002 --------     4.2     2.4      1.6        4.2        4.2
+         Other             2.5                         2.5        2.5
+         Freeable          1.6      .0                 1.6
+
+Top Process Memory (by component)  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> ordered by Begin/End snapshot, Alloc (MB) desc
+
+                        Alloc   Used   Freeabl     Max      Hist Max
+     PId Category       (MB)    (MB)     (MB)   Alloc (MB) Alloc (MB)
+- ------ ------------- ------- ------- -------- ---------- ----------
+B    103 SQL                .1      .0                  .1        1.2
+         PL/SQL             .0      .0                  .0         .0
+      27 LREG --------     3.5     3.1       .1        3.5        4.0
+         Other             3.4                         3.4        3.4
+         Freeable           .1      .0                  .1
+         SQL                .0      .0                  .0         .4
+         PL/SQL             .0      .0                  .0         .0
+      38 P001 --------     3.5     1.8       .0        3.5        9.2
+         Other             3.5                         3.5        5.8
+         SQL                .0      .0                  .0        3.4
+         PL/SQL             .0      .0                  .0         .0
+      13 DBRM --------     3.4     3.2       .0        3.4        3.9
+         Other             3.3                         3.3        3.7
+         SQL                .0      .0                  .0         .2
+         PL/SQL             .0      .0                  .0         .0
+      66 Q00H --------     3.3     3.0       .0        3.3        5.0
+         Other             2.9                         2.9        3.7
+         PL/SQL             .4      .4                  .4         .4
+         SQL                .1      .0                  .1         .9
+      22 SMON --------     3.3     2.6       .1        3.3        3.3
+         Other             3.1                         3.1        3.1
+         Freeable           .1      .0                  .1
+         SQL                .1      .0                  .1         .6
+         PL/SQL             .0      .0                  .0         .0
+      51 Q002 --------     2.9     2.7       .0        2.9        4.1
+         Other             2.5                         2.5        2.9
+         PL/SQL             .4      .4                  .4         .4
+         SQL                .0      .0                  .0         .8
+      36 M000 --------     2.7     2.4       .0        2.7        3.9
+         Other             2.7                         2.7        3.0
+         SQL                .1      .0                  .1         .9
+         PL/SQL             .0      .0                  .0         .0
+      53 Q004 --------     2.7     2.4       .0        2.7        6.5
+         Other             2.6                         2.6        4.5
+         SQL                .1      .0                  .1        2.0
+         PL/SQL             .0      .0                  .0         .0
+E    109 M003 --------    28.1    25.9       .8       28.1       78.3
+         Other            26.1                        26.1       66.0
+         PL/SQL            1.0     1.0                 1.0        1.7
+         Freeable           .8      .0                  .8
+         SQL                .2      .0                  .2        9.8
+      31 MMON --------    24.0     5.9       .3       24.0       27.1
+         Other            23.2                        23.2       24.0
+         PL/SQL             .3      .3                  .3         .4
+         Freeable           .3      .0                  .3
+         SQL                .2      .0                  .2        2.4
+      39 TT00 --------    19.7    18.2       .0       19.7       19.7
+         Other            19.7                        19.7       19.7
+         PL/SQL             .0      .0                  .0         .0
+      18 DBW0 --------    10.2     8.4      1.1       10.2       10.3
+         Other             9.1                         9.1        9.1
+         Freeable          1.1      .0                 1.1
+         PL/SQL             .0      .0                  .0         .0
+
+Top Process Memory (by component)  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> ordered by Begin/End snapshot, Alloc (MB) desc
+
+                        Alloc   Used   Freeabl     Max      Hist Max
+     PId Category       (MB)    (MB)     (MB)   Alloc (MB) Alloc (MB)
+- ------ ------------- ------- ------- -------- ---------- ----------
+E     35 TNS V1-V3 ---     9.2     5.7      3.1        9.2       44.6
+         Other             5.5                         5.5        6.9
+         Freeable          3.2      .0                 3.2
+         SQL                .3      .0                  .3       34.4
+         PL/SQL             .2      .2                  .2         .2
+     102 M001 --------     8.6     5.3      2.8        8.6        8.6
+         Other             5.4                         5.4        5.4
+         Freeable          2.8      .0                 2.8
+         PL/SQL             .2      .2                  .2         .2
+         SQL                .2      .0                  .2        2.9
+      73 CJQ0 --------     5.0     3.6       .9        5.0        7.0
+         Other             4.0                         4.0        5.1
+         Freeable           .9      .0                  .9
+         SQL                .1      .0                  .1        1.0
+         PL/SQL             .0      .0                  .0         .0
+      17 DIA0 --------     4.9     4.7       .0        4.9        4.9
+         Other             4.9                         4.9        4.9
+         PL/SQL             .0      .0                  .0         .0
+     103 M002 --------     4.2     2.4      1.6        4.2        4.2
+         Other             2.6                         2.6        2.6
+         Freeable          1.6      .0                 1.6
+         SQL                .1      .0                  .1        1.2
+         PL/SQL             .0      .0                  .0         .0
+      38 P001 --------     3.9     1.8       .4        3.9        9.2
+         Other             3.5                         3.5        5.3
+         Freeable           .4      .0                  .4
+         PL/SQL             .0      .0                  .0         .0
+         SQL                .0      .0                  .0        3.4
+      36 M000 --------     3.7     2.5       .9        3.7        3.9
+         Other             2.6                         2.6        2.6
+         Freeable           .9      .0                  .9
+         SQL                .1      .0                  .1         .9
+         PL/SQL             .0      .0                  .0         .0
+      27 LREG --------     3.5     3.1       .1        3.5        4.0
+         Other             3.4                         3.4        3.4
+         Freeable           .1      .0                  .1
+         SQL                .0      .0                  .0         .4
+         PL/SQL             .0      .0                  .0         .0
+      13 DBRM --------     3.4     3.2       .0        3.4        3.9
+         Other             3.3                         3.3        3.7
+         SQL                .0      .0                  .0         .2
+         PL/SQL             .0      .0                  .0         .0
+      22 SMON --------     3.3     2.5       .3        3.3        3.3
+         Other             3.0                         3.0        3.0
+         Freeable           .3      .0                  .3
+         SQL                .1      .0                  .1         .6
+         PL/SQL             .0      .0                  .0         .0
+      74 W007 --------     3.2     3.0       .0        3.2        4.5
+         Other             2.5                         2.5        3.1
+         SQL                .7      .7                  .7        1.4
+         PL/SQL             .0      .0                  .0         .0
+      37 P000 --------     2.6     1.8       .4        2.6        6.4
+         Other             2.2                         2.2        3.1
+
+Top Process Memory (by component)  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> ordered by Begin/End snapshot, Alloc (MB) desc
+
+                        Alloc   Used   Freeabl     Max      Hist Max
+     PId Category       (MB)    (MB)     (MB)   Alloc (MB) Alloc (MB)
+- ------ ------------- ------- ------- -------- ---------- ----------
+E     37 Freeable           .4      .0                  .4
+         PL/SQL             .0      .0                  .0         .0
+         SQL                .0      .0                  .0        2.9
+      19 LGWR --------     2.5     2.1       .0        2.5        2.5
+         Other             2.5                         2.5        2.5
+         PL/SQL             .0      .0                  .0         .0
+      42 W002 --------     2.5     2.3       .0        2.5        2.9
+         Other             2.3                         2.3        2.5
+         SQL                .1      .1                  .1         .4
+         PL/SQL             .0      .0                  .0         .0
+      11 OFSD --------     2.5     2.1       .0        2.5        2.5
+         Other             2.4                         2.4        2.4
+         SQL                .1      .0                  .1         .2
+         PL/SQL             .0      .0                  .0         .0
+      25 RECO --------     2.5     2.1       .1        2.5        2.5
+         Other             2.3                         2.3        2.3
+         SQL                .1      .0                  .1         .2
+         Freeable           .1      .0                  .1
+         PL/SQL             .0      .0                  .0         .0
+          -------------------------------------------------------------
+Enqueue activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> only enqueues with waits are shown
+-> Enqueue stats gathered prior to 10g should not be compared with 10g data
+-> ordered by Wait Time desc, Waits desc
+
+Enqueue Type (Request Reason)
+------------------------------------------------------------------------------
+    Requests    Succ Gets Failed Gets       Waits Wt Time (s)  Av Wt Time(ms)
+------------ ------------ ----------- ----------- ------------ --------------
+KO-Multiple Object Checkpoint (fast object checkpoint)
+          10           10           0           1            0         346.00
+PS-PX Process Reservation
+           8            8           0           1            0           1.00
+          -------------------------------------------------------------
+
+Undo Segment Summary  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Min/Max TR (mins) - Min and Max Tuned Retention (minutes)
+-> STO - Snapshot Too Old count,  OOS - Out Of Space count
+-> Undo segment block stats:
+   uS - unexpired Stolen,   uR - unexpired Released,   uU - unexpired reUsed
+   eS - expired   Stolen,   eR - expired   Released,   eU - expired   reUsed
+
+Undo   Num Undo       Number of  Max Qry     Max Tx Min/Max   STO/  uS/uR/uU/
+ TS# Blocks (K)    Transactions  Len (s)      Concy TR (mins) OOS   eS/eR/eU
+---- ---------- --------------- -------- ---------- --------- ----- -----------
+   2         .6           4,548        0          4 15/15     0/0   0/0/0/0/0/0
+          -------------------------------------------------------------
+
+
+Undo Segment Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Most recent 35 Undostat rows, ordered by End Time desc
+
+                Num Undo    Number of Max Qry  Max Tx Tun Ret STO/  uS/uR/uU/
+End Time          Blocks Transactions Len (s)   Concy  (mins) OOS   eS/eR/eU
+------------ ----------- ------------ ------- ------- ------- ----- -----------
+16-Jul 02:33         602        4,548       0       4      15 0/0   0/0/0/0/0/0
+          -------------------------------------------------------------
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+AQ Background: interrupt              2    0.0             0            4    0.0
+AQ Coord jobx_kwsbgsgn l              4    0.0             0            0
+AQ Message drive state o              2    0.0             0            0
+AQ Sharded master pool l              4    0.0             0            0
+AQ Slave freSlvL_kwsbgsg             14    0.0             0            0
+AQ deq hash table latch               2    0.0             0            0
+AQ process state object              14    0.0             0            0
+ASM db client latch                  86    0.0             0            0
+ASM map operation hash t              2    0.0             0            0
+ASM network state latch               2    0.0             0            0
+ASM remote client latch               2    0.0             0            0
+AWR Alerted Metric Eleme          5,007    0.0             0            0
+Autotask management                   2    0.0             0            0
+Change Notification Hash             42    0.0             0            0
+Column stats entry latch              2    0.0             0            0
+Consistent RBA                      189    0.0             0            0
+DML lock allocation               2,576    0.0             0            0
+Event Group Locks                     6    0.0             0            0
+File State Object Pool P              2    0.0             0            0
+GCS logfile block                     2    0.0             0            0
+GCS logfile write queue               2    0.0             0            0
+Hang Manager wait event               7    0.0             0            0
+I/O Staticstics latch                 2    0.0             0            0
+ILM Stats Stripe Latch                2    0.0             0            0
+ILM Stats main anchor la            337    0.0             0            0
+ILM access tracking exte              2    0.0             0            0
+ILM activity tracking la              2    0.0             0            0
+IM Global dictionary lat              2    0.0             0            0
+IM Global dictionary que              2    0.0             0            0
+IM Global dictionary rw               2    0.0             0            0
+IM area sb latch                      2    0.0             0            0
+IM area scb latch                     2    0.0             0            0
+IM emb latch                          2    0.0             0            0
+IM seg hdr latch                      2    0.0             0            0
+IMFS defer write list                 2    0.0             0            0
+IMXT hash table latch                 2    0.0             0            0
+IPC stats buffer allocat              2    0.0             0            0
+In memory undo latch                202    0.0             0           29    0.0
+JS Sh mem access                     27    0.0             0            0
+JS global state obj latc              2    0.0             0            0
+JS queue access latch                 2    0.0             0            0
+JS queue state obj latch          1,100    0.0             0            0
+JS slv state obj latch                4    0.0             0            0
+KCNIBR - invalid block r              2    0.0             0            0
+KDCStatHash latch                     2    0.0             0            0
+KDFI Buffer Latch                     2    0.0             0            0
+KDFI Hash Bucket Latch                2    0.0             0            0
+KDFI Hash Elem Latch                  2    0.0             0            0
+KDMADO action list latch              2    0.0             0            0
+KDMADO bll latch                      2    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+KDMADO latch                          2    0.0             0            0
+KFC FX Hash Latch                     2    0.0             0            0
+KFC Hash Latch                        2    0.0             0            0
+KFCL LE Freelist                      2    0.0             0            0
+KFIAS client latch                    2    0.0             0            0
+KFIAS cluster latch                   2    0.0             0            0
+KFIAS endpoint latch                  2    0.0             0            0
+KFIAS node latch                      2    0.0             0            0
+KFIAS process latch                   2    0.0             0            0
+KFIAS queue latch                     2    0.0             0            0
+KGNFS-NFS:SHM structure               2    0.0             0            0
+KGNFS-NFS:SVR LIST                    2    0.0             0            0
+KJC message pool KGH cal              2    0.0             0            0
+KJC message pool free li              2    0.0             0            0
+KJC message pool pending              2    0.0             0            0
+KJCT flow control latch               2    0.0             0            0
+KMG MMAN ready and start             42    0.0             0            0
+KSFS OFS ctx level paren              2    0.0             0            0
+KSFS OFS req layer paren              2    0.0             0            0
+KSFS OFS sess layer pare              2    0.0             0            0
+KSFS Receive and Send Qu              2    0.0             0            0
+KSFS id table parent lat              2    0.0             0            0
+KSFS ksfs_node latch                  2    0.0             0            0
+KSFSD name cache parent               2    0.0             0            0
+KSGL LS Segment latch                 2    0.0             0            0
+KSGL SGA anchor latch                 2    0.0             0            0
+KSIPC ASPC anchor latch               2    0.0             0            0
+KSIPC SGA allocation par              4    0.0             0            0
+KSIPCGSN Hash Table latc              2    0.0             0            0
+KSIPCGSN Namespace latch              2    0.0             0            0
+KSK PDB IO STAT                     128    0.0             0            0
+KSRMA SGA anchor latch                2    0.0             0            0
+KSRMF SGA anchor latch                2    0.0             0            0
+KSWL SGA anchor latch                 2    0.0             0            0
+KSXR hang analysis phase              2    0.0             0            0
+KSXR hang analysis phase              2    0.0             0            0
+KTF sga latch                         3    0.0             0           39    0.0
+KTILM latch                           2    0.0             0            0
+KTU in-memory txn table               2    0.0             0            0
+KTURMA ODPSCN latch                   2    0.0             0            0
+KTURMA SGA allocation pa              2    0.0             0            0
+KWQMN job cache list lat              8    0.0             0            0
+KWQP Prop Status                      2    0.0             0            0
+Latch for NonceHistory                2    0.0             0            0
+Locator state objects po              2    0.0             0            0
+Lost write change tracki              2    0.0             0            0
+Lsod array latch                      2    0.0             0            0
+MGA asr alloc latch                   2    0.0             0            0
+MGA heap latch                        2    0.0             0            0
+MGA shared context latch              2    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+MGA shared context root               2    0.0             0            0
+MQL Tracking Latch                    0                    0            5    0.0
+Memory Management Latch               0                    0           42    0.0
+Memory Queue                          2    0.0             0            0
+Memory Queue Message Sub              2    0.0             0            0
+Memory Queue Message Sub              2    0.0             0            0
+Memory Queue Message Sub              2    0.0             0            0
+Memory Queue Message Sub              2    0.0             0            0
+Memory Queue Subscriber               2    0.0             0            0
+Message cache latch                   2    0.0             0            0
+MinActiveScn Latch                    8    0.0             0            0
+Mutex                                 2    0.0             0            0
+Mutex Stats                           2    0.0             0            0
+Nologging Standby SCN Ti             38    0.0             0            0
+OS process                           99    0.0             0            0
+OS process allocation               268    0.4    0.0      0            0
+OS process: request allo             18    0.0             0            0
+PDB Hash Table Latch                225    0.0             0            0
+PDB LRU structure                     2    0.0             0            0
+PL/SQL warning settings              10    0.0             0            0
+PX hash array latch                   2    0.0             0            0
+Parent latch for depende              2    0.0             0            0
+Parent latch for query h              2    0.0             0            0
+Parent latch for segment              2    0.0             0            0
+QMT                                   2    0.0             0            0
+Real-time descriptor lat             17    0.0             0            0
+Report Request stats lat              4    0.0             0            0
+Request holder compeltio              4    0.0             0            0
+Result Cache: RC Latch               83    0.0             0            0
+Result Cache: SO Latch                1    0.0             0            0
+Retry Ht elm latch                    2    0.0             0            0
+Retry bkt latch                       2    0.0             0            0
+SGA IO buffer pool latch            122    0.0             0          122    0.0
+SGA Logging Bkt Latch                 2    0.0             0            0
+SGA Logging Log Latch               174    0.0             0            0
+SGA blob parent                       2    0.0             0            0
+SGA bucket locks                      2    0.0             0            0
+SGA heap locks                        2    0.0             0            0
+SGA pool locks                        2    0.0             0            0
+SO private so latch                  21    0.0             0           10    0.0
+SQL memory manager latch              6    0.0             0           42    0.0
+SQL memory manager worka          4,298    0.0             0            0
+SR Stats Stripe Latch                 2    0.0             0            0
+Sched IM Job latch                    4    0.0             0            0
+Sched InMem Job Cache                 2    0.0             0            0
+Shared B-Tree                         9    0.0             0            0
+Streams Generic                       2    0.0             0            0
+Subscriber Ht elm latch               2    0.0             0            0
+Testing                               2    0.0             0            0
+Token Manager                         2    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+Txn Ht elm latch                      2    0.0             0            0
+Txn bkt latch                         2    0.0             0            0
+UM object latch                       2    0.0             0            0
+WCR: sync                             2    0.0             0            0
+Write State Object Pool               2    0.0             0            0
+X$KSFQP                               1    0.0             0            0
+XDB NFS Security Latch                2    0.0             0            0
+XDB unused session pool               2    0.0             0            0
+XDB used session pool                 2    0.0             0            0
+active checkpoint queue              78    0.0             0            0
+active service list                 628    0.2    0.0      0        9,922    0.0
+archive destination                   4    0.0             0            0
+begin backup scn array                1    0.0             0            0
+buffer pool                           2    0.0             0            0
+business card                         2    0.0             0            0
+cache buffer handles                537    0.0             0            0
+cache buffers chains            202,416    0.0    0.0      0        3,964    0.0
+cache buffers lru chain           3,843    0.0    1.0      0        7,192    0.3
+cache table scan latch               49    0.0             0           49    0.0
+call allocation                   1,662    0.1    0.0      0            0
+change notification clie              2    0.0             0            0
+channel handle pool latc             39    0.0             0            0
+channel operations paren             77    0.0             0            0
+checkpoint queue latch            4,005    0.0             0        2,164    0.0
+client/application info              69    1.4    0.0      0            0
+compile environment latc              3    0.0             0            0
+cp handoff latch                      2    0.0             0            0
+cp pool latch                         2    0.0             0            0
+cp server hash latch                  2    0.0             0            0
+cp sga latch                          2    0.0             0            0
+cp srv type state latch             128    0.0             0            0
+cp srv type wait latch                2    0.0             0            0
+cr slave free list                    2    0.0             0            0
+cvmap freelist lock                   2    0.0             0            0
+deferred cleanup latch                2    0.0             0            0
+dispatcher info                       6    0.0             0            0
+dml lock allocation                 144    0.0             0            0
+done queue latch                      2    0.0             0            0
+dtp latch                            18    0.0             0            0
+dummy allocation                     24    0.0             0            0
+eighth spare latch - X p              2    0.0             0            0
+eleventh spare latch - c              2    0.0             0            0
+enqueue freelist latch                2    0.0             0        5,542    0.0
+enqueue hash chains              10,765    0.0    0.0      0            0
+enqueues                             37    0.0             0            0
+error message lists                   5    0.0             0            0
+fast space usage latch                1    0.0             0            0
+fifteenth spare latch -               2    0.0             0            0
+file cache latch                    225    0.0             0            0
+flash file access latch               2    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+flashback copy                        2    0.0             0            0
+fourteenth spare latch -              2    0.0             0            0
+fourth Audit Vault latch              2    0.0             0            0
+gc element                            2    0.0             0            0
+gcs commit scn state                  2    0.0             0            0
+gcs nodemap pool                      2    0.0             0            0
+gcs opaque info freelist              2    0.0             0            0
+gcs partitioned table ha              2    0.0             0            0
+gcs pcm hashed value buc              2    0.0             0            0
+gcs resource freelist                 2    0.0             0            0
+gcs resource hash                     2    0.0             0            0
+gcs resource scan list                2    0.0             0            0
+gcs resource timerq list              2    0.0             0            0
+gcs resource validate li              2    0.0             0            0
+gcs shadows freelist                  2    0.0             0            0
+ges cached resource list              2    0.0             0            0
+ges domain table                      2    0.0             0            0
+ges enqueue table freeli              2    0.0             0            0
+ges group table                       2    0.0             0            0
+ges process hash list                 2    0.0             0            0
+ges process parent latch              2    0.0             0            0
+ges remote lock freelist              2    0.0             0            0
+ges resource hash list                2    0.0             0            0
+ges resource scan list                2    0.0             0            0
+ges resource table freel              2    0.0             0            0
+ges timeout list                      2    0.0             0            0
+ges value block free lis              2    0.0             0            0
+global tx hash mapping                2    0.0             0            0
+granule from data transf              2    0.0             0            0
+gws:Sharding global desc              8    0.0             0            0
+hash table Sql Plan Find             87    0.0             0          213    0.0
+hash table column usage             529    0.0             0       31,492    0.0
+hash table expression us             11    0.0             0            0
+hash table modification             108    0.0             0            0
+hash table sql contorl l              2    0.0             0            0
+heartbeat check                       2    0.0             0            0
+imc buf hdl lat                       2    0.0             0            0
+imc cr clone buf                      2    0.0             0            0
+imc hash lat                          2    0.0             0            0
+imc sj lat                            2    0.0             0            0
+imc srchsp lat                        2    0.0             0            0
+imc-txn-wrk-lat                       2    0.0             0            0
+in-memory area latch                  2    0.0             0            0
+in-memory columnar segme              2    0.0             0            0
+in-memory columnar ts ex              2    0.0             0            0
+in-memory global pool la              2    0.0             0            0
+interrupt manipulation               10    0.0             0            0
+intra txn parallel recov              2    0.0             0            0
+io pool granule list                  2    0.0             0            0
+io pool granule metadata              6    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+job workq parent latch                2    0.0             0            0
+job_queue_processes para              2    0.0             0            0
+k2q lock allocation                   2    0.0             0            0
+kKCN Cqn SGA                          2    0.0             0            0
+kcb DW scan objtemp hash              2    0.0             0            0
+kcn buffer chains                     2    0.0             0            0
+kdlx hb parent latch                  2    0.0             0            0
+keiut hash table modific              0                    0            2    0.0
+kgb parent                            2    0.0             0            0
+kgnfs mount latch                     2    0.0             0            0
+kjbr roi instance map                 2    0.0             0            0
+kjci objects freelist la              2    0.0             0            0
+kjci process context lat              2    0.0             0          287    0.0
+kjoedcso state object fr              2    0.0             0            0
+kjoeq omni enqueue hash               2    0.0             0            0
+kjoer owner hash bucket               2    0.0             0            0
+kjsca protect pkey hash               2    0.0             0            0
+kjsca protect service ha              2    0.0             0            0
+krso process                          5    0.0             0            0
+ksevn object root latch              42    0.0             0            0
+ksfv messages                         2    0.0             0            0
+ksi resource reuse count              2    0.0             0            0
+ksim group membership ca              2    0.0             0            0
+ksns object latch                     2    0.0             0            0
+kss move lock                         4    0.0             0            0
+ksuosstats global area               19    0.0             0           48    0.0
+ksutcpistat latch                     1    0.0             0            0
+ksv allocation latch                 20    0.0             0            0
+ksv class latch                     132    0.8    0.0      0            0
+ksv msg queue latch                  14    0.0             0           12    0.0
+ksz_so allocation latch              18    5.6    0.0      0            0
+ktfbn latch                           2    0.0             0            0
+ktm adg jrnls                         2    0.0             0            0
+ktm adg lookuptable leve              2    0.0             0            0
+ktm adg lookuptable leve              2    0.0             0            0
+ktm adg space                         2    0.0             0            0
+ktm adg stages                        2    0.0             0            0
+ktm adg worklink                      2    0.0             0            0
+ktm global data                       9    0.0             0            0
+ktm prv jrnls                         2    0.0             0            0
+ktmpj HT ls                           2    0.0             0            0
+kwqbsn:qsga                           6    0.0             0            0
+kwslbmdl: metadata latch              6    0.0             0            0
+kwslbql: queue latch                  2    0.0             0            0
+kwslbutl: uncommitted tx              2    0.0             0            0
+kwsptQcachLt: queue cach              2    0.0             0            0
+kwsptTrncTsksLt: trunc t              2    0.0             0            0
+kwsptjobAdPtLt: AdPt lis              3    0.0             0            0
+kwsslLat: skiplist latch              2    0.0             0            0
+kxfxscanrate_latch                    2    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+lgwr LWN SCN                        228    0.0             0            0
+list of block allocation             42    0.0             0            0
+loader state object free             74    0.0             0            0
+lob segment dispenser la            105    0.0             0            0
+lob segment hash table l             21    0.0             0            0
+lob segment query latch               3    0.0             0            0
+lock DBA buffer during m              2    0.0             0            0
+log write info                        0                    0          189    0.0
+log write worker phase               24    0.0             0            0
+logical standby cache                 2    0.0             0            0
+logminer context allocat              2    0.0             0            0
+logminer local                        2    0.0             0            0
+logminer work area                    2    0.0             0            0
+longop free list parent               2    0.0             0            0
+managed standby                       4    0.0             0            0
+message bitmap latch                  2    0.0             0            0
+message pool operations               5    0.0             0            0
+messages                          2,338    0.1    0.0      0            0
+msg queue latch                       2    0.0             0            0
+multiblock read objects             126    0.0             0            0
+name-service namespace b              2    0.0             0            0
+ncodef allocation latch               2    0.0             0            0
+ninth spare latch - X pa              2    0.0             0            0
+object queue header free            733    0.0             0            0
+object queue header oper         15,898    0.0             0            0
+object queue memory                  88    0.0             0            0
+object stats modificatio          1,414    0.0             0            0
+parallel query alloc buf             18    0.0             0           16    0.0
+parallel query stats                  7    0.0             0            0
+parameter table manageme             22    0.0             0            0
+pdb enqueue hash chains               2    0.0             0            0
+peshm                                 2    0.0             0            0
+pesom_free_list                       2    0.0             0            0
+pesom_hash_node                       2    0.0             0            0
+pkey global statistics                2    0.0             0            0
+pmon dead latch                       2    0.0             0            0
+post/wait queue                     417    0.2    0.0      0          491    0.2
+process allocation                   19    0.0             0            0
+process group creation               18    0.0             0            0
+process memory detail                 2    0.0             0            0
+process pkey statistics               2    0.0             0            0
+process queue                        12    0.0             0            0
+process queue reference             242    0.0             0           22  454.5
+qmn task queue latch                 16    0.0             0            0
+quarantine object                     2    0.0             0            0
+query server freelists               13    0.0             0            0
+query server process                 94    0.0             0            0
+queued dump request                   1    0.0             0            0
+queuing load statistics               2    0.0             0            0
+read-moslty lock queue u              2    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+recovery domain hash buc              2    0.0             0            0
+redo allocation                     710    0.1    1.0      0       12,509    0.0
+redo copy                             2    0.0             0       12,511    0.1
+redo transport task                   1    0.0             0            0
+redo writing                        732    0.0             0            0
+remote tool request latc             19    0.0             0            0
+resmgr group change latc             16    0.0             0            0
+resmgr:active threads                34    0.0             0            2    0.0
+resmgr:actses change gro             19    0.0             0            0
+resmgr:actses change sta              9    0.0             0            0
+resmgr:free threads list             22    0.0             0            0
+resmgr:plan CPU method                2    0.0             0            0
+resmgr:plan change alloc              2    0.0             0            0
+resmgr:plan change latch              2    0.0             0            0
+resmgr:resource group CP              2    0.0             0            0
+resmgr:schema config                  7    0.0             0            2    0.0
+resmgr:session queuing                2    0.0             0            0
+row cache objects                     2    0.0             0            0
+rules engine rule set st            100    0.0             0            0
+second Audit Vault latch              2    0.0             0            0
+sequence cache                        8    0.0             0            0
+service drain list                  125    0.0             0            0
+session allocation                  118    0.0             0           81    0.0
+session idle bit                    257    0.0             0            0
+session queue latch                   2    0.0             0            0
+session state list latch              8    0.0             0            0
+session statistics                   25    0.0             0            0
+session switching                    21    0.0             0            0
+session timer                        42    0.0             0            0
+seventh spare latch - X               2    0.0             0            0
+sga hash table parent la              5    0.0             0            0
+shard latch                           2    0.0             0            0
+shardgroup list latch               670    0.0             0            0
+shared pool                      69,992    0.2    0.2      0            0
+shared pool sim alloc                45    0.0             0            0
+shared pool simulator             3,641    0.0             0            0
+shared server configurat             46    0.0             0            0
+sim partition latch                   2    0.0             0            0
+simulator hash latch              9,529    0.0             0            0
+simulator lru latch               3,423    0.0             0        5,652    0.0
+sixth spare latch - X pa              2    0.0             0            0
+sort extent pool                     22    0.0             0            0
+space background task la            241   15.4    0.6      0          138    0.0
+state object free list                2    0.0             0            0
+statistics aggregation              174    0.0             0            0
+subscriber Ht bkt                     2    0.0             0            0
+tablespace key chain                  2    0.0             0            0
+temp lob duration state               6    0.0             0            0
+tenth spare latch - X pa              2    0.0             0            0
+test excl. parent l0                  2    0.0             0            0
+Latch Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+test excl. parent2 l0                 2    0.0             0            0
+test excl. parent2 lmid               2    0.0             0            0
+test mixed exclusive                  2    0.0             0            0
+test mode exclusive                   2    0.0             0            0
+test open exclusive                   2    0.0             0            0
+test pdb exclusive                    2    0.0             0            0
+test shared parent2 lmid              2    0.0             0            0
+thirteenth spare latch -              2    0.0             0            0
+threshold alerts latch                3    0.0             0            0
+transaction allocation              350    0.0             0            0
+twelfth spare latch - ch              2    0.0             0            0
+twenty-fifth spare latch              2    0.0             0            0
+twenty-first spare latch              2    0.0             0            0
+twenty-fourth spare latc              2    0.0             0            0
+twenty-second spare latc              2    0.0             0            0
+twenty-third spare latch              2    0.0             0            0
+undo global data                  4,001    0.0             0            0
+virtual circuit buffers               2    0.0             0            0
+virtual circuit holder                2    0.0             0            0
+virtual circuit queues                2    0.0             0            0
+          -------------------------------------------------------------
+Latch Sleep breakdown  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> ordered by misses desc
+
+                                       Get                                 Spin
+Latch Name                        Requests       Misses      Sleeps        Gets
+-------------------------- --------------- ------------ ----------- -----------
+shared pool                         69,992          160          27         136
+space background task latc             241           37          21          16
+cache buffers lru chain              3,843            1           1           0
+redo allocation                        710            1           1           0
+          -------------------------------------------------------------
+Latch Miss Sources  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> only latches with sleeps are shown
+-> ordered by name, sleeps desc
+
+                                                     NoWait              Waiter
+Latch Name               Where                       Misses     Sleeps   Sleeps
+------------------------ -------------------------- ------- ---------- --------
+cache buffers lru chain  kcbzgws                          0          1        0
+redo allocation          kcrfw_redo_write: before w       0          1        0
+space background task la ktsj_detach_task                 0         12        0
+space background task la ktsj_grab_task                   0          9       21
+unknown latch            kghalp                           0         12        9
+unknown latch            kghalo                           0         12       11
+unknown latch            kghfrunp: no latch               0          1        0
+unknown latch            kgh_heap_sizes                   0          1        0
+unknown latch            kghupr1                          0          1        6
+          -------------------------------------------------------------
+Mutex Sleep  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> ordered by Wait Time desc
+
+                                                                         Wait
+Mutex Type         Location                                 Sleeps     Time (s)
+------------------ -------------------------------- -------------- ------------
+Cursor Pin         kkslce [KKSCHLPIN2]                          10          0.0
+          -------------------------------------------------------------
+Segments by Logical Reads  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Segment Logical Reads Threshold:     10000
+-> Pct Total shows % of logical reads for each top segment compared with total
+   logical reads for all segments captured by the Snapshot
+
+                                           Subobject    Obj.       Logical   Pct
+Owner      Tablespace Object Name          Name         Type         Reads Total
+---------- ---------- -------------------- ------------ ----- ------------ -----
+PERFSTAT   STATS      STATS$SQL_PLAN_USAGE              TABLE      104,688  57.0
+SYS        SYSTEM     SUBCOLTYPE$                       TABLE       48,720  26.5
+SYS        SYSTEM     I_CCOL1                           INDEX       11,312   6.2
+SYS        SYSTEM     I_HH_OBJ#_INTCOL#                 INDEX        4,816   2.6
+SYS        SYSTEM     AUD_OBJECT_OPT$                   TABLE        4,336   2.4
+          -------------------------------------------------------------
+
+
+Segments by Physical Reads  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> End Segment Physical Reads Threshold:      1000
+
+                                           Subobject    Obj.      Physical   Pct
+Owner      Tablespace Object Name          Name         Type         Reads Total
+---------- ---------- -------------------- ------------ ----- ------------ -----
+SYS        SYSTEM     SUBCOLTYPE$                       TABLE        1,838  54.2
+SYS        SYSTEM     OBJ$                              TABLE        1,205  35.5
+SYS        SYSTEM     IDL_UB1$                          TABLE          220   6.5
+SYS        SYSTEM     SEG$                              TABLE           61   1.8
+SYS        SYSTEM     I_CCOL1                           INDEX           38   1.1
+          -------------------------------------------------------------
+Dictionary Cache Stats  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Pct Misses"  should be very low (< 2% in most cases)
+->"Final Usage" is the number of cache entries being used in End Snapshot
+
+                                   Get    Pct    Scan   Pct      Mod      Final
+Cache                         Requests   Miss    Reqs  Miss     Reqs      Usage
+------------------------- ------------ ------ ------- ----- -------- ----------
+dc_awr_control                       6    0.0       0              2          1
+dc_global_oids                      30   30.0       0              0         14
+dc_histogram_data                  462   44.4       0              0        591
+dc_histogram_defs               11,919   30.2       0              0      4,330
+dc_objects                       6,193    5.2       0              0      1,972
+dc_profiles                          7    0.0       0              0          1
+dc_props                           109    0.0       0              0         85
+dc_rollback_segments               130    0.0       0              0         45
+dc_segments                      1,013   39.2       0            241        471
+dc_sequences                         1  100.0       0              1          2
+dc_statistics_status                44  100.0       0              0          0
+dc_tablespace_quotas                89    0.0       0              0          1
+dc_tablespaces                     549    0.5       0              0          6
+dc_users                        58,256    0.0      28   0.0        0        187
+          -------------------------------------------------------------
+
+
+Library Cache Activity  DB/Inst: ORCL/orcl  Snaps: 1-2
+->"Pct Misses"  should be very low
+
+                         Get  Pct        Pin        Pct               Invali-
+Namespace           Requests  Miss     Requests     Miss     Reloads  dations
+--------------- ------------ ------ -------------- ------ ---------- --------
+AUDIT POLICY              14    0.0             14   14.3          2        0
+BODY                      14   28.6             21   28.6          1        0
+CLUSTER                  103    2.9            101    4.0          1        0
+EDITION                    1    0.0              2   50.0          1        0
+INDEX                     75  100.0             75  100.0          0        0
+SCHEMA                   617    0.0              0                 0        0
+SQL AREA               1,998   53.6         17,272   10.0        394       54
+SQL AREA BUILD           718   74.8              0                 0        0
+SQL AREA STATS           585   71.8            585   71.8          0        0
+TABLE/PROCEDURE        3,031   18.7          6,059   22.8        453        0
+          -------------------------------------------------------------
+Rule Sets  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> * indicates Rule Set activity (re)started between Begin/End snaps
+-> Top 25 ordered by Evaluations desc
+
+                                                               No-SQL  SQL
+Rule                                *     Eval/sec Reloads/sec Eval % Eval %
+----------------------------------- - ------------ ----------- ------ ------
+SYS.ALERT_QUE_R                                  0           0      0      0
+          -------------------------------------------------------------
+Shared Pool Advisory  DB/Inst: ORCL/orcl  End Snap: 2
+-> SP: Shared Pool     Est LC: Estimated Library Cache   Factr: Factor
+-> Note there is often a 1:Many correlation between a single logical object
+   in the Library Cache, and the physical number of memory objects associated
+   with it.  Therefore comparing the number of Lib Cache objects (e.g. in
+   v$librarycache), with the number of Lib Cache Memory Objects is invalid
+
+                                        Est LC Est LC  Est LC Est LC
+    Shared    SP   Est LC                 Time   Time    Load   Load      Est LC
+      Pool  Size     Size       Est LC   Saved  Saved    Time   Time         Mem
+  Size (M) Factr      (M)      Mem Obj     (s)  Factr     (s)  Factr    Obj Hits
+---------- ----- -------- ------------ ------- ------ ------- ------ -----------
+       252    .9        1          598     783     .5     765   23.2      49,949
+       256    .9        8        1,040   1,030     .7     518   15.7      65,830
+       260    .9       11        1,188   1,083     .7     465   14.1      74,329
+       264    .9       14        1,370   1,188     .8     360   10.9      77,568
+       268    .9       17        1,598   1,223     .8     325    9.8      80,528
+       272   1.0       20        1,773   1,311     .9     237    7.2      83,265
+       276   1.0       23        1,990   1,347     .9     201    6.1      86,109
+       280   1.0       26        2,175   1,439     .9     109    3.3      89,041
+       284   1.0       29        2,350   1,515    1.0      33    1.0      92,842
+       288   1.0       32        2,575   1,515    1.0      33    1.0      92,941
+       292   1.0       34        2,727   1,516    1.0      32    1.0      92,991
+       296   1.0       37        2,871   1,516    1.0      32    1.0      93,029
+       300   1.1       41        3,066   1,516    1.0      32    1.0      93,046
+       304   1.1       45        3,209   1,516    1.0      32    1.0      93,071
+       308   1.1       49        3,441   1,516    1.0      32    1.0      93,113
+       312   1.1       53        3,690   1,518    1.0      30     .9      93,153
+       316   1.1       57        3,878   1,518    1.0      30     .9      93,175
+       320   1.1       61        4,095   1,518    1.0      30     .9      93,191
+       348   1.2       89        4,939   1,529    1.0      19     .6      93,553
+       380   1.3      121        7,647   1,536    1.0      12     .4      93,697
+       412   1.5      153        8,827   1,539    1.0       9     .3      93,775
+       444   1.6      184       10,268   1,541    1.0       7     .2      93,797
+       476   1.7      184       10,268   1,541    1.0       7     .2      93,797
+       508   1.8      184       10,268   1,541    1.0       7     .2      93,797
+       540   1.9      184       10,268   1,541    1.0       7     .2      93,797
+       572   2.0      184       10,268   1,541    1.0       7     .2      93,797
+          -------------------------------------------------------------
+SGA Target Advisory  DB/Inst: ORCL/orcl  End Snap: 2
+
+SGA Target SGA Size   Est DB      Est DB   Est Physical
+  Size (M)   Factor Time (s) Time Factor          Reads
+---------- -------- -------- ----------- --------------
+       408      1.0      241         1.0         25,317
+       510      1.3      154          .6         17,932
+       612      1.5      140          .6         17,932
+       714      1.8      139          .6         17,932
+       816      2.0      139          .6         17,932
+          -------------------------------------------------------------
+SGA Memory Summary  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+                                                        End Size (Bytes)
+SGA regions                      Begin Size (Bytes)       (if different)
+------------------------------ -------------------- --------------------
+Database Buffers                        100,663,296
+Fixed Size                                9,139,032
+Redo Buffers                              7,634,944
+Variable Size                           608,174,080
+                               -------------------- --------------------
+sum                                     725,611,352
+          -------------------------------------------------------------
+
+
+SGA breakdown difference  DB/Inst: ORCL/orcl  Snaps: 1-2
+-> Top 35 rows by size, ordered by Pool, Name (note rows with null values for
+   Pool column, or Names showing free memory are always shown)
+-> Null value for Begin MB or End MB indicates the size of that Pool/Name was
+   insignificant, or zero in that snapshot
+
+Pool   Name                                 Begin MB         End MB  % Diff
+------ ------------------------------ -------------- -------------- --------
+java p free memory                               4.0            4.0     0.00
+large  PX msg pool                                .5             .5     0.00
+large  free memory                               7.5            7.5     0.00
+shared ASH buffers                               4.0            4.0     0.00
+shared KCB Table Scan Buffer                     3.8            3.8     0.00
+shared KGLH0                                    16.9           18.0     6.52
+shared KGLHD                                     3.7            3.9     4.94
+shared KGLS                                      6.1            9.2    49.95
+shared KGLSG                                     5.0            5.0     0.00
+shared KKSSP                                     3.2                 -100.00
+shared KQR X PO                                  5.2            5.4     4.36
+shared KSFD SGA I/O b                            3.8            3.8     0.00
+shared KSKQ master CG stats seg                  3.5            3.5     0.00
+shared KTI-UNDO                                  3.8            3.8     0.00
+shared PLDIA                                     5.4                 -100.00
+shared SGA PDB Info Array                        3.3            3.3     0.00
+shared SO private sga                            7.4            7.4     0.00
+shared SQLA                                     12.5           14.4    14.75
+shared VIRTUAL CIRCUITS                          2.9            2.9     0.00
+shared free memory                              35.1           32.8    -6.55
+shared kghrcx batch                              2.8            2.8     0.00
+shared kglsim hash table bkts                    4.0            4.0     0.00
+shared ksipc state object                        3.2            3.2     0.00
+shared ksunfy_meta 1                            12.0           12.0     0.00
+shared message pool freequeue                    2.9            2.9     0.00
+shared obj stats allocation chun                 4.9            4.9     0.00
+shared parameter table block                     3.0                 -100.00
+shared private strands                           6.6            6.6     0.00
+shared row cache hash                            5.7            5.7     0.00
+shared row cache mutex                           8.6            8.6     0.00
+shared row cache mutex versions                  2.9            2.9     0.00
+shared session                                   4.6            4.6     0.00
+       buffer_cache                             84.0           84.0     0.00
+       fixed_sga                                 8.7            8.7     0.00
+       log_buffer                                7.3            7.3     0.00
+       shared_io_pool                           12.0           12.0     0.00
+          -------------------------------------------------------------
+SQL Memory Statistics  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+                                   Begin            End         % Diff
+                          -------------- -------------- --------------
+   Avg Cursor Size (KB):           25.39          25.23           -.63
+ Cursor to Parent ratio:            1.49           1.49           -.07
+          Total Cursors:             729            833          12.48
+          Total Parents:             488            558          12.54
+          -------------------------------------------------------------
+init.ora Parameters  DB/Inst: ORCL/orcl  Snaps: 1-2
+
+                                                                  End value
+Parameter Name                Begin value                       (if different)
+----------------------------- --------------------------------- --------------
+audit_file_dest               /u01/app/oracle/admin/orcl/adump
+audit_trail                   DB
+compatible                    19.0.0
+control_files                 /u01/app/oracle/oradata/ORCL/cont
+                              rol01.ctl, /u01/app/oracle/oradat
+                              a/ORCL/control02.ctl
+db_block_size                 8192
+db_name                       orcl
+diagnostic_dest               /u01/app/oracle
+dispatchers                   (PROTOCOL=TCP) (SERVICE=orclXDB)
+enable_pluggable_database     TRUE
+local_listener                LISTENER_ORCL
+memory_target                 725614592
+nls_language                  AMERICAN
+nls_territory                 AMERICA
+open_cursors                  300
+processes                     300
+remote_login_passwordfile     EXCLUSIVE
+undo_tablespace               UNDOTBS1
+          -------------------------------------------------------------
+
+End of Report ( sp_20190716_1_1-2.lst )
+

@@ -1,0 +1,18 @@
+https://qiita.com/mkyz08/items/729545aab4751f3002d0
+
+
+
+conn / as sysdba
+@?/rdbms/admin/spdrop.sql
+alter session set "_oracle_script" = TRUE;
+@?/rdbms/admin/spcreate.sql
+
+conn sys/oracle@pdb1 as sysdba
+define default_tablespace='STATS01'
+define temporary_tablespace='TEMP'
+define perfstat_password='perfstat'
+@?/rdbms/admin/spcreate.sql
+
+
+alter session set "_oracle_script" = FALSE;
+

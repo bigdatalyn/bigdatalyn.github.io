@@ -357,6 +357,30 @@ About the size of soe tables/indexes
 
 ### Test ScaleUp cpu cores
 
+Test command:
+
+	./charbench -c ../configs/SOE_Server_Side_V2.xml \
+	-v users,tpm,tps \
+	-intermin 0 \
+	-intermax 0 \
+	-min 0 \
+	-max 0 \
+	-uc 32 \
+	-di SQ,WQ,WA \
+	-cf ~/Wallet_ATPDEMO.zip \
+	-cs atpdemo_tp \
+	-u soe \
+	-p Welcome#2019 \
+	-v user,tpm,tps \
+	-intermin 0 \
+	-intermax 0 \
+	-uc 32 \
+	-di SQ,WQ,WA \
+	-rt 0:10.30
+
+Scale Up/Down: set CPU core count from 2 to 4.
+
+
 ![ATP]({{ "/files/Oracle/ADB/charbench_scaleup.png"}})
 
 

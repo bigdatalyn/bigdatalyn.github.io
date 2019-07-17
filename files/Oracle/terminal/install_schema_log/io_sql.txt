@@ -1,0 +1,47 @@
+WITH /*+MONITOR */
+SACOMMON1340 AS
+( select sum(T220.AMOUNT_SOLD) as c1, sum(T220.QUANTITY_SOLD) as c2,
+T147.CHANNEL_CLASS as c3, T228.CALENDAR_QUARTER_DESC as c4,
+T228.CALENDAR_YEAR as c5, T185.PROD_CATEGORY as c6
+from CHANNELS T147, PRODUCTS T185,
+SALES T220, TIMES T228
+where ( T220.TIME_ID < to_date('2014/01/01','YYYY/MM/DD')
+and T228.TIME_ID = T220.TIME_ID
+and T147.CHANNEL_ID = T220.CHANNEL_ID
+and T185.PROD_ID = T220.PROD_ID)
+group by T147.CHANNEL_CLASS,
+T185.PROD_CATEGORY,
+T228.CALENDAR_QUARTER_DESC,
+T228.CALENDAR_YEAR),
+SAWITH0 AS
+( select distinct 0 as c1, D1.c3 as c2, D1.c4 as c3, D1.c5 as c4,
+D1.c6 as c5, D1.c2 as c6, D1.c1 as c7, cast(NULL as DOUBLE PRECISION ) as c8
+from SACOMMON1340 D1),
+SAWITH1 AS
+( select D1.c1 as c1, D1.c2 as c2, D1.c3 as c3, D1.c4 as c4,
+D1.c5 as c5, D1.c6 as c6, D1.c7 as c7, D1.c8 as c8, sum(D1.c7) as c9
+from SAWITH0 D1
+group by D1.c1, D1.c2, D1.c3, D1.c4, D1.c5, D1.c6, D1.c7, D1.c8),
+SAWITH2 AS
+( select distinct 1 as c1, D1.c3 as c2, D1.c4 as c3, D1.c5 as c4,
+D1.c6 as c5, D1.c2 as c6, D1.c1 as c7
+from SACOMMON1340 D1),
+SAWITH3 AS
+( select D1.c1 as c1, D1.c2 as c2, D1.c3 as c3, D1.c4 as c4,
+D1.c5 as c5, D1.c6 as c6, D1.c7 as c7, sum(D1.c6) as c8, sum(D1.c7) as c9
+from SAWITH2 D1
+group by D1.c1, D1.c2, D1.c3, D1.c4, D1.c5, D1.c6, D1.c7),
+SAWITH4 AS
+(( select D1.c1 as c1, D1.c2 as c2, D1.c3 as c3, D1.c4 as c4, D1.c5 as c5,
+D1.c6 as c6, D1.c7 as c7, D1.c8 as c8,
+sum(D1.c9) over (partition by D1.c3, D1.c4, D1.c5) as c9
+from SAWITH1 D1
+union all
+select D1.c1 as c1, D1.c2 as c2, D1.c3 as c3, D1.c4 as c4, D1.c5 as c5,
+D1.c6 as c6, D1.c7 as c7,
+sum(D1.c8) over (partition by D1.c3, D1.c4, D1.c5) as c8,
+sum(D1.c9) over (partition by D1.c3, D1.c4, D1.c5) as c9
+from SAWITH3 D1 ))
+select D1.c1 as c1, D1.c2 as c2, D1.c3 as c3, D1.c4 as c4, D1.c5 as c5,
+D1.c6 as c6, D1.c7 as c7, D1.c8 as c8, D1.c9 as c9
+from SAWITH4 D1 order by c1, c3, c5, c4;
