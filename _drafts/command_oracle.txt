@@ -1,0 +1,151 @@
+
+### Find
+
+-- find only current directory
+find . -maxdepth 1 -type f -name "*.dmp"
+
+--Linux find/search root partition ONLY
+find / -xdev -type f -size +100M -exec ls -la {} \; | sort -nk 5
+
+--search for huge files:
+find / -type f -size +800M -exec ls -lh {} \; | awk '{ print $NF ": " $5 }'
+
+--rename_all_files
+find /var/lib/mysql -type f -name "ib_logfile?" -exec mv {} {}_OLD \;
+
+
+
+### save perm and owner
+
+--https://www.dbarj.com.br/en/2018/06/protecting-oracle-database-binaries-against-malicious-changes/
+
+$ ORACLE_HOME=/u01/app/oracle/product/18.0.0/dbhome_1
+$ cd $ORACLE_HOME
+$ find -depth -printf '%m:%u:%g:%p\0' |
+awk -v RS='\0' -F: '
+BEGIN {
+    print "#!/bin/sh";
+    print "set -e";
+    q = "\047";
+}
+{
+    gsub(q, q q "\\" q);
+    f = $0;
+    sub(/^[^:]*:[^:]*:[^:]*:/, "", f);
+    print "chown --", q $2 ":" $3 q, q f q;
+    print "chmod", $1, q f q;
+}' > original-permissions.sh
+
+### Date
+
+date "+%Y%m%dT%H%M%S"
+
+### meminfo
+
+awk '/Hugepagesize:/{p=$2}/ 0 /{next}/ kB$/{v[sprintf("%9d GB %-s",int($2/1024/1024),$0)]=$0;next}{h[$0]=$2}END{for(k in v) print k;for (k in h) print sprintf("%9d GB %-s",p*h[k]/1024/1024,k)}' /proc/meminfo|sort -nr|grep --color=auto -E "^|.*(Huge.*_[TF]|Mem).*:|" #awk #meminfo
+
+### du
+
+
+#du -ch . --max-depth=1 
+
+-c, --total produce a grand total
+-h, --human-readable print sizes in human readable format (e.g., 1K 234M 2G)
+--max-depth=, which instructs du to list its subdirectories and their sizes to any desired level of depth (i.e., to any level of subdirectories) in a directory tree
+
+-- find only root fs usage.
+
+#du -k -x / | sort -rn | more
+
+
+### sql monitor
+
+--https://jonathanlewis.wordpress.com/2018/04/06/sql-monitor/
+set linesize 255
+set pagesize 200
+set trimspool on
+set long 200000
+ 
+column text_line format a254
+set heading off
+ 
+define m_sql_id = 'fssk2xabr717j'
+ 
+spool rep_mon
+ 
+SELECT  dbms_sqltune.report_sql_monitor(
+                sql_id=> v.sql_id,
+                sql_exec_id => v.max_sql_exec_id
+        ) text_line
+from     (
+        select
+                sql_id,
+                max(sql_exec_id)        max_sql_exec_id
+        from
+                v$sql_monitor
+        where
+                sql_id = '&m_sql_id'
+        and     status like 'DONE%'
+        group by
+                sql_id
+        )       v
+;
+ 
+spool off
+ 
+set heading on
+set linesize 132
+set pagesize 60
+
+------
+
+SELECT DBMS_SQLTUNE.report_sql_monitor(
+  sql_id       => '0hnujnc0a8b9j',
+  sql_exec_id  => 67108864
+  type         => 'TEXT',
+  report_level => 'ALL') AS report
+FROM dual;
+
+--Or if you want to generate the EM Active SQL Monitor Report (my recommendation) from any SQL_ID you can use:
+set pagesize 0 echo off timing off linesize 1000 trimspool on trim on long 2000000 longchunksize 2000000 feedback off
+spool sqlmon_4vbqtp97hwqk8.html
+select dbms_sqltune.report_sql_monitor(
+  type=>'EM', 
+  sql_id=>'4vbqtp97hwqk8') monitor_report from dual;
+spool off
+
+SET LONG 1000000 
+SET FEEDBACK OFF
+spool monitor_sql.html 
+SELECT DBMS_SQLTUNE.report_sql_monitor(sql_id =>'0tqfh0cggfg0v',type=> 'HTML')
+AS report FROM dual;
+spool off
+
+--How to Collect SQL Monitor Output For Parallel Query (Doc ID 1604469.1)
+SELECT DBMS_SQLTUNE.REPORT_SQL_MONITOR(SESSION_ID=>&1,
+              SESSION_SERIAL=>&2,    
+              INST_ID=>&3,
+              report_level=>'ALL',
+              type =>'ACTIVE') as report 
+from dual;
+
+SELECT DBMS_SQLTUNE.report_sql_monitor(
+  sql_id       => 'ghc9z7q3qzr7w',
+  event_detail => 'YES',
+  sql_exec_id  => null,
+  type         => 'EM',
+  report_level => 'ALL') AS report
+FROM dual;
+
+----
+POOL	report_sql_monitor_acIve.htm
+SELECT	DBMS_SQLTUNE.report_sql_monitor(	
+		sql_id=>'1kf86hqsyvddb’,
+		type=>	'ACTIVE',	
+		report_level=>'ALL') AS report	
+FROM	dual;	
+SPOOL	OFF	
+
+---http://www.anbob.com/archives/3362.html
+select dbms_sqltune.report_sql_monitor(sql_id=>'&sql_id',report_level=>'ALL',type=>'text') from dual; 
+
