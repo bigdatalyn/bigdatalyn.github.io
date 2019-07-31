@@ -120,26 +120,33 @@ ${变量//旧字符串/新字符串}	|	若变量内容符合『旧字符串』�
 
 ### 变量
 
-env 	列出目前shell环境下的所有全局变量
-set 	查看所有变量，包括环境变量和局部变量
+env | 列出目前shell环境下的所有全局变量
+set | 查看所有变量，包括环境变量和局部变量
 
 
 read	从键盘读取数据存入变量
+
 	read -p "plz input yourname:" -t 30 name 按下回车输入变量name的值，会等待30s结束
 
 ### 数组
 	
 array
+
 数组的设定	
+
 	A[0]=1;A[1]=2;A[2]=3
 	A=(1 2 3)
 	A=(1 2 3 [50]=4)
 	A=(1 2 3 [50]=4 5)
+	
 数组的读取	
+
 	echo ${A[0]}
 	echo ${A[@]}
 	echo ${A[*]}
+	
 * 代表的是一次取出所有的值 ,@ 代表依次取值
+
 	for i in "${A[@]}";do echo $i;done
 	for i in "${A[*]}";do echo $i;done
 
@@ -177,12 +184,14 @@ declare
 ### 重定向
 
 用法总结			
+
 	1> :以覆盖的方法将『正确的数据』输出到指定的文件中；
 	1>>:以追加的方法将『正确的数据』输出到指定的文件中；
 	2> :以覆盖的方法将『错误的数据』输出到指定的文件中；
 	2>>:以追加的方法将『错误的数据』输出到指定的文件中；
 
 cat	从键盘读取数据存入文件
+
 	cat > /tmp/catfile 以ctrl+d结束
 	cat > /tmp/catfile < /tmp/passwd
 	cat > /tmp/catfile	<< ENDF
@@ -448,56 +457,57 @@ until condition --> 不满足 condition, 则执行 cmd
 
 ####
 
-[lin@localhost ~]$ cat cmd.sh
-#!/bin/bash
+	[lin@localhost ~]$ cat cmd.sh
+	#!/bin/bash
 
-SLEEP()
-{
-  sleep $1
-}
+	SLEEP()
+	{
+	  sleep $1
+	}
 
-DIR()
-{
-  ls -ld $1
-  ls -l $1
-}
+	DIR()
+	{
+	  ls -ld $1
+	  ls -l $1
+	}
 
-RM()
-{
-  rm -rf $1
-}
+	RM()
+	{
+	  rm -rf $1
+	}
 
-case $1 in
--t)
-  SLEEP $2;;
--l)
-  DIR $2;;
--r)
-  RM $2;;
---help)
-  echo "Usage: ls [-t|-l|-r] name";;
-*)
-  echo "Usage: ls [-t|-l|-r] name";;
-esac
+	case $1 in
+	-t)
+	  SLEEP $2;;
+	-l)
+	  DIR $2;;
+	-r)
+	  RM $2;;
+	--help)
+	  echo "Usage: ls [-t|-l|-r] name";;
+	*)
+	  echo "Usage: ls [-t|-l|-r] name";;
+	esac
 
 
-[lin@localhost ~]$
+	[lin@localhost ~]$
 
 ### 正则表达式
 
 特殊字符 	代表意义
-	[:alnum:] 代表英文大小写字符及数字 ,0-9, A-Z, a-z
-	[:alpha:] 代表任何英文大小写字符 , A-Z, a-z
-	[:lower:] 代表小写字符 , a-z
-	[:upper:] 代表大写字符 ,A-Z
-	[:digit:] 代表数字而已 , 0-9
-	[:xdigit:] 代表 16 进制数字 , 因此包括 : 0-9, A-F, a-f
-	[:blank:] 代表空格键和 [Tab] 按键
-	[:space:] 任何会产生空白的字符,包括空格键 , [Tab], CR 等等
-	[:graph:] 除了空格键 ( 空格键和 [Tab] ) 外的其他所有按键
-	[:cntrl:] 代表键盘上面的控制按键 , 包括 CR, LF, Tab, Del.. 等等
-	[:print:] 代表任何可以被打印出来的字符
-	[:punct:] 代表标点符号 (punctuation symbol) :" ' ? ! ; : # $...
+
+	[:alnum:] | 代表英文大小写字符及数字 ,0-9, A-Z, a-z
+	[:alpha:] | 代表任何英文大小写字符 , A-Z, a-z
+	[:lower:] | 代表小写字符 , a-z
+	[:upper:] | 代表大写字符 ,A-Z
+	[:digit:] | 代表数字而已 , 0-9
+	[:xdigit:] | 代表 16 进制数字 , 因此包括 : 0-9, A-F, a-f
+	[:blank:] | 代表空格键和 [Tab] 按键
+	[:space:] | 任何会产生空白的字符,包括空格键 , [Tab], CR 等等
+	[:graph:] | 除了空格键 ( 空格键和 [Tab] ) 外的其他所有按键
+	[:cntrl:] | 代表键盘上面的控制按键 , 包括 CR, LF, Tab, Del.. 等等
+	[:print:] | 代表任何可以被打印出来的字符
+	[:punct:] | 代表标点符号 (punctuation symbol) :" ' ? ! ; : # $...
 
 非打印字符
 非打印字符也可以是正则表达式的组成部分。下表列出了表示非打印字符的转义序列：
@@ -576,21 +586,22 @@ if判断匹配ip地址
 
 
 下载mysqlbinlog.row文件
-打印第三行
-打印1到5行
-打印最后一行
-打印30到最后一行
-打印包含“BEGIN”的行
-打印包含“COMMIT”的行
-打印以“###”开头的行
-删除每一行的“### ”
-删除所有“/到/”
-将“DELETE FROM”替换为“insert into”
-将“INSERT INTO”替换为“delete from”
-将“SET”替换为“where”
-将“WHERE”替换为“set”
-将“@1”替换为“id”
-将“@2”替换为“name”
+
+	*打印第三行
+	*打印1到5行
+	*打印最后一行
+	*打印30到最后一行
+	*打印包含“BEGIN”的行
+	*打印包含“COMMIT”的行
+	*打印以“###”开头的行
+	*删除每一行的“### ”
+	*删除所有“/到/”
+	*将“DELETE FROM”替换为“insert into”
+	*将“INSERT INTO”替换为“delete from”
+	*将“SET”替换为“where”
+	*将“WHERE”替换为“set”
+	*将“@1”替换为“id”
+	*将“@2”替换为“name”
 
 
 	[root@mysqlhost ~]# sed '3p' mysqlbinlog.row
@@ -606,13 +617,13 @@ if判断匹配ip地址
 
 有三种方式调用awk
 
-· 命令行方式 awk [-F field-separator] 'commands' input-file(s)
+* 命令行方式 awk [-F field-separator] 'commands' input-file(s)
 
 其中，commands 是真正awk命令，[-F域分隔符]是可选的。 input-file(s) 是待处理的文件。
 
 在awk中，文件的每一行中，由域分隔符分开的每一项称为一个域。通常，在不指名-F域分隔符的情况下，默认的域分隔符是空格。
 
-· shell脚本方式
+* shell脚本方式
 
 将所有的awk命令插入一个文件，并使awk程序可执行，然后awk命令解释器作为脚本的首行，一遍通过键入脚本名称来调用。
 
@@ -620,7 +631,7 @@ if判断匹配ip地址
 
 可以换成：#!/bin/awk
 
-· 将所有的awk命令插入一个单独文件，然后调用： awk -f awk-script-file input-file(s)
+* 将所有的awk命令插入一个单独文件，然后调用： awk -f awk-script-file input-file(s)
 
 其中，-f选项加载awk-script-file中的awk脚本，input-file(s)跟上面的是一样的。
 
@@ -651,7 +662,9 @@ if判断匹配ip地址
 	operator        /sbin/nologin
 	[lin@localhost ~]$
 	
-awk工作流程是这样的：先执行BEGING，然后读取文件，读入有/n换行符分割的一条记录，然后将记录按指定的域分隔符划分域，填充域，$0则表示所有域,$1表示第一个域,$n表示第n个域,随后开始执行模式所对应的动作action。接着开始读入第二条记录······直到所有的记录都读完，最后执行END操作。
+awk工作流程是这样的：
+
+先执行BEGING，然后读取文件，读入有/n换行符分割的一条记录，然后将记录按指定的域分隔符划分域，填充域，$0则表示所有域,$1表示第一个域,$n表示第n个域,随后开始执行模式所对应的动作action。接着开始读入第二条记录······直到所有的记录都读完，最后执行END操作。
 
 	[lin@localhost ~]$ head /etc/passwd |awk  -F ':'  'BEGIN {print "name,shell"}  {print $1","$7} END {print "last,/bin/nosh"}'
 	name,shell

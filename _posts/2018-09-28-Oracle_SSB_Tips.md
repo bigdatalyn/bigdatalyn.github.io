@@ -193,6 +193,7 @@ Generate a small, approximately 4GB, set of test data.
 	$ mv *.tbl /home/oracle/ssb
 
 Sample:
+
 	[root@database18c dbgen]# ./dbgen -s 1 -T l
 	SSBM (Star Schema Benchmark) Population Generator (Version 1.0.0)
 	Copyright Transaction Processing Performance Council 1994 - 2000

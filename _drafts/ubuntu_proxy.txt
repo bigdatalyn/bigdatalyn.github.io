@@ -1,0 +1,57 @@
+
+apt
+
+echo 'Acquire::http::proxy "http://[address]:[port]";' | sudo tee -a /etc/apt/apt.conf
+
+
+wget
+
+echo 'https_proxy=http://[address]:[port]' | sudo tee -a /etc/wgetrc
+echo 'http_proxy=http://[address]:[port]' | sudo tee -a /etc/wgetrc
+echo 'ftp_proxy=http://[address]:[port]' | sudo tee -a /etc/wgetrc
+echo '#check_certificate = off' >> ~/.wgetrc
+
+
+curl
+
+echo 'proxy = "http://[address]:[port]"' >> ~/.curlrc
+echo '#insecure' >> ~/.curlrc
+
+
+git
+git config --global https.proxy http://[address]:[port]
+git config --global http.proxy http://[address]:[port]
+#git config --local http.sslVerify false
+
+atom
+apm config set https-proxy http://[address]:[port]
+#apm config set strict-ssl false
+
+shell
+echo 'export https_proxy="http://[address]:[port]"' >> ~/.bashrc
+echo 'export http_proxy=$https_proxy' >> ~/.bashrc
+echo 'export ftp_proxy=$https_proxy' >> ~/.bashrc
+echo 'export proxy=$https_proxy' >> ~/.bashrc
+echo 'export HTTPS_PROXY=$https_proxy' >> ~/.bashrc
+echo 'export HTTP_PROXY=$https_proxy' >> ~/.bashrc
+echo 'export FTP_PROXY=$https_proxy' >> ~/.bashrc
+echo 'export PROXY=$https_proxy' >> ~/.bashrc
+
+conda
+
+echo 'proxy_servers:' >> ~/.condarc
+echo '  http: http://[address]:[port]' >> ~/.condarc
+echo '  https: http://[address]:[port]' >> ~/.condarc
+echo '#client_ssl_cert: False' >> ~/.condarc
+echo '#ssl_verify: false' >> ~/.condarc
+
+
+pip
+pip [command] --proxy http://[address]:[port] [arg]
+
+docker
+sudo mkdir /etc/systemd/system/docker.service.d
+echo '[Service]' | sudo tee -a /etc/systemd/system/docker.service.d/http-proxy.conf
+echo 'Environment="HTTP_PROXY=http://[address]:[port]"' | sudo tee -a /etc/systemd/system/docker.service.d/http-proxy.conf
+sudo systemctl daemon-reload
+sudo systemctl restart docker
