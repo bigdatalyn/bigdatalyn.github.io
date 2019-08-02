@@ -1,0 +1,679 @@
+单表访问方式：
+
+全表扫描 | 读取表中所有行并过滤掉那些不符合 WHERE 子句谓词的行。用于索引、DOP集等
+
+按 ROWID 访问表 | ROWID 指定含有所需行的数据文件和数据块以及该行在该块中的位置。当在索引或 WHERE 子句中提供 rowid 时使用
+
+索引唯一扫描 | 将只返回一行。当语句中包含 UNIQUE 或 PRIMARY KEY 约束条件时使用，这些约束条件用于保证只访问一行
+
+索引范围扫描 | 访问相邻索引项，可返回多个 ROWID 值。与等式一起用于非唯一索引，或与范围谓词一起用于唯一索引（<.>、between 等）
+
+索引跳过扫描 | 如果前导列中只有很少的不同值，而非前导列中有许多不同的值，则跳过索引的前导部分，使用其余有用的部分
+
+完整索引扫描 | 处理索引的所有叶块，但只有经过足够多的分支块才能找到第 1 个叶块。当所有需要的列都位于索引中且 order by 子句与索引结构匹配，或者排序合并联接已完成时，即可使用
+
+快速完整索引扫描 | 扫描索引中的所有块，用来在所有需要的列都在索引中时代替 FTS。使用多块IO，可以并行运行
+
+索引联接 | 散列联接多个索引，这些索引一起包含有查询中引用的所有表列。 不会消除排序操作
+
+位图索引 | 使用键值位图和映射函数，映射函数可将每个比特的位置转换成一个 rowid。 可以有效地合并对应于 WHERE 子句中的多个条件的索引
+
+
+
+
+
+#### 全表扫描： TABLE ACCESS FULL
+
+	SYSTEM@PDB1> select * from sh.sales where rownum < 10;
+
+	9 rows selected.
+
+
+	Execution Plan
+	----------------------------------------------------------
+	Plan hash value: 807288713
+
+	----------------------------------------------------------------------------------------------
+	| Id  | Operation            | Name  | Rows  | Bytes | Cost (%CPU)| Time     | Pstart| Pstop |
+	----------------------------------------------------------------------------------------------
+	|   0 | SELECT STATEMENT     |       |     9 |   261 |     2   (0)| 00:00:01 |       |       |
+	|*  1 |  COUNT STOPKEY       |       |       |       |            |          |       |       |
+	|   2 |   PARTITION RANGE ALL|       |     9 |   261 |     2   (0)| 00:00:01 |     1 |    28 |
+	|   3 |    TABLE ACCESS FULL | SALES |     9 |   261 |     2   (0)| 00:00:01 |     1 |    28 |
+	----------------------------------------------------------------------------------------------
+
+	Predicate Information (identified by operation id):
+	---------------------------------------------------
+
+	   1 - filter(ROWNUM<10)
+
+
+	Statistics
+	----------------------------------------------------------
+			  1  recursive calls
+			  0  db block gets
+			 21  consistent gets
+			  0  physical reads
+			  0  redo size
+		   1322  bytes sent via SQL*Net to client
+			402  bytes received via SQL*Net from client
+			  2  SQL*Net roundtrips to/from client
+			  0  sorts (memory)
+			  0  sorts (disk)
+			  9  rows processed
+
+	SYSTEM@PDB1>
+
+或者:
+
+```sql
+
+SYSTEM@PDB1> alter session set statistics_level='ALL';
+
+Session altered.
+
+SYSTEM@PDB1> select * from sh.sales where rownum < 5;
+
+   PROD_ID    CUST_ID TIME_ID                       CHANNEL_ID   PROMO_ID QUANTITY_SOLD AMOUNT_SOLD
+---------- ---------- ----------------------------- ---------- ---------- ------------- -----------
+        13        987 10-JAN-1998 00:00:00                   3        999             1     1232.16
+        13       1660 10-JAN-1998 00:00:00                   3        999             1     1232.16
+        13       1762 10-JAN-1998 00:00:00                   3        999             1     1232.16
+        13       1843 10-JAN-1998 00:00:00                   3        999             1     1232.16
+
+SYSTEM@PDB1> select * from table(dbms_xplan.display_cursor(null,null,'ALLSTATS'));
+
+PLAN_TABLE_OUTPUT
+------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID  fc4ajm7ycnnv8, child number 0
+-------------------------------------
+select * from sh.sales where rownum < 5
+
+Plan hash value: 807288713
+
+----------------------------------------------------------------------------------------
+| Id  | Operation            | Name  | Starts | E-Rows | A-Rows |   A-Time   | Buffers |
+----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |       |      1 |        |      4 |00:00:00.01 |      21 |
+|*  1 |  COUNT STOPKEY       |       |      1 |        |      4 |00:00:00.01 |      21 |
+|   2 |   PARTITION RANGE ALL|       |      1 |      4 |      4 |00:00:00.01 |      21 |
+|   3 |    TABLE ACCESS FULL | SALES |      5 |      4 |      4 |00:00:00.01 |      21 |
+----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter(ROWNUM<5)
+
+
+20 rows selected.
+
+SYSTEM@PDB1> select * from sh.sales where rownum < 5;
+
+   PROD_ID    CUST_ID TIME_ID                       CHANNEL_ID   PROMO_ID QUANTITY_SOLD AMOUNT_SOLD
+---------- ---------- ----------------------------- ---------- ---------- ------------- -----------
+        13        987 10-JAN-1998 00:00:00                   3        999             1     1232.16
+        13       1660 10-JAN-1998 00:00:00                   3        999             1     1232.16
+        13       1762 10-JAN-1998 00:00:00                   3        999             1     1232.16
+        13       1843 10-JAN-1998 00:00:00                   3        999             1     1232.16
+
+SYSTEM@PDB1> select * from table(dbms_xplan.display_cursor(null,null,'ADVANCED ALLSTATS LAST PEEKED_BINDS'));
+
+PLAN_TABLE_OUTPUT
+------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID  fc4ajm7ycnnv8, child number 0
+-------------------------------------
+select * from sh.sales where rownum < 5
+
+Plan hash value: 807288713
+
+----------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation            | Name  | Starts | E-Rows |E-Bytes| Cost (%CPU)| E-Time   | Pstart| Pstop | A-Rows |   A-Time   | Buffers |
+----------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |       |      1 |        |       |     2 (100)|          |       |       |      4 |00:00:00.01 |      21 |
+|*  1 |  COUNT STOPKEY       |       |      1 |        |       |            |          |       |       |      4 |00:00:00.01 |      21 |
+|   2 |   PARTITION RANGE ALL|       |      1 |      4 |   116 |     2   (0)| 00:00:01 |     1 |    28 |      4 |00:00:00.01 |      21 |
+|   3 |    TABLE ACCESS FULL | SALES |      5 |      4 |   116 |     2   (0)| 00:00:01 |     1 |    28 |      4 |00:00:00.01 |      21 |
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   3 - SEL$1 / SALES@SEL$1
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('19.1.0')
+      DB_VERSION('19.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+      FULL(@"SEL$1" "SALES"@"SEL$1")
+      END_OUTLINE_DATA
+  */
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter(ROWNUM<5)
+
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+
+   1 - (rowset=4) "SALES"."PROD_ID"[NUMBER,22], "SALES"."CUST_ID"[NUMBER,22], "SALES"."TIME_ID"[DATE,7],
+       "SALES"."CHANNEL_ID"[NUMBER,22], "SALES"."PROMO_ID"[NUMBER,22], "SALES"."QUANTITY_SOLD"[NUMBER,22],
+       "SALES"."AMOUNT_SOLD"[NUMBER,22]
+   2 - (rowset=4) "SALES"."PROD_ID"[NUMBER,22], "SALES"."CUST_ID"[NUMBER,22], "SALES"."TIME_ID"[DATE,7],
+       "SALES"."CHANNEL_ID"[NUMBER,22], "SALES"."PROMO_ID"[NUMBER,22], "SALES"."QUANTITY_SOLD"[NUMBER,22],
+       "SALES"."AMOUNT_SOLD"[NUMBER,22]
+   3 - (rowset=4) "SALES"."PROD_ID"[NUMBER,22], "SALES"."CUST_ID"[NUMBER,22], "SALES"."TIME_ID"[DATE,7],
+       "SALES"."CHANNEL_ID"[NUMBER,22], "SALES"."PROMO_ID"[NUMBER,22], "SALES"."QUANTITY_SOLD"[NUMBER,22],
+       "SALES"."AMOUNT_SOLD"[NUMBER,22]
+
+Query Block Registry:
+---------------------
+
+  <q o="2" f="y"><n><![CDATA[SEL$1]]></n><f><h><t><![CDATA[SALES]]></t><s><![CDATA[SEL$1]]></s></h></f></q>
+
+
+
+59 rows selected.
+
+SYSTEM@PDB1>
+
+```
+
+#### ROWID 读取(TABLE ACCESS BY USER ROWID)
+
+```sql
+
+SYSTEM@PDB1> select rowid, s.* from sh.sales s where rownum < 5;
+
+ROWID                 PROD_ID    CUST_ID TIME_ID                       CHANNEL_ID   PROMO_ID QUANTITY_SOLD AMOUNT_SOLD
+------------------ ---------- ---------- ----------------------------- ---------- ---------- ------------- -----------
+AAAR/uAAMAAAA+SAAA         13        987 10-JAN-1998 00:00:00                   3        999             1     1232.16
+AAAR/uAAMAAAA+SAAB         13       1660 10-JAN-1998 00:00:00                   3        999             1     1232.16
+AAAR/uAAMAAAA+SAAC         13       1762 10-JAN-1998 00:00:00                   3        999             1     1232.16
+AAAR/uAAMAAAA+SAAD         13       1843 10-JAN-1998 00:00:00                   3        999             1     1232.16
+
+SYSTEM@PDB1> select rowid, s.* from sh.sales s where rowid='AAAR/uAAMAAAA+SAAC';
+
+ROWID                 PROD_ID    CUST_ID TIME_ID                       CHANNEL_ID   PROMO_ID QUANTITY_SOLD AMOUNT_SOLD
+------------------ ---------- ---------- ----------------------------- ---------- ---------- ------------- -----------
+AAAR/uAAMAAAA+SAAC         13       1762 10-JAN-1998 00:00:00                   3        999             1     1232.16
+
+SYSTEM@PDB1> select * from table(dbms_xplan.display_cursor(null,null,'ADVANCED ALLSTATS LAST PEEKED_BINDS'));
+
+PLAN_TABLE_OUTPUT
+------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID  bg4xp3x4hjgcf, child number 0
+-------------------------------------
+select rowid, s.* from sh.sales s where rowid='AAAR/uAAMAAAA+SAAC'
+
+Plan hash value: 85008936
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                  | Name  | Starts | E-Rows |E-Bytes| Cost (%CPU)| E-Time   | Pstart| Pstop | A-Rows |   A-Time   | Buffers |
+----------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT           |       |      1 |        |       |     1 (100)|          |       |       |      1 |00:00:00.01 |       1 |
+|   1 |  TABLE ACCESS BY USER ROWID| SALES |      1 |      1 |    29 |     1   (0)| 00:00:01 | ROWID | ROWID |      1 |00:00:00.01 |       1 |
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1 / S@SEL$1
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('19.1.0')
+      DB_VERSION('19.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+      ROWID(@"SEL$1" "S"@"SEL$1")
+      END_OUTLINE_DATA
+  */
+
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+
+   1 - ROWID[ROWID,10], "S"."PROD_ID"[NUMBER,22], "S"."CUST_ID"[NUMBER,22], "S"."TIME_ID"[DATE,7], "S"."CHANNEL_ID"[NUMBER,22],
+       "S"."PROMO_ID"[NUMBER,22], "S"."QUANTITY_SOLD"[NUMBER,22], "S"."AMOUNT_SOLD"[NUMBER,22]
+
+Query Block Registry:
+---------------------
+
+  <q o="2" f="y"><n><![CDATA[SEL$1]]></n><f><h><t><![CDATA[S]]></t><s><![CDATA[SEL$1]]></s></h></f></q>
+
+
+
+44 rows selected.
+
+SYSTEM@PDB1>
+
+```
+
+#### 表取样扫描(TABLE ACCESS SAMPLE)
+
+
+```sql
+
+SH@PDB1> set linesize 200 pagesize 300
+SH@PDB1> set autot traceonly explain
+SH@PDB1> select * from sh.sales sample block(10);
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 353650088
+
+----------------------------------------------------------------------------------------------
+| Id  | Operation            | Name  | Rows  | Bytes | Cost (%CPU)| Time     | Pstart| Pstop |
+----------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |       |   183K|  5204K|   437   (1)| 00:00:01 |       |       |
+|   1 |  PARTITION RANGE ALL |       |   183K|  5204K|   437   (1)| 00:00:01 |     1 |    28 |
+|   2 |   TABLE ACCESS SAMPLE| SALES |   183K|  5204K|   437   (1)| 00:00:01 |     1 |    28 |
+----------------------------------------------------------------------------------------------
+
+SH@PDB1>
+
+
+```
+
+小技巧：快速评估大表行数
+
+- sample子句查询部分数据而不是整个数据
+
+- sample（percent）查询随机行，sample block（percent）查询的随机块
+
+- 0.000001 <=percent<100
+
+- 预估值不一定等于实际值
+
+- seed相当于一个标记，比如seed为1，那么下次执行seed(1)时还是以第一次seed(1)的方式预估。如果不加seed，那么每次执行的值几乎都不一样。
+
+	SYSTEM@PDB1> select count(*) from sh.sales;
+
+	  COUNT(*)
+	----------
+	   1837686
+
+	SYSTEM@PDB1> select count(*)*10 from sh.sales sample(10);
+
+	COUNT(*)*10
+	-----------
+		1837110
+
+	SYSTEM@PDB1> select count(*)*2 from sh.sales sample(50);
+
+	COUNT(*)*2
+	----------
+	   1838738
+
+	SYSTEM@PDB1> 
+
+查看分布情况
+
+	SH@PDB1> select count(*),count(distinct COUNTRY_ID) from customers;
+
+	  COUNT(*) COUNT(DISTINCTCOUNTRY_ID)
+	---------- -------------------------
+		 55500                        19
+
+	SH@PDB1> select count(*),count(distinct COUNTRY_ID) from customers sample block(10);
+
+	  COUNT(*) COUNT(DISTINCTCOUNTRY_ID)
+	---------- -------------------------
+		  4534                        19
+
+	SH@PDB1> 
+	SH@PDB1> select count(*),COUNTRY_ID from customers group by COUNTRY_ID;
+
+	  COUNT(*) COUNTRY_ID
+	---------- ----------
+		  3833      52779
+		  8173      52776
+		  2039      52778
+		   708      52786
+			75      52787
+		  7557      52789
+		 18520      52790
+		   597      52769
+		   831      52774
+		   383      52777
+			91      52788
+		   244      52785
+		   403      52773
+			88      52791
+		   624      52782
+		   832      52775
+		  2010      52772
+		  7780      52770
+		   712      52771
+
+	19 rows selected.
+
+	SH@PDB1> select count(*),COUNTRY_ID from customers group by COUNTRY_ID order by count(*);
+
+	  COUNT(*) COUNTRY_ID
+	---------- ----------
+			75      52787
+			88      52791
+			91      52788
+		   244      52785
+		   383      52777
+		   403      52773
+		   597      52769
+		   624      52782
+		   708      52786
+		   712      52771
+		   831      52774
+		   832      52775
+		  2010      52772
+		  2039      52778
+		  3833      52779
+		  7557      52789
+		  7780      52770
+		  8173      52776
+		 18520      52790
+
+	19 rows selected.
+
+	SH@PDB1> select count(*),COUNTRY_ID from customers sample block(10) group by COUNTRY_ID order by count(*);
+
+	  COUNT(*) COUNTRY_ID
+	---------- ----------
+			 3      52791
+			 5      52788
+			 5      52787
+			11      52785
+			12      52777
+			16      52773
+			24      52782
+			28      52775
+			29      52786
+			30      52769
+			31      52771
+			43      52774
+			84      52778
+			84      52772
+		   173      52779
+		   325      52789
+		   342      52776
+		   364      52770
+		   657      52790
+
+	19 rows selected.
+
+	SH@PDB1>
+	SH@PDB1> select count(*), CUST_GENDER from customers group by cust_gender order by count(*);
+
+	  COUNT(*) C
+	---------- -
+		 18325 F
+		 37175 M
+
+	SH@PDB1>
+
+	
+#### 索引唯一扫描（Index UNIQUE SCAN )
+
+``` sql
+
+SH@PDB1> create unique index pk_prod1 on prod1(prod_id);
+
+Index created.
+
+SH@PDB1> set autot traceonly explain
+SH@PDB1> select * from prod1 where prod_id=20;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 4182907003
+
+----------------------------------------------------------------------------------------
+| Id  | Operation                   | Name     | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT            |          |     1 |   173 |     1   (0)| 00:00:01 |
+|   1 |  TABLE ACCESS BY INDEX ROWID| PROD1    |     1 |   173 |     1   (0)| 00:00:01 |
+|*  2 |   INDEX UNIQUE SCAN         | PK_PROD1 |     1 |       |     0   (0)| 00:00:01 |
+----------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("PROD_ID"=20)
+
+```
+
+先走索引PK_PROD1然后回表： TABLE ACCESS BY INDEX ROWID / PROD1
+
+
+#### 索引范围扫描（INDEX RANGE SCAN）
+
+```sql
+
+SH@PDB1> create index idx_customer_city_id on customers(cust_city_id);
+
+Index created.
+
+SH@PDB1> 
+SH@PDB1> select * from customers where cust_city_id=52526 and cust_id > 10;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 2239167293
+
+------------------------------------------------------------------------------------------------------------
+| Id  | Operation                           | Name                 | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                    |                      |    90 | 17010 |    85   (0)| 00:00:01 |
+|*  1 |  TABLE ACCESS BY INDEX ROWID BATCHED| CUSTOMERS            |    90 | 17010 |    85   (0)| 00:00:01 |
+|*  2 |   INDEX RANGE SCAN                  | IDX_CUSTOMER_CITY_ID |    90 |       |     1   (0)| 00:00:01 |
+------------------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - filter("CUST_ID">10)
+   2 - access("CUST_CITY_ID"=52526)
+
+SH@PDB1>
+
+
+```
+
+#### 索引范围扫描: 倒序(INDEX RANGE SCAN DESCENDING)
+
+```sql
+
+SH@PDB1> select * from customers where cust_city_id < 50000 order by cust_city_id desc;
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1921311399
+
+-----------------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name                 | Rows  | Bytes | Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT             |                      |    27 |  5103 |    28   (0)| 00:00:01 |
+|   1 |  TABLE ACCESS BY INDEX ROWID | CUSTOMERS            |    27 |  5103 |    28   (0)| 00:00:01 |
+|*  2 |   INDEX RANGE SCAN DESCENDING| IDX_CUSTOMER_CITY_ID |    27 |       |     2   (0)| 00:00:01 |
+-----------------------------------------------------------------------------------------------------
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("CUST_CITY_ID"<50000)
+
+SH@PDB1>
+
+```
+
+#### 索引范围扫描: 函数索引
+
+涉及函数运算
+
+#### 索引全扫描(INDEX FULL SCAN)
+
+order by 。。。 索引中已经排好序了不需要就行order by操作
+
+```sql
+
+```
+#### 索引快速全扫描(INDEX FAST FULL SCAN)
+
+没有order by ... 出来的结果集是不排序
+
+#### 索引跳跃扫描（INDEX SKIP SCAN)
+
+组合索引中，前导列不在where条件中，会去补全，类似通过union all前导列的分类组合起来的结果集
+
+所以前导列唯一值应该少才没有性能问题，（10/20以内）
+
+#### 什么时候索引什么时候全表扫
+
+判断 条件中的 是不是能带来过滤性？
+
+看列是否有过滤，唯一值少
+
+收集统计信息/dba_tables dba_tab_columns的唯一性
+
+
+
+	SH@PDB1> col owner for a20
+	SH@PDB1> col column_name for a40
+	SH@PDB1> select t.owner,column_name, t.num_rows,c.num_distinct from dba_tables t, dba_tab_columns c where t.owner = c.owner and t.table_name = c.table_name and t.owner='&OWNER' and t.table_name ='&TNAME' order by num_distinct;
+	Enter value for owner: SH
+	Enter value for tname: CUSTOMERS
+	old   1: select t.owner,column_name, t.num_rows,c.num_distinct from dba_tables t, dba_tab_columns c where t.owner = c.owner and t.table_name = c.table_name and t.owner='&OWNER' and t.table_name ='&TNAME' order by num_distinct
+	new   1: select t.owner,column_name, t.num_rows,c.num_distinct from dba_tables t, dba_tab_columns c where t.owner = c.owner and t.table_name = c.table_name and t.owner='SH' and t.table_name ='CUSTOMERS' order by num_distinct
+
+	OWNER                COLUMN_NAME                                NUM_ROWS NUM_DISTINCT
+	-------------------- ---------------------------------------- ---------- ------------
+	SH                   CUST_EFF_TO                                   55500            0
+	SH                   CUST_SRC_ID                                   55500            0
+	SH                   CUST_EFF_FROM                                 55500            1
+	SH                   CUST_TOTAL_ID                                 55500            1
+	SH                   CUST_TOTAL                                    55500            1
+	SH                   CUST_GENDER                                   55500            2
+	SH                   CUST_VALID                                    55500            2
+	SH                   CUST_CREDIT_LIMIT                             55500            8
+	SH                   CUST_MARITAL_STATUS                           55500           11
+	SH                   CUST_INCOME_LEVEL                             55500           12
+	SH                   COUNTRY_ID                                    55500           19
+	SH                   CUST_YEAR_OF_BIRTH                            55500           75
+	SH                   CUST_STATE_PROVINCE                           55500          145
+	SH                   CUST_STATE_PROVINCE_ID                        55500          145
+	SH                   CUST_CITY_ID                                  55500          620
+	SH                   CUST_CITY                                     55500          620
+	SH                   CUST_POSTAL_CODE                              55500          623
+	SH                   CUST_LAST_NAME                                55500          908
+	SH                   CUST_FIRST_NAME                               55500         1300
+	SH                   CUST_EMAIL                                    55500         1699
+	SH                   CUST_STREET_ADDRESS                           55500        50945
+	SH                   CUST_MAIN_PHONE_NUMBER                        55500        51000
+	SH                   CUST_ID                                       55500        55500
+
+	23 rows selected.
+
+	SH@PDB1>
+	SH@PDB1> select count(*) from customers;
+
+	  COUNT(*)
+	----------
+		 55500
+
+	SH@PDB1>
+
+
+如果没有采样统计信息，通过sample count一把各个列的个数，（大表可以通过并行执行提高速度）
+
+	SYSTEM@PDB1> select count(*),count(distinct CUSTOMER_ID),count(distinct ACCOUNT_MGR_ID),count(distinct CUST_LAST_NAME||' '||CUST_FIRST_NAME) from SOE.CUSTOMERS sample block(10);
+
+	  COUNT(*) COUNT(DISTINCTCUSTOMER_ID) COUNT(DISTINCTACCOUNT_MGR_ID) COUNT(DISTINCTCUST_LAST_NAME||''||CUST_FIRST_NAME)
+	---------- -------------------------- ----------------------------- --------------------------------------------------
+		 56334                      56334                           759                                                759
+
+	SYSTEM@PDB1> select count(*),count(distinct CUSTOMER_ID),count(distinct ACCOUNT_MGR_ID),count(distinct CUST_LAST_NAME||' '||CUST_FIRST_NAME) from SOE.CUSTOMERS;
+
+	  COUNT(*) COUNT(DISTINCTCUSTOMER_ID) COUNT(DISTINCTACCOUNT_MGR_ID) COUNT(DISTINCTCUST_LAST_NAME||''||CUST_FIRST_NAME)
+	---------- -------------------------- ----------------------------- --------------------------------------------------
+		500000                     500000                           866                                                866
+
+	SYSTEM@PDB1>
+
+数字越大越好，唯一性比较高，特殊情况是，唯一性低，但是特定值比较高，如男女两类性别，但是男性占了90%，男性的数据唯一性就
+
+	SYSTEM@PDB1> select count(*),CREDIT_LIMIT from SOE.CUSTOMERS group by CREDIT_LIMIT order by 1;
+
+	  COUNT(*) CREDIT_LIMIT
+	---------- ------------
+			50       100000
+			58         1000
+		   654         2000
+		   746        50000
+		  5740         3000
+		  5842        20000
+		 27810         4000
+		 27974        10000
+		 79854         6500
+		 80448         5000
+		135209         6000
+		135615         5500
+
+	12 rows selected.
+
+	SYSTEM@PDB1>
+	SYSTEM@PDB1> select count(*),CREDIT_LIMIT from SOE.CUSTOMERS sample block(10) group by CREDIT_LIMIT order by 1;
+
+	  COUNT(*) CREDIT_LIMIT
+	---------- ------------
+			 6         1000
+			 6       100000
+			58         2000
+			66        50000
+		   548         3000
+		   596        20000
+		  2637        10000
+		  2760         4000
+		  7741         5000
+		  8070         6500
+		 12994         6000
+		 13289         5500
+
+	12 rows selected.
+
+	SYSTEM@PDB1>
+
+
+	
+CREDIT_LIMIT为100000的选择性看起来可以建立索引.... 
+
+特俗的值在某场景是需要特殊考虑
+
+#### access和filter区别
+
+在执行计划中：
+
+access 在访问单表时候走的是索引
+
+filter 表示不是通过索引去访问，把数据取到内存里就行过滤
+
+#### 基本信息
+
+表，表的大小，分析时间，
+
+索引，名字，大小，选择度，列，列的顺序
+
+列，名字，选择度(distinct)，nulls(null值是不计入索引的),类型
+
+
+
