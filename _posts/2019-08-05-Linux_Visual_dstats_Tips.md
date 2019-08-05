@@ -16,6 +16,17 @@ Linux Visual-dstat Tips
 
 ![Visual-dstat]({{ "/files/Linux/Visual-dstat/Visual-dstat.png"}})
 
+
+
+
+
+
+
+
+
+
+
+
 ### Linux Loading ways
 
 #### CPU
