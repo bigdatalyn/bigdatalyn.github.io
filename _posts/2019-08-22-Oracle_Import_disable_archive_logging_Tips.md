@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Oracle 19c Import with disable_archive_logging Tips"
-category: Linux
+category: Oracle
 tags: Oracle Import disable_archive_logging Tips
 ---
 
