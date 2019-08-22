@@ -262,8 +262,8 @@ C##LIN@orcl>
 
 The Result of importing with transform/disable_archive_logging
 
-| Data   | transform      | Generated Redo log size |  Import elapsed    |
-| :----- | :------------: | ----------------------: |  ----------------: |
+| Data   | transform(archive_logging)      | Generated Redo log size |  Import elapsed    |
+| :----- | :-----------------------------: | ----------------------: |  ----------------: |
 | 360MB  | enable(default)| 357 MB                  |  02:20             |
 | 360MB  | disable        | 3.1 MB                  |  01:28             |
 
@@ -289,6 +289,12 @@ Other Tips: Disable Archive Log Not Working During IMPDP (Doc ID 2223043.1)
 ```
 In no-archive log mode, Disable_archive_logging does not affect import session with content=data_only because it does not execute any CREATE TABLE/INDEX DDLs. 
 ```
+
+
+[Speed up Import with TRANSFORM=DISABLE_ARCHIVE_LOGGING in #Oracle 12c](https://uhesse.com/2014/01/20/speed-up-import-with-transformdisable_archive_logging-in-oracle-12c/)
+
+
+
 
 #### Prepare archivelog mode
 
