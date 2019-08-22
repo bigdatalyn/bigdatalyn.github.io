@@ -10,6 +10,17 @@ tags: Oracle Import disable_archive_logging Tips
 
 Oracle 19c Import with disable_archive_logging Tips
 
+Oracle12c feature is the ability to run in nologging mode in import execution, disabling archive logging during a large import. Only for table and index Not for tablespace.
+
+```
+    transform=disable_archive_logging:Y
+    transform=disable_archive_logging:Y:tablename
+    transform=disable_archive_logging:Y:indexname
+```
+
+
+
+
 
 
 
