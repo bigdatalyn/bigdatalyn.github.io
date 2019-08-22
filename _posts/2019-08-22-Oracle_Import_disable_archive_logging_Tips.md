@@ -24,10 +24,7 @@ Oracle12c feature is the ability to run in nologging mode in import execution, d
 
 
 
-
-
-
-#### Test 
+### Test 
 
 Create directory and user;
 
@@ -270,7 +267,7 @@ The Result of importing with transform/disable_archive_logging
 | 360MB  | enable(default)| 357 MB                  |  02:20             |
 | 360MB  | disable        | 3.1 MB                  |  01:28             |
 
-### Reference and Tips
+### Reference and Other Tips
 
 DISABLE_ARCHIVE_LOGGING
 
@@ -293,8 +290,89 @@ Other Tips: Disable Archive Log Not Working During IMPDP (Doc ID 2223043.1)
 In no-archive log mode, Disable_archive_logging does not affect import session with content=data_only because it does not execute any CREATE TABLE/INDEX DDLs. 
 ```
 
+#### Prepare archivelog mode
+
+```
+
+SYS@orcl> select log_mode from v$database;
+
+LOG_MODE
+------------
+NOARCHIVELOG
+SYS@orcl> archive log list;
+Database log mode              No Archive Mode
+Automatic archival             Disabled
+Archive destination            /u01/app/oracle/product/19.0.0/dbhome_1/dbs/arch
+Oldest online log sequence     37
+Current log sequence           39
+SYS@orcl>
+
+```
+
+Configuring the database for ARCHIVELOG Mode
+
+- db_recovery_file_dest - ORACLE_BASE/flash_recovery_area - This is the location of the flash recovery area.
+
+- db_recovery_file_dest_size - 2g - This is the maximum size that can be used by the flash recovery area.  If this size limit is exceeded, you must clear out space or database operations will eventually stall.
 
 
+```
+SYS@orcl> shu immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SYS@orcl> startup mount;
+ORACLE instance started.
+
+Total System Global Area  725611352 bytes
+Fixed Size                  9139032 bytes
+Variable Size             574619648 bytes
+Database Buffers          134217728 bytes
+Redo Buffers                7634944 bytes
+Database mounted.
+SYS@orcl> alter database archivelog;
+SYS@orcl> alter database open;
+SYS@orcl> archive log list;
+Database log mode              Archive Mode
+Automatic archival             Enabled
+Archive destination            /u01/app/oracle/product/19.0.0/dbhome_1/dbs/arch
+Oldest online log sequence     37
+Next log sequence to archive   39
+Current log sequence           39
+SYS@orcl>
+SYS@orcl> show parameter recovery
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest                string
+db_recovery_file_dest_size           big integer 0
+recovery_parallelism                 integer     0
+remote_recovery_file_dest            string
+SYS@orcl> alter system set db_recovery_file_dest_size=1g;
+SYS@orcl> alter system set db_recovery_file_dest='/u01/app/oracle/oradata';
+SYS@orcl> !ls -ltr /u01/app/oracle/oradata
+total 4
+drwxr-x---. 4 oracle oinstall 4096 Jul 16 10:31 ORCL
+
+SYS@orcl> show parameter recovery
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+db_recovery_file_dest                string      /u01/app/oracle/oradata
+db_recovery_file_dest_size           big integer 1G
+recovery_parallelism                 integer     0
+remote_recovery_file_dest            string
+SYS@orcl>
+SYS@orcl> archive log list;
+Database log mode              Archive Mode
+Automatic archival             Enabled
+Archive destination            USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     41
+Next log sequence to archive   43
+Current log sequence           43
+SYS@orcl>
+
+```
 
 
 
