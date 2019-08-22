@@ -131,7 +131,7 @@ orcl:/u01/app/oracle/product/19.0.0/dbhome_1:Y
 
 Test:
 
-```
+```shell
 [root@orl7 ~]# service dbora start
 Warning: dbora.service changed on disk. Run 'systemctl daemon-reload' to reload units.
 + ORACLE_HOME=/u01/app/oracle/product/19.0.0/dbhome_1
