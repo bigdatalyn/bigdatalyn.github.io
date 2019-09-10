@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="author" content="MarkdownViewer++" />
+        <title>new 1</title>
+        <style type="text/css">
+            /* Avoid page breaks inside the most common attributes, especially for exports (i.e. PDF) */
+td, h1, h2, h3, h4, h5, p, ul, ol, li {
+    page-break-inside: avoid; 
+}
+
+            
+        </style>
+      </head>
+    <body>
+        <div class="article-body kancloud-markdown-body"><p>字符集</p>
+<div class="markdown-toc"><ul><ul><li><a href="#_4">字符集是什么？</a></li><li><a href="#_19">字符集的重点知识</a></li><ul><li><a href="#ASCII_35">ASCII</a></li><li><a href="#GBK_43">GBK</a></li><li><a href="#Unicode_47">Unicode</a></li><li><a href="#UTF8_51">UTF-8</a></li></ul><li><a href="#_55">实际工作中要使用的编码</a></li></ul></ul></div><h2><a id="_4"></a>字符集是什么？</h2>
+<p>为了更好的识别中文、日文、英文、希腊语。对于常用的符号进行了编码，这个编码就是字符集。</p>
+<p>字符集确定了文字的存储方式。</p>
+<p>字符集相当于是计算机中人类的语言。</p>
+<p>举个例子：</p>
+<p>我说的是英文，所以我存储的时候要用英文文字来存储。<br>
+如果我说的是中文，用英文字符来存储的话。那么人们就看不懂也看不明白，就是我们所说的乱码。</p>
+<p>因为字符集太多了，足够有几十种上百种之多。所以我们不需要了解太多的字符集的知识，甚至不需要了解字符集到底是如何编成人类可见字符的。</p>
+<h2><a id="_19"></a>字符集的重点知识</h2>
+<p>我们只需要了解：</p>
+<ol><li>常用字符集</li><li>数据库中我们用什么字符集</li></ol>
+<p>英文字符集：</p>
+<table><thead><tr><th>字符集</th><th>说明</th><th>字节长度</th></tr></thead><tbody><tr><td>ASCII</td><td>美国标准信息交换代码</td><td>单字节</td></tr><tr><td>GBK</td><td>汉字内码扩展规范</td><td>双字节</td></tr><tr><td>unicode</td><td>万国码</td><td>4字节</td></tr><tr><td>UTF-8</td><td>Unicode的可变长度字符编码</td><td>1到6个字节</td></tr></tbody></table>
+<h3><a id="ASCII_35"></a>ASCII</h3>
+<p>ASCII 码使用指定的7 位或8 位二进制数组合来表示128 或256 种可能的字符。标准ASCII 码也叫基础ASCII码，使用7 位二进制数来表示所有的大写和小写字母，数字0 到9、标点符号， 以及在美式英语中使用的特殊控制字符。<br>
+其中：<br>
+0～31及127(共33个)是控制字符或通信专用字符（其余为可显示字符），如控制符：LF（换行）、CR（回车）、FF（换页）、DEL（删除）、BS（退格)、BEL（响铃）等；通信专用字符：SOH（文头）、EOT（文尾）、ACK（确认）等；ASCII值为8、9、10 和13 分别转换为退格、制表、换行和回车字符。它们并没有特定的图形显示，但会依不同的应用程序，而对文本显示有不同的影响。<br>
+32～126(共95个)是字符(32是空格），其中48～57为0到9十个阿拉伯数字。<br>
+65～90为26个大写英文字母，97～122号为26个小写英文字母，其余为一些标点符号、运算符号等。</p>
+<h3><a id="GBK_43"></a>GBK</h3>
+<p>GBK 向下与 GB 2312 编码兼容。是中华人民共和国定义的汉字计算机编码规范。早期版本为GB2312。</p>
+<h3><a id="Unicode_47"></a>Unicode</h3>
+<p>Unicode（统一码、万国码、单一码）Unicode是国际组织制定的可以容纳世界上所有文字和符号的字符编码方案。以满足跨语言、跨平台进行文本转换、处理的要求。</p>
+<h3><a id="UTF8_51"></a>UTF-8</h3>
+<p>是一种针对Unicode的可变长度字符编码，也是万国码。因为UNICODE比ASCII占用大一倍的空间，而对ASCII来说高字节的0对他毫无用处。为了解决这个问题，就出现了一些中间格式的字符集，他们被称为通用转换格式，即UTF（Universal Transformation Format）</p>
+<h2><a id="_55"></a>实际工作中要使用的编码</h2>
+<p>在中文中常用的字符集分为utf-8和GBK。</p>
+<p>实际使用的如下：</p>
+<table><thead><tr><th>字符集</th><th>说明</th></tr></thead><tbody><tr><td>gbk_chinese_ci</td><td>简体中文, 不区分大小写</td></tr><tr><td>utf8_general_ci</td><td>Unicode (多语言), 不区分大小写</td></tr></tbody></table>
+<p>观察（图一）的特点你会发现，MySQL字符集由三个部分组成：<br>
+1.字符集&nbsp;<br>
+2.语言<br>
+3.类型</p>
+<p>最后的bin是指二进制字符集，后面的ci是指存储排序时不区分字符的大小写。</p>
+<blockquote class="default"><p>注意：<br>
+mysql在写utf-8的时候写的是utf8。不加中间的中横线。</p></blockquote>
+<hr>
+<p>（图一）<br><img src="http://box.kancloud.cn/2015-10-10_5618defd1f9e3.png" alt="image"></p>
+</div>
+
+    </body>
+</html>
+            

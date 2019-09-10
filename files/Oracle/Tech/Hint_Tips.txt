@@ -1,0 +1,16 @@
+SQL> select /*+ index(a PK_WCHG201305)*/ count(*) from DBCUSTADM.WCHG201305 a; 
+
+SQL> select /*+ full(a)*/ count(*) from DBCUSTADM.WCHG201305 a; 
+
+
+
+FULL           /*+ FULL (table) */ 
+                指定该表使用全表扫描 
+ROWID          /*+ ROWID ( table) */ 
+                指定对该表使用rowid存取方法，该提示用的较少 
+INDEX          /*+ INDEX ( table [index]) */ 
+                使用该表上指定的索引对表进行索引扫描 
+INDEX_FFS      /*+ INDEX_FFS ( table [index]) */ 
+                使用快速全表扫描 
+NO_INDEX       /*+ NO_INDEX ( table [index]) */ 
+                不使用该表上指定的索引进行存取，仍然可以使用其它的索引进行索引扫描

@@ -1,0 +1,13 @@
+在处理一个繁忙的系统时，发现表的统计信息不对，导致SQL走了全表扫，而这个表非常大，从而就出现了大量read by other session等待事件，相关业务基本上无法运行。 
+后手工收集统计信息，并使用explain plan查看执行计划走了索引，但是SQL执行时仍然走的全表扫。 
+后来研究发现，在收集统计信息时需要指定no_invalidate为false，默认是true： 
+true：当收集完统计信息后，收集对象的cursor不会失效（不会产生新的执行计划，子游标） 
+false:当收集完统计信息后，收集对象的cursor会立即失效（新的执行计划，新的子游标） 
+也就是在手工收集完后SQL未重新解析，仍然使用的旧的执行计划。 
+后加no_invalidate重新收集，SQL恢复正常： 
+
+dbms_stats.gather_table_stats('OWNER','TABLE_NAME',degree=>10,cascade=> TRUE,no_invalidate=>false);
+
+其中degree为并行，cascade为级联，也就是把相关索引的统计信息一并收集。
+
+

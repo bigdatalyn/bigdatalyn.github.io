@@ -1,0 +1,6 @@
+SQL 回表
+
+回表即为一条SELECT语句，where子句中的字段有索引，首先通过索引定位记录行的rowid，然后通过rowid回到表中读取相关数据。 
+如：select * from tab_t where id=1，id字段有索引，需要回表取行的所有记录。 
+针对查询较少列的sql，还可以通过建立联合索引，使sql一次将数据读取出来，不用回表。 
+select id,name from tab_t where id=1,(id,name)联合索引，这种情况下就不用回表。 

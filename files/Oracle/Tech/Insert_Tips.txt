@@ -1,0 +1,2 @@
+大数据insert可以使用下面hint来提高SQL的性能： 
+insert /*+ append parallel(a, 4) nologging */ into target_table a select /*+ parallel(b, 4) */ * from source_table b; 
