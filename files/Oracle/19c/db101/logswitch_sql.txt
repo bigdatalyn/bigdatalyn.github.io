@@ -1,0 +1,32 @@
+function logswitches {
+$ORACLE_HOME/bin/sqlplus -s '/ as sysdba' <<EOF
+set feedback off newpage none termout on
+alter session set nls_date_format='YYYY/MM/DD HH24:MI:SS';
+select * from (
+select thread#,sequence#,first_time "LOG START TIME",(blocks*block_size/1024/1024)/((next_time-first_time)*86400) "REDO RATE(MB/s)", \
+(((blocks*block_size)/a.average)*100) pct_full
+from v\$archived_log, (select avg(bytes) average from v\$log) a
+where ((next_time-first_time)*86400<300)
+and first_time > (sysdate-90)
+and (((blocks*block_size)/a.average)*100)>80
+and dest_id=1
+order by 4 desc
+)
+where rownum<11;
+exit
+EOF
+}
+
+export SWITCHES=$(logswitches)
+
+if [ $(echo "$SWITCHES"| wc -l) -le 1 ]
+ then
+  echo -e "SUCCESS: Redo logs are appropriately sized"
+ else
+  echo
+  echo -e "WARNING: Redo logs are potentially mis-sized.  Below is a list of archived logs from"
+  echo -e "the previous 90 days which were active for less than 5 minutes and the redo rate seen"
+  echo -e "for the duration of that log.  These indicate the peak redo rate. Resizing of the log"
+  echo -e "files to accomodate this rate may be required.\n"
+  echo "$SWITCHES"
+fi
