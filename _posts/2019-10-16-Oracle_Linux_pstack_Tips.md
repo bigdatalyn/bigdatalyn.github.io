@@ -12,7 +12,7 @@ tags: Oracle Tips 12c pstack trace
 Oracle Linux pstack Tips
 
 
-####Install pstack in Oracle Linux 7.
+### Install pstack in Oracle Linux 7.
 
 Install gdb by yum and there are pstack and gstack in gdb.
 
@@ -75,6 +75,7 @@ Pstack output sample: select * from t1;
 
 pstack sh_scirpts_pid with root user.
 
+```
 #0  0x00007fc2d2b66afc in waitpid () from /lib64/libc.so.6
 #1  0x0000000000440a74 in waitchld.isra.10 ()
 #2  0x0000000000441d2c in wait_for ()
@@ -84,6 +85,7 @@ pstack sh_scirpts_pid with root user.
 #6  0x0000000000433c1e in execute_command ()
 #7  0x000000000041e255 in reader_loop ()
 #8  0x000000000041c8be in main ()
+```
 
 ### oradebug trace
 
