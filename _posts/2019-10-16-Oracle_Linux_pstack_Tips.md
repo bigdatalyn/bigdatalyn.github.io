@@ -71,7 +71,7 @@ Complete!
 ```
 
 
-Pstack output sample: select * from t1;
+Pstack output sample: `select * from t1;`
 
 pstack sh_scirpts_pid with root user.
 
