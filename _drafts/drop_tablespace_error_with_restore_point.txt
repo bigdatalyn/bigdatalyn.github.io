@@ -1,0 +1,40 @@
+SYS@pdbprod1> drop tablespace trans_tbs including contents and datafiles;
+drop tablespace trans_tbs including contents and datafiles
+*
+ERROR at line 1:
+ORA-38881: Cannot drop tablespace TRANS_TBS on primary database due to
+guaranteed restore points.
+
+
+SYS@pdbprod1> desc v$restore_point;
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SCN						    NUMBER
+ DATABASE_INCARNATION#				    NUMBER
+ GUARANTEE_FLASHBACK_DATABASE			    VARCHAR2(3)
+ STORAGE_SIZE					    NUMBER
+ TIME						    TIMESTAMP(9)
+ RESTORE_POINT_TIME				    TIMESTAMP(9)
+ PRESERVED					    VARCHAR2(3)
+ NAME						    VARCHAR2(128)
+ CON_ID 					    NUMBER
+
+SYS@pdbprod1> select name, RESTORE_POINT_TIME from v$restore_point;
+
+NAME
+--------------------------------------------------------------------------------
+RESTORE_POINT_TIME
+---------------------------------------------------------------------------
+DBRS1
+
+
+
+SYS@pdbprod1> drop restore point dbrs1;
+
+Restore point dropped.
+
+SYS@pdbprod1> drop tablespace trans_tbs including contents and datafiles;
+
+Tablespace dropped.
+
+SYS@pdbprod1>

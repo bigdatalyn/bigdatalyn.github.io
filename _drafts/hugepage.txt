@@ -1,0 +1,45 @@
+
+Oracle Database Error Code ORA-27138: PRCR-1079: CRS-5017: ORA-27125: CRS-2674: CRS-2632
+https://mycct.wordpress.com/2017/07/07/oracle-database-error-code-ora-27138-prcr-1079-crs-5017-ora-27125-crs-2674-crs-2632/
+
+[oracle@exa_node01 02_test_11g (dbm011)]$ srvctl start database -d dbm01
+PRCR-1079 : Failed to start resource ora.dbm01.db
+CRS-5017: The resource action "ora.dbm01.db start" encountered the following error: 
+ORA-27137: unable to allocate large pages to create a shared memory segment
+Linux-x86_64 Error: 12: Cannot allocate memory
+Additional information: -268435456
+Additional information: 1
+. For details refer to "(:CLSN00107:)" in "/u01/app/grid/diag/crs/exa_node01/crs/trace/crsd_oraagent_oracle.trc".
+
+CRS-2674: Start of 'ora.dbm01.db' on 'exa_node01' failed
+CRS-5017: The resource action "ora.dbm01.db start" encountered the following error: 
+ORA-27137: unable to allocate large pages to create a shared memory segment
+Linux-x86_64 Error: 12: Cannot allocate memory
+Additional information: -268435456
+Additional information: 1
+. For details refer to "(:CLSN00107:)" in "/u01/app/grid/diag/crs/exa_node02/crs/trace/crsd_oraagent_oracle.trc".
+
+CRS-2674: Start of 'ora.dbm01.db' on 'exa_node02' failed
+CRS-2632: There are no more servers to try to place resource 'ora.dbm01.db' on that would satisfy its placement policy
+[oracle@exa_node01 02_test_11g (dbm011)]$
+
+
+
+
+
+grep Huge /proc/meminfo
+
+grep Hugepagesize /proc/meminfo
+
+grep nr_hugepages /etc/security/limits.conf
+
+hugepages_settings.sh
+
+vi /etc/security/limits.conf
+
+vm.nr_hugepages=value
+
+sysctl -w vm.nr_hugepages=value
+
+grep Huge /proc/meminfo
+
