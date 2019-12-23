@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Oracle Cloud | Hands-on Labs</title>
+<meta name="generator" content="Jekyll v3.8.5">
+<meta property="og:title" content="Oracle Cloud">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Hands-on Labs">
+<meta property="og:description" content="Hands-on Labs">
+<link rel="canonical" href="https://oracle.github.io/learning-library/data-management-library/database/options/docker.html">
+<meta property="og:url" content="https://oracle.github.io/learning-library/data-management-library/database/options/docker.html">
+<meta property="og:site_name" content="Oracle Cloud">
+<script type="application/ld+json">
+{"@type":"WebPage","url":"https://oracle.github.io/learning-library/data-management-library/database/options/docker.html","headline":"Oracle Cloud","description":"Hands-on Labs","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/style.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Oracle Cloud</h1>
+      <h2 class="project-tagline">Hands-on Labs</h2>
+      
+        <a href="https://github.com/oracle/learning-library" class="btn">View on GitHub</a>
+      
+      
+    </section>
+
+    <section class="main-content">
+      <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/docker-title.png" alt=""></p>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+  <li><a href="#lab-introduction">Introduction</a></li>
+  <li><a href="#lab-assumptions">Lab Assumptions</a></li>
+  <li><a href="#section-1-login-to-your-oracle-cloud-account">Section 1-Login to your Oracle Cloud Account</a></li>
+  <li><a href="#section-2-lab-setup">Section 2-Lab Setup</a></li>
+  <li><a href="#section-3-docker-basic-concepts">Section 3-Docker Basic Concepts</a></li>
+  <li><a href="#section-4-docker-networking-basics">Section 4-Docker Networking Basics</a></li>
+  <li><a href="#section-5-create-an-oracle-database-container">Section 5-Create an Oracle Database Container</a></li>
+  <li><a href="#section-6-create-a-schema-in-container-running-oracle-database-and-login-to-em-express">Section 6-Create A Schema in Container Running Oracle Database and Login to EM Express</a></li>
+  <li><a href="#section-7-deploy-application">Section 7-Deploy Application</a></li>
+  <li><a href="#section-8-change-application-(optional)">Section 8-Change Application (optional)</a></li>
+</ul>
+
+<h2 id="lab-introduction">Lab Introduction</h2>
+<p>Docker is a set of platform-as-a-service products that use OS-level 
+virtualization to deliver software in packages called containers. 
+Containers are isolated from one another and bundle their own software, 
+libraries and configuration files; they can communicate with each other 
+through well-defined channels.</p>
+
+<p>Lab courtesy of NATD Solution Engineering Team.  Check out the original lab <a href="http://go.oracle.com/docker">here!</a>.</p>
+
+<h2 id="lab-assumptions">Lab Assumptions</h2>
+<ul>
+  <li>Each participant has completed the Environment Setup lab and succesfully created a compute instance</li>
+  <li>The Virtual Compute Network (VCN) has been created with the appropriate Ingress rules</li>
+  <li>Each participant has created a docker hub <a href="http://docker.hub.com/">account</a></li>
+  <li>Participants are not logged onto Oracle’s VPN</li>
+  <li>Participants are using Chrome as the preferred browser and have installed Chrome’s JSON formatter</li>
+</ul>
+
+<h2 id="section-1-login-to-your-oracle-cloud-account">Section 1-Login to your Oracle Cloud Account</h2>
+
+<ol>
+  <li>
+    <p>From any browser go to www.oracle.com to access the Oracle Cloud.</p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/login-screen.png" alt=""></p>
+  </li>
+  <li>
+    <p>Click the icon in the upper right corner.  Click on <strong>Sign in to Cloud</strong> at the bottom of the drop down.  <em>NOTE:  Do NOT click the Sign-In button, this will take you to Single Sign-On, not the Oracle Cloud</em></p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/signup.png" alt=""></p>
+  </li>
+  <li>
+    <p>Enter your <strong>Cloud Account Name</strong>: <code class="language-plaintext highlighter-rouge">c4u03</code> in the input field</p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/login-tenancy.png" alt=""></p>
+  </li>
+  <li>
+    <p>Enter your <strong>Username</strong> and <strong>Password</strong> in the input fields and click <strong>Sign In</strong></p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/cloud-login.png" alt=""></p>
+  </li>
+</ol>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+
+<h2 id="section-2-lab-setup">Section 2-Lab Setup</h2>
+
+<ol>
+  <li>
+    <p>Login to the ssh terminal</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ssh -i optionskey opc@&lt;your ip address&gt;
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Before beginning the lab, you will need switch to the oracle user and stop the default listener running on port 1521.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo su - oracle
+ps -ef | grep tns
+lsnrctl status LISTENER
+lsnrctl stop LISTENER
+ps -ef | grep tns
+exit
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>You will use yum (a package management tool for Linux) to install
+ the Docker engine, enable it to start on re-boot, grant docker 
+privledges to the opc user and finally install GIT.  When prompted, 
+press <em>Y</em> to download.  All of these steps will be performed as the root user.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> sudo -s
+ yum install docker-engine
+ usermod -aG docker opc
+ systemctl enable docker
+ systemctl start docker
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/python1.png" alt=""></p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/python2.png" alt=""></p>
+  </li>
+  <li>
+    <p>Next, we are going to install git using yum as the root user</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> yum install git
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/installgit.png" alt=""></p>
+  </li>
+  <li>
+    <p>Verify the version by switching to the opc user</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>su - opc
+docker version
+docker images
+git --version
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/gitversion.png" alt=""></p>
+  </li>
+  <li>
+    <p>Place your server in permissive mode</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exit
+setenforce 0
+sestatus
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/setenforce.png" alt=""></p>
+  </li>
+  <li>
+    <p>Switch back to the opc user and verify you are the <code class="language-plaintext highlighter-rouge">opc</code> user</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> su - opc
+ whoami
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+
+<h2 id="section-3-docker-basic-concepts">Section 3-Docker Basic Concepts</h2>
+
+<ol>
+  <li>
+    <p>Check the version of docker</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker version
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/dockerversion2.png" alt=""></p>
+  </li>
+  <li>
+    <p>Start your application, restclient, in docker on port 8002 in json format.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps
+docker run -d -it --rm --name restclient -p=8002:8002 -e DS='json' wvbirder/restclient
+</code></pre></div>    </div>
+
+    <ul>
+      <li>“-d” flag runs the container in the background</li>
+      <li>“-it” flags instructs docker to allocate a pseudo-TTY 
+connected to the container’s stdin, creating an interactive bash capable
+ shell in the container (which we will use in a moment when we connect 
+into the container)</li>
+      <li>“-h” We give the container a hostname “oracledb-ao” to make it easier to start/stop/remove, reference from other containers, etc</li>
+      <li>“-p” We map port 8002 from within the container to the same 
+ports on the HOST for accessibility from outside of the container’s 
+private subnet (typically 172.17.0.0/16). This allows the container to 
+be accessed from the HOST, for example. The default port for Oracle’s 
+tns listener is on port 1521 and port 5600 is used for HTTP access to 
+Enterprise Manager Express</li>
+      <li>”–name” The name of the container will be “restclient”</li>
+      <li>“-v” This maps the directory where you downloaded the restclient setup.
+<img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/dockerps.png" alt=""></li>
+    </ul>
+  </li>
+  <li>
+    <p>Find the public IP address of your instances.  Compute -&gt; Instance</p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/computeinstance.png" alt=""></p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/selectdboptions2.png" alt=""></p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/dboptions2.png" alt=""></p>
+  </li>
+  <li>
+    <p>Open up a browser on your laptop and go to your public URL on 
+port 8002.  Go to http://Enter IP Address:8002/products. Depending on 
+whether you have a JSON formatter, you should see the products in your 
+application, in RAW or FORMATTED format.  <code class="language-plaintext highlighter-rouge">Note:  If you are on the VPN, disconnect</code></p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/products2-8002.html" alt=""></p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/products.png" alt=""></p>
+  </li>
+  <li>
+    <p>The <code class="language-plaintext highlighter-rouge">restclient</code> container was started earlier with the -rm option.  This means when stopping it will remove ALL allocated resources.  The <code class="language-plaintext highlighter-rouge">ps</code> command with the <code class="language-plaintext highlighter-rouge">-a</code> option shows the status of ALL containers that are running.  As you can see, there are no containers running.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stop restclient
+docker ps -a
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/restclient2.png" alt=""></p>
+  </li>
+  <li>
+    <p>Let’s start another container on your compute instance’s 18002 port.  Type the following command:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   docker run -d -it --rm --name restclient -p=18002:8002 -e DS='json' wvbirder/restclient
+   docker ps -a
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/restclient.png" alt=""></p>
+  </li>
+  <li>
+    <p>Go back to your browser and change the port to 18002.</p>
+
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/18002.png" alt=""></p>
+  </li>
+</ol>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+
+<h2 id="section-4-docker-networking-basics">Section 4-Docker Networking Basics</h2>
+
+<p>Now that you know how to start, stop and relocate a container, let’s see how to get information about the network.</p>
+
+<ol>
+  <li>
+    <p>Inspect the network bridge that docker created for you out of the
+ box.  This shows network information about all the containers running 
+on the default bridge. We see that our restclient container is assigned 
+IP Address 172.17.0.2. You can ping that address from your compute 
+instance.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network inspect bridge
+</code></pre></div>    </div>
+    <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_docker_files/network.png" alt=""></p>
+  </li>
+  <li>
+    <p>Ping that address for your restclient container from your compute instance.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ping 172.17.0.2 -c3
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Stop your restclient container</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stop restclient
+</code></pre></div>    </div>
+    <p><a href="#table-of-contents">Back to Top</a></p>
+  </li>
+</ol>
+
+<h2 id="section-5-create-an-oracle-database-container">Section 5-Create an Oracle Database Container</h2>
+
+<ol>
+  <li>Verify your docker version
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~
+docker version
+</code></pre></div>    </div>
+  </li>
+  <li>Make sure you are in the /home/opc directory.  You will clone some setup scripts from git.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pwd
+git clone https://github.com/wvbirder/AlphaOfficeSetup.git
+cd /home/opc
+chmod -R 777 Alpha*
+</code></pre></div>    </div>
+  </li>
+  <li>Login with your Docker Hub credentials
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker login
+</code></pre></div>    </div>
+  </li>
+  <li>There are database setup files that you cloned in an earlier step.
+   Ensure the listener has stopped.  Let’s see how easy it is to deploy 
+an Oracle Database to a docker container.  Issue the command below.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -it --name orcl -h='oracledb-ao' -p=1521:1521 -p=5600:5600 -v /home/opc/AlphaOfficeSetup:/dbfiles wvbirder/database-enterprise:12.2.0.1-slim
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<ul>
+  <li>-d runs the command in the background</li>
+  <li>-h assigns it the hostname oracleadb-ao</li>
+  <li>-p maps ports 1521 and 5600 (Enterprise Manager Express) inside 
+the container to your compute instance. In an earlier step, we added 
+ingress rules for these ports</li>
+  <li>–name is the name of the container</li>
+  <li>v maps the directory where you downloaded the setup files to the /dbfiles directory inside the container</li>
+</ul>
+
+<ol>
+  <li>To watch the progress type the following command passing the name of the container:  orcl.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker logs --follow orcl
+</code></pre></div>    </div>
+  </li>
+  <li>When the database creationg is complete, you may see “The database
+ is ready for use”. The instance creation may happen quickly and that 
+message may scroll past. Press control-c to continue.</li>
+</ol>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+
+<h2 id="section-6-create-a-schema-in-container-running-oracle-database-and-login-to-em-express">Section 6-Create A Schema in Container Running Oracle Database and Login to EM Express</h2>
+
+<ol>
+  <li>To create the schema we need to “login” to the container.  Type the following:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker exec -it orcl bash
+</code></pre></div>    </div>
+  </li>
+  <li>Let’s make sure the /dbfiles directory mapped earlier is writeable
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /dbfiles
+touch xxx
+ls
+</code></pre></div>    </div>
+  </li>
+  <li>Now run the sql scipt from inside the container using sqlplus
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sqlplus / as sysdba
+@setupAlphaOracle.sql
+exit
+</code></pre></div>    </div>
+  </li>
+  <li>Now that our schema is created, let’s login to Enterprise Manager Express.  Enter the address below into your browser:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://&lt;Public IP Address&gt;:5600/em
+</code></pre></div>    </div>
+  </li>
+  <li>If prompted to enable Adobe Flash, click Allow.  Login using the 
+credentials below.  Leave the container name field blank.  Explore the 
+database using EM Express.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Username: sys
+Password: Oradoc_db1
+Check the "as SYSDBA" checkbox
+</code></pre></div>    </div>
+    <p><a href="#table-of-contents">Back to Top</a></p>
+  </li>
+</ol>
+
+<h2 id="section-7-deploy-application">Section 7-Deploy Application</h2>
+
+<ol>
+  <li>Download the docker image, twitterfeed, extract it and run the 
+container.  The download is from the wvbirder docker hub account where 
+this application is staged.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d --name=twitterfeed -p=9080:9080 wvbirder/twitterfeed
+</code></pre></div>    </div>
+  </li>
+  <li>Check to see which containers are running.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Open up a broswer to see the application with the stream of texts.  http://Public IP address:9080/statictweets</p>
+  </li>
+  <li>Let’s run the restclient with the Oracle Database as the datasource.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -it --rm --name restclient -p=8002:8002 --link orcl:oracledb-ao -e ORACLE_CONNECT='oracledb-ao/orclpdb1.localdomain' -e DS='oracle' wvbirder/restclient
+
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Go back to your broswer to see the application with the stream of texts.  http://Public IP address:8002/products</p>
+  </li>
+  <li>An application called AlphaOfficeUI has been staged in wvbirders docker hub account.  Let’s download it, extract and run it.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d --name=alphaofficeui -p=8085:8085 wvbirder/alpha-office-ui-js
+</code></pre></div>    </div>
+  </li>
+  <li>Go back to your broswer to see the application running on port 
+8085.  http://Public IP address:8085.  Clickon one of the products to 
+see the details and the twitterfeed comments.</li>
+</ol>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+
+<h2 id="section-8-change-application-optional">Section 8-Change Application (optional)</h2>
+
+<ol>
+  <li>Copy a background image from your compute instance into the filesystem of the container.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> docker cp /home/opc/AlphaOfficeSetup/dark_blue.jpg alphaofficeui:/pipeline/source/public/Images
+</code></pre></div>    </div>
+  </li>
+  <li>wvbirder’s container does not have vim installed.  So you will configure it.  First you need to login to the container.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker exec -it alphaofficeui bash
+apt-get update
+apt-get install vim
+</code></pre></div>    </div>
+  </li>
+  <li>Verify the dark_blue.jpg file is in the container and then use vim
+ to edit the html file for the main page in your application.  Change 
+the highlighted areas to your name.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls /pipeline/source/public/Images
+vim /pipeline/source/public/alpha.html
+</code></pre></div>    </div>
+  </li>
+  <li>Let’s edit the css file as well and change the background color of the app.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim /pipeline/source/public/css/alpha.css
+exit
+</code></pre></div>    </div>
+  </li>
+  <li>Let’s commit this new docker image to your docker hub now.  
+Wvbirder thanks but we have our own Docker account.  Once commited, list
+ the images.  Note that your image is now listed.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker commit alphaofficeui (your-dockerhub-account)/(image-name)
+docker images
+</code></pre></div>    </div>
+  </li>
+  <li>Let’s start a container based on your image.  First we need to stop the existing container.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stop alphaofficeui
+docker rm alphaofficeui
+</code></pre></div>    </div>
+  </li>
+  <li>Let’s download, extract and install the new container from your docker account
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d --name=alphaofficeui -p=8085:8085 (your-dockerhub-account)/(image-name)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Go back to your broswer to view the application.  http://Public IP address:8085</p>
+  </li>
+  <li>Now let’s push this image to your docker hub account
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push (your-dockerhub-account)/(image-name)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Open up a new browswer tab and login to hub.docker.com.  Verify your new account is there.</p>
+  </li>
+  <li>Don’t forget to restart your oracle listener!
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo su - oracle
+. oraenv ORCL
+lsnrctl start LISTENER
+ps -ef | grep tns
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/oracle/learning-library">learning-library</a> is maintained by <a href="https://github.com/oracle">oracle</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com/">GitHub Pages</a>.</span>
+      </footer>
+    </section>
+
+    
+  
+
+</body></html>

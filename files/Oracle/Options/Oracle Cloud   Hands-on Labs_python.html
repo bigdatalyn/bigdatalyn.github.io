@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Oracle Cloud | Hands-on Labs</title>
+<meta name="generator" content="Jekyll v3.8.5">
+<meta property="og:title" content="Oracle Cloud">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Hands-on Labs">
+<meta property="og:description" content="Hands-on Labs">
+<link rel="canonical" href="https://oracle.github.io/learning-library/data-management-library/database/options/python.html">
+<meta property="og:url" content="https://oracle.github.io/learning-library/data-management-library/database/options/python.html">
+<meta property="og:site_name" content="Oracle Cloud">
+<script type="application/ld+json">
+{"@type":"WebPage","url":"https://oracle.github.io/learning-library/data-management-library/database/options/python.html","headline":"Oracle Cloud","description":"Hands-on Labs","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="Oracle%20Cloud%20%20%20Hands-on%20Labs_python_files/style.css">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Oracle Cloud</h1>
+      <h2 class="project-tagline">Hands-on Labs</h2>
+      
+        <a href="https://github.com/oracle/learning-library" class="btn">View on GitHub</a>
+      
+      
+    </section>
+
+    <section class="main-content">
+      <p><img src="Oracle%20Cloud%20%20%20Hands-on%20Labs_python_files/python-title.png" alt=""></p>
+
+<h1 id="table-of-contents">Table of Contents</h1>
+
+<ul>
+  <li><a href="#lab-introduction">Lab Introduction</a></li>
+  <li><a href="#section-1---lab-setup">Section 1 - Lab Setup</a></li>
+  <li><a href="#section-2---python-programming">Section 2 - Python Programming</a></li>
+  <li><a href="#section-3---install-python-oracle-module-and-connect">Section 3 - Install Python Oracle module and connect</a></li>
+  <li><a href="#section-4---Querying-the-Oracle-database">Section 4 - Querying the Oracle database</a></li>
+</ul>
+
+<h2 id="lab-introduction">Lab Introduction</h2>
+<p>This lab guide shows how to program a very simple Python script, 
+connect to a database and retrieve information from the database.</p>
+
+<p><strong>Lab Assumptions</strong></p>
+<ul>
+  <li>Each participant has been provided a username and password to the tenancy c4u03</li>
+  <li>Each participant has completed the Environment Setup lab.</li>
+</ul>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+<h2 id="section-1---lab-setup">Section 1 - Lab Setup</h2>
+
+<p>Python comes preinstalled on most Linux distributions, and it is 
+available as a package on others. The Python packages can be obtained 
+from the software repository of your Linux distribution using the 
+package manager. There are two Python versions available, 2.X and 3.X, 
+the VM used for this lab comes preinstalled with Python 2.7 but since 
+this version will reach the end of support on January 1st, 2020, we will
+ use Python3 for this excercise.</p>
+
+<ol>
+  <li>
+    <p>Open up a terminal and ssh into your compute instance as the opc user</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ssh -i optionskey opc@&lt;your ip address&gt;
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Check if python3 has been installed by running the command</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo yum -y install python3 python3-tools
+</code></pre></div>    </div>
+
+    <p>The system will either install packages or let you know they are already installed.</p>
+  </li>
+</ol>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+<h2 id="section-2---python-programming">Section 2 - Python Programming</h2>
+
+<p>There are several ways to execute Python code.  In this section we 
+start with two examples on how to execute Python code from the command 
+line. The first example executing code from the command prompt i.e. 
+executing commands directly in the interpreter. The second example to 
+save your code in a .py file and invoke the interpreter to execute the 
+file.</p>
+
+<ol>
+  <li>
+    <p>To execute code from command line open the Python command line 
+editor and type the following commands, one by one (each line is one 
+command):</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ python3
+ &gt;&gt;&gt; var1 = "hello world"
+ &gt;&gt;&gt; var1
+ 'hello world'
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>To create a simple script, open up a text editor (like vi) and enter the following script.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var1 = "hello world"
+print(var1)
+</code></pre></div>    </div>
+
+    <p>Save the file as test.py in the /home/oracle directory.</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python3 /home/oracle/test.py
+
+hello world
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+
+<h2 id="section-3---install-python-oracle-module-and-connect">Section 3 - Install Python Oracle module and connect</h2>
+
+<p>cx_Oracle is a python module that enables access to Oracle databases.
+  This module is supported by Oracle 11.2 and higher and works for both 
+Python 2.X and 3.X. There are various ways in which cx_Oracle can be 
+installed. In this example we will use pip (installed by default for 
+python 3.4 and up). For more ways to install cx_Oracle (like yum) check 
+the documentation on <a href="https://yum.oracle.com/oracle-linux-python.html#Aboutcx_Oracle" title="documentation">https://yum.oracle.com/oracle-linux-python.html#Aboutcx_Oracle</a>.</p>
+
+<ol>
+  <li>
+    <p>Become the Oracle user</p>
+
+    <p>Since our client libraries are installed in our VM under the 
+oracle user, we will now ‘sudo’ into the oracle user. (If you have an 
+environment that does not have client libraries accessible to the user 
+running the python3 script, install the Oracle instant client as 
+described in the documentation)</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo su - oracle
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Install cx_Oracle using pip</p>
+
+    <p>Install the module using python3 and pip for the oracle user:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 -m pip install --user cx_Oracle
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Test your install by launching the python console and list the available modules</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$. oraenv
+ORACLE_SID = [ORCL] ? ORCL
+The Oracle base remains unchanged with value /u01/app/oracle
+
+$ python3
+&gt;&gt;&gt; help('modules')
+</code></pre></div>    </div>
+
+    <p>This command will show you a list of installed modules which 
+should include the cx_Oracle module we installed in the previous step.</p>
+  </li>
+  <li>
+    <p>Connect to the Oracle database and print the version of the database via python.<br>
+(This confirms you are connected to an Oracle instance and returns the database version)</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; import cx_Oracle
+&gt;&gt;&gt; con = cx_Oracle.connect('system/Ora_DB4U@localhost:1521/orclpdb')
+&gt;&gt;&gt; print(con.version)
+     
+19.5.0.0.0 (example output)
+
+&gt;&gt;&gt; quit()
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="section-4---querying-the-oracle-database">Section 4 - Querying the Oracle database</h2>
+
+<p>Retrieving records from Oracle database using cursors is a simple as 
+embedding the SQL statement within the cursor().execute statement. For 
+this example we will use an existing table that was imported for the 
+In-Memory lab.</p>
+
+<ol>
+  <li>
+    <p>Create a script called /home/oracle/db_connect.py witht he following contents:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import cx_Oracle
+
+con = cx_Oracle.connect('ssb/Ora_DB4U@localhost:1521/orclpdb')
+
+cur = con.cursor()
+cur.execute('select c_name,c_address,c_city from customer where rownum &lt; 100')
+
+for row in cur:
+  print (row)
+
+cur.close()
+
+con.close()
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Execute the script and check the result:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 /home/oracle/db_connect.py
+</code></pre></div>    </div>
+
+    <p>The result should be a list of customers.</p>
+  </li>
+</ol>
+
+<p>Congratulations!  You’ve created a basic python application connecting to the oracle database.</p>
+
+<p><a href="#table-of-contents">Back to Top</a></p>
+
+
+      <footer class="site-footer">
+        
+          <span class="site-footer-owner"><a href="https://github.com/oracle/learning-library">learning-library</a> is maintained by <a href="https://github.com/oracle">oracle</a>.</span>
+        
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com/">GitHub Pages</a>.</span>
+      </footer>
+    </section>
+
+    
+  
+
+</body></html>

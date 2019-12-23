@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang=" en-US "><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="INDEX, FOLLOW">
+
+    <title>Loading Data into ADW #</title>
+    <meta name="description" content="Learn how to load data from an Oracle Object Store into the Oracle Autonomous Data Warehouse.">
+    <meta name="keywords" content="Oracle Cloud, Autonomous Data Warehouse, ADW, Oracle Cloud Infrastructure, OCI, Object Store, Data Load">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="Loading%20Data%20into%20ADW%20%23_files/normalize.css">
+    <link rel="stylesheet" href="Loading%20Data%20into%20ADW%20%23_files/font-awesome.css">
+    <link rel="stylesheet" href="Loading%20Data%20into%20ADW%20%23_files/obe-lite.css">
+    <script src="Loading%20Data%20into%20ADW%20%23_files/jquery-1.js"></script>
+    <script src="Loading%20Data%20into%20ADW%20%23_files/jquery-ui-1.js"></script>
+    <script src="Loading%20Data%20into%20ADW%20%23_files/jquery.js"></script>
+    <script src="Loading%20Data%20into%20ADW%20%23_files/showdown.js"></script>
+
+    <script src="Loading%20Data%20into%20ADW%20%23_files/ziplabs.js"></script>
+
+    <link rel="stylesheet" href="Loading%20Data%20into%20ADW%20%23_files/default.css">
+    <script src="Loading%20Data%20into%20ADW%20%23_files/highlight.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <div class="w1024" style="min-height:55px; display:block;">
+            <a href="http://docs.oracle.com/" class="oracle-logo">
+                <img src="Loading%20Data%20into%20ADW%20%23_files/oracle_doc_logo.png" alt="Oracle Documentation" style="max-width: none;" width="236" height="22">
+            </a>
+        </div>
+    </header>
+    <!--end header-->
+
+    <div id="content">
+        <h1>
+            <img src="Loading%20Data%20into%20ADW%20%23_files/obe_tag.png" alt="Oracle by Example branding" align="middle">
+            <span id="mainTitle">Loading Data into ADW</span>
+        </h1>
+        <div class="w1024" style="position:relative; margin-top:40px;">
+            <div class="navbackwide border-right" style="width: 220px;"></div>
+            <div id="shownav" title="Show Navigation" style="display: none;"></div>
+            <div id="hidenavw" title="Hide Navigation" style="display: none;"></div>
+            <div id="sidebar" style="display: block;">
+                <div class="left-nav-tut">
+                    <div id="navbar" class="left-nav-w">
+                        <div id="toc" class="tocify"><ul id="tocify-header0" class="tocify-header nav nav-list"><li class="tocify-item active" data-unique="BeforeYouBegin"><a href="#">Before You Begin</a></li><ul class="tocify-subheader nav nav-list" data-tag="3"><li class="tocify-item" data-unique="Background"><a href="#">Background</a></li><li class="tocify-item" data-unique="WhatDoYouNeed?"><a href="#">What Do You Need?</a></li></ul></ul><ul id="tocify-header1" class="tocify-header nav nav-list"><li class="tocify-item" data-unique="LoadadatafiletoyourObjectStore"><a href="#">Load a data file to your Object Store</a></li></ul><ul id="tocify-header2" class="tocify-header nav nav-list"><li class="tocify-item" data-unique="CreateanObjectStoreAuthToken"><a href="#">Create an Object Store Auth Token</a></li></ul><ul id="tocify-header3" class="tocify-header nav nav-list"><li class="tocify-item" data-unique="CreateObjectStoreCredentialsinyourAutonomousDatabase"><a href="#">Create Object Store Credentials in your Autonomous Database</a></li></ul><ul id="tocify-header4" class="tocify-header nav nav-list"><li class="tocify-item" data-unique="CopyDatafromObjectStoretoAutonomousDatabaseTables"><a href="#">Copy Data from Object Store to Autonomous Database Tables</a></li></ul><ul id="tocify-header5" class="tocify-header nav nav-list"><li class="tocify-item" data-unique="WanttoLearnMore?"><a href="#">Want to Learn More?</a></li></ul></div>
+                    </div>
+                </div>
+            </div>
+            <div id="bookContainer" style="margin-left: 220px;">
+                <article>
+                    <div data-spy="scroll" data-target=".left-nav-w"> </div>
+
+                    
+
+<div name="BeforeYouBegin" data-unique="BeforeYouBegin"></div><h2 id="before-you-begin">Before You Begin</h2>
+<p>This 20-minute lab walks you through the steps to get data from 
+external databases and load it into the Oracle Autonomous Data Warehouse
+ (ADW) on Oracle Cloud Infrastructure (OCI). This lab assumes you have 
+already provisioned an ADW instance.</p>
+
+<div name="Background" data-unique="Background"></div><h3 id="background">Background</h3>
+<p>You can load data into Autonomous Database using Oracle Database tools and 3rd party data integration tools. Data can be loaded:</p>
+<ul>
+  <li>from files local to your client computer, or</li>
+  <li>from files stored in a cloud-based object store</li>
+</ul>
+
+<p>For the fastest data loading experience Oracle recommends uploading the source
+files to a cloud-based object store before loading the data into your Autonomous Database.</p>
+
+<p>Today we will use the PL/SQL package <strong>DBMS_CLOUD</strong>. The DBMS_CLOUD package supports loading
+data files from the following Cloud sources:</p>
+<ol>
+  <li>Oracle Cloud Infrastructure Object Storage (OCI Object Storage)</li>
+  <li>Oracle Cloud Infrastructure Object Storage Classic</li>
+  <li>Amazon AWS S3</li>
+</ol>
+
+<p>This tutorial shows how to load data from OCI Object
+Storage using two of the procedures in the DBMS_CLOUD package:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">create_credential</code>: Stores the object store credentials in your Autonomous Database schema.</li>
+  <li><code class="language-plaintext highlighter-rouge">copy_data</code>: Loads the specified source file to a table.</li>
+</ul>
+
+<div name="WhatDoYouNeed?" data-unique="WhatDoYouNeed?"></div><h3 id="what-do-you-need">What Do You Need?</h3>
+<ul>
+  <li>Access to an instance of Oracle Autonomous Data Warehouse (ADW)</li>
+  <li>Have completed the previous lab <strong>Provisioning Autonomous Data Warehouse</strong>.</li>
+</ul>
+
+<div name="LoadadatafiletoyourObjectStore" data-unique="LoadadatafiletoyourObjectStore"></div><h2 id="load-a-data-file-to-your-object-store">Load a data file to your Object Store</h2>
+<p>Oracle Cloud Infrastructure offers two distinct storage class tiers. 
+ Object Storage, for data which you need fast, immediate and frequent 
+access and Archive Storage, for data which you seldom or rarely access. 
+ In this ziplab you will stage data into an object store in the Oracle 
+Cloud Infrastructure Object Storage service.</p>
+
+<ol>
+  <li>Login to your Oracle Cloud Infrastructure Console</li>
+  <li>
+    <p>Select <strong>Object Storage</strong> -&gt; <strong>Object Storage</strong> from the drop down menu on the top left of the Oracle Cloud Infrastructure console.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-object-storage2.png" alt=""></p>
+  </li>
+  <li>
+    <p>Select <strong>Create Bucket</strong> to create a bucket to load 
+your data in.  This will be your staging area.  Later in this lab you 
+will move the data from this staging area to your ADW instance.
+For this lab, we’ll use the <code class="language-plaintext highlighter-rouge">root</code> compartment.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-create-bucket-screen.png" alt=""></p>
+  </li>
+  <li>Enter the following information:
+    <ul>
+      <li><strong>Bucket Name</strong>:  <code class="language-plaintext highlighter-rouge">bucket-&lt;city you were born in&gt;-&lt;your initials&gt;</code>  (example: <em>bucket-london-kam</em>)</li>
+      <li><strong>Storage Tier</strong>:  <code class="language-plaintext highlighter-rouge">Standard</code></li>
+      <li><strong>Encryption</strong>: <code class="language-plaintext highlighter-rouge">Encrypt using Oracle Managed Keys</code></li>
+    </ul>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-create-bucket.png" alt=""></p>
+  </li>
+  <li>Click <strong>Create Bucket</strong>.</li>
+  <li>
+    <p>Click on the bucket name you just created.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-buckets.png" alt=""></p>
+  </li>
+  <li>
+    <p>Review the screen. Note you have created an empty bucket with no objects in it and the visibility is set to private.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-bucket-screen.png" alt=""></p>
+  </li>
+  <li>Click <strong><a href="https://www.oracle.com/webfolder/technetwork/tutorials/obe/cloud/adwc/OBE_Loading%20Your%20Data/files/datafiles_for_sh_tables.zip">here</a></strong> to download the zip file with the objects you will be importing into cloud storage.  The file will download to your desktop.</li>
+  <li>
+    <p>Double click and <strong>extract</strong> the folder to your desktop.</p>
+  </li>
+  <li>
+    <p>Click the <strong>Upload Object</strong> button at the bottom of the page to begin selecting the data files to upload to the bucket.</p>
+  </li>
+  <li>
+    <p>Choose all the files you just extracted, drag and drop them into the upload objects window.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-view-objects-4.png" alt=""></p>
+  </li>
+  <li>
+    <p>Select the ten data files and click <strong>Open</strong>.  Once the files are finished loading, click <strong>Upload Objects</strong> to load.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-select-files.png" alt=""></p>
+  </li>
+  <li>Once complete, verify <strong>all</strong> *.dat files have a status of <code class="language-plaintext highlighter-rouge">Finished</code> and click <strong>Close</strong>.</li>
+  <li>Your bucket should have 10 objects loaded.  If this were a true data load, you may be loading <em>hundreds</em> of large files here.</li>
+  <li>
+    <p>The final step will be to change the visibility of your bucket. Click the <strong>Edit Visibility</strong> button at the top of your Bucket Details screen.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-edit-visibility.png" alt=""></p>
+  </li>
+  <li>
+    <p>Change the visibility to <strong>Public</strong>, accept all other defaults.  Click <strong>Save Changes</strong>.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-update-visibility.png" alt=""></p>
+  </li>
+  <li>
+    <p>Your bucket should now be visible and public.  Verify and proceed to setting up your Auth token.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-bucket-info.png" alt=""></p>
+  </li>
+</ol>
+
+<div name="CreateanObjectStoreAuthToken" data-unique="CreateanObjectStoreAuthToken"></div><h2 id="create-an-object-store-auth-token">Create an Object Store Auth Token</h2>
+
+<p>To load data from the OCI object store, you need to create an Auth 
+Token for your object store account. The
+communication between your Autonomous Database and the object store 
+relies on this Auth Token and username/password authentication.</p>
+
+<ol>
+  <li>If you have logged out of Oracle Cloud Infrastructure Object Storage, please log back in.</li>
+  <li>
+    <p>From the menu on the top left select <strong>Identity-&gt;Users</strong>. Once on the Users Page click on your username</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-identity-users.png" alt=""></p>
+  </li>
+  <li>
+    <p>Select your username.  Click <strong>Auth Tokens</strong> under <strong>Resources</strong> on the left of the console. <em>Note: This will be the the username you created when you launched your trial NOT ziplab_user</em>.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-user-screen.png" alt=""></p>
+  </li>
+  <li>
+    <p>Click <strong>Generate Token</strong>.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-user-token.png" alt=""></p>
+  </li>
+  <li>A pop-up dialog appears. Set the Auth Token by performing the following steps:
+    <ul>
+      <li>In the pop-up dialog, enter a description.  Click the <strong>Generate Token</strong> button.</li>
+    </ul>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-token-description.png" alt=""></p>
+
+    <ul>
+      <li>Copy the generated token to notepad located on your desktop. 
+The token does not appear again and you WILL NEED this token to load 
+your data into ADW.</li>
+    </ul>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-generated-token.png" alt=""></p>
+
+    <ul>
+      <li>Click <strong>Close</strong>.</li>
+    </ul>
+  </li>
+</ol>
+
+<div name="CreateObjectStoreCredentialsinyourAutonomousDatabase" data-unique="CreateObjectStoreCredentialsinyourAutonomousDatabase"></div><h2 id="create-object-store-credentials-in-your-autonomous-database">Create Object Store Credentials in your Autonomous Database</h2>
+
+<p>Now that you have created an object store Auth Token, its time to store the credentials of the object store in ADW instance.</p>
+
+<ol>
+  <li>
+    <p>Let’s navigate to SQL Developer web to prepare your ADW instance for the staged data.<br>
+Go back to your ADW instance via the menu.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-view-dbs.png" alt=""></p>
+  </li>
+  <li>
+    <p>Click on the ADW instance you created in a previous exercise and verify it is still running.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-finance-mart.png" alt=""></p>
+  </li>
+  <li>
+    <p>Click on <strong>Service Console</strong>.  If the service console does not open a new tab, ensure pop up blocker is turned off for your browser.  Click on <strong>Development</strong> to access the developer tools for ADB.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-service-console.png" alt=""></p>
+  </li>
+  <li>
+    <p>Click on <strong>SQL Developer Web</strong>.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-navigate-sql-dev.png" alt=""></p>
+  </li>
+  <li>
+    <p>Enter your database admin username from the previous exercise and login to your ADW instance.</p>
+
+    <p><em>Note:  When you provisioned your ADW instance you wrote down 
+an admin password for your new database.  Use this to log in to SQL 
+Developer web.  You can go back to your ADW instance and reset your 
+admin password via the menu.</em></p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-sql-dev-logging-in.png" alt=""></p>
+  </li>
+  <li>SQL Developer Web has an interface similar to the installed client.  Note where the Worksheet is and the Query Results.</li>
+  <li>Copy the pl/sql procedure into SQL Developer Web. Fill in the 
+username and password using the Oracle Cloud username you signed up with
+ and the auth token you saved earlier. The create_credential procedure 
+of the DBMS_CLOUD package stores the object store credentials in your 
+database. This pl/sql procedure takes in the following arguments:
+    <ul>
+      <li>credential name</li>
+      <li>Oracle cloud username</li>
+      <li>Authorization token created earlier</li>
+    </ul>
+
+    <pre><code class="language-SQL hljs"> <span class="hljs-keyword">begin</span>  
+ DBMS_CLOUD.create_credential (  
+ credential_name =&gt; <span class="hljs-string">'OBJ_STORE_CRED'</span>,  
+ username =&gt; <span class="hljs-string">'&lt;enter your username\&gt;'</span>,  
+ <span class="hljs-keyword">password</span> =&gt; <span class="hljs-string">'\&lt;enter your savedAuth Token\&gt;'</span>  
+ ) ;  
+ <span class="hljs-keyword">end</span>;  
+ /
+</code></pre>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-create-credential.png" alt=""></p>
+  </li>
+  <li>Press the green arrow to run the worksheet.  Once the correct information is entered, you should get a message that the <code class="language-plaintext highlighter-rouge">PL/SQL procedure completed</code></li>
+  <li>Your object store’s credentials are stored in
+your ADW instance now.</li>
+</ol>
+
+<div name="CopyDatafromObjectStoretoAutonomousDatabaseTables" data-unique="CopyDatafromObjectStoretoAutonomousDatabaseTables"></div><h2 id="copy-data-from-object-store-to-autonomous-database-tables">Copy Data from Object Store to Autonomous Database Tables</h2>
+<p>Before data is copied, the tables and objects need to be created in ADW.  In this lab you will create the target objects.</p>
+
+<ol>
+  <li>
+    <p>Download the sql script to create the tables for your ADB instance <strong><a href="https://oracle.github.io/learning-library/data-management-library/autonomous-database/certification/adb-loading/files/adw-loading.sql">here</a></strong>.  Open up the file in notepad from your desktop.   <em>(Remember to click the back button to return to this window)</em> This script will be used to create the tables and constraints.</p>
+  </li>
+  <li>
+    <p>Copy and paste the commands in your SQL Developer Web worksheet area overwriting any existing commands.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-paste-sql.png" alt=""></p>
+  </li>
+  <li>
+    <p>Select the entire script and press the green play button.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-green-play.png" alt=""></p>
+  </li>
+  <li>
+    <p>Once the script has run review the output to ensure the tables and constraints have been created successfully.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-create-tables-3.png" alt=""></p>
+  </li>
+  <li>
+    <p>Now you have empty tables and staged data in the OCI Object 
+store. To get the data from the object store to your ADB instance, you 
+need to get some information about the object. To move the data we will 
+be using the dbms_cloud.copy_data procedure.  The procedure takes 
+information about the location of the data you staged in your object 
+store.  Review the procedure.</p>
+
+    <pre><code class="language-SQL hljs"> <span class="hljs-keyword">begin</span>
+ dbms_cloud.copy_data(
+     table_name =&gt;<span class="hljs-string">'&lt;ENTER_TABLE_NAME&gt;'</span>,
+     credential_name =&gt;<span class="hljs-string">'OBJ_STORE_CRED'</span>,
+     file_uri_list =&gt;<span class="hljs-string">'&lt;entertenancy-bucket-address&gt;/chan_v3.dat'</span>,
+     <span class="hljs-keyword">format</span> =&gt; json_object(<span class="hljs-string">'ignoremissingcolumns'</span> <span class="hljs-keyword">value</span> <span class="hljs-string">'true'</span>, <span class="hljs-string">'removequotes'</span> <span class="hljs-keyword">value</span> <span class="hljs-string">'true'</span>)
+ );
+ <span class="hljs-keyword">end</span>;
+ /
+</code></pre>
+  </li>
+  <li>Leave SQL Developer Web open in a tab and go back to your tenancy and select <strong>Object Storage-&gt;Object Storage</strong> from the menu. Select your bucket.</li>
+  <li>
+    <p>In the objects section, locate one of the data files.  Click on the three dots on the right.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-view-bucket-objects.png" alt=""></p>
+  </li>
+  <li>
+    <p>Click <strong>View Object Details</strong>.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-view-object-details-3.png" alt=""></p>
+  </li>
+  <li>
+    <p>Right click on the URI Path and select Copy Link Location. Paste 
+the URI into a notepad. In the script that will be provided the file and
+ table names are already there. You are going to remove the file name 
+from the end and that is the URI you will use in the following steps.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-view-object-details-customers.png" alt=""></p>
+  </li>
+  <li>
+    <p>Download this <a href="https://oracle.github.io/learning-library/data-management-library/autonomous-database/ziplabs/2019/adw-loading/files/adw-loading-copy-data.sql">sql script</a>  to load your tables. <em>(Remember to click the back button to return)</em>.
+  Replace the file_uri_list with the string you saved in notepad. The 
+script already has the correct table names, just replace the tenancy 
+address.</p>
+
+    <pre><code class="language-SQL hljs"> <span class="hljs-keyword">begin</span>
+     dbms_cloud.copy_data(
+         table_name =&gt;<span class="hljs-string">'&lt;ENTER_TABLE_NAME&gt;'</span>,
+         credential_name =&gt;<span class="hljs-string">'OBJ_STORE_CRED'</span>,
+         file_uri_list =&gt;<span class="hljs-string">'&lt;replace this urlpart&gt;'</span>/chan_v3.dat,
+         <span class="hljs-keyword">format</span> =&gt; json_object(<span class="hljs-string">'ignoremissingcolumns'</span> <span class="hljs-keyword">value</span> <span class="hljs-string">'true'</span>, <span class="hljs-string">'removequotes'</span> <span class="hljs-keyword">value</span> <span class="hljs-string">'true'</span>)
+     );
+ <span class="hljs-keyword">end</span>;
+ /
+</code></pre>
+  </li>
+  <li>Paste the sql script into SQL Workshet.</li>
+  <li>
+    <p>For each of the URI in the script you will need to replace only 
+the first portion of the file_uri_list leaving the file name as is. 
+Leave the table names intact as they are preset for you in the sql 
+script.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw-loading-copy-data-2.png" alt=""></p>
+  </li>
+  <li>
+    <p>This time click the run script button.</p>
+
+    <p><img src="Loading%20Data%20into%20ADW%20%23_files/adw_sql_dev_web_script_button.png" alt=""></p>
+  </li>
+  <li>In the Script Output, once you see the message <code class="language-plaintext highlighter-rouge">PL/SQL procedure successfully completed.</code>, Query a few of the tables to see the rows that were inserted.
+    <pre><code class="language-SQL hljs"><span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> sales;
+<span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> customers;
+</code></pre>
+  </li>
+</ol>
+
+<p>Success! Notice that the data has been copied from the object store to the tables in your ADW instance.</p>
+
+<p>This can be done for multiple tables providing an easy migration path from your existing databaset to Autonomous Database.</p>
+
+<div name="WanttoLearnMore?" data-unique="WanttoLearnMore?"></div><h2 id="want-to-learn-more">Want to Learn More?</h2>
+<ul>
+  <li><a href="https://education.oracle.com/en/data-management/autonomous-database/product_817?certPage=true">Autonomous Database Cloud Certification</a> from Oracle University</li>
+  <li><a href="https://learn.oracle.com/pls/web_prod-plq-dad/dl4_pages.getpage?page=dl4homepage&amp;get_params=offering:35573#filtersGroup1=&amp;filtersGroup2=.f667&amp;filtersGroup3=&amp;filtersGroup4=&amp;filtersGroup5=&amp;filtersSearch=">Data Management Cloud Courses</a> from Oracle University</li>
+</ul>
+
+
+
+                </article>
+            </div>
+            <br class="clearfloat">
+        </div>
+    </div>
+
+    <!--end content-->
+    <div class="footer-container ">
+        <div style="max-width: 994px; padding:10px 0 0 17px;">
+            <footer class="footer-list">
+                <ul>
+                    <li>
+                        <a href="http://www.oracle.com/corporate/index.html" target="_blank">
+                            About Oracle
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.oracle.com/us/corporate/contact/index.html" target="_blank">Contact Us</a>
+                    </li>
+                    <li>
+                        <a href="http://www.oracle.com/us/legal/index.html" target="_blank">
+                            Legal Notices
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.oracle.com/us/legal/terms/index.html" target="_blank">
+                            Terms of Use
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.oracle.com/us/legal/privacy/index.html" target="_blank">
+                            Your Privacy Rights
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.oracle.com/pls/topic/lookup?ctx=cpyr&amp;id=en">Copyright © 2017, Oracle and/or its affiliates. All rights reserved.</a>
+                    </li>
+                </ul>
+            </footer>
+        </div>
+        <script language="javascript">
+            var s_prefix = "OBE";
+            if (typeof (document.title) != "undefined") {
+                var s_pageName = s_prefix + ":" + document.title
+            }
+        </script>
+        <script type="text/javascript" src="Loading%20Data%20into%20ADW%20%23_files/ora_docs.js"></script>
+    </div><script src="Loading%20Data%20into%20ADW%20%23_files/ora_code_docs.js"></script><script src="Loading%20Data%20into%20ADW%20%23_files/ora_code.js"></script>
+
+
+
+<script src="Loading%20Data%20into%20ADW%20%23_files/ora_code_docs.js"></script><script src="Loading%20Data%20into%20ADW%20%23_files/ora_code.js"></script></body></html>
