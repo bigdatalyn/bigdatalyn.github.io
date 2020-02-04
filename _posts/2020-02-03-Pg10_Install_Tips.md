@@ -210,7 +210,7 @@ PostgreSQL安装
 
 连接数据库
 	
-	[postgres@sdedu ~]$ psql -U postgres -d postgres -h 10.0.3.13 -p 5432
+	[postgres@pg10 ~]$ psql -U postgres -d postgres -h 10.0.3.13 -p 5432
 	psql: could not connect to server: Connection refused
 	Is the server running on host "10.0.3.13" and accepting
 	TCP/IP connections on port 5432?		
@@ -231,7 +231,7 @@ postgresql.conf (数据库服务器的参数和监听)
 
 查看数据库端口是否正常启动
 
-	[postgres@sdedu ~]$ netstat -nalp | grep 5432
+	[postgres@pg10 ~]$ netstat -nalp | grep 5432
 	(Not all processes could be identified, non-owned process info
 	will not be shown, you would have to be root to see it all.)
 	tcp        0      0 127.0.0.1:5432          0.0.0.0:*               LISTEN      57348/postgres      
