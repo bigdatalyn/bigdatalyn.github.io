@@ -10,6 +10,19 @@ tags: Centos Postgres Postgresql Tips
 
 Centos 7.6 + Postgresql 10 Install Tips
 
+实战介绍在 CentOS 7.6 环境下如何 源码安装 Postgresql 10
+
+
+
+
+
+
+
+
+
+
+
+
 PostgreSQL安装
 
 1.使用RPM
