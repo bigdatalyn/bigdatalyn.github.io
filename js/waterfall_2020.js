@@ -68,13 +68,6 @@
         title: 'Python基础教程（第2版 修订版）',
         core_tech: '编程',
         description: '<font color="#FF8000">Python入门佳作 经典教程。2016年学习的语言之一</font>'
-    }, {
-        demo_link: 'http://item.jd.com/11785168.html',
-        img_link: '/files/books/bigdata_internet.jpg',
-        code_link: 'http://item.jd.com/11785168.html',
-        title: '《大数据的互联网思维》',
-        core_tech: '大数据的互联网思维》',
-        description: '<font color="#CC2D00">100多亿元买来的15年大数据产品及运营实战经验。抽点时间了解下。</font>'
     }];
 
     contentInit(demoContent) //内容初始化
