@@ -259,7 +259,7 @@ postgresql.conf (数据库服务器的参数和监听)
 
 
 
-```
+
 Have a good work&life! 2020/02 via LinHong
 
 
