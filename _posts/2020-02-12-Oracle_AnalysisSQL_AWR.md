@@ -15,7 +15,7 @@ There are some sql in SQL ordered by CPU Time AWR report.
 
 These sql were using so many cpu time...
 
-![AnalysisSQL]({{ "/files/oracle/19c/AnalysisSQL.png"}})
+![AnalysisSQL]({{ "/files/Oracle/19c/AnalysisSQL.png"}})
 
 ```
 /* SQL Analyze(0) */ select /*+ full(t) parallel(t, 6) parallel_index(t, 6) dbms_stats cursor_sharing_exact use_weak_name_resl dynamic_sampling(0) no_monitoring xmlindex_sel_idx_tbl no_substrb_pad */to_char...
