@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle 19c Online statistics gathering between sqlloader and insert append Tips"
+title: "Oracle 19c online statistics gathering Tips"
 category: Oracle
 tags: Oracle SQLloader Tips 
 ---
@@ -8,8 +8,7 @@ tags: Oracle SQLloader Tips
 * content
 {:toc}
 
-Oracle 19c online statistics gathering Tips
-
+Oracle 19c Online statistics gathering between sqlloader and insert append Tips
 
 This is test with sqlloader/insert append sql.
 
