@@ -246,6 +246,19 @@ SYS@orcl> select DBID, INSTANCE_NUMBER, count(SNAP_ID), min(SNAP_ID), max(SNAP_I
 SYS@orcl>
 ```
 
+### Reference
+
+
+["Extracting AWR Data"](https://docs.oracle.com/en/database/oracle/oracle-database/12.2/tgdba/gathering-database-statistics.html#GUID-18E1B278-B3C5-4FE1-8E51-BC8878C439F5) for information about exporting AWR data from an Oracle database
+
+
+
+["Loading AWR Data"](https://docs.oracle.com/en/database/oracle/oracle-database/12.2/tgdba/gathering-database-statistics.html#GUID-CC6A87BD-BFEA-4A1B-9FD1-3445DC11BE72) for information about importing AWR data into an Oracle database
+
+
+
+
+
 
 
 Have a good work&life! 2020/03 via LinHong
