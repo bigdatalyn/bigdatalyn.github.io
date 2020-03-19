@@ -1,0 +1,118 @@
+.chatLogo {
+  float: right;
+  margin-left: 10px;
+}
+.oracleLogo {
+  float: left;
+  margin-right: 10px;
+}
+.chatIcon {
+  vertical-align: middle;
+}
+
+.chatWithOracle {
+  color: #555;
+  font-weight: normal;
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+.chatWithOracle_MOS {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+root { 
+    display: block;
+}
+
+div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
+    background-color:#EBF1F7;
+    border: 1px gray solid;
+    font-size: 14px;
+    color: #000000; 
+    border-radius: 20px;
+    opacity:.95;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=95)";
+    filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=95);
+}
+
+div.jGrowl div.jGrowl-notification.desktop-notifications {
+    background-color: #FFF !important;
+    line-height: 1.4em;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+div.jGrowl-close {
+    width: 13px; 
+    height: 13px;
+    background: url('../faces/common/images/invitations/close.png') no-repeat;
+}
+
+div.jGrowl-close:hover {
+    width: 13px; 
+    height: 13px;
+    background: url('../faces/common/images/invitations/close_ovr.png') no-repeat;
+}
+
+div.jGrowl div.jGrowl-notification div.jGrowl-header{
+    text-align: center;
+    color: #FFFFFF;  
+    font-size: 20px;
+}
+
+div.jGrowl div.jGrowl-notification.desktop-notifications div.jGrowl-header{
+    text-align: left !important;
+    color: #000 !important;  
+    font-size: 14px !important;
+    line-height: 1.4em;
+}
+
+#title1 {
+	float: left;
+	margin-left: 2px;
+}
+#title2 {
+	float: right;
+	color:white;
+	margin-left: 20px;
+	margin-right: 10px;
+	margin-top: 3px;
+	font-size:18px;
+	text-align:right;
+	width:134px;
+}
+
+
+#notification #expireTime {
+    font-size: 10px;
+    line-height: 30px;
+    color:gray;    
+}
+
+#commandButton {
+    color:black;
+    float: right;
+    width: auto;	
+    height:15px;
+    border: 1px gray solid;
+    font-size:13px;
+    padding: 4px 10px 6px 10px;
+    margin: 00px 0px 0px 10px;
+    text-align:center;
+    background: #fefff2; /* Old browsers */
+    background: -moz-linear-gradient(top,  #fefff2 19%, #d6dbbf 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(19%,#fefff2), color-stop(100%,#d6dbbf)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #fefff2 19%,#d6dbbf 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #fefff2 19%,#d6dbbf 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #fefff2 19%,#d6dbbf 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #fefff2 19%,#d6dbbf 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefff2', endColorstr='#d6dbbf',GradientType=0 ); /* IE6-9 */
+
+
+}
+
+#commandButtonBar #commandButtonBarDesktopNotifications {
+    float: right;
+}

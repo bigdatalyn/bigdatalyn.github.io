@@ -1,0 +1,8 @@
+Linux下grep显示前后几行信息
+标准unix/linux下的grep通过下面參数控制上下文
+
+grep -C 5 foo file 显示file文件里匹配foo字串那行以及上下5行
+grep -B 5 foo file 显示foo及前5行
+grep -A 5 foo file 显示foo及后5行
+
+

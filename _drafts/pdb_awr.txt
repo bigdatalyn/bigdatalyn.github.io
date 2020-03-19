@@ -1,0 +1,195 @@
+
+
+
+AWR Snapshots and Reports from Oracle Multitentant Database(CDB, PDB) (Doc ID 2295998.1)
+
+
+In 12.1
+
+AWR Snapshots and Reports can be created only at the CDB level.
+
+
+
+In 12.2 and later
+
+1. AWR Snapshots and Reports can be created both at the CDB level and at the PDB level. AWR Snapshots can be generated only at the CDB level by default.
+
+ 
+
+2. Manual creation of PDB AWR snapshot.
+   
+
+   SQL> connect <username>/<password> as sysdba
+   SQL> alter session set container=PDB1;
+   SQL> exec dbms_workload_repository.create_snapshot();
+
+
+3. Configuration for automatic creation of PDB AWR snapshots.
+
+
+SQL> alter session set container = CDB$ROOT;
+SQL> alter system set AWR_PDB_AUTOFLUSH_ENABLED = TRUE;
+SQL> alter system set AWR_SNAPSHOT_TIME_OFFSET=1000000; 
+
+SQL> select * from cdb_hist_wr_control;    
+
+      DBID SNAP_INTERVAL                            RETENTION                                TOPNSQL        CON_ID
+---------- ---------------------------------------- ---------------------------------------- ---------- ----------
+1793141417 +00000 01:00:00.0                        +00008 00:00:00.0                        DEFAULT             0
+4182556862 +40150 00:01:00.0                        +00008 00:00:00.0                        DEFAULT             3  
+
+The snap_interval for PDB is too long by default, so it is required to change it.
+
+
+SQL> alter session set container=PDB1;
+SQL> exec dbms_workload_repository.modify_snapshot_settings(interval => 30, dbid => 4182556862);
+
+SQL> alter session set container = CDB$ROOT;
+SQL> select * from cdb_hist_wr_control;
+
+      DBID SNAP_INTERVAL                            RETENTION                                TOPNSQL        CON_ID
+---------- ---------------------------------------- ---------------------------------------- ---------- ----------
+1793141417 +00000 01:00:00.0                        +00008 00:00:00.0                        DEFAULT             0
+4182556862 +00000 00:30:00.0                        +00008 00:00:00.0                        DEFAULT             3
+
+
+
+4. You can find AWR snapshots(CDB,PDB) from cdb_hist_snapshot.
+
+
+SQL> alter session set container=CDB$ROOT;
+SQL> select con_id, instance_number, snap_id, begin_interval_time, end_interval_time from cdb_hist_snapshot order by 1,2,3;
+
+    CON_ID INSTANCE_NUMBER    SNAP_ID BEGIN_INTERVAL_TIME              END_INTERVAL_TIME
+---------- --------------- ---------- -------------------------------- --------------------------------
+         0               1          1 28-FEB-19 06.26.06.000 PM        28-FEB-19 07.00.14.425 PM
+         0               1          2 28-FEB-19 07.00.14.425 PM        28-FEB-19 08.00.30.362 PM
+         0               1          3 28-FEB-19 08.00.30.362 PM        28-FEB-19 09.00.46.286 PM
+         0               1          4 28-FEB-19 09.00.46.286 PM        28-FEB-19 10.00.02.598 PM
+         0               1          5 28-FEB-19 10.00.02.598 PM        28-FEB-19 11.00.15.351 PM
+         3               1          1 28-FEB-19 07.00.14.425 PM        28-FEB-19 07.30.36.225 PM   <<--- PDB snapshot
+         3               1          2 28-FEB-19 07.30.36.225 PM        28-FEB-19 08.00.31.532 PM   <<--- PDB snapshot
+         3               1          3 28-FEB-19 08.00.31.532 PM        28-FEB-19 08.30.10.270 PM   <<--- PDB snapshot
+
+5. Creation of CDB AWR report
+
+
+SQL> alter session set container=CDB$ROOT;
+SQL> @?/rdbms/admin/awrrpt    
+
+
+
+6. Creation of PDB AWR report
+
+
+SQL> alter session set container=PDB1;
+SQL> @?/rdbms/admin/awrrpt
+
+Specify the Report Type
+~~~~~~~~~~~~~~~~~~~~~~~
+AWR reports can be generated in the following formats.  Please enter the name of the format at the prompt.  Default value is 'html'.
+
+'html'          HTML format (default)
+'text'          Text format
+'active-html'   Includes Performance Hub active report
+
+Enter value for report_type:
+
+Specify the location of AWR Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AWR_ROOT - Use AWR data from root (default)  
+AWR_PDB  - Use AWR data from PDB          <<------- This can be chosen only if PDB snapshots have been created separately.
+ 
+Enter value for awr_location:
+
+
+
+
+
+
+
+
+
+
+ORA-20200 Error When Generating AWR or ADDM Report as a PDB DBA User From a 12.2.0.1 CDB Database (Doc ID 2267849.1)
+
+please check Awr_pdb_autoflush_enabled parameter value on CDB - root container. if it is set to FALSE. please follow the solution given on the Doc.
+
+
+SQL> show parameter flush
+
+NAME TYPE VALUE
+------------------------------------ ----------- ------------------------------
+awr_pdb_autoflush_enabled boolean TRUE
+SQL> alter session set container=KPDWH01;
+
+Session altered.
+
+SQL> @?/rdbms/admin/awrrpt
+
+Specify the Report Type
+~~~~~~~~~~~~~~~~~~~~~~~
+AWR reports can be generated in the following formats. Please enter the
+name of the format at the prompt. Default value is 'html'.
+
+'html' HTML format (default)
+'text' Text format
+'active-html' Includes Performance Hub active report
+
+Enter value for report_type: html
+old 1: select 'Type Specified: ',lower(nvl('&&report_type','html')) report_type from dual
+new 1: select 'Type Specified: ',lower(nvl('html','html')) report_type from dual
+
+Type Specified: html
+
+Specify the location of AWR Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AWR_ROOT - Use AWR data from root (default)
+AWR_PDB - Use AWR data from PDB
+Enter value for awr_location: AWR_PDB
+
+Location of AWR Data Specified: AWR_PDB
+
+
+
+ALTER SYSTEM SET awr_pdb_autoflush_enabled= TRUE SID='*' SCOPE=BOTH;
+
+please provide this parameter value from both instances.
+
+also,
+
+please provide below output.
+
+
+set linesize 132
+column snap_interval format A30
+column retention format A20
+select dbid, snap_interval, retention from wrm$_wr_control;
+
+
+ORA-20200 Error When Generating AWR or ADDM Report as a PDB DBA User From a 12.2.0.1 CDB Database (Doc ID 2267849.1)
+
+please check Awr_pdb_autoflush_enabled parameter value on CDB - root container. if it is set to FALSE. please follow the solution given on the Doc.
+
+
+please run below commands in CDB.
+
+EXECUTE DBMS_WORKLOAD_REPOSITORY.MODIFY_SNAPSHOT_SETTINGS( interval => 30, retention => 20160);
+
+
+After 1 hr, please run below command and share the result.
+
+
+select * from AWR_PDB_DATABASE_INSTANCE ;
+
+
+==
+
+please run below commands in CDB.
+
+EXECUTE DBMS_WORKLOAD_REPOSITORY.MODIFY_SNAPSHOT_SETTINGS( interval => 30, retention => 20160);
+
+
+After 1 hr, please run below command and share the result.
+
+select * from AWR_PDB_DATABASE_INSTANCE ;

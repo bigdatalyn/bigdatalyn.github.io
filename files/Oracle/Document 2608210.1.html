@@ -1,0 +1,1028 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html class="p_AFMaximized" dir="ltr" lang="en-US"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><link rel="stylesheet" charset="UTF-8" type="text/css" href="Document%202608210.1_files/kmportal-desktop-8p5wdu-en-ltr-gecko-cmp-s.css"><script type="text/javascript" src="Document%202608210.1_files/Locale1_2_12_3_3.js"></script><script type="text/javascript">var AdfAssert = new Object();AdfAssert.DEBUG = false;</script><script type="text/javascript" src="Document%202608210.1_files/boot-11.js"></script><script type="text/javascript">AdfLogger.DEFAULT_LEVEL=AdfLogger.OFF;(AdfLogger.LOGGER=new AdfLogger('global', new AdfBufferedLogWriter())).register();var checkAgentSupport = false;AdfAgent.AGENT = AdfAgent.getAgent(window);var lookAndFeel = new AdfDhtmlLookAndFeel(window);AdfAgent._LOG_WRITERS = "NativeLogWriter";AdfPage.PAGE = lookAndFeel.createPage();var page = AdfPage.PAGE;page.setBaseResourceUrl("/epmos");page.setAccessibilityMode("default");page.setAnimationEnabled(true);page.__setSessionIdentifier('xzi235v9q');page.__setOutputMode('default');</script><script type="text/javascript" src="Document%202608210.1_files/core-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/AdfTranslations-11.txt"></script><title>Document  2608210.1</title><link rel="stylesheet" type="text/css" afrres="true" href="Document%202608210.1_files/kmstyles-20.css"><script type="text/javascript" language="javascript" src="Document%202608210.1_files/jquery-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/commonKM-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/clickStreamLogger-20.js"></script><script type="text/javascript" language="javascript">var pageState = "";
+  var backDecrementUnit = '3';
+  var executeBackJavascript = 'true';
+  $( document ).ready(function() {
+    pageState = getQueryVariable("_adf.ctrl-state");
+    });
+    
+   function getQueryVariable(variable)
+    {
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+    }
+    
+    window.onbeforeunload = function () {
+        var pageURL = document.URL;
+        if(executeBackJavascript == 'true' && 
+            (pageURL.indexOf("epmos/faces/DocumentDisplay") > 0 || pageURL.indexOf("epmos/faces/SearchDoc") > 0) ){
+            try{
+                var numberState = pageState.split("_")[1] - backDecrementUnit;
+                window.name = pageState.split("_")[0] + "_" + numberState;
+            }catch(err){}
+        }
+    } 
+    
+    function handleSugClick (event) {
+        var link = event.getSource();
+        AdfCustomEvent.queue(link, "logSugClickStream", {}, false);
+    }
+        
+    function openAskCommunity(event){
+        window.open('https://community.oracle.com/discussion/create.jspa?showCommSelectHelpText=true','_blank');
+    }</script><script type="text/javascript" language="javascript">var popupHandle;
+    
+     window.onkeydown = function (event){
+        var key = event.keyCode ;
+        if (key == 27) {
+            if(popupHandle != null){
+                popupHandle.hide();
+            }
+            return false;
+        }
+      }
+     
+     function savePopupId(event){
+       var source = event.getSource();
+       popupHandle = source;
+    }</script><script type="text/javascript" language="javascript">function onCommentsKeyUp(event) {
+        var source = event.getSource();
+        var feedbackButtonComponent = source.findComponent("cb1");
+        var domElement = AdfRichUIPeer.getDomElementForComponent(feedbackButtonComponent);
+        var submittedComments = source.getSubmittedValue();
+        if (submittedComments == null || submittedComments == '') {
+            feedbackButtonComponent.setProperty('disabled', true);
+            document.getElementById(feedbackButtonComponent.getClientId()).disabled = true;
+            AdfDomUtils.addOrRemoveCSSClassName(true, domElement, AdfRichUIPeer.DISABLED_STYLECLASS);
+        }
+        else {
+            feedbackButtonComponent.setProperty('disabled', false);
+            document.getElementById(feedbackButtonComponent.getClientId()).disabled = false;
+            AdfDomUtils.addOrRemoveCSSClassName(false, domElement, AdfRichUIPeer.DISABLED_STYLECLASS);
+        }
+    }</script><script type="text/javascript" language="javascript">referenceRedirect = function (event) {
+          var referenceId = event.getSource().getProperty('referenceId');
+          AdfCustomEvent.queue(event.getSource(), "referenceRedirectEvent", 
+          {
+              referenceId : referenceId
+          },
+true);
+      }</script><script type="text/javascript" language="javascript">showRecentDocContextMenu = function (event) {
+          var id = event.getSource().getProperty('bid');
+          var docUrl = event.getSource().getProperty('docUrl');
+          var bugUrl = event.getSource().getProperty('bugUrl');
+          var type = event.getSource().getProperty('type');
+          var component = document.getElementById(event.getSource().getClientId());
+          if (type == 'BUG') {
+              component.href = bugUrl + id + "&parent=WIDGET_RECENT_DB";
+          }
+          else {
+              component.href = docUrl + id + "&parent=WIDGET_RECENT_DB";
+          }
+      }
+      recentLinkWidgetRedirect = function (event) {
+          var documentId = event.getSource().getProperty('documentId');
+          AdfCustomEvent.queue(event.getSource(), "recentLinkWidgetRedirectEvent", 
+          {
+              documentId : documentId
+          },true);
+      }</script><script type="text/javascript" language="javascript">function onCommentsKeyUp(event) {
+    //event.cancel();
+    var source = event.getSource();
+    var feedbackButtonComponent = source.findComponent("cb1");
+    var domElement = AdfRichUIPeer.getDomElementForComponent(feedbackButtonComponent);
+    var submittedComments = source.getSubmittedValue();
+    
+    if (submittedComments == null || submittedComments == '') {
+        var rateComponent = source.findComponent("sor1");
+        var helpComponent = source.findComponent("sor2");
+        var findComponent = source.findComponent("sor3");
+        if (rateComponent.getSubmittedValue() == "1" || 
+            helpComponent.getSubmittedValue() == "1" ||
+            findComponent.getSubmittedValue() == "1") {
+            feedbackButtonComponent.setProperty('disabled', true);
+            document.getElementById(feedbackButtonComponent.getClientId()).disabled = true;
+            AdfDomUtils.addOrRemoveCSSClassName(true, domElement, AdfRichUIPeer.DISABLED_STYLECLASS);
+        }
+    } else {
+        feedbackButtonComponent.setProperty('disabled', false);
+        document.getElementById(feedbackButtonComponent.getClientId()).disabled = false;
+        AdfDomUtils.addOrRemoveCSSClassName(false, domElement, AdfRichUIPeer.DISABLED_STYLECLASS);
+    }
+}
+
+function onCommentsFocus(event) {
+    var source = event.getSource();
+    var submittedComments = source.getSubmittedValue();
+    var requiredText = source.getProperty("requiredText");
+    if (submittedComments == requiredText)
+        source.setValue("");
+}
+
+function onQuestionValueChange(event) {
+    var source = event.getSource();
+    var submittedValue = source.getSubmittedValue();
+    var commentsComponent = source.findComponent("it1");
+    var requiredText = commentsComponent.getProperty("requiredText");
+    var feedbackButtonComponent = source.findComponent("cb1");
+    var domElement = AdfRichUIPeer.getDomElementForComponent(feedbackButtonComponent);
+    var commentsValue = commentsComponent.getSubmittedValue();
+    
+    if (submittedValue == "1") {
+        if (commentsValue == null || commentsValue == '') {
+            feedbackButtonComponent.setProperty('disabled', true);
+            document.getElementById(feedbackButtonComponent.getClientId()).disabled = true;
+            AdfDomUtils.addOrRemoveCSSClassName(true, domElement, AdfRichUIPeer.DISABLED_STYLECLASS);
+            commentsComponent.setValue(requiredText);
+        }
+    } else {
+        var rateComponent = source.findComponent("sor1");
+        var helpComponent = source.findComponent("sor2");
+        var findComponent = source.findComponent("sor3");
+        if (rateComponent.getSubmittedValue() != "1" &&
+            helpComponent.getSubmittedValue() != "1" &&
+            findComponent.getSubmittedValue() != "1") { 
+            feedbackButtonComponent.setProperty('disabled', false);
+            document.getElementById(feedbackButtonComponent.getClientId()).disabled = false;
+            AdfDomUtils.addOrRemoveCSSClassName(false, domElement, AdfRichUIPeer.DISABLED_STYLECLASS);
+            if (commentsValue == requiredText)
+                commentsComponent.setValue("");
+        }
+    }
+}</script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/messageArea-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/clickstream-20.js"></script><script type="text/javascript" language="javascript">function clickMessageCenter(event) {
+        var link = event.getSource();
+        var tabName = link.getProperty('tabName');
+        AdfCustomEvent.queue(link, "logClickstream", {}, true);
+    }
+    function disableSignout(event){
+        var firingPrompt=event.getSource();
+        firingPrompt.setStyleClass('goMenuItemDisabled');
+        firingPrompt.setDestination(null);
+              }</script><style type="text/css" afrres="true">input::-webkit-input-placeholder {
+                    color: #737373;
+                    font-style: italic;
+                    opacity: 1;
+            }
+            input::-moz-placeholder {
+                    color: #737373;
+                    font-style: italic;
+                    opacity: 1;
+            }
+            input:-moz-placeholder {   /* Older versions of Firefox */
+                    color: #737373;
+                    font-style: italic;
+                    opacity: 1;
+            }
+            input:-ms-input-placeholder {
+                    color: #737373;
+                    font-style: italic;
+                    opacity: 1;
+            }</style><script type="text/javascript" language="javascript" src="Document%202608210.1_files/customComponent-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/promptedText-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/fwkComponent-20.js"></script><script type="text/javascript" language="javascript">function showPVAddEditPopup(event) {
+            event.cancel();
+            var source = event.getSource();
+            var popupId = ('pvAddEdit');
+            
+            var popup = AdfPage.PAGE.findComponentByAbsoluteId(popupId);
+            var halignid = 'pvOnOffLink';
+            if (popup == null){ 
+                popup = AdfPage.PAGE.findComponentByAbsoluteId('pt1:svHd:'+attrId+':'+popupId); 
+                halignid = 'pt1:svHd:pv1:pvOnOffLink';
+            }
+            if (!popup.isPopupVisible()) {
+                var hints = {
+                };
+                hints[AdfRichPopup.HINT_LAUNCH_ID] = source.getClientId();
+                hints[AdfRichPopup.HINT_ALIGN_ID] = halignid;
+                hints[AdfRichPopup.HINT_ALIGN] = AdfRichPopup.ALIGN_AFTER_END;
+                popup.show(hints);
+            }
+        }
+
+        
+        function hidePVAddPopup(event) {
+            event.cancel();
+            var source = event.getSource();
+            var attrId = source.getProperty('attrId');
+            var popupId = source.getProperty('popupId');
+            var isCanceled = source.getProperty('isCanceled');
+            var popup = AdfPage.PAGE.findComponentByAbsoluteId(attrId+':pvAdd');
+            if (popup.isPopupVisible()) {
+                if (isCanceled)
+                    popup.cancel();
+                else 
+                    popup.hide();
+            }
+        }
+        
+        handlePVTextfieldKeyUpAdd = function (event) { 
+            var inputTextComponent = event.getSource();
+            var sourceId = event.getSource().getClientId();
+            var okButtonId = sourceId.replace(inputTextComponent.getId(), 'pvAddOK');
+            sourceId = sourceId + '::content';
+            //var input = $('input[id*=' + sourceId + ']');
+            var inp = document.getElementById(sourceId);
+            var okButton = document.getElementById(okButtonId);
+            //alert(inp.value+' : '+okButton.className.indexOf('Disabled'));
+            if (okButton.className.indexOf('Disabled')  > 0  && inp.value != null){
+                AdfCustomEvent.queue(event.getSource(), "textFieldKeyUpEventAdd", {fvalue : inp.value}, false);
+            } else if (okButton.className.indexOf('Disabled')  == -1  && (inp.value == '' || inp.value == null)){
+                AdfCustomEvent.queue(event.getSource(), "textFieldKeyUpEventAdd", {fvalue : inp.value}, false);
+            }
+            
+        }
+        handlePVTextfieldKeyUp = function (event) { 
+            var inputTextComponent = event.getSource();
+            var sourceId = event.getSource().getClientId();
+            var okButtonId = sourceId.replace(inputTextComponent.getId(), 'pvEditOK');
+            sourceId = sourceId + '::content';
+            //var input = $('input[id*=' + sourceId + ']');
+            var inp = document.getElementById(sourceId);
+            var okButton = document.getElementById(okButtonId);
+            //alert(inp.value+' : '+okButton.className.indexOf('Disabled'));
+            if (okButton.className.indexOf('Disabled')  > 0  && inp.value != null){
+                AdfCustomEvent.queue(event.getSource(), "textFieldKeyUpEvent", {fvalue : inp.value}, false);
+            } else if (okButton.className.indexOf('Disabled')  == -1  && (inp.value == '' || inp.value == null)){
+                AdfCustomEvent.queue(event.getSource(), "textFieldKeyUpEvent", {fvalue : inp.value}, false);
+            }
+            
+        }</script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/jgrowl-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/notifications-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/cookies-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/presence-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/invitation-20.js"></script><link rel="stylesheet" type="text/css" afrres="true" href="Document%202608210.1_files/jgrowl-20.css"><link rel="stylesheet" type="text/css" afrres="true" href="Document%202608210.1_files/notification-20.css"><script type="text/javascript" language="javascript">//
+    var legalStatement = 'If you accept the chat invitation, a transcript of your chat with the engineer will be attached to the service request while it is open. For details, review the <a href="{0}" target="_blank">Oracle Global Customer Support Security Practices</a>.'.replace('{0}', 'http://www.oracle.com/us/support/library/customer-support-security-practices-069170.pdf');
+    var notificationHtmlElement = '<div id="notification" > ' +
+      '  <p>{0} has requested to chat about  ' +
+      '  <a target="_blank" href="/epmos/faces/SrDetail?needSrDetailRefresh=true&srNumber={1}">SR {1}: {2}</a></p>' +
+      '  <span id="expireTime">Chat request will close in <span class="chatInvitationCountDown">10</span> minutes </span>' +
+      '  <div id="commandButtonBar"> ' +
+      '    <button id="declineInvitation" title="When you click \'No, I\'m Busy\' a text box will appear, allowing you to provide feedback to the customer on your availability.">No, I\'m Busy</button> ' +
+      '    <button id="acceptInvitation">Accept Invitation</button> ' +
+      '  </div>' +
+      '  <div id="invitationLegalStatement"> ' + legalStatement + ' </div>' +
+      '</div>';
+      
+    var recoverNotificationElement = '<div id="recoverNotification" > ' +
+        '  <p>You have active conversations in progress. Do you want to recover them?</p>' +
+        '  <div id="commandButtonBarRecover"> ' +
+        '    <button id="declineRecoverNotification">No, don\'t recover</button> ' +
+        '    <button id="acceptRecoverNotification">Yes, recover</button> ' +
+        '  </div>' +
+        '</div>';
+      
+    var notificationHtmlElementHeader = '<div class="oracleLogo"><img src="/epmos/faces/common/images/invitations/oracle.png" /></div>' +
+      '<div class="chatLogo">' +
+      '  <img src="/epmos/faces/common/images/chat_icon.png" class="chatIcon"/>' +
+      '  <span class="chatWithOracle">Chat with <span class="chatWithOracle_MOS">My Oracle Support</span></span> ' +
+      '</div>' +
+      '<div style="clear:both" />';
+    INVITATION.config.ROOT_CONTEXT = '/epmos/';
+    INVITATION.config.isScreenReaderMode = false;
+    INVITATION.config.tabbedChatLoader = '/epmos/faces/common/images/spinning-wheel.gif';
+    INVITATION.config.messageForAnInvitationActionAlreadyProcessed = 'This invitation is no longer valid.';
+    INVITATION.config.genericError = 'An unexpected error occured, please try again later.';
+    INVITATION.config.messageForPopupBlockerEnabled = 'Please disable the popup blocker and then click Accept again.';
+    INVITATION.config.invitationAsPlainText = '{0} has requested to chat about  SR {1}: {2}';
+    INVITATION.config.invitationAsHtmlElement = notificationHtmlElement;
+    INVITATION.config.recoverNotificationAsPlainText = 'You have active conversations in progress. Do you want to recover them?';
+    INVITATION.config.recoverNotificationAsHtmlElement = recoverNotificationElement;    
+    INVITATION.config.invitationHeaderForHtmlElement = notificationHtmlElementHeader;
+    INVITATION.config.unreadMessage = 'message';
+    INVITATION.config.unreadMessages = 'messages';
+    INVITATION.config.declineMessage = 'Provide feedback to the customer on your availability';
+    INVITATION.config.declineMessageSubmit = 'Send';
+
+    var enableDesktopNotificationsElement = '<div id="enableDesktopNotifications" > ' +
+        '  <p>Oracle Support might want to chat with you about your open service requests. While you are signed into My Oracle Support, we can pop-up a message to let you know your engineer wants to chat. To allow these pop-up notifications, do two things: <br></p><ol><li>Click Enable Notifications below</li><li>When the browser offers a second prompt for you to allow/show notifications, click that button too.</li></ol>Once this is done, you will see a notification whenever Oracle Support attempts to contact you by chat while you are logged into My Oracle Support.</p> ' +
+        '  <div id="commandButtonBarDesktopNotifications"> ' +
+        '    <button id="rejectDesktopNotifications">Don\'t Enable</button> ' +
+
+        '    <button id="learnMoreDesktopNotifications" onclick="window.open(\'http://www.oracle.com/pls/topic/lookup?ctx=mos_en&id=MOSHP1498\', \'_blank\'); return false;">Learn More</button> ' +
+        '    <button id="acceptDesktopNotifications">Enable Notifications</button> ' +
+        '  </div>' +
+        '</div>';
+    var enableDesktopNotificationsElementHeader = 'Enable Notifications from Oracle Support';
+
+    INVITATION.config.notificationIcon                = "./common/images/new_chat_invite.png";
+    INVITATION.config.notificationAutoCloseInterval   = 20000;
+    INVITATION.config.notificationTitleForInvitations = 'New Chat Invitation[s] from:';
+    INVITATION.config.notificationTextAboutSR         = 'about SR';
+    INVITATION.config.NOTIFICATIONS_COOKIE_NAME       = "mos.notifications";
+    INVITATION.config.NOTIFICATIONS_COOKIE_EXPIRE     = 365 * 5;
+   
+    var USE_JET = 'true' === 'true';    
+    if (USE_JET) {
+      INVITATION.switchToJet();
+    }
+   
+    function enableDesktopNotifications() {
+      if (COOKIES.getCookieValue(INVITATION.config.NOTIFICATIONS_COOKIE_NAME)) {
+        return;
+      }
+      if ((typeof notify !== 'undefined') && notify.isSupported) {
+        if (notify.permissionLevel() === notify.PERMISSION_DEFAULT) {
+          var rejected = true,
+              elementToGetFocus = false ? '.jGrowl-header > h3' : '#acceptDesktopNotifications';
+          $.jGrowl.defaults.closeTemplate = "";
+          $.jGrowl(enableDesktopNotificationsElement, {
+            theme: 'desktop-notifications',
+            // make JAWS happy with an h3 element
+            header : '<h3>' + enableDesktopNotificationsElementHeader + '</h3>', 
+            closeDuration: 100,
+            sticky: true,
+            beforeOpen : function (notificationWindow, m, o) {
+              $(notificationWindow).width("500px");
+            },
+            afterOpen: function (notificationWindow, m, o) { 
+
+              $(notificationWindow).find("#acceptDesktopNotifications").click(function () {
+                rejected = false; 
+                $(notificationWindow).trigger('jGrowl.beforeClose');            
+                //$(notificationWindow).children("div.jGrowl-close").click();              
+                notify.requestPermission();
+              });
+              $(notificationWindow).find("#rejectDesktopNotifications").click(function () {
+                $(notificationWindow).trigger('jGrowl.beforeClose');
+              //  $(notificationWindow).children("div.jGrowl-close").click();              
+              });
+              // hide close button
+              $(notificationWindow).find('.jGrowl-close').hide();
+              // focus on header if screen reader, otherwise on enable notifications button
+              $(notificationWindow).find(elementToGetFocus).attr('tabindex', 0);
+              $(notificationWindow).find(elementToGetFocus).focus();
+            },
+            close: function() {
+              if (rejected) {
+                COOKIES.setCookieValue(INVITATION.config.NOTIFICATIONS_COOKIE_NAME, false, INVITATION.config.NOTIFICATIONS_COOKIE_EXPIRE);
+              }
+            }
+          });
+        }
+      }
+    }
+
+    if (window.addEventListener) {
+      window.addEventListener('load', function () {
+        enableDesktopNotifications();      
+      }, false);      
+    }
+
+    function displayLoadingIndicator(browserWindow) {
+      if(!browserWindow.document.title) {
+        var tabbedChatLoader = '/epmos/faces/common/images/spinning-wheel.gif';
+        browserWindow.document.write('<img src="' + tabbedChatLoader + '" style="position: absolute; left: 50%; top: 50%; width: 32px; height: 32px; margin: -16px 0 0 -16px;" />');
+      }
+    }
+    
+    function openChatWindowForCustomer(event) {
+      var button = event.getSource();
+      var chatSrNumber = button.getProperty('srNumber');
+
+      var isJet = INVITATION.isJet();
+      if (isJet) {
+        // Switch to ADF temporary, because JET doesn't support CIC yet
+        INVITATION.switchToAdf();
+      }
+
+      var chatWindow = INVITATION.openChatWindow();
+      
+      var onError = function() {
+        if (chatWindow && !chatWindow.document.title) { // about:blank
+          chatWindow.close();
+        }
+        if (arguments.length >= 1) {
+          var error = arguments[0].error;
+          var errorMessage = arguments[0].errorMessage;
+          if ('ERROR_CONTACT_AVAILABILITY_CHANGED' === error) {
+            alert('Support engineer availability has changed. Please refresh SR and try again.');
+          } else if ('ERROR_CREATE_CHAT_CONVERSATION' === error)  {
+            alert('Chat cannot be initiated. Please refresh the SR page and try again.' + '\n\n' + errorMessage);
+          } else if ('ERROR_INVITE_ON_SR_PENDING' === error) {  
+            alert('Chat cannot be initiated because your assigned Support Engineer has already sent a chat request on this SR that is awaiting your response. Please check all My Oracle Support windows for pending chat invitations. '); 
+          } else {
+            alert('An unexpected error occured, please try again later.');
+          }
+        } else {
+          alert('An unexpected error occured, please try again later.');                
+        }
+      }
+      
+      var appName = false ? 'MOSCP' : 'MOSEP';
+      jQuery.ajax( {
+        type: 'POST',
+        dataType: 'json',
+        url : '/epmos/rest/mos/chat/1.0/invite-support-engineer.jsp', 
+        data: {srNumber: chatSrNumber, applicationName: appName},
+        complete: function() {
+          if (isJet) {
+            // Switch back to JET for EIC
+            INVITATION.switchToJet();
+          }
+        },
+        error: function() {
+          onError();  
+        },
+        success : function (result) {            
+          if (result) {
+            if (result.success) {
+              if (!chatWindow.document.title) { // about:blank
+                chatWindow.location = INVITATION.getChatWindowUrl();
+              } else {
+                chatWindow.ignorePageUnload = true;
+                chatWindow.location.reload();
+              }
+              chatWindow.focus();                
+            } else {
+              onError(result);
+            }
+          } else {
+            onError();  
+          }
+       } 
+      });
+      
+    }
+  //</script><script type="text/javascript" language="javascript">//
+    var includeSocial = true;
+    
+    // default poll interval when active in ms.
+    PRESENCE.DEFAULT_ACTIVE_POLL_INTERVAL = 30000;
+    PRESENCE.MAX_POLLING_TIME = 900000;
+    PRESENCE.userAvailable = true;
+
+    if(includeSocial && PRESENCE.userAvailable) {
+        try {
+            PRESENCE.initPresence();
+            if(document.startPoll) {
+                document.startPoll();
+            }
+        } catch (err) {
+            if(typeof(console) != 'undefined')
+              console.log('Error: ' + err);
+        }
+    }
+    //</script><script type="text/javascript" language="javascript">var popupShown = false;
+
+        function readCookie(name)
+        {
+          var nameEQ = name + "=";
+          var cookies = document.cookie.split(';');
+          for(var i=0;i < cookies.length;i++)
+          {
+            var c = cookies[i];
+            while (c.charAt(0)==' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0)
+            {
+              return unescape(c.substring(nameEQ.length, c.length));
+            }
+          }
+          return null;
+        }
+        
+        function readExpCookie() {
+            var timeoutCookie = readCookie('ORASSO_AUTH_HINT');
+            var expTimestamp = 0;
+            if (timeoutCookie && timeoutCookie.length > 5) {
+                var utcTimeout = timeoutCookie.substring(5);
+                
+                if (utcTimeout.length == 14) {
+                    var year	= utcTimeout.substring(0, 4);
+                    var month	= utcTimeout.substring(4, 6);
+                    var day	= utcTimeout.substring(6, 8);
+                    var hour	= utcTimeout.substring(8, 10);
+                    var min	= utcTimeout.substring(10, 12);
+                    var sec	= utcTimeout.substring(12, 14);
+                    
+                    var timeoutDate = new Date(year, month - 1, day, hour, min, sec, 0);
+                    expTimestamp = timeoutDate.getTime();
+                }
+            }
+                
+            if (expTimestamp < 1)
+                expTimestamp = -1;
+            
+            return expTimestamp;
+        }
+        
+        function showPopup(timeout, target) {
+            if (target) {
+                var serverLink = AdfPage.PAGE.findComponent(target);
+                if (serverLink != null) {
+                    AdfCustomEvent.queue(serverLink, 'showPopup', {toLevel:timeout}, true);
+                    popupShown = true;
+                } else {
+                    setTimeout(function(){checkForTimeout(target);}, 1*60*1000);
+                }
+            } else {
+                var timeoutMessage = 'Your SSO login will expire in ' + timeout + ' minutes.  Save the work in all your open applications.  Failure to do this may result in loss of data. \n\nLogout and login back into one application to force an SSO re-login.  This may also require you to re-login to other open applications.\n\nSSO logins expire after 8 hours.'
+                alert(timeoutMessage);
+            }
+        }
+        
+        function hideSsoToPopup(target) {
+            if (target) {
+                var serverLink = AdfPage.PAGE.findComponent(target);
+                if (serverLink != null) {
+                    AdfCustomEvent.queue(serverLink, 'hidePopup', {source:'update'}, true);
+                    popupShown = false;
+                }
+            }
+        }
+        
+        function checkForTimeout(target) {
+            var expTimestamp = readExpCookie();
+                
+            if (expTimestamp != -1) {
+                var d = new Date();
+                var nowUTC = d.getTime() + d.getTimezoneOffset()*60*1000;
+                
+                var timeDiff = expTimestamp - nowUTC;
+                if (timeDiff <= 1800000) { // 30 mins
+                    if (timeDiff <= 1200000) { // 20 mins
+                        if (timeDiff <= 600000) { // 10 mins
+                            if (timeDiff <= 300000) {// 5 mins - show expired dialog
+                                if (timeDiff > 5000) { // do not make call to server if session is expiring
+                                    showPopup(0, target);
+                                }
+                            } else {
+                                showPopup(10, target);
+                            }
+                        } else {
+                            showPopup(20, target);
+                        }
+                    } else {
+                        showPopup(30, target);
+                    }
+                } else if (popupShown) {
+                    hideSsoToPopup(target);
+                }
+            }
+        }
+        
+        function initializeTimeout(target) {
+            window.onfocus = function(){checkForTimeout(target);};
+        
+            checkForTimeoutDriver(target);
+        }
+        
+        function checkForTimeoutDriver(target) {
+            checkForTimeout(target);
+            setTimeout(function(){checkForTimeoutDriver(target);}, 5*60*1000);
+        }
+        
+        function clientHidePopup(event) {
+            popupShown = false;
+            var source = event.getSource();
+            AdfCustomEvent.queue(source, 'hidePopup', {source:'remind'}, true);
+        }</script><link rel="stylesheet" type="text/css" afrres="true" href="Document%202608210.1_files/oracleSuggest-20.css"><script type="text/javascript" language="javascript" src="Document%202608210.1_files/oracleSuggest-20.js"></script><script type="text/javascript" language="javascript" src="Document%202608210.1_files/globalSearchBarUtil-20.js"></script><script type="text/javascript" language="javascript">function unsavedDataHandlerHook(event) {
+        try {
+          if(unsavedDataHandler) {
+            if(unsavedDataHandler(event))
+              return;
+          }
+        } catch(ex) {
+          ;
+        }
+    }
+
+    function menuTabClicked(event) {
+        var inputText = event.getSource();
+        var value = inputText.getProperty('tabName');
+
+        //need to call javascript clickstream.js in a separate call for logOmnitureTrackClickEvent
+        // log clickstream data into Omniture server
+        //logOmnitureTrackClickEvent(value, 'NAV', 'CLICK');
+
+        //notify server to log clickstream data into portalDB
+        //used to send the curently selected source
+       var sourceShortName = $('input[id*="selectedSourceShortName"]').val();
+       AdfCustomEvent.queue(inputText, "notifyServer",
+         {
+            element : value ,
+            shortName : sourceShortName
+         }, true);
+
+    }</script><script type="text/javascript" language="javascript">function externalLinkClicked(event) {
+        var inputText = event.getSource();
+        var value = inputText.getProperty('linkName');
+        AdfCustomEvent.queue(inputText, "logClickExternalLink",
+         {
+            element : value
+         }, true);
+    }
+
+    function kmAdvSearchClicked(event) {
+        var commandLink = event.getSource();
+        AdfCustomEvent.queue(commandLink, "advSearchClicked", {}, true);
+    }</script><script type="text/javascript" language="javascript">function refreshFavMenu(event) {
+        var button = event.getSource();
+        AdfCustomEvent.queue(button, "refreshList", {}, true);
+    }
+    
+    function refreshFavManager(event) {
+        var button = event.getSource();
+        AdfCustomEvent.queue(button, "refreshData", {}, true);
+    }</script><script type="text/javascript" language="javascript">validateSearchTerm = function(event){
+                        event.cancel();
+                    }</script><script type="text/javascript" language="javascript">function handleFBClick (event) {
+            var link = event.getSource();
+            var surveyId = link.getProperty('surveyId');
+            AdfCustomEvent.queue(link, "logFBClickStream", {surveyId:surveyId}, true);
+        }
+
+        function getTopOffset(h) {
+            return (window.screen.height / 2)-(h/2);
+        }
+
+        function getLeftOffset(w) {
+            return (window.screen.width / 2)-(w/2);
+        }</script><script type="text/javascript" language="javascript">function hidePopup(event)
+      {
+          event.cancel();
+          var source = event.getSource();
+          var popup = source.getParent();
+          var elemFound = false;
+          while (!elemFound)
+          {
+              try 
+              {
+                  elemFound = popup.isPopupVisible();
+              }
+              catch (err)
+              {
+                  popup = popup.getParent();
+              }
+          }
+          popup.hide();
+          return false;
+      }</script></head><body class="x14t p_AFMaximized" style="cursor: auto;"><div id="searchBar__searchSuggestions" class="searchBar__searchSuggestionsStyle" style="left: 1351.54px; top: 58.9166px; width: 321px;"></div><noscript>This page uses JavaScript and requires a JavaScript enabled browser.Your browser is not JavaScript enabled.</noscript><iframe name="afr::PushIframe" id="afr::PushIframe" style="display:none" src="Document%202608210.1_files/blank.html"></iframe><input type="hidden" id="oracle.adf.view.faces.RICH_UPDATE" value="dirty"><div id="d1"><a id="d1::skip" href="#" class="x14v">Skip to content</a><form id="f1" name="f1" class="xyz" method="POST" action="/epmos/faces/DocumentDisplay?_adf.ctrl-state=47r3e5qi0_152&amp;id=2608210.1"><div id="kmPgTpl:pt_headerPs" class="x2ac xp1" style="position:absolute;width:auto;height:auto;top:0px;bottom:0px;left:0px;right:0px;min-height:200px;width:auto;overflow:visible;height:auto"><div id="kmPgTpl:pt_headerPs::f" class="xp4" style="position:relative;height:30px;border-width:0px"><span id="kmPgTpl:pglH" class="xpj x1a" style="position:absolute;width:auto;height:auto;top:0px;left:0px;bottom:0px;right:0px"><div id="kmPgTpl:svHd:pt_brBar" class="xpj xpf" style="min-width:960px;">&nbsp;<div id="kmPgTpl:svHd:pt_brBar::l" style="position: absolute; overflow: hidden; top: 0px; left: 0px; width: 330px; bottom: 0px; height: auto;"><span id="kmPgTpl:svHd:pt_brLogo" class="x23k x1a" style="position:absolute;width:auto;height:auto;top:0px;left:0px;bottom:0px;right:0px"><a id="kmPgTpl:svHd:permLink" class="x2b3 xfu" href="https://mosemp.us.oracle.com/epmos/faces/UserPersonalization">Accessibility Preferences</a><img id="kmPgTpl:svHd:pt_i1" title="My Oracle Support For Employees Logo" alt="My Oracle Support For Employees Logo" class="xjd" src="Document%202608210.1_files/mos_logo_internal.gif"></span></div><div id="kmPgTpl:svHd:pt_brBar::c" style="position: absolute; overflow: hidden; inset: 0px 276px 0px 330px; height: auto; width: auto;"><table summary="" id="kmPgTpl:svHd:pgl2" class="x23s x1a" style="position:absolute;width:auto;height:auto;top:0px;left:0px;bottom:0px;right:0px" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td valign="top"><table summary="" id="kmPgTpl:svHd:pv1:powerView" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td valign="middle"><div id="kmPgTpl:svHd:pv1:pvToolbar" class="xk3" style="overflow:hidden;"><div class="xre"><div id="kmPgTpl:svHd:pv1:pvToolbar::oc" class="xjk"><table summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x117"><a style="display: none;"></a><a id="kmPgTpl:svHd:pv1:pvptcl" class="xfe" style="display:none" onclick="return false;" href="#">pvText</a></td><td class="x117"><a style="display: none;"></a><a id="kmPgTpl:svHd:pv1:pvptclL" class="xfe" style="display:none" onclick="return false;" href="#">pvText</a></td><td class="x117"><a style="display: none;"></a><div id="kmPgTpl:svHd:pv1:pvOnOffLink" class="p_AFTextOnly xfg" _afrgrp="0"><table summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><a onclick="this.focus();return false" class="x13d" href="#"><img id="kmPgTpl:svHd:pv1:pvOnOffLink::icon" src="Document%202608210.1_files/pvoff.txt" alt="" class="x13i"><span class="x13e"> PowerView is Off</span></a></td><td id="kmPgTpl:svHd:pv1:pvOnOffLink::popArea"><div _afrpopid="kmPgTpl:svHd:pv1:m2" class="x13g"><a tabindex="-1" class="x13h" id="kmPgTpl:svHd:pv1:pvOnOffLink::popEl"></a></div></td></tr></tbody></table><div id="kmPgTpl:svHd:pv1:pvOnOffLink::popCtr" style="display:none"><div id="kmPgTpl:svHd:pv1:m2" class="x11d af_menu_popup" _afrdth="1"><table summary="" class="x11q" id="kmPgTpl:svHd:pv1:m2::menu" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22l p_AFDisabled" id="kmPgTpl:svHd:pv1:m2::sUpBg"><div id="kmPgTpl:svHd:pv1:m2::ScrollUp" class="x11r p_AFDisabled" style="display:none"><span class="x11t"></span></div></td></tr><tr><td><div id="kmPgTpl:svHd:pv1:m2::ScrollBox" class="x12t"><table summary="" id="kmPgTpl:svHd:pv1:m2::ScrollContent" class="af_menu_scroll-content" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:svHd:pv1:togglePV" class="x11k x11u" onclick="return false;" _afrdth="2" _afrgrp="0" tabindex="0"><td class="x11x"><div class="x12u"></div></td><td class="x11y">Turn PowerView On</td><td class="x11z"><div class="x12u"></div></td><td class="x120"><div class="x12u"></div></td></tr><tr id="kmPgTpl:svHd:pv1:editPvId" class="x11k x11u p_AFDisabled" onclick="return false;" _afrdth="2" _afrgrp="0"><td class="x11x"><div class="x12u"></div></td><td class="x11y">Edit</td><td class="x11z"><div class="x12u"></div></td><td class="x120"><div class="x12u"></div></td></tr><tr id="kmPgTpl:svHd:pv1:newPV" class="x11k x11u" onclick="return false;" _afrdth="2" _afrgrp="0" tabindex="0"><td class="x11x"><div class="x12u"></div></td><td class="x11y">New</td><td class="x11z"><div class="x12u"></div></td><td class="x120"><div class="x12u"></div></td></tr><tr id="kmPgTpl:svHd:pv1:m3" class="x11d x11w p_AFDisabled" _afrdth="2" _afrgrp="0"><td class="x11t"><div class="x12i"></div></td><td class="x125">Recent PowerViews</td><td class="x126"><div class="x12i"></div></td><td class="x127"><div class="x12c"></div><table summary="" class="x11q" id="kmPgTpl:svHd:pv1:m3::menu" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22l p_AFDisabled" id="kmPgTpl:svHd:pv1:m3::sUpBg"><div id="kmPgTpl:svHd:pv1:m3::ScrollUp" class="x11r p_AFDisabled" style="display:none"><span class="x11t"></span></div></td></tr><tr><td><div id="kmPgTpl:svHd:pv1:m3::ScrollBox" class="x12t"><table summary="" id="kmPgTpl:svHd:pv1:m3::ScrollContent" class="af_menu_scroll-content" width="100%" cellspacing="0" cellpadding="0" border="0"></table></div></td></tr><tr><td class="x22m" id="kmPgTpl:svHd:pv1:m3::sDwnBg"><div id="kmPgTpl:svHd:pv1:m3::ScrollDown" class="x11s" style="display:none"><span class="x11t"></span></div></td></tr></tbody></table></td></tr><tr id="kmPgTpl:svHd:pv1:m4" class="x11d x11w p_AFDisabled" _afrdth="2" _afrgrp="0"><td class="x11t"><div class="x12i"></div></td><td class="x125">Named PowerViews</td><td class="x126"><div class="x12i"></div></td><td class="x127"><div class="x12c"></div><table summary="" class="x11q" id="kmPgTpl:svHd:pv1:m4::menu" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22l p_AFDisabled" id="kmPgTpl:svHd:pv1:m4::sUpBg"><div id="kmPgTpl:svHd:pv1:m4::ScrollUp" class="x11r p_AFDisabled" style="display:none"><span class="x11t"></span></div></td></tr><tr><td><div id="kmPgTpl:svHd:pv1:m4::ScrollBox" class="x12t"><table summary="" id="kmPgTpl:svHd:pv1:m4::ScrollContent" class="af_menu_scroll-content" width="100%" cellspacing="0" cellpadding="0" border="0"></table></div></td></tr><tr><td class="x22m" id="kmPgTpl:svHd:pv1:m4::sDwnBg"><div id="kmPgTpl:svHd:pv1:m4::ScrollDown" class="x11s" style="display:none"><span class="x11t"></span></div></td></tr></tbody></table></td></tr><tr id="kmPgTpl:svHd:pv1:managePVMI" class="x11k x11u p_AFDisabled" onclick="return false;" _afrdth="2" _afrgrp="0"><td class="x11x"><div class="x12u"></div></td><td class="x11y">Manage PowerViews</td><td class="x11z"><div class="x12u"></div></td><td class="x120"><div class="x12u"></div></td></tr><tr id="kmPgTpl:svHd:pv1:learnMorePV" class="x11l x11v" _afrdth="2" _afrgrp="0" tabindex="0"><td class="x121"><div class="x12v"></div></td><td class="x122">Learn more about PowerView...</td><td class="x123"><div class="x12v"></div></td><td class="x124"><div class="x12v"></div></td></tr></tbody></table></div></td></tr><tr><td class="x22m" id="kmPgTpl:svHd:pv1:m2::sDwnBg"><div id="kmPgTpl:svHd:pv1:m2::ScrollDown" class="x11s" style="display:none"><span class="x11t"></span></div></td></tr></tbody></table></div></div></div></td></tr></tbody></table></div><div id="kmPgTpl:svHd:pv1:pvToolbar::eoi" class="xjv" tabindex="0"><div id="kmPgTpl:svHd:pv1:pvToolbar::eoc" class="xk8"></div></div></div><div class="xlv"></div></div></td><td valign="middle"><table summary="" id="kmPgTpl:svHd:pv1:pl1" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr></tr></tbody></table></td></tr></tbody></table><div id="kmPgTpl:svHd:pv1:pvAddEdit" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svHd:pv1:pvAddEdit::content"></div></div><div id="kmPgTpl:svHd:pv1:managePV" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svHd:pv1:managePV::content"></div></div></td><td valign="top"><div id="kmPgTpl:svHd:sug1:sggstrpp" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svHd:sug1:sggstrpp::content"></div></div><span id="kmPgTpl:svHd:sug1:pglcl" class="x1a"></span></td><td valign="top"><div id="kmPgTpl:svHd:pop1" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svHd:pop1::content"></div></div></td></tr></tbody></table></div><div id="kmPgTpl:svHd:pt_brBar::r" style="position: absolute; overflow: hidden; top: 0px; right: 0px; bottom: 0px; height: auto;"><table summary="" id="kmPgTpl:svHd:pgl3" class="x23l x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td valign="middle"><div id="kmPgTpl:svHd:r1" class="xpg"><div id="kmPgTpl:svHd:r1:0:dc_mb1" class="x6e" style="overflow:hidden;"><div class="xde"><div id="kmPgTpl:svHd:r1:0:dc_mb1::oc" class="af_menuBar_content"><table summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x11b"><a style="display: none;"></a><div id="kmPgTpl:svHd:r1:0:dc_m1" class="x11d xdt" _afrdth="1" _afrgrp="0"><div class="x12q" tabindex="0"><table summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><img src="Document%202608210.1_files/step_valid.txt" alt="" class="x11e"></td><td class="x11c"><a onclick="return false" class="x11h" tabindex="-1" href="#">Hong (Available)</a></td><td><div class="x11p"></div></td></tr></tbody></table></div><table summary="" class="x11q" id="kmPgTpl:svHd:r1:0:dc_m1::menu" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22l p_AFDisabled" id="kmPgTpl:svHd:r1:0:dc_m1::sUpBg"><div id="kmPgTpl:svHd:r1:0:dc_m1::ScrollUp" class="x11r p_AFDisabled" style="display:none"><span class="x11t"></span></div></td></tr><tr><td><div id="kmPgTpl:svHd:r1:0:dc_m1::ScrollBox" class="x12t"><table summary="" id="kmPgTpl:svHd:r1:0:dc_m1::ScrollContent" class="af_menu_scroll-content" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:svHd:r1:0:dc_cmi1" class="x11k x11u" onclick="return false;" _afrdth="2" _afrgrp="0" tabindex="0"><td class="x11x"><img src="Document%202608210.1_files/step_valid.txt" alt=""></td><td class="x11y">Available (for My Oracle Support initiated chat)</td><td class="x11z"><div class="x12u"></div></td><td class="x120"><div class="x12u"></div></td></tr><tr id="kmPgTpl:svHd:r1:0:dc_cmi2" class="x11k x11u" onclick="return false;" _afrdth="2" _afrgrp="0" tabindex="0"><td class="x11x"><img src="Document%202608210.1_files/step_notvisitable.txt" alt=""></td><td class="x11y">Not Available</td><td class="x11z"><div class="x12u"></div></td><td class="x120"><div class="x12u"></div></td></tr><tr class="x12h"><td class="x11t"><div class="x12i"></div></td><td colspan="3"><div class="x12j"></div></td></tr><tr id="kmPgTpl:svHd:r1:0:dc_cmi3" class="x11l x11v" _afrdth="2" _afrgrp="1" tabindex="0"><td class="x121"><div class="x12v"></div></td><td class="x122">Learn about Chat...</td><td class="x123"><div class="x12v"></div></td><td class="x124"><div class="x12v"></div></td></tr><tr class="x12h"><td class="x11t"><div class="x12i"></div></td><td colspan="3"><div class="x12j"></div></td></tr><tr id="kmPgTpl:svHd:r1:0:dc_cmi4" class="x11l x11v" _afrdth="2" _afrgrp="2" tabindex="0"><td class="x121"><div class="x12v"></div></td><td class="x122">My Account</td><td class="x123"><div class="x12v"></div></td><td class="x124"><div class="x12v"></div></td></tr><tr class="x12h"><td class="x11t"><div class="x12i"></div></td><td colspan="3"><div class="x12j"></div></td></tr><tr id="kmPgTpl:svHd:r1:0:dc_cmi5" class="x11l x11v" _afrdth="2" _afrgrp="3" tabindex="0"><td class="x121"><div class="x12v"></div></td><td class="x122">Sign Out</td><td class="x123"><div class="x12v"></div></td><td class="x124"><div class="x12v"></div></td></tr></tbody></table></div></td></tr><tr><td class="x22m" id="kmPgTpl:svHd:r1:0:dc_m1::sDwnBg"><div id="kmPgTpl:svHd:r1:0:dc_m1::ScrollDown" class="x11s" style="display:none"><span class="x11t"></span></div></td></tr></tbody></table></div></td></tr></tbody></table></div><div id="kmPgTpl:svHd:r1:0:dc_mb1::eoi" class="xjw" tabindex="0"><div id="kmPgTpl:svHd:r1:0:dc_mb1::eoc" class="xk9"></div></div></div><div class="xlu"></div></div><div style="display:none"><a id="kmPgTpl:svHd:r1:0:_afrCommandDelegate" class="xfe" onclick="return false;" href="#"></a></div></div></td><td valign="middle"><a id="kmPgTpl:svHd:epgl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/secure/common/Profile.jspx">Profile</a></td><td valign="middle"><img id="kmPgTpl:svHd:s4" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td><td valign="middle"><img id="kmPgTpl:svHd:s2" src="Document%202608210.1_files/t.gif" alt="" width="5" height="0px"></td><td valign="middle"><a id="kmPgTpl:svHd:cil1" title="Last Refreshed: 27-Feb-2020 17:43 CST" class="xfd" onclick="return false;" href="#"><img id="kmPgTpl:svHd:cil1::icon" src="Document%202608210.1_files/email_16.png" title="Last Refreshed: 27-Feb-2020 17:43 CST" alt="Last Refreshed: 27-Feb-2020 17:43 CST" class="x137"><span class="x133">(0)</span></a></td><td valign="middle"><div id="kmPgTpl:svHd:p2" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svHd:p2::content"></div></div></td><td valign="middle"><img id="kmPgTpl:svHd:s1" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td><td valign="middle"><a id="kmPgTpl:svHd:tc1:tccl1" class="xfe" style="display:none" onclick="return false;" href="#">a</a><div id="kmPgTpl:svHd:tc1:tcp1" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svHd:tc1:tcp1::content"></div></div></td><td valign="middle"><div id="kmPgTpl:svHd:mb1" class="x6e" style="overflow:hidden;"><div class="xde"><div id="kmPgTpl:svHd:mb1::oc" class="af_menuBar_content"><table summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x11b"><a style="display: none;"></a><div id="kmPgTpl:svHd:m1" class="x11d xdt" _afrdth="1" _afrgrp="0"><div class="x12q" tabindex="0"><table summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td></td><td class="x11c"><a onclick="return false" class="x11h" tabindex="-1" href="#">Help</a></td><td><div class="x11p"></div></td></tr></tbody></table></div><table summary="" class="x11q" id="kmPgTpl:svHd:m1::menu" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22l p_AFDisabled" id="kmPgTpl:svHd:m1::sUpBg"><div id="kmPgTpl:svHd:m1::ScrollUp" class="x11r p_AFDisabled" style="display:none"><span class="x11t"></span></div></td></tr><tr><td><div id="kmPgTpl:svHd:m1::ScrollBox" class="x12t"><table summary="" id="kmPgTpl:svHd:m1::ScrollContent" class="af_menu_scroll-content" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x11t"><div class="x12i"></div></td><td colspan="3"><hr id="kmPgTpl:svHd:sep9" class="x1j"></td></tr><tr id="kmPgTpl:svHd:gnItem" class="x11l x11v" _afrdth="2" _afrgrp="0" tabindex="0"><td class="x121"><div class="x12v"></div></td><td class="x122">MOS for Employees - Getting Started User Guide</td><td class="x123"><div class="x12v"></div></td><td class="x124"><div class="x12v"></div></td></tr><tr id="kmPgTpl:svHd:gnItemj_id_1" class="x11l x11v" _afrdth="2" _afrgrp="0" tabindex="0"><td class="x121"><div class="x12v"></div></td><td class="x122">My Oracle Support (MOS) Release Notes Roadmap - Index of Release Notes in MOS Product Area</td><td class="x123"><div class="x12v"></div></td><td class="x124"><div class="x12v"></div></td></tr></tbody></table></div></td></tr><tr><td class="x22m" id="kmPgTpl:svHd:m1::sDwnBg"><div id="kmPgTpl:svHd:m1::ScrollDown" class="x11s" style="display:none"><span class="x11t"></span></div></td></tr></tbody></table></div></td></tr></tbody></table></div><div id="kmPgTpl:svHd:mb1::eoi" class="xjw" tabindex="0"><div id="kmPgTpl:svHd:mb1::eoc" class="xk9"></div></div></div><div class="xlu"></div></div></td></tr></tbody></table></div></div><div id="kmPgTpl:svCH:psl1" class="xpf">&nbsp;<div id="kmPgTpl:svCH:psl1::t" style="position:absolute;overflow:hidden;left:0px;top:0px;height:0px;right:0px"><div id="kmPgTpl:svCH:r1" class="xpg" style="position:absolute;width:auto;height:auto;top:0px;left:0px;bottom:0px;right:0px"><div style="display:none"><a id="kmPgTpl:svCH:r1:0:_afrCommandDelegate" class="xfe" onclick="return false;" href="#"></a></div></div></div></div></span></div><div id="kmPgTpl:pt_headerPs::s" class="xp4" style="position:static;border-width:0px"><div id="kmPgTpl:pt_psl1" class="xpf" style="width:auto;overflow:visible;height:auto"><div style="overflow:hidden"><div id="kmPgTpl:pt_psl1::c" style="overflow:hidden"><div id="kmPgTpl:pt_db8" class="x249 xpi" style="width:auto;overflow:visible;height:auto"><div style="height:26px"><div id="kmPgTpl:pt_db8::tl" style="position:absolute;overflow:hidden;top:0px;height:26px;left:0px;width:6px" class="xrw p_AFFlow"><span style="display:block;"></span></div><div id="kmPgTpl:pt_db8::t" style="position:absolute;overflow:hidden;left:6px;top:0px;right:6px;height:26px"><div style="position:absolute;left:0px;right:0px;top:0px;bottom:0px" class="xrx p_AFFlow"><span style="display:block;"></span></div></div><div id="kmPgTpl:pt_db8::t-i" class="xry" style="position:absolute;overflow:hidden;left:0px;right:0px;top:0px;height:26px"><div id="kmPgTpl:svMenu:ptpsl2" class="panelTabBckrnd xpf" style="position:absolute;width:auto;height:auto;top:0px;left:0px;bottom:0px;right:0px">&nbsp;<div id="kmPgTpl:svMenu:ptpsl2::c" role="navigation" style="position: absolute; overflow: hidden; inset: 0px 503px 0px 0px; height: auto; width: auto;"><div id="kmPgTpl:svMenu:np1" class="xdc xj5" style="position:absolute;width:auto;height:auto;top:0px;left:0px;bottom:0px;right:0px"><div id="kmPgTpl:svMenu:np1::tabh" style="height:2em" _afrdistab="kmPgTpl:svMenu:np1:0:cni1" class="xj6"><div class="xki"><div id="kmPgTpl:svMenu:np1::tabh::soi" class="xjn" tabindex="0"><img src="Document%202608210.1_files/overflow_left.txt" border="0"><div id="kmPgTpl:svMenu:np1::tabh::soc" class="xk4"></div></div><div id="kmPgTpl:svMenu:np1::tabh::oc" class="xji"><div id="kmPgTpl:svMenu:np1:0:cni1" class="xfl p_AFSelected" onclick="return false;" href="/epmos/faces/secure/home/Home.jspx?nodeId=itemNode_Home940968171" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:0:cni1::disclosureAnchor" class="xzi p_AFSelected" href="#" onclick="return false;">Knowledge</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:1:cni1" class="xfl" onclick="return false;" href="/epmos/faces/secure/rca/MyOpenRCAs.jspx?nodeId=itemNode_MyOpenRCAs940968171" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:1:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">RCA</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:2:cni1" class="xfl" onclick="return false;" href="/epmos/faces/secure/custpatchex/Home.jspx?nodeId=itemNode_CustPatchEx_HomePage940968171" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:2:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">Customer Exceptions</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:3:cni1" class="xfl" onclick="return false;" href="/epmos/faces/secure/cms/nominationworkbench/Home.jspx?nodeId=itemNode_CMS_homePage940968171" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:3:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">CMS</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:4:cni1" class="xfl" onclick="return false;" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:4:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">Service Requests</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:5:cni1" class="xfl" onclick="return false;" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:5:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">Patches &amp; Updates</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:6:cni1" class="xfl" onclick="return false;" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:6:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">Certifications</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:7:cni1" class="xfl" onclick="return false;" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:7:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">Systems</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:8:cni1" class="xfl" onclick="return false;" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:8:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">Collector</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:9:cni1" class="xfl" onclick="return false;" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:9:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">Settings</a></div><div class="xze" style="height:2em"></div></div><div id="kmPgTpl:svMenu:np1:10:cni1" class="xfl" onclick="return false;" target=""><div class="xzd" style="height:2em"></div><div class="xzf" style="height:2em"><img alt="" style="padding-right:5px;" class="xiw" src="Document%202608210.1_files/blank.gif" border="0"><a id="kmPgTpl:svMenu:np1:10:cni1::disclosureAnchor" class="xzi" href="#" onclick="return false;">XNS</a></div><div class="xze" style="height:2em"></div></div></div><div id="kmPgTpl:svMenu:np1::tabh::eoi" class="xjr" tabindex="0"><img src="Document%202608210.1_files/overflow_right_EN.txt" border="0"><div id="kmPgTpl:svMenu:np1::tabh::eoc" class="xk4"></div></div></div><div class="x1bd"></div></div></div></div><div id="kmPgTpl:svMenu:ptpsl2::r" role="search" style="position: absolute; overflow: hidden; top: 0px; right: 0px; bottom: 0px; height: auto;"><table summary="" id="kmPgTpl:svMenu:gsb:pt_pgl1" class="x2a4 x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><span style="display:none"></span></td><td><table summary="" id="kmPgTpl:svMenu:gsb:pgl1" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td width="100%"></td><td><button id="kmPgTpl:svMenu:gsb:dc_cb1" class="x23r x7j" onclick="return false;" title="Favorites"><img src="Document%202608210.1_files/favorites_qualifier_arrow.txt" title="Favorites" alt="Favorites" class="xf7"></button></td><td><div id="kmPgTpl:svMenu:gsb:fm1" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svMenu:gsb:fm1::content"></div></div></td><td><div id="kmPgTpl:svMenu:gsb:fm2" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svMenu:gsb:fm2::content"></div></div></td></tr></tbody></table></td><td><table summary="" id="kmPgTpl:svMenu:gsb:pgl_srcs" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><button id="kmPgTpl:svMenu:gsb:cb1" class="x23u x7j" onclick="return false;" title="Recent Searches"><img src="Document%202608210.1_files/recent_searches_menuarrow_global.txt" title="Recent Searches" alt="Recent Searches" class="xf7"></button></td><td><div id="kmPgTpl:svMenu:gsb:p1" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svMenu:gsb:p1::content"></div></div></td></tr></tbody></table></td><td><input type="hidden" id="kmPgTpl:svMenu:gsb:sel_srcG" name="kmPgTpl:svMenu:gsb:sel_srcG" value="Search Knowledge Base"></td><td><input type="hidden" id="kmPgTpl:svMenu:gsb:srchTG" name="kmPgTpl:svMenu:gsb:srchTG"></td><td><input type="hidden" id="kmPgTpl:svMenu:gsb:selSrcShNaG" name="kmPgTpl:svMenu:gsb:selSrcShNaG" value="KB"></td><td><input type="hidden" id="kmPgTpl:svMenu:gsb:selSrcG" name="kmPgTpl:svMenu:gsb:selSrcG"></td><td><input type="hidden" id="kmPgTpl:svMenu:gsb:srcCntG" name="kmPgTpl:svMenu:gsb:srcCntG" value=""></td><td><table class="x1u" style="display:none" id="kmPgTpl:svMenu:gsb:clickStreamParameters" summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xu"><label for="kmPgTpl:svMenu:gsb:clickStreamParameters::content">Selected Source</label></td><td class="xpu" valign="top" nowrap="nowrap"><input id="kmPgTpl:svMenu:gsb:clickStreamParameters::content" name="kmPgTpl:svMenu:gsb:clickStreamParameters" class="x25" type="text"></td></tr></tbody></table></td><td><table id="kmPgTpl:svMenu:gsb:subFgsb:pt_tl2" summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:svMenu:gsb:subFgsb:pt_rl21"><td id="kmPgTpl:svMenu:gsb:subFgsb:pt_cf211"><span id="kmPgTpl:svMenu:gsb:subFgsb:pt_hiddenLabel" class="xq" style="position:absolute; top:-999px"><label for="kmPgTpl:svMenu:gsb:subFgsb:mGlobalSearch:pt_itG::content">Global Search</label></span><span id="kmPgTpl:svMenu:gsb:subFgsb:mGlobalSearch:pt_itG" class="x23n x1u"><input id="kmPgTpl:svMenu:gsb:subFgsb:mGlobalSearch:pt_itG::content" name="kmPgTpl:svMenu:gsb:subFgsb:mGlobalSearch:pt_itG" style="width:auto" class="x25" size="50" type="text" autocomplete="off"></span></td><td id="kmPgTpl:svMenu:gsb:subFgsb:pt_cf212"><a id="kmPgTpl:svMenu:gsb:subFgsb:menu_pt_cil2" title="Global Search" class="x23x xfd" onclick="return false;" href="#"><img id="kmPgTpl:svMenu:gsb:subFgsb:menu_pt_cil2::icon" src="Document%202608210.1_files/searchiconbutton.gif" title="Global Search" alt="Global Search" class="x137"></a></td><td id="kmPgTpl:svMenu:gsb:subFgsb:cf1"></td></tr></tbody></table></td><td><img id="kmPgTpl:svMenu:gsb:s1" src="Document%202608210.1_files/t.gif" alt="" width="5" height="10"></td><td><table summary="" id="kmPgTpl:svMenu:gsb:pgl_adv" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><a id="kmPgTpl:svMenu:gsb:gl31" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/AdvancedSearch">Advanced</a></td><td><img id="kmPgTpl:svMenu:gsb:s2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></td></tr></tbody></table></td></tr></tbody></table></div></div></div><div id="kmPgTpl:pt_db8::tr" style="position:absolute;overflow:hidden;top:0px;height:26px;right:0px;width:6px" class="xrz p_AFFlow"><span style="display:block;"></span></div></div><table summary="" style="table-layout:fixed" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td id="kmPgTpl:pt_db8::l" style="display:table-cell;width:6px" class="xs0 p_AFFlow"><span style="display:block;"></span></td><td style="display:table-cell;width:100%" id="kmPgTpl:pt_db8::c"><div style="position:relative" class="xs1 p_AFFlow"><div style="position:relative"><div id="kmPgTpl:pt_psl3" class="centerContainer xpf" style="width:auto;overflow:visible;height:auto"><div id="kmPgTpl:pt_psl3::t" style="position:relative;overflow:hidden;width:100%"><div id="kmPgTpl:pgHeader" class="x1a"><div><table id="kmPgTpl:tl1" summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:tr1" valign="top"><td id="kmPgTpl:tc1" width="30%" valign="top" align="left"><div id="kmPgTpl:pglt2" class="x1a"><div><span id="kmPgTpl:svBC:pglbc" class="x1a"></span></div><div><span id="kmPgTpl:pglt3" class="x1a"><table id="kmPgTpl:overTitle:tl1" class="xpj" summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:overTitle:rl1"><td id="kmPgTpl:overTitle:cf1" nowrap="nowrap" align="left"><div id="kmPgTpl:overTitle:pgl1" class="x1a"><div><table summary="" id="kmPgTpl:overTitle:pgl2" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><div id="kmPgTpl:overTitle:ot1" class="x29r x6v"><table class="xtx" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xue">&nbsp;</td><td class="xve"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22o"></td><td id="kmPgTpl:overTitle:ot1::_afrTtxt"><div title=" " class="xu2" style="width: 0px; max-width: 0px;"><h1 class="xdl "> </h1></div></td><td id="kmPgTpl:overTitle:ot1::_afrEps"><div class="xdl  xw8" style="display: none" title=" ">…</div></td><td id="kmPgTpl:overTitle:ot1::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xuw">&nbsp;</td></tr></tbody></table><div class="xwb"><div></div></div></div></td></tr></tbody></table></div><div><div id="kmPgTpl:overTitle:s2" style="margin-top:2px"></div></div></div></td></tr></tbody></table></span></div></div></td><td id="kmPgTpl:tc2" width="70%" valign="top" nowrap="nowrap" align="right"><table summary="" id="kmPgTpl:pt_pgl4" class="x1a" style="white-space: nowrap" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td valign="top"><div id="kmPgTpl:pt_pgl5" class="x1a" style="white-space: nowrap"><div><div id="kmPgTpl:pt_s1" style="margin-top:6px"></div></div><div></div></div></td><td valign="top"><div id="kmPgTpl:pt_pgl6" class="x1a" style="white-space: nowrap"><div><div id="kmPgTpl:pt_s2" style="margin-top:1px"></div></div><div><div id="kmPgTpl:svMsg:mosMsgA" class="x1a"><div><div id="kmPgTpl:svMsg:msgAsPop" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:svMsg:msgAsPop::content"></div></div></div></div></div></div></td></tr></tbody></table></td><td id="kmPgTpl:tc3" width="0%" valign="top" nowrap="nowrap" align="right"><table summary="" id="kmPgTpl:pglt4" class="x1a" style="white-space: nowrap" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td valign="top"><img id="kmPgTpl:splt1a" src="Document%202608210.1_files/t.gif" alt="" width="12px" height="0px"></td><td valign="top"><div id="kmPgTpl:pglt5" class="x1a" style="white-space: nowrap"><div><div id="kmPgTpl:splt1b" style="margin-top:6px"></div></div><div><a id="kmPgTpl:cl1" class="padding-left: 12px; padding-right: 12px xfe" style="display:none" onclick="return false;" href="#">Customize Page...</a></div></div></td><td valign="top"><img id="kmPgTpl:splt1c" src="Document%202608210.1_files/t.gif" alt="" width="12px" height="0px"></td></tr></tbody></table></td></tr><tr id="kmPgTpl:pt_rl1" valign="top"><td id="kmPgTpl:pt_cf1" colspan="3"></td></tr></tbody></table></div></div></div><div style="overflow:hidden"><div id="kmPgTpl:pt_psl3::c" style="overflow:hidden"><div id="kmPgTpl:pageCustomizable1" class="x1do" style=""><div id="kmPgTpl:pageCustomizable1::c"><div id="kmPgTpl:pslMain" class="xpj xpf" style="width:auto;overflow:visible;height:auto"><div style="overflow:hidden"><div id="kmPgTpl:pslMain::c" style="overflow:hidden"><div id="kmPgTpl:pt_pgl1" class="x1a"><div><div id="kmPgTpl:psl1" class="xpf" style="width:auto;overflow:visible;background-color:White;;height:auto"><div style="overflow:hidden"><table summary="" style="table-layout:fixed" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td style="width:10px" valign="top"><div id="kmPgTpl:psl1::l" style="overflow:hidden"><img id="kmPgTpl:s1" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></div></td><td valign="top"><div id="kmPgTpl:psl1::c" style="overflow:hidden"><div id="kmPgTpl:r1" class="xpg"><div id="kmPgTpl:r1:0:docMainPanel" class="x1a"><div><span class="xq1">Copyright (c) 2020, Oracle. All rights reserved. Oracle Confidential.</span></div><div><img id="kmPgTpl:r1:0:s5cc" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></div><div><span style="display:none">9876</span></div><div><div id="kmPgTpl:r1:0:psl1" class="p_AFHoverTarget xpj x2el xpf" style="width:auto;overflow:visible;height:auto"><div id="kmPgTpl:r1:0:psl1::t" style="position:relative;overflow:hidden;width:100%"><div id="kmPgTpl:r1:0:pgl14" class="x1a"><div><img id="kmPgTpl:r1:0:s111" src="Document%202608210.1_files/t.gif" alt="" width="10" height="5"></div><div><table summary="" id="kmPgTpl:r1:0:Headpgl" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><div id="kmPgTpl:r1:0:ph22" class="x6v" style="display:none"><table class="xtx" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xue">&nbsp;</td><td class="xve"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22o"></td><td id="kmPgTpl:r1:0:ph22::_afrTtxt"><div title="Doc ID " class="xu2"><h1 class="xdl ">Doc ID </h1></div></td><td id="kmPgTpl:r1:0:ph22::_afrEps"><div class="xdl  xw8" style="display: none" title="Doc ID ">…</div></td><td id="kmPgTpl:r1:0:ph22::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xuw">&nbsp;</td></tr></tbody></table><div class="xwb"><div></div></div></div></td></tr></tbody></table></div><div><table id="kmPgTpl:r1:0:tl5" summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:r1:0:rl12"><td id="kmPgTpl:r1:0:cf41" width="10" align="left"><div id="kmPgTpl:r1:0:srFavorite" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:srFavorite::content"></div></div><a id="kmPgTpl:r1:0:cil4" title="Click to add to Favorites" class="xfd" onclick="return false;" href="#"><img id="kmPgTpl:r1:0:cil4::icon" src="Document%202608210.1_files/favorites_qualifier_notsel.txt" title="Click to add to Favorites" alt="Click to add to Favorites" class="x137"></a><span id="kmPgTpl:r1:0:pglhts1" class="x1a"><div id="kmPgTpl:r1:0:sug1:sggstrpp" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:sug1:sggstrpp::content"></div></div><span id="kmPgTpl:r1:0:sug1:pglcl" class="x1a"></span></span><div id="kmPgTpl:r1:0:sug2:sggstrpp" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:sug2:sggstrpp::content"></div></div><span id="kmPgTpl:r1:0:sug2:pglcl" class="x1a"></span></td><td id="kmPgTpl:r1:0:cf40" width="10"><img id="kmPgTpl:r1:0:s13" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></td><td id="kmPgTpl:r1:0:cf49" align="left"><span id="kmPgTpl:r1:0:ol22" class="xq" style="font-weight:bold;color:Black;font-size:130%"><label>Tuning SQLs to Optimize Smart Scan Performance (Doc ID 2608210.1)</label></span></td><td id="kmPgTpl:r1:0:cf48" align="right"><a id="kmPgTpl:r1:0:toBottom" title="To Bottom" class="xfd" style="text-decoration:none" onclick="return false;" href="#"><img id="kmPgTpl:r1:0:toBottom::icon" src="Document%202608210.1_files/quicklink_smlarrowdown_enabled.gif" title="To Bottom" alt="To Bottom" class="x137"><span class="x133">To Bottom</span></a></td><td id="kmPgTpl:r1:0:cf50"><img id="kmPgTpl:r1:0:s6" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"></td></tr></tbody></table></div><div><hr id="kmPgTpl:r1:0:s4" class="x1j"></div></div></div><div style="overflow:hidden"><div id="kmPgTpl:r1:0:psl1::c" style="overflow:hidden"><div id="kmPgTpl:r1:0:kmDocPanel" class="xpj x1a" style="width:100%;height:100%;overflow:auto;"><div><img id="kmPgTpl:r1:0:s23" src="Document%202608210.1_files/t.gif" alt="" width="10" height="5"></div><div><table id="kmPgTpl:r1:0:tl7" style="table-layout:fixed; overflow:hidden;" summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:r1:0:rl14"><td id="kmPgTpl:r1:0:cf54" style="overflow:hidden; vertical-align:top;"><div id="kmPgTpl:r1:0:pgl25" class="x1a" style="overflow:auto;"><div><span id="kmPgTpl:r1:ot71" class="kmContent" style="font-size:small; color:Black;"><!-- class=km before in this document marker --><p><b>In this Document</b><br>
+</p><table><tbody><tr><td width="0"></td><td><a href="#GOAL">Goal</a></td></tr></tbody></table>
+<table><tbody><tr><td width="0"></td><td><a href="#FIX">Solution</a></td></tr></tbody></table>
+<table><tbody><tr><td width="20">&nbsp;</td><td><a href="#aref_section21">Tuning SQLs to Maximize Smart Scan Throughput</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section22">Standard SQL Tuning Rules Apply</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section23">Exadata Smart Scan SQL Best Practices</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section24">Data Collection for Troubleshooting Smart Scan SQL Issues</a></td></tr></tbody></table>
+<table><tbody><tr><td width="20">&nbsp;</td><td><a href="#aref_section25">Diagnosing smart scan issues</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section26">No Smart Scans (cell multiblock physical read)</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section27">Reduced Storage Index Savings</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section28">Reduced Columnar Cache Reasons</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section29">Increased Passthru Bytes</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section210">Use of direct path reads</a></td></tr></tbody></table>
+<table><tbody><tr><td width="40">&nbsp;</td><td><a href="#aref_section211">Check for IORM Queuing</a></td></tr></tbody></table>
+<table><tbody><tr><td width="20">&nbsp;</td><td><a href="#aref_section212">Tuning PARALLEL_SERVERS_TARGET</a></td></tr></tbody></table>
+<table><tbody><tr><td width="20">&nbsp;</td><td><a href="#aref_section213">Identifying Problematic SQLs</a></td></tr></tbody></table>
+<table><tbody><tr><td width="20">&nbsp;</td><td><a href="#aref_section214">AWR report</a></td></tr></tbody></table>
+<table><tbody><tr><td width="20">&nbsp;</td><td><a href="#aref_section215">Additional/Advanced diagnostics</a></td></tr></tbody></table>
+<table><tbody><tr><td width="0"></td><td><a href="#REF">References</a></td></tr></tbody></table><hr size="1"><p>
+<span></span></p><table class="docInternalContentBox" width="100%"><tbody><tr><td>Created from <a href="https://support.us.oracle.com/oip/faces/secure/ml3/sr/SRDetail.jspx?parent=DOCUMENT&amp;sourceId=2608210.1&amp;SRNumber=3-21424896343" target="_blank">SR 3-21424896343</a>[This section is not visible to customers.]</td></tr></tbody></table></span><br>
+<!-- class=km before applies to --><h2 class="km">Applies to:  </h2>
+Oracle Exadata Storage Server Software - Version 11.1.3.1.0 to 19.3.1.0.0 [Release 11.1 to 12.2]<br>Information in this document applies to any platform.<br>
+
+<h2 class="km"><a name="GOAL"></a>Goal</h2>
+<p>&nbsp;The goal of this document is to share tips on how to optimize 
+your SQLs for the best smart scan performance on Exadata particularly 
+for large reads.</p>
+<h2 class="km"><a name="FIX"></a>Solution</h2>
+<p>For maximum smart scan throughput on Exadata you can optimize your 
+SQLs and tune the database for highest performance of smart scans.</p>
+<a name="aref_section21"></a><h3 class="km">Tuning SQLs to Maximize Smart Scan Throughput</h3>
+<a name="aref_section22"></a><h4 class="km"><a name="sqltune"></a>Standard SQL Tuning Rules Apply</h4>
+<p>First of all, most of the normal query turning rules apply to Exadata.&nbsp; For more on that see:<br><br>&nbsp; <a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=1516494.2">Document 1516494.2</a> - Information Center: SQL Query Performance</p>
+<p>And for any SQL performance issue it is helpful to get a SQL Monitor report and possibly SQLT or SQLHC output.</p>
+<a name="aref_section23"></a><h4 class="km"><a name="BP"></a>Exadata Smart Scan SQL Best Practices</h4>
+<p>Specifically for Exadata, we can maximize performance by:</p>
+<ul>
+<li>Avoiding case insensitive queries.</li>
+<li>Avoiding REGEXP operators like REGEXP_LIKE.</li>
+<li>Avoiding single block reads.</li>
+<li>Choose the best IORM plan and settings to avoid queuing.</li>
+<li>Utilizing PARALLEL_SERVERS_TARGET</li>
+</ul>
+<p>Case insensitive and REGEXP queries often unnecessarily put 
+additional work on the storage cells when the query is offloaded. 
+Optimizing these queries to avoid case insensitivity and REGEXP 
+operators would reduce workload on the storage cells and increase 
+throughput.</p>
+<p>Single block reads do not utilize the cells as well as they could be 
+for smart scans. They also increase the IOPs going to the cell disks 
+which may trigger IORM queuing. Note: single block reads are fine for 
+OLTP type queries</p>
+<a name="aref_section24"></a><h4 class="km">Data Collection for Troubleshooting Smart Scan SQL Issues</h4>
+<p>The steps below are only for smart scan specific issues (i.e. not optimizer plan regressions, etc.)</p>
+<p>Collect SQL*Monitor report</p>
+<div class="kmcodeblock">-- To collect in-memory SQL monitor report<br>set pages 0 lines 32767 trimspool on trim on long 1000000 longchunksize 1000000<br>spool sqlmon.html -- or any other descriptive file name<br>select dbms_sqltune.report_sql_monitor(sql_id=&gt;'&amp;sql_id',type=&gt;'active') from dual;<br>spool off;</div>
+<p>Are there scenarios when the query performs well? If so, collect 
+SQL*Monitor for the time it worked well (for comparison purposes). If it
+ performed well in the past, you can potentially extract it from the 
+repository using the following (but you'd need to determine the snapshot
+ range when it performed well)</p>
+<div class="kmcodeblock">-- get one sql monitor report captured between a range of snapshots<br>select dbms_auto_report.report_repository_detail(r.report_id, type=&gt;'active')<br>from dba_hist_reports<br>where dbid = (select dbid from v$database)<br>and snap_id between &amp;bsnap and &amp;esnap<br>and key1 = '&amp;sql_id'<br>and rownum = 1;</div>
+<p>In most cases, once the row source with the smart scan has been 
+identified from SQL*Monitor, the testcase can often be simplified to 
+execute that one row source by selecting rows from the table and adding 
+the predicates (as shown below). Having a simple query that reproduces 
+the problem can often be very useful.</p>
+<div class="kmcodeblock">
+<p>select * from &lt;table&gt; wehre &lt;predicate&gt;</p>
+<p>-- if query returns a lot of rows, can use count(*), but that may have other optimizations that kick in<br>select count(*) from &lt;table&gt; where &lt;predicate&gt;</p>
+<p>-- or, you can also simply strip the output using the following. Be 
+careful when using this, as we may not get the true row count from 
+SQL*Monitor.<br>select /*+ tracing(strip 1) */ * from &lt;table&gt; where &lt;predicate&gt;</p>
+</div>
+<p>In some cases, it may be helpful to collect an AWR report as well - esp if the issues affect multiple SQL statements.</p>
+<a name="aref_section25"></a><h3 class="km">Diagnosing smart scan issues</h3>
+<p>If you are able to capture a SQL Monitor report for your SQL there 
+are is some good information on smart scans available. In the plan data,
+ find the longest operation and click here:</p>
+<p><a name="sqlmonitor"></a><img src="Document%202608210.1_files/downloadattachmentprocessor_002.tar" alt="SQL Monitor 1" title="SQL Monitor 1" vspace="0" hspace="0" border="0"></p>
+<p>After you click on the binoculars, we have this data available:</p>
+<p><img src="Document%202608210.1_files/downloadattachmentprocessor.tar" alt="SQL Monitor 2" title="SQL Monitor 2" vspace="0" hspace="0" border="0"></p>
+<p>In the example above if you have a simple predicate and are not seeing SI bytes saved then go to the "<a href="#SI">Reduced Storage Index Savings</a>" section. If you see that passthru is a large percentage of eligabe bytes then go to the "<a href="#passthru">Increased Passthru Bytes</a>" section of the note.</p>
+<p>If you are able to gather SQL*Monitor reports for the good vs bad execution:</p>
+<ul>
+<li>Compare the SQL Monitor reports, verify that the execution plans are
+ the same. If the execution plans are different, then this may be a plan
+ regression. Try and get the same plan again for comparison purposes 
+before proceeding through smart scan diagnosis and follow <a href="#sqltune">normal SQL tuning rules</a>.</li>
+<li>Compare the SQL*Monitor reports, verify the data volumes are 
+comparable. If the execution plans are showing a significant difference 
+in rows or IOs, then verify that the changes in performance are not due 
+to data volume changes.</li>
+<li>Once you've validated that the plans are identical, and the data volumes are comparable, then with SQL*Monitor:
+<ul>
+<li>determine where query time is spent (wait events, and row sources), verify that the time is in 'cell smart table scan'</li>
+<li>verify that the row source for the smart scans (usually TABLE ACCESS
+ STORAGE FULL) have regressed. If the time is not being spent on the 
+smart scan row source, then go back to regular SQL tuning.</li>
+</ul>
+</li>
+<li>For the TABLE ACCESS STORAGE FULL row source
+<ul>
+<li>Check the wait events - are they always 'cell smart table scan' (or 
+cell smart index scan), or did they switch to 'cell multiblock physical 
+read', 'direct path read' or perhaps 'cell single block physical read'?</li>
+<li>Click on the binoculars to compare possible causes of the 
+regression. This may include lack of SI savings, lack of CC savings, or 
+more passthru bytes, or lack of smart scans (either seeing 'cell 
+multiblock physical read' or 'direct path read' in the wait 
+events).&nbsp; There are image examples <a href="#sqlmonitor">here</a>.</li>
+</ul>
+</li>
+<li>In general, for smart scan issues, we would like to see v$cell_state and session statistics as show below:
+<ul>
+<li>v$cell_state - either save it in CTAS and export the resulting tables, or query v$cell_state before/after query execution</li>
+</ul>
+</li>
+</ul>
+<div class="kmcodeblock">
+<p>-- save cell state:<br>create table cell_state_before as select * from v$cell_state;<br>-- OR<br>select cell_name, statistics_type, xmltype(statistics_value).getclobval(2,2)<br>from v$cell_state<br>where statistics_type = 'PREDIO';</p>
+<p>&lt;run query&gt;</p>
+<p>-- save cell state<br>create table cell_state_after as select * from v$cell_state;<br>-- OR<br>select cell_name, statistics_type, xmltype(statistics_value).getclobval(2,2)<br>from v$cell_state<br>where statistics_type = 'PREDIO';</p>
+<p>--<br>-- export cell_state_before and cell_state_after using exp or expdp, if saving data to a table rather than querying</p>
+</div>
+<ul>
+<li>session statistics. If the regression can be reproduced in a single session, then session stats can be collected. Either
+<ul>
+<li>login and run the query and collect session stats (so session stats only include information related to the query execution), or</li>
+<li>collect session stats before/after the query(so a comparison can be made)</li>
+</ul>
+</li>
+</ul>
+<div class="kmcodeblock">set lines 128<br>col name format a60 trunc<br>col value format 999,999,999,999,999<br>select n.name, s.value<br>from v$sesstat s, v$statname n<br>where n.statistic# = s.statistic#<br>and s.sid = userenv('SID')<br>and s.value &gt; 0<br>and (n.name like 'cell%'<br>or n.name like 'physical%'<br>or n.name like 'db%'<br>or n.name like 'Session%' -- future stat for IORM<br>or n.name in ('session logical reads','logical read bytes from cache'))<br>order by n.name;</div>
+<p>In some cases, it may be useful to collect the AWR report as well, esp if the issues affect multiple SQL statements.</p>
+<p>Below we discuss various reasons smart scan performance could be impacted:</p>
+<a name="aref_section26"></a><h4 class="km">No Smart Scans (cell multiblock physical read)</h4>
+<p>Direct reads are a prerequisite for performing smart scans. The upper
+ layers determine whether or not a direct read can be done. If the query
+ is not performing a direct read for the row source, using NSMTIO 
+tracing can help determine the root cause. For example, a small segment 
+may not qualify for a direct read.&nbsp; For more information on NSMTIO 
+tracing see:</p>
+<p><a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=2310422.1">Document 2310422.1</a> - SRDC - Exadata: Smart Scan Not Working Issues</p>
+<a name="aref_section27"></a><h4 class="km"><a name="SI"></a>Reduced Storage Index Savings</h4>
+<p>Reduced storage index savings means more real IOs are performed on 
+the storage cells. This could be because SI hasn't been built yet - in 
+which case subsequent executions of the query would build the storage 
+index.</p>
+<p>You can attempt forcing a storage index to get built by running the 
+simple query using a &lt; predicate (e.g. select count(*) from table 
+where column &lt; 0), and then attempt to rerun the test query. If that 
+does not resolve the issue, then determine why SI is not getting built, 
+or not getting used by looking at the output of v$cell_state.&nbsp; In 
+addition you can monitor storage index usage in SQL Monitor or in 
+v$sysstat / v$sesstat with "cell physical IO bytes saved by storage 
+index".&nbsp; This statistic should also be in AWR along with a Smart IO
+ section to break it down further.</p>
+<p>If the object is new and you are not seeing any storage index usage 
+it could be because the MIN_ACT_SCN has not advanced enough.&nbsp; For 
+more information on that see:</p>
+<p>&nbsp; <a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=2081483.1">Document 2081483.1</a>
+ - EXADATA and SuperCluster : Check if long running transactions are 
+preventing min active scn from progressing, resulting in Storage Indexes
+ not being used</p>
+<p>If you the object is not new and there are no long running transactions you can troubleshoot further with:</p>
+<p>&nbsp; <a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=2310422.1">Document 2310422.1</a> - SRDC - Exadata: Smart Scan Not Working Issues</p>
+<a name="aref_section28"></a><h4 class="km"><a name="CC"></a>Reduced Columnar Cache Reasons</h4>
+<p>Reduced columnar cache savings means more IOs are performed on the 
+storage cells. This could be because the columnar cache has not been 
+built yet - check if there are outstanding population jobs (from AWR or 
+from v$cell_state).</p>
+<p>There are a couple of scripts that summarize v$cell_state information
+ for CC available in the OSS vob (oss/utl/ccstats.sql, or a mini-AWR 
+that collects cell_state information from oss/utl/spcell_snap.sql).</p>
+<a name="aref_section29"></a><h4 class="km"><a name="passthru"></a>Increased Passthru Bytes</h4>
+<p>Cellsrv can go through a reverse offload when there is high CPU usage
+ on the cells (90-100% CPU). It can also go through passthru for many 
+reasons including database timezone upgrade, low cell server memory 
+(usually &lt; 2-3 GB of free memory), bad SQL causing the offload server
+ to be busy , etc.</p>
+<p>If reverse offload is occurring due to high cell CPU, check the 
+predicates being used to see if there are ways to use less CPU for 
+evaluating predicates (as stated above, <a href="#BP">case-insensitive searches can consume more CPU</a>).&nbsp;
+ Also check if the workload has changed causing more CPU to be consumed 
+on the cells (for example this would&nbsp; include possible changes to 
+other databases running on the same cells). Reverse offloading by itself
+ is not always bad, and is merely an indication that the cells are CPU 
+bound, so that data gets sent back to the database for processing 
+instead. The goal is to reduce cell CPU usage.</p>
+<p>If passthru is occuring for other reasons - check database statistics
+ for 'cell num smart IO sessions using passthru mode%' .This is also 
+shown in the Exadata sections of the AWR report under "Passthru Reasons"</p>
+<ul>
+<li>cell num smart IO sessions using passthru mode due to user - the user has explicitly disabled smart scans from occurring</li>
+<li>cell num smart IO sessions using passthru mode due to timezone - db timezone upgrade disabled smart scans</li>
+<li>cell num smart IO sessions using passthru mode due to cellsrv - cellsrv, for some reason, decided to perform passthru</li>
+</ul>
+<p>If passthru has occurred due to cellsrv, then check v$cell_state for potential other reasons</p>
+<div class="kmcodeblock">
+<p>set lines 120<br>set pages 100<br>select cell_name, statistics_type, xmltype(statistics_value).getclobval(2,2)<br>from v$cell_state where statistics_type='PREDIO';</p>
+</div>
+<a name="aref_section210"></a><h4 class="km">Use of direct path reads</h4>
+<p>The wait event can show 'direct path reads' rather than 'cell smart 
+table scan' if there are other resources on the cells that are 
+constrained, preventing the cells from performing smart scans. This 
+would include</p>
+<ul>
+<li>lack of memory buffers in the cells.
+<ul>
+<li>Use ExaWatcher to determine if there are a high number of "Number of allocation failures in 1MB pool"</li>
+<li>Use ExaWatcher and check "Number of active smart IO sessions" and 
+"High water mark of smart IO sessions". If the smart IO sessions are 
+approaching or exceeding 6000, there may be too many concurrent PQ 
+slaves accessing the cells. Determine if the number of concurrent PQ 
+slaves can be reduced by modifying parallel degree, and/or <a href="#PST">adjusting parallel_server_target</a>.</li>
+</ul>
+</li>
+</ul>
+<a name="aref_section211"></a><h4 class="km">Check for IORM Queuing</h4>
+<p>You should also choose an IORM plan / option that fits your 
+workload.&nbsp; Ideally you should see little queuing in IORM.&nbsp; To 
+monitor queuing you can look in the "Exadata Top Database Consumers" 
+section of an AWR report search for "Queue Time". If that number is 
+above 10ms you may be suffering from excessive queuing time.&nbsp; 
+Alternatively you can use the following note to review queuing times on 
+the cell side:</p>
+<p>&nbsp; <a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=1337265.1">Document 1337265.1</a> - Tool for Gathering I/O Resource Manager Metrics: metric_iorm.pl</p>
+<p>A quick DCLI command to look for queuing in the last hour would be:</p>
+<div class="kmcodeblock">dcli -g ~/cell_group -l root './metric_iorm.pl "where ageInMinutes &lt; 60" | grep "qtime=[1-9][0-9]"'</div>
+<a name="aref_section212"></a><h3 class="km"><a name="PST"></a>Tuning PARALLEL_SERVERS_TARGET</h3>
+<p>To maximize throughput you should also utilize the 
+PARALLEL_SERVERS_TARGET parameter. Normally you can use the 
+documentation guidelines to set PARALLEL_SERVERS_TARGET but in a 
+massively parallel environment we can limit that number to ensure that 
+we are mostly doing smart scans and not direct reads. If the calculation
+ from the documentation exceeds 5000 PQ slaves across all instances then
+ it might be best to set PARALLEL_SERVERS_TARGET anywhere from 
+5000/instances up to 14000/instances and 50%-80% of PARALLEL_MAX_SERVERS
+ depending on workload. So for example with 4 compute nodes a target 
+range might be 1250-3500 per instance. Ideally we want no more than 
+4800-5000 active smart scans per cell.&nbsp; The goal is to minimize 
+direct path reads which can occur if there are too many smart scan 
+clients or if CPU utilization gets too high on the cell servers. If we 
+set PARALLEL_SERVERS_TARGET too low we can have too much 
+queuing(resmgr:pq queued wait event) but if we set it too high we have 
+too many direct path reads. When tuning this parameter it is important 
+to monitor cell CPU, queuing, and direct path read waits. We want the 
+cells to be busy but not overwhelmed.&nbsp; Here is a table to 
+illustrate:</p>
+<table border="1" align="center">
+<tbody>
+<tr>
+<td>&nbsp;</td>
+<td align="center"><strong>PARALLEL_SERVERS_TARGET TOO LOW</strong></td>
+<td align="center"><strong>PARALLEL_SERVERS_TARGET SET CORRECTLY</strong></td>
+<td align="center"><strong>PARALLEL_SERVERS_TARGET TOO HIGH</strong></td>
+</tr>
+<tr>
+<td><strong>QUEUING</strong></td>
+<td align="center">A lot of queuing happening (resmgr:pq queued) wait event.</td>
+<td align="center">Little or reasonable queuing happening.</td>
+<td align="center">Zero or nearly zero queuing.</td>
+</tr>
+<tr>
+<td><strong>DIRECT PATH READS</strong></td>
+<td align="center">Almost zero direct path reads.</td>
+<td align="center">Few direct path reads.</td>
+<td align="center">Excessive direct path read waits.</td>
+</tr>
+<tr>
+<td><strong>CELL CPU</strong></td>
+<td align="center">Cell CPU is under utilized.</td>
+<td align="center">Cells are busy but not overwhelmed.</td>
+<td align="center">Cells are very busy staying at 90-100% CPU.</td>
+</tr>
+</tbody>
+</table>
+<a name="aref_section213"></a><h3 class="km">Identifying Problematic SQLs</h3>
+<p>If the regressions are not specific to a SQL statement, and there's a
+ perceived regression of general smart scan issues, then ASH can be used
+ to determine SQL statements that waiting on smart scans.</p>
+<p>To find SQL statements consuming the most DB time on smart scan waits over the past 5 minutes:</p>
+<div class="kmcodeblock">select *<br>from (<br>select sql_id, count(*)<br>from gv$active_session_history<br>where event = 'cell smart table scan'<br>and wait_time = 0<br>and sample_time &gt; sysdate - 5/1440<br>group by sql_id<br>order by count(*) desc)<br>where rownum &lt; 21;</div>
+<p>Similarly, to see the top SQL statements consuming the most DB time 
+on smart scan waits over the past 7+ days, a similar query can be 
+executed against dba_hist_active_sess_history instead:</p>
+<div class="kmcodeblock">select *<br>from (<br>select sql_id, count(*)<br>from dba_hist_active_sess_history<br>where event = 'cell smart table scan'<br>and wait_time = 0<br>and dbid = &amp;dbid<br>and snap_id between &amp;bsnap and &amp;esnap<br>group by sql_id<br>order by count(*) desc)<br>where rownum &lt; 21;</div>
+<p>Once there are candidate SQL statements, then retrieve the 
+SQL*Monitor reports for the SQL statements, and follow the steps above.</p>
+<p>Note that you can also change the wait events in the above queries.&nbsp; Example: 'cell single block physical read', etc.</p>
+<a name="aref_section214"></a><h3 class="km">AWR report</h3>
+<p>The AWR report has sections that can help with smart scan diagnosis. Specifically:</p>
+<ul>
+<li>wait events - indicate the number of waits and the average wait 
+time. The average wait time is a general idea, but each individual wait 
+can vary depending on how much work is offloaded to the storage cells.</li>
+<li>sysstat (Instance Activity Statistics) - includes a number of useful statistics related to smart scans, such as
+<ul>
+<li>cell physical IO bytes eligible for predicate offload - # of bytes on storage that are eligible for predicate offload.</li>
+<li>cell physical IO bytes eligible for smart IO - # of bytes eligible 
+for smart scans, which has the actual bytes that have to be scanned. 
+This can be larger than bytes eligible for predicate offload if the 
+table is in EHCC format.</li>
+</ul>
+</li>
+<li>IOStat by Function - this shows total bytes for smart scans. This also shows other types of IO on the system</li>
+<li>Exadata Smart IO - this has general information regarding smart scans, such as
+<ul>
+<li>eligible bytes for smart scans</li>
+<li>bytes saved by SI</li>
+<li>bytes read from Flash Cache</li>
+<li>reverse offload bytes</li>
+<li>passthru bytes</li>
+</ul>
+</li>
+</ul>
+<p>In addition, the Exadata Smart IO sections will also show if there is some imbalance in requests across the cells.</p>
+<ul>
+<li>Passthru Reasons - if passthru is occurring, this will extract the 
+sysstat for sessions in passthru mode, and will indicate it passthru is 
+due to db timezone upgrades, user settings or cellsrv.</li>
+<li>Columnar Cache - if the issues are CC related, there are a number of sections related to Columnar Cache including
+<ul>
+<li>read requests/read bytes from Columnar Cache</li>
+<li>Columnar Cache efficiency</li>
+<li>breakdown of Columnar Cache between No Memcompress (CC1), IM Query or IM Capacity (CC2 formats).</li>
+<li>also shows if there are outstanding population jobs</li>
+</ul>
+</li>
+</ul>
+<a name="aref_section215"></a><h3 class="km">Additional/Advanced diagnostics</h3>
+<p>If the steps above do not yield any useful information, it may be 
+necessary to start drilling down into more details as to how a SQL 
+statement is performing. The following are some examples on how ASH can 
+be further used.</p>
+<p>To track the performance of a SQL statement, or to see there is a 
+suspicion that certain cells are slow, you can use the following to 
+identify a slow cell:</p>
+<div class="kmcodeblock">
+<p>select sample_time,<br>p1,<br>count(*)<br>from gv$active_session_history<br>where sql_id = '&amp;sql_id' -- sql_id of test<br>and event = 'cell smart table scan'<br>and wait_time = 0<br>group by sample_time, p1<br>order by sample_time, count(*) desc;</p>
+<p>-- if you see a large number of PQ slaves with the same p1 at the 
+same sample_time, then this may be an indication that the cell needs to 
+be further investigated.<br>-- To identify the cell:<br>col cellname format a30<br>col cell format a30<br>select cellname,<br>extractvalue(xmltype(confval),'//cell/name') cell<br>from v$cell_config_info<br>where conftype = 'CELL'<br>and cellhash = &amp;p1;</p>
+</div>
+<p>To get an idea on whether or not some of the waits are "long", you 
+can query the time_waited column. But be wary of performing any 
+aggregations on the time_waited column, and using those aggregations to 
+make conclusions.</p>
+<div class="kmcodeblock">select sample_time, time_waited<br>from gv$active_session_history<br>where event = 'cell smart table scan'<br>and wait_time = 0<br>and sql_id = '&amp;sql_id'<br>order by sample_time;</div>
+<p>If you really want to estimate the average latency of the waits for 
+the SQL statements consuming the most DB time on smart scan waits (over 
+the past 5 minutes), this can be estimated using the following:</p>
+<div class="kmcodeblock">-- assumes in memory ASH samples are every second<br>select *<br>from (<br>select sql_id,<br>estd_db_time_ms,<br>estd_db_time_ms/estd_waits estd_latency<br>from (<br>select sql_id,<br>-- if the time_waited is &gt; sampling_interval, then count it as a single wait<br>-- otherwise, the estimated waits = sampling_interval / time_waited<br>sum(case when time_waited &gt;= 1000000<br>then 1<br>else 1000000/decode(time_waited,0,null,time_waited)<br>end) estd_waits,<br>-- db time is # of samples * sampling_interval<br>count(*) * 1000 estd_db_time_ms<br>from gv$active_session_history<br>where sample_time &gt; sysdate - 5/1440<br>and event='cell smart table scan'<br>and wait_time = 0<br>group by sql_id)<br>order by estd_db_time_ms desc)<br>where rownum &lt; 21;</div>
+<p>Similarly, to estimate the average latency of the sql statements 
+consuming the most DB time on smart scan waits over the past 7+ days:</p>
+<div class="kmcodeblock">-- assumes on-disk ASH samples are every 10 seconds<br>select *<br>from (<br>select sql_id,<br>estd_db_time_ms,<br>estd_db_time_ms/estd_waits estd_latency<br>from (<br>select sql_id,<br>-- if the time_waited is &gt; sampling_interval, then count it as a single wait<br>-- otherwise, the estimated waits = sampling_interval / time_waited<br>sum(case when time_waited &gt;= 10000000<br>then 1<br>else 10000000/decode(time_waited,0,null,time_waited)<br>end) estd_waits,<br>-- db time is # of samples * sampling_interval<br>count(*) * 10000 estd_db_time_ms<br>from dba_hist_active_sess_history<br>where dbid = :dbid<br>and sample_time &gt; trunc(sysdate) - 7<br>and event='cell smart table scan'<br>and wait_time = 0<br>group by sql_id)<br>order by estd_db_time_ms desc)<br>where rownum &lt; 21;</div>
+<p>To find cpu intensive queries, you can look at AWR, or you can query v$sqlstats.</p>
+<div class="kmcodeblock">-- you can query regular executions, cpu_time, elapsed_time columns, or the delta columns.<br>-- the delta columns are deltas since the last AWR snapshot. This gives it a 'recency' bias.<br>select sql_id,<br>delta_execution_count, delta_elapsed_time, delta_cpu_time, delta_user_io_wait_time<br>delta_physical_read_requests, delta_physical_read_bytes,<br>delta_io_interconnect_bytes, delta_cell_offload_elig_bytes<br>from v$sqlstats<br>where cpu_time &gt; &amp;threshold<br>order by delta_cpu_time desc;</div>
+<p>&nbsp;</p>
+
+<h2 class="km"><a name="REF"></a>References</h2><a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=1516494.2">NOTE:1516494.2</a> - Information Center: SQL Query Performance Overview<br><a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=2081483.1">NOTE:2081483.1</a>
+ - EXADATA and SuperCluster : Check if long running transactions are 
+preventing min active scn from progressing, resulting in Storage Indexes
+ not being used<br><span><table class="docInternalContentBox" width="100%"><tbody><tr><td> <a href="https://mosemp.us.oracle.com/epmos/faces/BugDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=30479478" target="_blank">BUG:30479478</a> - HIGH AVG CELL SMART TABLE SCAN WAITS[This section is not visible to customers.]</td></tr></tbody></table></span><br><span><table class="docInternalContentBox" width="100%"><tbody><tr><td> <a href="https://mosemp.us.oracle.com/epmos/faces/BugDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=30496186" target="_blank">BUG:30496186</a> - SMART SCAN PERFORMANCE ISSUES DUE TO CELL PASSTHRU MODE[This section is not visible to customers.]</td></tr></tbody></table></span><br><span><table class="docInternalContentBox" width="100%"><tbody><tr><td> <a href="https://mosemp.us.oracle.com/epmos/faces/BugDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=30507137" target="_blank">BUG:30507137</a> - LARGE I/O THROTTLING CAUSING SEVERE PERFORMANCE DEGRADATION[This section is not visible to customers.]</td></tr></tbody></table></span><br><a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=2310422.1">NOTE:2310422.1</a> - SRDC - Exadata: Smart Scan Not Working Issues<br><a href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?parent=DOCUMENT&amp;sourceId=2608210.1&amp;id=1337265.1">NOTE:1337265.1</a> - Tool for Gathering I/O Resource Manager Metrics: metric_iorm.pl<br>
+</div></div></td><td id="kmPgTpl:r1:0:cf56" width="1%"><img id="kmPgTpl:r1:0:s44" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></td><td id="kmPgTpl:r1:0:cf55" style="vertical-align:top" width="20%"><div id="kmPgTpl:r1:0:pglwdg" class="x1a" style="width:100%;height:100%;overflow:auto;"><div><div id="kmPgTpl:r1:0:ws1" style="margin-top:10px"></div></div><div><div id="kmPgTpl:r1:0:pb5" class="xdk"><table class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrf p_AFCore p_AFDefault">&nbsp;</td><td class="xrj p_AFCore p_AFDefault"><table summary="" cellspacing="0" cellpadding="0"><tbody><tr><td class="xr5"><a href="#" onclick="return false" class="xts x1ay" id="kmPgTpl:r1:0:pb5::_afrDscl" title="Collapse Was this document helpful?"></a></td><td style="white-space:nowrap" class="xr7"><h1 class="xr9">Was this document helpful?</h1></td></tr></tbody></table></td><td class="xrn p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table><div class="x1b5 p_AFCore p_AFDefault"><div class="x5s p_AFCore p_AFDefault" id="kmPgTpl:r1:0:pb5::content"><div id="kmPgTpl:r1:0:psl3" class="xpf" style="width:auto;overflow:visible;height:auto"><div style="overflow:hidden"><div id="kmPgTpl:r1:0:psl3::c" style="overflow:hidden"><div id="kmPgTpl:r1:0:r7" class="xpg"><div id="kmPgTpl:r1:0:r7:0:pfl1" class="x19"><table summary="" style="width: auto" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x4w" colspan="1"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x51"><div id="kmPgTpl:r1:0:r7:0:pfl2" class="x19" style="margin-left:0;padding-left:0;"><table summary="" style="width: auto" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x4w" colspan="1"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td></td></tr><tr><td class="x51"><div id="kmPgTpl:r1:0:r7:0:sor1" class="x21"><div id="kmPgTpl:r1:0:r7:0:sor1::content" name="kmPgTpl:r1:0:r7:0:sor1" class="x2j"><fieldset style="border:none; margin:0px; padding:0px;"><legend class="x9w"> </legend><div><span class="xif"><input type="radio" name="kmPgTpl:r1:0:r7:0:sor1" id="kmPgTpl:r1:0:r7:0:sor1:_0" value="3" class="xqe"></span><label for="kmPgTpl:r1:0:r7:0:sor1:_0" class="x2l">Yes</label></div><div><span class="xif"><input type="radio" name="kmPgTpl:r1:0:r7:0:sor1" id="kmPgTpl:r1:0:r7:0:sor1:_1" value="1" class="xqe"></span><label for="kmPgTpl:r1:0:r7:0:sor1:_1" class="x2l">No</label></div></fieldset></div></div></td></tr></tbody></table></td></tr></tbody></table></div></td></tr><tr><td class="x51"><div id="kmPgTpl:r1:0:r7:0:pfl3" class="x19" style="margin-left:0;padding-left:0;"><table summary="" style="width: auto" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x4w" colspan="1"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x51"><table id="kmPgTpl:r1:0:r7:0:tl2" style="margin-left:0;padding-left:0;" summary="" width="100%" cellspacing="0" cellpadding="0" border="0"></table></td></tr></tbody></table></td></tr><tr><td class="x4w" colspan="1"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x51"><table id="kmPgTpl:r1:0:r7:0:tl1" summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:r1:0:r7:0:rl1"><td id="kmPgTpl:r1:0:r7:0:cf1" align="right"></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table></td></tr></tbody></table></div><div style="display:none"><a id="kmPgTpl:r1:0:r7:0:_afrCommandDelegate" class="xfe" onclick="return false;" href="#"></a></div></div></div></div></div></div></div><table style="font-size:1px;line-height:1px" class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrh p_AFCore p_AFDefault">&nbsp;</td><td class="xrl p_AFCore p_AFDefault">&nbsp;</td><td class="xrp p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table></div></div><div><div id="kmPgTpl:r1:0:s49" style="margin-top:10px"></div></div><div><div id="kmPgTpl:r1:0:pb1" class="xdk"><table class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrf p_AFCore p_AFDefault">&nbsp;</td><td class="xrj p_AFCore p_AFDefault"><table summary="" cellspacing="0" cellpadding="0"><tbody><tr><td class="xr5"><a href="#" onclick="return false" class="xts x1ay" id="kmPgTpl:r1:0:pb1::_afrDscl" title="Collapse Document Details"></a></td><td style="white-space:nowrap" class="xr7"><h1 class="xr9">Document Details</h1></td></tr></tbody></table></td><td class="xrn p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table><div class="x1b5 p_AFCore p_AFDefault"><div class="x5s p_AFCore p_AFDefault" id="kmPgTpl:r1:0:pb1::content"><span id="kmPgTpl:r1:0:pglicons" class="x1a"><img id="kmPgTpl:r1:0:ws2" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"><a id="kmPgTpl:r1:0:cil1" title="Add comment" class="xfd" onclick="return false;" href="#"><img id="kmPgTpl:r1:0:cil1::icon" src="Document%202608210.1_files/createcomment_ena.txt" title="Add comment" alt="Add comment" class="x137"></a><div id="kmPgTpl:r1:0:comeditpopw" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:comeditpopw::content"></div></div><img id="kmPgTpl:r1:0:s45" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"><a id="kmPgTpl:r1:0:wgil1" title="View document statistics" class="x132" href="https://mosemp.us.oracle.com/epmos/faces/secure/mykm/reports/DocumentDetails.jspx?document_id=2608210.1&amp;doc_details_tab=metrics"><img id="kmPgTpl:r1:0:wgil1::icon" src="Document%202608210.1_files/report.png" title="View document statistics" alt="View document statistics" class="x13a"></a><img id="kmPgTpl:r1:0:ws3" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"><a id="kmPgTpl:r1:0:wcil1" title="View authoring history" class="x132" href="https://mosemp.us.oracle.com/epmos/faces/secure/mykm/reports/DocumentDetails.jspx?document_id=2608210.1&amp;doc_details_tab=doc_update_history"><img id="kmPgTpl:r1:0:wcil1::icon" src="Document%202608210.1_files/multi_source.png" title="View authoring history" alt="View authoring history" class="x13a"></a><img id="kmPgTpl:r1:0:ws4" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"><a id="kmPgTpl:r1:0:wgil2" title="Email link to this document" class="x132" href="#"><img id="kmPgTpl:r1:0:wgil2::icon" src="Document%202608210.1_files/email_16.png" title="Email link to this document" alt="Email link to this document" class="x13a"></a><img id="kmPgTpl:r1:0:ws5" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"><a id="kmPgTpl:r1:0:wgil3" title="Open document in new window" class="x132" href="https://mosemp.us.oracle.com/epmos/faces/DocContentDisplay?id=2608210.1" target="_blank"><img id="kmPgTpl:r1:0:wgil3::icon" src="Document%202608210.1_files/offsite_ena.png" title="Open document in new window" alt="Open document in new window" class="x13a"></a><img id="kmPgTpl:r1:0:ws6" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"><a id="kmPgTpl:r1:0:wcl5" title="Printable Page" class="xfe" onclick="return false;" href="#"><img id="kmPgTpl:r1:0:wi1" title="Printable Page" alt="Printable Page" class="xjd" style="margin-bottom:-5px;" src="Document%202608210.1_files/print_ena.txt"></a><img id="kmPgTpl:r1:0:ws7" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"></span><img id="kmPgTpl:r1:0:ws14" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"><table summary="" id="kmPgTpl:r1:0:wpgl2" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><img id="kmPgTpl:r1:0:ws15" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"></td><td><div id="kmPgTpl:r1:0:wpfl2" class="x19"><table summary="" style="width: auto" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x4w" colspan="1"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td></td><td></td></tr><tr><td></td><td class="x51"><span id="kmPgTpl:r1:0:wol7" class="xq"><label>Type:</label></span></td></tr><tr><td></td><td class="x51"><span id="kmPgTpl:r1:0:wol6" class="xq"><label>Status:</label></span></td></tr><tr><td></td><td class="x51"><span id="kmPgTpl:r1:0:ol28" class="xq"><label>Distribution:</label></span></td></tr><tr><td></td><td class="x51"><span id="kmPgTpl:r1:0:ol27" class="xq"><label>Visibility:</label></span></td></tr><tr><td></td><td class="x51"><span id="kmPgTpl:r1:0:wol5" class="xq"><label>Last Major Update:</label></span></td></tr><tr><td></td><td class="x51"><span id="kmPgTpl:r1:0:wol4" class="xq"><label>Last Update:</label></span></td></tr></tbody></table></td></tr></tbody></table></div></td><td><div id="kmPgTpl:r1:0:wpfl1" class="x19"><table summary="" style="width: auto" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x4w" colspan="1"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td></td><td></td></tr><tr><td></td><td class="x51"><span style="color:Black;;white-space:nowrap">HOWTO</span></td></tr><tr><td></td><td class="x51"><span style="color:Black;;white-space:nowrap">PUBLISHED</span></td></tr><tr><td></td><td class="x51"><span style="color:Black;;white-space:nowrap">EXTERNAL</span></td></tr><tr><td></td><td class="x51"><span class="x2ej" style="white-space:nowrap">EXTERNAL</span></td></tr><tr><td></td><td class="x51"><span style="color:Black;;white-space:nowrap">Nov 20, 2019</span></td></tr><tr><td></td><td class="x51"><span style="color:Black;;white-space:nowrap">Nov 20, 2019</span></td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table><img id="kmPgTpl:r1:0:sw47" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"><table summary="" id="kmPgTpl:r1:0:wpgl1" class="xpj x1a" style="display:none;background-color:#E4E4E4;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><img id="kmPgTpl:r1:0:ws13" src="Document%202608210.1_files/t.gif" alt="" width="15" height="30"></td><td><div id="kmPgTpl:r1:0:pgl22" class="x1a"><div><span id="kmPgTpl:r1:0:wol2" class="xq" style="color:#003C5B;font-weight:bold;"><label>Currency Check Required.</label></span></div><div><img id="kmPgTpl:r1:0:s47" src="Document%202608210.1_files/t.gif" alt="" width="15" height="5"></div><div><table summary="" id="kmPgTpl:r1:0:pgl24" class="xpj x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><button id="kmPgTpl:r1:0:wcil3" class="x7j p_AFTextOnly" onclick="return false;">Current</button></td><td><button id="kmPgTpl:r1:0:wcil2" class="x7j p_AFTextOnly" onclick="return false;">Out of Date</button></td><td><div id="kmPgTpl:r1:0:comeditpopwidget" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:comeditpopwidget::content"></div></div></td></tr></tbody></table></div><div><img id="kmPgTpl:r1:0:s48" src="Document%202608210.1_files/t.gif" alt="" width="15" height="5"></div></div></td><td><img id="kmPgTpl:r1:0:ws12" src="Document%202608210.1_files/t.gif" alt="" width="20" height="0px"></td></tr></tbody></table></div></div><table style="font-size:1px;line-height:1px" class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrh p_AFCore p_AFDefault">&nbsp;</td><td class="xrl p_AFCore p_AFDefault">&nbsp;</td><td class="xrp p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table></div></div><div><img id="kmPgTpl:r1:0:ws11" src="Document%202608210.1_files/t.gif" alt="" width="20" height="0px"></div><div><div id="kmPgTpl:r1:0:pb3" class="xdk"><table class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrf p_AFCore p_AFDefault">&nbsp;</td><td class="xrj p_AFCore p_AFDefault"><table summary="" cellspacing="0" cellpadding="0"><tbody><tr><td class="xr5"><a href="#" onclick="return false" class="xts x1ay" id="kmPgTpl:r1:0:pb3::_afrDscl" title="Collapse Related Products"></a></td><td style="white-space:nowrap" class="xr7"><h1 class="xr9">Related Products</h1></td></tr></tbody></table></td><td class="xrn p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table><div class="x1b5 p_AFCore p_AFDefault"><div class="x5s p_AFCore p_AFDefault" id="kmPgTpl:r1:0:pb3::content"><table summary="" id="kmPgTpl:r1:0:pgl21" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><img id="kmPgTpl:r1:0:s43" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"></td><td><div id="kmPgTpl:r1:0:pgl20" class="x1a"><div>Oracle Exadata Storage Server Software</div><div><a id="kmPgTpl:r1:0:i33:0:cl7" class="xfe" onclick="return false;" href="#"></a></div></div></td></tr></tbody></table></div></div><table style="font-size:1px;line-height:1px" class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrh p_AFCore p_AFDefault">&nbsp;</td><td class="xrl p_AFCore p_AFDefault">&nbsp;</td><td class="xrp p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table></div></div><div><div id="kmPgTpl:r1:0:r4" class="xpg"><span id="kmPgTpl:r1:0:r4:0:pgl3" class="x1a"><span id="kmPgTpl:r1:0:r4:0:p1"></span><div id="kmPgTpl:r1:0:r4:0:pb1" class="xdk"><table class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrf p_AFCore p_AFDefault">&nbsp;</td><td class="xrj p_AFCore p_AFDefault"><table summary="" cellspacing="0" cellpadding="0"><tbody><tr><td class="xr5"><a href="#" onclick="return false" class="xts x1ay" id="kmPgTpl:r1:0:r4:0:pb1::_afrDscl" title="Collapse Information Centers"></a></td><td style="white-space:nowrap" class="xr7"><h1 class="xr9">Information Centers</h1></td></tr></tbody></table></td><td class="xrn p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table><div class="x1b5 p_AFCore p_AFDefault"><div class="x5s p_AFCore p_AFDefault" id="kmPgTpl:r1:0:r4:0:pb1::content"><table summary="" id="kmPgTpl:r1:0:r4:0:pgl1" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><img id="kmPgTpl:r1:0:r4:0:s1" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"></td><td><img id="kmPgTpl:r1:0:r4:0:wait" title="Loading Information Center" alt="Loading Information Center" class="xjd" style="display:none" src="Document%202608210.1_files/spinning-wheel.gif"></td><td><span style="display:none">No Information Center available for this document.</span></td><td><div id="kmPgTpl:r1:0:r4:0:pgl2" class="x1a"><div><a id="kmPgTpl:r1:0:r4:0:i1:0:gl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=1306791.2&amp;parent=WIDGET_INFORMATION_CENTER&amp;sourceId=2608210.1" target="_self">Information Center: Oracle Exadata Database Machine [1306791.2]</a></div><div><img id="kmPgTpl:r1:0:r4:0:i1:0:s2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></div><div><a id="kmPgTpl:r1:0:r4:0:i1:1:gl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=1946305.2&amp;parent=WIDGET_INFORMATION_CENTER&amp;sourceId=2608210.1" target="_self">インフォメーション・センター: データベースおよび Enterprise Manager 日本語ドキュメント [1946305.2]</a></div><div><img id="kmPgTpl:r1:0:r4:0:i1:1:s2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></div></div></td></tr></tbody></table></div></div><table style="font-size:1px;line-height:1px" class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrh p_AFCore p_AFDefault">&nbsp;</td><td class="xrl p_AFCore p_AFDefault">&nbsp;</td><td class="xrp p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table></div></span><div style="display:none"><a id="kmPgTpl:r1:0:r4:0:_afrCommandDelegate" class="xfe" onclick="return false;" href="#"></a></div></div></div><div><div id="kmPgTpl:r1:0:r6" class="xpg"><span id="kmPgTpl:r1:0:r6:0:pgl3" class="x1a"><span id="kmPgTpl:r1:0:r6:0:p1"></span><div id="kmPgTpl:r1:0:r6:0:pb1" class="xdk"><table class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrf p_AFCore p_AFDefault">&nbsp;</td><td class="xrj p_AFCore p_AFDefault"><table summary="" cellspacing="0" cellpadding="0"><tbody><tr><td class="xr5"><a href="#" onclick="return false" class="xts x1ay" id="kmPgTpl:r1:0:r6:0:pb1::_afrDscl" title="Collapse Document References"></a></td><td style="white-space:nowrap" class="xr7"><h1 class="xr9">Document References</h1></td></tr></tbody></table></td><td class="xrn p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table><div class="x1b5 p_AFCore p_AFDefault"><div class="x5s p_AFCore p_AFDefault" id="kmPgTpl:r1:0:r6:0:pb1::content"><table summary="" id="kmPgTpl:r1:0:r6:0:pgl1" class="x1a" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><img id="kmPgTpl:r1:0:r6:0:s1" src="Document%202608210.1_files/t.gif" alt="" width="20" height="10"></td><td><img id="kmPgTpl:r1:0:r6:0:wait" title="Loading Information Center" alt="Loading Information Center" class="xjd" style="display:none" src="Document%202608210.1_files/spinning-wheel.gif"></td><td><span style="display:none">No References available for this document. </span></td><td><div id="kmPgTpl:r1:0:r6:0:pgl2" class="x1a"><div><a id="kmPgTpl:r1:0:r6:0:i1:0:gl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=1516494.2&amp;parent=WIDGET_REFERENCES&amp;sourceId=2608210.1" target="_self">Information Center: SQL Query Performance Overview [1516494.2]</a></div><div><img id="kmPgTpl:r1:0:r6:0:i1:0:s2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></div><div><a id="kmPgTpl:r1:0:r6:0:i1:1:gl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=2081483.1&amp;parent=WIDGET_REFERENCES&amp;sourceId=2608210.1" target="_self">EXADATA
+ and SuperCluster : Check if long running transactions are preventing 
+min active scn from progressing, resulting in Storage Indexes not being 
+used [2081483.1]</a></div><div><img id="kmPgTpl:r1:0:r6:0:i1:1:s2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></div><div><a id="kmPgTpl:r1:0:r6:0:i1:2:gl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=2310422.1&amp;parent=WIDGET_REFERENCES&amp;sourceId=2608210.1" target="_self">SRDC - Exadata: Smart Scan Not Working Issues [2310422.1]</a></div><div><img id="kmPgTpl:r1:0:r6:0:i1:2:s2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></div><div><a id="kmPgTpl:r1:0:r6:0:i1:3:gl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=1337265.1&amp;parent=WIDGET_REFERENCES&amp;sourceId=2608210.1" target="_self">Tool for Gathering I/O Resource Manager Metrics: metric_iorm.pl [1337265.1]</a></div><div><img id="kmPgTpl:r1:0:r6:0:i1:3:s2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"></div></div></td></tr></tbody></table></div></div><table style="font-size:1px;line-height:1px" class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrh p_AFCore p_AFDefault">&nbsp;</td><td class="xrl p_AFCore p_AFDefault">&nbsp;</td><td class="xrp p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table></div></span><div style="display:none"><a id="kmPgTpl:r1:0:r6:0:_afrCommandDelegate" class="xfe" onclick="return false;" href="#"></a></div></div></div><div><div id="kmPgTpl:r1:0:pb4" class="xdk"><table class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrf p_AFCore p_AFDefault">&nbsp;</td><td class="xrj p_AFCore p_AFDefault"><table summary="" cellspacing="0" cellpadding="0"><tbody><tr><td class="xr5"><a href="#" onclick="return false" class="xts x1ay" id="kmPgTpl:r1:0:pb4::_afrDscl" title="Collapse Recently Viewed"></a></td><td style="white-space:nowrap" class="xr7"><h1 class="xr9">Recently Viewed</h1></td></tr></tbody></table></td><td class="xrn p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table><div class="x1b5 p_AFCore p_AFDefault"><div class="x5s p_AFCore p_AFDefault" id="kmPgTpl:r1:0:pb4::content"><div id="kmPgTpl:r1:0:psl2" class="xpf" style="width:auto;overflow:visible;height:auto"><div style="overflow:hidden"><div id="kmPgTpl:r1:0:psl2::c" style="overflow:hidden"><div id="kmPgTpl:r1:0:r5" class="xpg"><span id="kmPgTpl:r1:0:r5:0:pgl1" class="x1a"><div id="kmPgTpl:r1:0:r5:0:recentViewsPanelGroupLayout" class="x1a" style=""><div><table id="kmPgTpl:r1:0:r5:0:tl1" summary="" cellspacing="0" cellpadding="0" border="0" align="left"><tbody><tr id="kmPgTpl:r1:0:r5:0:rl2" valign="top"><td id="kmPgTpl:r1:0:r5:0:cf6"><img id="kmPgTpl:r1:0:r5:0:s3" src="Document%202608210.1_files/t.gif" alt="" width="20" height="0px"></td><td id="kmPgTpl:r1:0:r5:0:cf3"><a id="kmPgTpl:r1:0:r5:0:gl1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=2019634.1&amp;parent=WIDGET_RECENTLY_VIEWED&amp;sourceId=2608210.1" target="_self">Online Statistics Gathering for Bulk Loads [2019634.1]</a></td><td id="kmPgTpl:r1:0:r5:0:cf9"><img id="kmPgTpl:r1:0:r5:0:s11" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl3"><td id="kmPgTpl:r1:0:r5:0:cf4" colspan="6"><img id="kmPgTpl:r1:0:r5:0:s1" src="Document%202608210.1_files/t.gif" alt="" width="10" height="5"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl2j_id_1" valign="top"><td id="kmPgTpl:r1:0:r5:0:cf6j_id_1"><img id="kmPgTpl:r1:0:r5:0:s3j_id_1" src="Document%202608210.1_files/t.gif" alt="" width="20" height="0px"></td><td id="kmPgTpl:r1:0:r5:0:cf3j_id_1"><a id="kmPgTpl:r1:0:r5:0:gl1j_id_1" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=1770039.1&amp;parent=WIDGET_RECENTLY_VIEWED&amp;sourceId=2608210.1" target="_self">[12c 新機能]　バルク・ロード実行時のオンライン統計収集についての注意点(KROWN:168163) [1770039.1]</a></td><td id="kmPgTpl:r1:0:r5:0:cf9j_id_1"><img id="kmPgTpl:r1:0:r5:0:s11j_id_1" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl3j_id_1"><td id="kmPgTpl:r1:0:r5:0:cf4j_id_1" colspan="6"><img id="kmPgTpl:r1:0:r5:0:s1j_id_1" src="Document%202608210.1_files/t.gif" alt="" width="10" height="5"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl2j_id_2" valign="top"><td id="kmPgTpl:r1:0:r5:0:cf6j_id_2"><img id="kmPgTpl:r1:0:r5:0:s3j_id_2" src="Document%202608210.1_files/t.gif" alt="" width="20" height="0px"></td><td id="kmPgTpl:r1:0:r5:0:cf3j_id_2"><a id="kmPgTpl:r1:0:r5:0:gl1j_id_2" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=1274475.1&amp;parent=WIDGET_RECENTLY_VIEWED&amp;sourceId=2608210.1" target="_self">Oracle Exadata Database Machine Performance Best Practices [1274475.1]</a></td><td id="kmPgTpl:r1:0:r5:0:cf9j_id_2"><img id="kmPgTpl:r1:0:r5:0:s11j_id_2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl3j_id_2"><td id="kmPgTpl:r1:0:r5:0:cf4j_id_2" colspan="6"><img id="kmPgTpl:r1:0:r5:0:s1j_id_2" src="Document%202608210.1_files/t.gif" alt="" width="10" height="5"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl2j_id_3" valign="top"><td id="kmPgTpl:r1:0:r5:0:cf6j_id_3"><img id="kmPgTpl:r1:0:r5:0:s3j_id_3" src="Document%202608210.1_files/t.gif" alt="" width="20" height="0px"></td><td id="kmPgTpl:r1:0:r5:0:cf3j_id_3"><a id="kmPgTpl:r1:0:r5:0:gl1j_id_3" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=2427633.1&amp;parent=WIDGET_RECENTLY_VIEWED&amp;sourceId=2608210.1" target="_self">Master Note For Troubleshooting Database Performance In Exadata [2427633.1]</a></td><td id="kmPgTpl:r1:0:r5:0:cf9j_id_3"><img id="kmPgTpl:r1:0:r5:0:s11j_id_3" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl3j_id_3"><td id="kmPgTpl:r1:0:r5:0:cf4j_id_3" colspan="6"><img id="kmPgTpl:r1:0:r5:0:s1j_id_3" src="Document%202608210.1_files/t.gif" alt="" width="10" height="5"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl2j_id_4" valign="top"><td id="kmPgTpl:r1:0:r5:0:cf6j_id_4"><img id="kmPgTpl:r1:0:r5:0:s3j_id_4" src="Document%202608210.1_files/t.gif" alt="" width="20" height="0px"></td><td id="kmPgTpl:r1:0:r5:0:cf3j_id_4"><a id="kmPgTpl:r1:0:r5:0:gl1j_id_4" class="xfu" href="https://mosemp.us.oracle.com/epmos/faces/DocumentDisplay?id=1438173.1&amp;parent=WIDGET_RECENTLY_VIEWED&amp;sourceId=2608210.1" target="_self">Smart scan : Find the statistics related to cell offload [1438173.1]</a></td><td id="kmPgTpl:r1:0:r5:0:cf9j_id_4"><img id="kmPgTpl:r1:0:r5:0:s11j_id_4" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td></tr><tr id="kmPgTpl:r1:0:r5:0:rl3j_id_4"><td id="kmPgTpl:r1:0:r5:0:cf4j_id_4" colspan="6"><img id="kmPgTpl:r1:0:r5:0:s1j_id_4" src="Document%202608210.1_files/t.gif" alt="" width="10" height="5"></td></tr></tbody></table></div><div><div id="kmPgTpl:r1:0:r5:0:pgl2" class="x1a"><div><div id="kmPgTpl:r1:0:r5:0:s4" style="margin-top:5px"></div></div><div><a id="kmPgTpl:r1:0:r5:0:wcl2" class="xfe" onclick="return false;" href="#">Show More</a></div></div></div></div></span><div style="display:none"><a id="kmPgTpl:r1:0:r5:0:_afrCommandDelegate" class="xfe" onclick="return false;" href="#"></a></div></div></div></div></div></div></div><table style="font-size:1px;line-height:1px" class="xqt p_AFCore p_AFDefault" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xrh p_AFCore p_AFDefault">&nbsp;</td><td class="xrl p_AFCore p_AFDefault">&nbsp;</td><td class="xrp p_AFCore p_AFDefault">&nbsp;</td></tr></tbody></table></div></div></div></td></tr></tbody></table></div><div><img id="kmPgTpl:r1:0:s51" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"><span id="kmPgTpl:r1:0:pgl29" class="x1a"><img id="kmPgTpl:r1:0:s52" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10">Didn't find what you are looking for?<img id="kmPgTpl:r1:0:s53" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"><button id="kmPgTpl:r1:0:cb1" class="x7j" style="vertical-align:middle; height:19px;" onclick="return false;"><img src="Document%202608210.1_files/comm_thread_15x15.txt" alt="" class="xf7"><span title="" class="xfa">Ask in Community...</span></button></span></div><div><span id="kmPgTpl:r1:0:pgl6" class="x1a"><img id="kmPgTpl:r1:0:s8" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"><div id="kmPgTpl:r1:0:sdh2" title="Attachments" class="x6w"><table class="p_AFDisclosed xty" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xuj">&nbsp;</td><td class="xvf"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xtm"><a href="#" onclick="return false" class="xtu x1aw" id="kmPgTpl:r1:0:sdh2::_afrDscl" title="Collapse Attachments"></a></td><td class="x22p"></td><td id="kmPgTpl:r1:0:sdh2::_afrTtxt"><div title="Attachments" class="xu3" style="width: 90px; max-width: 90px;"><h1 class="xdm ">Attachments</h1></div></td><td id="kmPgTpl:r1:0:sdh2::_afrEps"><div class="xdm  xw9" style="display: none" title="Attachments">…</div></td><td id="kmPgTpl:r1:0:sdh2::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xv1">&nbsp;</td></tr></tbody></table><div class="xwg"><div><div id="kmPgTpl:r1:0:pl3" class="x3q"><ul style="list-style-type:none"><li value="1"><span id="kmPgTpl:r1:0:i3:0:pgl7" class="x1a"><img id="kmPgTpl:r1:0:i3:0:i13" title="FILE" alt="FILE" class="xjd" src="Document%202608210.1_files/file_default.gif"><img id="kmPgTpl:r1:0:i3:0:space_11" src="Document%202608210.1_files/t.gif" alt="" width="5" height="10"><a id="kmPgTpl:r1:0:i3:0:attachment_link" href="https://mosemp.us.oracle.com/epmos/main/downloadattachmentprocessor?attachid=2608210.1%3ASQLMON1&amp;docType=HOWTO&amp;action=download" target="_blank">SQL Monitor 1</a><img id="kmPgTpl:r1:0:i3:0:s11" src="Document%202608210.1_files/t.gif" alt="" width="5" height="10">(25.74 KB)</span></li><li value="2"><span id="kmPgTpl:r1:0:i3:1:pgl7" class="x1a"><img id="kmPgTpl:r1:0:i3:1:i13" title="FILE" alt="FILE" class="xjd" src="Document%202608210.1_files/file_default.gif"><img id="kmPgTpl:r1:0:i3:1:space_11" src="Document%202608210.1_files/t.gif" alt="" width="5" height="10"><a id="kmPgTpl:r1:0:i3:1:attachment_link" href="https://mosemp.us.oracle.com/epmos/main/downloadattachmentprocessor?attachid=2608210.1%3ASQLMON2&amp;docType=HOWTO&amp;action=download" target="_blank">SQL Monitor 2</a><img id="kmPgTpl:r1:0:i3:1:s11" src="Document%202608210.1_files/t.gif" alt="" width="5" height="10">(46.13 KB)</span></li></ul></div></div></div></div></span></div><div><span id="kmPgTpl:r1:0:pgl5" class="x1a"><img id="kmPgTpl:r1:0:s7" src="Document%202608210.1_files/t.gif" alt="" width="10" height="10"><div id="kmPgTpl:r1:0:sdh1" title="Related Products" class="x6w"><table class="p_AFDisclosed xty" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xuj">&nbsp;</td><td class="xvf"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xtm"><a href="#" onclick="return false" class="xtu x1aw" id="kmPgTpl:r1:0:sdh1::_afrDscl" title="Collapse Related"></a></td><td class="x22p"></td><td id="kmPgTpl:r1:0:sdh1::_afrTtxt"><div title="Related" class="xu3" style="width: 54px; max-width: 54px;"><h1 class="xdm ">Related</h1></div></td><td id="kmPgTpl:r1:0:sdh1::_afrEps"><div class="xdm  xw9" style="display: none" title="Related">…</div></td><td id="kmPgTpl:r1:0:sdh1::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xv1">&nbsp;</td></tr></tbody></table><div class="xwg"><div><div id="kmPgTpl:r1:0:ph2" title="Related Products" class="x6v"><table class="xtx" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xut">&nbsp;</td><td class="xvh"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22o"></td><td id="kmPgTpl:r1:0:ph2::_afrTtxt"><div title="Products" class="xu2" style="width: 53px; max-width: 53px;"><h2 class="xdo ">Products</h2></div></td><td id="kmPgTpl:r1:0:ph2::_afrEps"><div class="xdo  xw8" style="display: none" title="Products">…</div></td><td id="kmPgTpl:r1:0:ph2::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xvb">&nbsp;</td></tr></tbody></table><div class="xwl"><div><div id="kmPgTpl:r1:0:pl1" class="x3q"><ul><li value="1"><span id="kmPgTpl:r1:0:i1:0:pgl3" class="x1a"><a id="kmPgTpl:r1:0:i1:0:gl14" title="Oracle Database Products" href="https://mosemp.us.oracle.com/epmos/main/kmservlet?operation=doSearch&amp;task=SearchProduct&amp;type=line&amp;id=LI_3_F8H7P8&amp;name=Oracle%20Database%20Products&amp;source=" target="_parent">Oracle Database Products</a> &gt; <a id="kmPgTpl:r1:0:i1:0:gl15" title="Exadata" href="https://mosemp.us.oracle.com/epmos/main/kmservlet?operation=doSearch&amp;task=SearchProduct&amp;type=family&amp;id=FI_3_F8H7PC&amp;name=Exadata&amp;source=" target="_parent">Exadata</a> &gt; <a id="kmPgTpl:r1:0:i1:0:gl16" title="Storage" href="https://mosemp.us.oracle.com/epmos/main/kmservlet?operation=doSearch&amp;task=SearchProduct&amp;type=area&amp;id=AI_3_F8H7PU&amp;name=Storage&amp;source=" target="_parent">Storage</a> &gt; <a id="kmPgTpl:r1:0:i1:0:gl17" title="Oracle Exadata Storage Server Software" href="https://mosemp.us.oracle.com/epmos/main/kmservlet?operation=doSearch&amp;task=SearchProduct&amp;type=product&amp;id=PI_1_97K3T&amp;name=Oracle%20Exadata%20Storage%20Server%20Software&amp;source=" target="_parent">Oracle Exadata Storage Server Software</a> &gt; <a id="kmPgTpl:r1:0:i1:0:gl18" title="Performance" href="https://mosemp.us.oracle.com/epmos/main/kmservlet?operation=doSearch&amp;task=SearchProduct&amp;type=component&amp;id=CI_3_OGE2XY&amp;prodid=PI_1_97K3T&amp;name=Performance&amp;source=" target="_parent">Performance</a></span></li></ul></div></div></div></div><div id="kmPgTpl:r1:0:ph4" title="Related Knowledge Categories" class="x6v"><table class="xtx" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xut">&nbsp;</td><td class="xvh"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x22o"></td><td id="kmPgTpl:r1:0:ph4::_afrTtxt"><div title="Knowledge Categories" class="xu2" style="width: 132px; max-width: 132px;"><h2 class="xdo ">Knowledge Categories</h2></div></td><td id="kmPgTpl:r1:0:ph4::_afrEps"><div class="xdo  xw8" style="display: none" title="Knowledge Categories">…</div></td><td id="kmPgTpl:r1:0:ph4::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xvb">&nbsp;</td></tr></tbody></table><div class="xwl"><div><div id="kmPgTpl:r1:0:pl4" class="x3q"><ul><li value="1"><span id="kmPgTpl:r1:0:i14:0:pgl8" class="x1a"><span title="PLA-Support">PLA-Support</span> &gt; <span title="Database">Database</span> &gt; <span title="DEV ES">DEV ES</span> &gt; <span title="DEV Exadata">DEV Exadata</span> &gt; <span title="DB: Exadata_EST">DB: Exadata_EST</span> ( Primary )</span></li><li value="2"><span id="kmPgTpl:r1:0:i14:1:pgl8" class="x1a"><span title="KB Review">KB Review</span> &gt; <span title="KB Review.Reviewed-OK">KB Review.Reviewed-OK</span></span></li></ul></div></div></div></div></div></div></div></span></div><div><span id="kmPgTpl:r1:0:pgl10" class="x1a"><img id="kmPgTpl:r1:0:s21" src="Document%202608210.1_files/t.gif" alt="" width="10" height="20"><div id="kmPgTpl:r1:0:sdh3" class="x6w"><table class="p_AFDisclosed xty" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xuj">&nbsp;</td><td class="xvf"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xtm"><a href="#" onclick="return false" class="xtu x1aw" id="kmPgTpl:r1:0:sdh3::_afrDscl" title="Collapse Document Attributes"></a></td><td class="x22p"></td><td id="kmPgTpl:r1:0:sdh3::_afrTtxt"><div title="Document Attributes" class="xu3" style="width: 147px; max-width: 147px;"><h1 class="xdm ">Document Attributes</h1></div></td><td id="kmPgTpl:r1:0:sdh3::_afrEps"><div class="xdm  xw9" style="display: none" title="Document Attributes">…</div></td><td id="kmPgTpl:r1:0:sdh3::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xv1">&nbsp;</td></tr></tbody></table><div class="xwg"><div><table id="kmPgTpl:r1:0:tl2" summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr id="kmPgTpl:r1:0:rl2"><td id="kmPgTpl:r1:0:cf3" align="right"><span id="kmPgTpl:r1:0:ol6" class="xq"><label>Author:</label></span></td><td id="kmPgTpl:r1:0:cf4">MPOLASKI.US;CGERVASI.US;</td><td id="kmPgTpl:r1:0:cf5" align="right"><span id="kmPgTpl:r1:0:ol7" class="xq"><label>Status:</label></span></td><td id="kmPgTpl:r1:0:cf6">PUBLISHED(EXTERNAL)</td></tr><tr id="kmPgTpl:r1:0:rl3"><td id="kmPgTpl:r1:0:cf7" align="right"><span id="kmPgTpl:r1:0:ol8" class="xq"><label>Owner:</label></span></td><td id="kmPgTpl:r1:0:cf8">michael.polaski@oracle.com</td><td id="kmPgTpl:r1:0:cf9" align="right"><span id="kmPgTpl:r1:0:ol9" class="xq"><label>Publisher:</label></span></td><td id="kmPgTpl:r1:0:cf10">JSKARIAH.US</td></tr><tr id="kmPgTpl:r1:0:rl4"><td id="kmPgTpl:r1:0:cf11" align="right"><span id="kmPgTpl:r1:0:ol10" class="xq"><label>Alias:</label></span></td><td id="kmPgTpl:r1:0:cf12"></td><td id="kmPgTpl:r1:0:cf13" align="right"><span id="kmPgTpl:r1:0:ol11" class="xq"><label>Content Type:</label></span></td><td id="kmPgTpl:r1:0:cf14">TEXT/X-HTML</td></tr><tr id="kmPgTpl:r1:0:rl5"><td id="kmPgTpl:r1:0:cf15" align="right"><span id="kmPgTpl:r1:0:ol12" class="xq"><label>Distribution:</label></span></td><td id="kmPgTpl:r1:0:cf16">EXTERNAL</td><td id="kmPgTpl:r1:0:cf17" align="right"><span id="kmPgTpl:r1:0:ol29" class="xq"><label>Visibility:</label></span></td><td id="kmPgTpl:r1:0:cf18"><span class="">EXTERNAL</span></td></tr><tr id="kmPgTpl:r1:0:rl6"><td id="kmPgTpl:r1:0:cf19" align="right"><span id="kmPgTpl:r1:0:ol14" class="xq"><label>Created By:</label></span></td><td id="kmPgTpl:r1:0:cf20">michael.polaski@oracle.com</td><td id="kmPgTpl:r1:0:cf21" align="right"><span id="kmPgTpl:r1:0:ol15" class="xq"><label>Created:</label></span></td><td id="kmPgTpl:r1:0:cf22">Nov 6, 2019</td></tr><tr id="kmPgTpl:r1:0:rl7"><td id="kmPgTpl:r1:0:cf23" align="right"><span id="kmPgTpl:r1:0:ol16" class="xq"><label>Modified By:</label></span></td><td id="kmPgTpl:r1:0:cf24">JSKARIAH.US</td><td id="kmPgTpl:r1:0:cf25" align="right"><span id="kmPgTpl:r1:0:ol17" class="xq"><label>Modified:</label></span></td><td id="kmPgTpl:r1:0:cf26">Nov 20, 2019</td></tr><tr id="kmPgTpl:r1:0:rl8"><td id="kmPgTpl:r1:0:cf27" align="right"><span id="kmPgTpl:r1:0:ol18" class="xq"><label>Reviewed By:</label></span></td><td id="kmPgTpl:r1:0:cf28">JSKARIAH.US</td><td id="kmPgTpl:r1:0:cf29" align="right"><span id="kmPgTpl:r1:0:ol19" class="xq"><label>Reviewed:</label></span></td><td id="kmPgTpl:r1:0:cf30">Feb 27, 2020</td></tr><tr id="kmPgTpl:r1:0:rl9"><td id="kmPgTpl:r1:0:cf31" align="right"><span id="kmPgTpl:r1:0:ol20" class="xq"><label>Source:</label></span></td><td id="kmPgTpl:r1:0:cf32">AWIZ 3-21424896343</td><td id="kmPgTpl:r1:0:cf33" align="right"><span id="kmPgTpl:r1:0:ol21" class="xq"><label>Exception:</label></span></td><td id="kmPgTpl:r1:0:cf34">No</td></tr><tr id="kmPgTpl:r1:0:rl15"><td id="kmPgTpl:r1:0:cf57" align="right"><span id="kmPgTpl:r1:0:ol13" class="xq"><label>Priority:</label></span></td><td id="kmPgTpl:r1:0:cf58">2</td></tr></tbody></table></div></div></div></span></div><div><span id="kmPgTpl:r1:0:pgl11" class="x1a"><img id="kmPgTpl:r1:0:s22" src="Document%202608210.1_files/t.gif" alt="" width="10" height="20"><div id="kmPgTpl:r1:0:sdh4" title="Comments" class="x6w"><table class="p_AFDisclosed xty" summary="" width="0" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xuj">&nbsp;</td><td class="xvf"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="xtm"><a href="#" onclick="return false" class="xtu x1aw" id="kmPgTpl:r1:0:sdh4::_afrDscl" title="Collapse Comments"></a></td><td class="x22p"></td><td id="kmPgTpl:r1:0:sdh4::_afrTtxt"><div title="Comments" class="xu3" style="width: 75px; max-width: 75px;"><h1 class="xdm ">Comments</h1></div></td><td id="kmPgTpl:r1:0:sdh4::_afrEps"><div class="xdm  xw9" style="display: none" title="Comments">…</div></td><td id="kmPgTpl:r1:0:sdh4::_afrStr" style="width: 100%"></td></tr></tbody></table></td><td class="xv1">&nbsp;</td></tr></tbody></table><div class="xwg"><div><div tabindex="0" id="kmPgTpl:r1:0:t1" class="xpr" style="width: 100%; height: 56px;" _afrautohr="10" _leafcolclientids="['kmPgTpl:r1:0:t1:c0','kmPgTpl:r1:0:t1:c4','kmPgTpl:r1:0:t1:c3','kmPgTpl:r1:0:t1:c2','kmPgTpl:r1:0:t1:c5','kmPgTpl:r1:0:t1:c1','kmPgTpl:r1:0:t1:c6','kmPgTpl:r1:0:t1:c7','kmPgTpl:r1:0:t1:c8','kmPgTpl:r1:0:t1:c9']"><div id="kmPgTpl:r1:0:t1::ch" style="overflow: hidden; position: relative; width: 1711px; border-right-width: 0px;" _afrcolcount="10" class="x10f"><table class="x10h" summary="This table contains column headers corresponding to the data body table below" id="kmPgTpl:r1:0:t1::ch::t" style="position:relative;table-layout:fixed;width:1360px" cellspacing="0"><tbody><tr><th style="padding:0px;padding-left:5px;width:30px;"></th><th style="padding:0px;padding-left:5px;width:350px;"></th><th style="padding:0px;padding-left:5px;width:100px;"></th><th style="padding:0px;padding-left:5px;width:100px;"></th><th style="padding:0px;padding-left:5px;width:50px;"></th><th style="padding:0px;padding-left:5px;width:200px;"></th><th style="padding:0px;padding-left:5px;width:80px;"></th><th style="padding:0px;padding-left:5px;width:200px;"></th><th style="padding:0px;padding-left:5px;width:100px;"></th><th style="padding:0px;padding-left:5px;width:100px;"></th></tr><tr><th id="kmPgTpl:r1:0:t1:c0" _d_index="0" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div class="x1bc">Edit</div></th><th id="kmPgTpl:r1:0:t1:c4" _d_index="1" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c4::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">Comment</div></th><th id="kmPgTpl:r1:0:t1:c3" _d_index="2" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c3::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">Type</div></th><th id="kmPgTpl:r1:0:t1:c2" _d_index="3" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c2::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">Status</div></th><th id="kmPgTpl:r1:0:t1:c5" _d_index="4" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c5::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">Priority</div></th><th id="kmPgTpl:r1:0:t1:c1" _d_index="5" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c1::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">From</div></th><th id="kmPgTpl:r1:0:t1:c6" _d_index="6" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c6::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">To</div></th><th id="kmPgTpl:r1:0:t1:c7" _d_index="7" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c7::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">Modified By</div></th><th id="kmPgTpl:r1:0:t1:c8" _d_index="8" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c8::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">Created</div></th><th id="kmPgTpl:r1:0:t1:c9" _d_index="9" _afrleaf="true" _afrroot="true" class="x10i" align="left"><div style="position:relative; float:right"><table id="kmPgTpl:r1:0:t1:c9::afrSI" _afrhoverable="true" style="display:none" class="x113" cellspacing="0" cellpadding="0"><tbody><tr><td _afrsortasc="1"><a tabindex="-1" class="x10l" title="Sort Ascending"></a></td><td _afrsortdesc="1"><a tabindex="-1" class="x10m" title="Sort Descending"></a></td></tr></tbody></table></div><div class="x1bc">Modified</div></th></tr></tbody></table></div><div id="kmPgTpl:r1:0:t1::db" class="x106" style="position: relative; width: 1711px; overflow: hidden; height: 38px; z-index: 1;" _afrcolcount="10"><table summary="Comments" class="x109 x110" style="table-layout:fixed;position:relative;width:1360px;" _totalwidth="1360" _rowcount="2" _startrow="0" cellspacing="0"><tbody><tr _afrrk="0" class="x10w"><td style="width:30px;" class="x10t" nowrap="nowrap"><a id="kmPgTpl:r1:0:t1:0:gil5" title="Edit Comment" class="xfd" onclick="return false;" href="#"><img id="kmPgTpl:r1:0:t1:0:gil5::icon" src="Document%202608210.1_files/editComment.gif" title="Edit Comment" alt="Edit Comment" class="x137"></a><div></div><div id="kmPgTpl:r1:0:t1:0:editcomment" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:t1:0:editcomment::content"></div></div></td><td style="width:350px;" class="x10t" nowrap="nowrap"><a id="kmPgTpl:r1:0:t1:0:cl4" class="xfe" onclick="return false;" href="#">My Oracle Support Feedback</a><div></div><div id="kmPgTpl:r1:0:t1:0:p2" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:t1:0:p2::content"></div></div></td><td style="width:100px;" class="x10t" nowrap="nowrap">Customer Feedback</td><td style="width:100px;" class="x10t" nowrap="nowrap">REJECTED</td><td style="width:50px;" class="x10t" nowrap="nowrap">3</td><td style="width:200px;" class="x10t" nowrap="nowrap">CUSTFEED.WW</td><td style="width:80px;" class="x10t" nowrap="nowrap">OWNER</td><td style="width:200px;" class="x10t" nowrap="nowrap">michael.polaski@oracle.com</td><td style="width:100px;" class="x10t" nowrap="nowrap">Dec 24, 2019</td><td style="width:100px;" class="x10t" nowrap="nowrap">Jan 13, 2020</td></tr><tr _afrrk="1" class="x10w"><td class="x10t" nowrap="nowrap"><a id="kmPgTpl:r1:0:t1:1:gil5" title="Edit Comment" class="xfd" onclick="return false;" href="#"><img id="kmPgTpl:r1:0:t1:1:gil5::icon" src="Document%202608210.1_files/editComment.gif" title="Edit Comment" alt="Edit Comment" class="x137"></a><div></div><div id="kmPgTpl:r1:0:t1:1:editcomment" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:t1:1:editcomment::content"></div></div></td><td class="x10t" nowrap="nowrap"><a id="kmPgTpl:r1:0:t1:1:cl4" class="xfe" onclick="return false;" href="#">Bug 30496186 has been updated. Old Status = 11, New Status = 92</a><div></div><div id="kmPgTpl:r1:0:t1:1:p2" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="kmPgTpl:r1:0:t1:1:p2::content"></div></div></td><td class="x10t" nowrap="nowrap">Bug Status Update</td><td class="x10t" nowrap="nowrap">IMPLEMENTED</td><td class="x10t" nowrap="nowrap">2</td><td class="x10t" nowrap="nowrap">GKM.WW</td><td class="x10t" nowrap="nowrap">OWNER</td><td class="x10t" nowrap="nowrap">michael.polaski@oracle.com</td><td class="x10t" nowrap="nowrap">Nov 27, 2019</td><td class="x10t" nowrap="nowrap">Jan 13, 2020</td></tr></tbody></table></div><div id="kmPgTpl:r1:0:t1::sm" class="x114" style="position:absolute;display:none"></div><div id="kmPgTpl:r1:0:t1::ri" class="x10a" style="position:absolute;display:none;overflow:hidden"></div><div id="kmPgTpl:r1:0:t1::dataW" style="display:none"></div><div tabindex="-1" id="kmPgTpl:r1:0:t1::scroller" style="position: absolute; overflow: auto; z-index: 0; width: 1711px; top: 18px; height: 38px; right: 0px;"><div style="width: 1360px; height: 38px; visibility: hidden;"></div></div></div></div></div></div></span></div><div><img id="kmPgTpl:r1:0:s5" src="Document%202608210.1_files/t.gif" alt="" width="10" height="20"></div><div><a id="kmPgTpl:r1:0:toTop" title="Back to Top" class="xfd" style="text-decoration:none" onclick="return false;" href="#"><img id="kmPgTpl:r1:0:toTop::icon" src="Document%202608210.1_files/quicklink_smlarrowup_enabled.gif" title="Back to Top" alt="Back to Top" class="x137"><span class="x133">Back to Top</span></a></div></div></div></div></div></div></div><div style="display:none"><a id="kmPgTpl:r1:0:_afrCommandDelegate" class="xfe" onclick="return false;" href="#"></a></div></div></div></td></tr></tbody></table></div></div></div><div><div id="kmPgTpl:pt_psl2" class="xpj x23p xpf" style="height:25px;">&nbsp;<div id="kmPgTpl:pt_psl2::b" style="position:absolute;overflow:hidden;left:0px;bottom:0px;height:25px;right:0px"><table summary="" id="kmPgTpl:pt_pgl3" class="x1a" style="position:absolute;width:auto;height:auto;top:0px;left:0px;bottom:0px;right:0px" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr><td><table summary="" id="kmPgTpl:svFt2:pgFooter" class="xq1 x1a" cellspacing="0" cellpadding="0" border="0" align="center"><tbody><tr><td valign="top"><div id="kmPgTpl:svFt2:npFtr" class="xk3" style="overflow:hidden;"><div class="xre"><div id="kmPgTpl:svFt2:npFtr::oc" class="xjk"><table summary="" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x117"><a style="display: none;"></a><span class="xq1">Copyright (c) 2020, Oracle. All rights reserved.</span></td><td class="x117"><a style="display: none;"></a><img id="kmPgTpl:svFt2:s1" src="Document%202608210.1_files/t.gif" alt="" width="10" height="0px"></td><td class="xh3">&nbsp;</td><td class="x117"><a style="display: none;"></a><a id="kmPgTpl:svFt2:tou" class="xq1 xfu" href="https://www.oracle.com/support/mosterms.html" target="_blank">Legal Notices and Terms of Use</a></td><td class="xh3">&nbsp;</td><td class="x117"><a style="display: none;"></a><a id="kmPgTpl:svFt2:privacy" class="xq1 xfu" href="http://www.oracle.com/us/legal/privacy/index.html" target="_blank">Privacy Statement</a></td></tr></tbody></table></div><div id="kmPgTpl:svFt2:npFtr::eoi" class="xjv" tabindex="0"><div id="kmPgTpl:svFt2:npFtr::eoc" class="xk8"></div></div></div><div class="xlv"></div></div></td></tr></tbody></table></td></tr></tbody></table></div></div></div></div></div></div></div></div></div></div></div></div></div><div class="xs2"></div></div></td><td id="kmPgTpl:pt_db8::r" style="display:table-cell;width:6px" class="xs3 p_AFFlow"><span style="display:block;"></span></td></tr></tbody></table><div style="height:8px"><div id="kmPgTpl:pt_db8::bl" style="position:absolute;overflow:hidden;bottom:0px;height:8px;left:0px;width:6px" class="xs4 p_AFFlow"><span style="display:block;"></span></div><div id="kmPgTpl:pt_db8::b" style="position:absolute;overflow:hidden;left:6px;bottom:0px;right:6px;height:8px"><div style="position:absolute;left:0px;right:0px;top:0px;bottom:0px" class="xs5 p_AFFlow"><span style="display:block;"></span></div></div><div id="kmPgTpl:pt_db8::br" style="position:absolute;overflow:hidden;bottom:0px;height:8px;right:0px;width:6px" class="xs6 p_AFFlow"><span style="display:block;"></span></div></div></div></div></div></div></div></div><input type="hidden" name="org.apache.myfaces.trinidad.faces.FORM" value="f1"><span id="f1::postscript"><input type="hidden" name="javax.faces.ViewState" value="!-u0vuubz6r"></span></form><div id="d1::msgCtr" style="display:none"><div id="d1::msgDlg" class="x17j"><div class="x18r" _afrpanelwindowbackground="1"></div><div class="x18r" _afrpanelwindowbackground="1"></div><div class="x18r" _afrpanelwindowbackground="1"></div><div class="x18r" _afrpanelwindowbackground="1"></div><table summary="" class="x17q" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="p_AFResizable x17s" id="d1::msgDlg::_hse">&nbsp;</td><td class="p_AFResizable x17u" id="d1::msgDlg::_hce"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><div id="d1::msgDlg::_ticn" class="x18l" style="display:none"></div></td><td class="x17y" id="d1::msgDlg::tb"><div id="d1::msgDlg::_ttxt" class="x18j"></div></td><td><div class="x18n"><a href="#" onclick="return false" class="x18e" id="d1::msgDlg::close" title="Close"></a></div></td></tr></tbody></table></td><td class="p_AFResizable x17w" id="d1::msgDlg::_hee">&nbsp;</td></tr><tr><td class="p_AFResizable x183" id="d1::msgDlg::_cse">&nbsp;</td><td class="p_AFResizable x1o" id="d1::msgDlg::contentContainer"><div id="d1::msgDlg::_ccntr" class="x181" style="position:relative;overflow:auto;"><div id="d1::msgDlg::_cnt" class="x14u"></div></div></td><td class="p_AFResizable x185" id="d1::msgDlg::_cee">&nbsp;</td></tr><tr><td class="p_AFResizable x187" id="d1::msgDlg::_fse"><div></div></td><td class="p_AFResizable x189" id="d1::msgDlg::_fce"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="p_AFResizable x18c" id="d1::msgDlg::_fcc"><button type="button" id="d1::msgDlg::cancel" class="xf6 p_AFTextOnly" onclick="return false;" _afrpdo="cancel">OK</button></td><td valign="bottom" align="left"><div class="p_AFResizable x18i"><a tabindex="-1" class="x18g" id="d1::msgDlg::_ree" title="Resize"></a></div></td></tr></tbody></table></td><td class="p_AFResizable x18b" id="d1::msgDlg::_fee"><div></div></td></tr></tbody></table></div></div><span id="d1::iconC" style="display:none"><span id="af_panelSplitter::vertical-restore-icon"><img src="Document%202608210.1_files/splittervr.png" style="vertical-align:top;cursor:default" title="Restore Pane" alt="Restore Pane" width="23" height="7" border="0"></span><span id="af_table::disclosed-icon"></span><span id="af_message::fatal-icon"><img src="Document%202608210.1_files/error.png" title="Critical Error" alt="Critical Error" width="16" height="16" border="0"></span><span id="af_messages::warning-icon"><img src="Document%202608210.1_files/warning.png" title="Warning" alt="Warning" width="16" height="16" border="0"></span><span id="af_messages::confirmation-icon"><img src="Document%202608210.1_files/confirmation.png" title="Confirmation" alt="Confirmation" width="16" height="16" border="0"></span><span id="af_messages::info-icon"><img src="Document%202608210.1_files/info.png" title="Information" alt="Information" width="16" height="16" border="0"></span><span id="af_message::warning-icon"><img src="Document%202608210.1_files/warning.png" title="Warning" alt="Warning" width="16" height="16" border="0"></span><span id="af_messages::fatal-icon"><img src="Document%202608210.1_files/error.png" title="Critical Error" alt="Critical Error" width="16" height="16" border="0"></span><span id="af_panelSplitter::vertical-collapse-icon"><img src="Document%202608210.1_files/splittervc.png" style="vertical-align:top;cursor:default" title="Collapse Pane" alt="Collapse Pane" width="23" height="7" border="0"></span><span id="af_message::info-icon"><img src="Document%202608210.1_files/info.png" title="Information" alt="Information" width="16" height="16" border="0"></span><span id="af_message::confirmation-icon"><img src="Document%202608210.1_files/confirmation.png" title="Confirmation" alt="Confirmation" width="16" height="16" border="0"></span><span id="af_message::error-icon"><img src="Document%202608210.1_files/error.png" title="Error" alt="Error" width="16" height="16" border="0"></span><span id="af_table::undisclosed-icon"></span><span id="af_messages::error-icon"><img src="Document%202608210.1_files/error.png" title="Error" alt="Error" width="16" height="16" border="0"></span></span><div id="afr::DlgSrvPopupCtnr"><div id="afr::DlgSrvPopupCtnr::content" style="display:none"></div></div><div id="afr::UtilPopupCtnr" _pid="j_id9" _did="j_id10" _dmw="250" style="display:none"><div id="j_id9" style="display:none"><div style="top:auto;right:auto;left:auto;bottom:auto;width:auto;height:auto;position:relative;" id="j_id9::content"><div id="j_id10" class="x17j"><div class="x18r" _afrpanelwindowbackground="1"></div><div class="x18r" _afrpanelwindowbackground="1"></div><div class="x18r" _afrpanelwindowbackground="1"></div><div class="x18r" _afrpanelwindowbackground="1"></div><table summary="" class="x17q" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x17s" id="j_id10::_hse">&nbsp;</td><td class="x17u" id="j_id10::_hce"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><div id="j_id10::_ticn" class="x18l" style="display:none"></div></td><td class="x17y" id="j_id10::tb"><div id="j_id10::_ttxt" class="x18j"></div></td></tr></tbody></table></td><td class="x17w" id="j_id10::_hee">&nbsp;</td></tr><tr><td class="x183" id="j_id10::_cse">&nbsp;</td><td class="x1o" id="j_id10::contentContainer"></td><td class="x185" id="j_id10::_cee">&nbsp;</td></tr><tr><td class="x187" id="j_id10::_fse"><div></div></td><td class="x189" id="j_id10::_fce"><table summary="" width="100%" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="x18c" id="j_id10::_fcc"><button type="button" id="j_id10::ok" class="xf6 p_AFTextOnly" onclick="return false;" _afrpdo="ok">OK</button><button type="button" id="j_id10::cancel" class="xf6 p_AFTextOnly" onclick="return false;" _afrpdo="cancel">Cancel</button></td><td valign="bottom" align="left"><div class="x18i"><a tabindex="-1" class="x18g" id="j_id10::_ree" title="Resize"></a></div></td></tr></tbody></table></td><td class="x18b" id="j_id10::_fee"><div></div></td></tr></tbody></table></div></div></div></div></div><script type="text/javascript" src="Document%202608210.1_files/dnd-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/coreTable-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/menu-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/table-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/iedit-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/uncommon-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/stretch-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/_AdfPageCustomizable-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/input-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/_AdfUserInactivityTimeout-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/detail-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/header-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/box-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/region-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/nav-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/select-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/toolbar-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/eum-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/form-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/imagelink-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/poll-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/print-11.js"></script><script type="text/javascript" src="Document%202608210.1_files/scrollComponentIntoView-11.js"></script><script type="text/javascript">AdfBootstrap._onLoad=function (){if (AdfPage.PAGE.__checkRichResponseDirty()) return;AdfUserActivityInfo.getInstance('pr0').setContextId('005bsiZI53R9xWAZv_e9V10005Mo0011hH');var isCachedPage = AdfPage.PAGE.__handleCachedPageForNewWindow('47r3e5qi0_149');if (!isCachedPage){window.name='47r3e5qi0_149';};AdfAgent.AGENT.elementsAdded(document);AdfDhtmlLookAndFeel.addSkinProperties({"af|dialog-tr-open-animation-duration":"300","p_AFTwinkleOff":"p_AFTwinkleOff","af|decorativeBox::top-start-tr-width":"6px","AFPopupSelectorFooterStart":"x14r","af|table-tr-column-scroll-animation-duration":"300","af|decorativeBox::top-end-tr-width":"6px","af|decorativeBox::end-tr-width":"6px","af|dialog::resize-ghost":"x17o","af|messages::intro":"x15j","af|decorativeBox::top-start:flow-tr-width":"4px",".AFWorkaround-tr-disable-property-delta-sync":"false","AFPopupSelector":"x14g","af|menu-tr-open-animation-duration":"100","af|messages::message-group-title":"x15k","af|decorativeBox::bottom-end:flow-tr-width":"4px","af|message::intro":"x15r","af|popup-tr-shadow-offset":1,"AFPopupSelectorHeader":"x14k","af|messages::detail":"x15t","p_AFTwinkleOn":"p_AFTwinkleOn","af|decorativeBox::top-tr-height":"5px","af|panelSplitter-tr-collapse-animation-duration":"400","af|decorativeBox::end:flow-tr-width":"4px","AFPopupSelectorContentStart":"x14o","AFOverflowElement":"xkf","af|decorativeBox::top-end:flow-tr-width":"4px","af|showDetailHeader::disclosed-icon-style":"x1aw","af|decorativeBox::start:flow-tr-width":"4px","af|table-tr-column-reorder-animation-duration":"600","af|panelBox::undisclosed-icon-style":"x1ax","af|messages::component-link":"xfv","af|message::summary":"x15p",".AFPopupSelector-tr-open-animation-duration":"200","af|decorativeBox::bottom-tr-height":"8px","af|messages::summary":"x15s","af|navigationPane-tr-layout-type":"overflow","af|panelBox-tr-animation-duration":"200","AFPopupSelectorContentEnd":"x14p","af|decorativeBox::bottom-start-tr-width":"6px","af|table-tr-hover-highlight-row":"true","AFPopupSelectorContent":"x14n","af|decorativeBox::start-tr-width":"6px","af|decorativeBox::top:flow-tr-height":"4px","af|panelSplitter-tr-divider-size":"7","AFPopupSelectorFooterEnd":"x14s","af|showDetailHeader::undisclosed-icon-style":"x1av","af|panelBox::disclosed-icon-style":"x1ay","af|popup-tr-shadow-starting-black-percent":50,"af|decorativeBox::bottom-start:flow-tr-width":"4px","af|popup-tr-shadow-pixel-size":9,"af|decorativeBox::bottom:flow-tr-height":"4px","af|decorativeBox::bottom-end-tr-width":"6px","af|messages::message-group-type-separator":"x15l","af|message::type":"x15o","AFPopupSelectorHeaderStart":"x14l","af|message::detail":"x15q","af|messages::header-text":"x15i",".AFNoteWindow-tr-open-animation-duration":"200","af|menu-tr-visible-items":20,"AFPopupSelectorFooter":"x14q","AFPopupSelectorHeaderEnd":"x14m"});AdfPage.PAGE.addComponents(new AdfRichDocument('d1',{'title':'Document  2608210.1','_afrSkpLnk':'kmPgTpl:pt_psl3'}),new AdfRichForm('f1'),new AdfRichPanelSplitter('kmPgTpl:pt_headerPs',{'orientation':'vertical','splitterPosition':30}),new AdfRichPanelStretchLayout('kmPgTpl:svHd:pt_brBar',{'startWidth':330,'endWidth':'auto'}),new AdfRichToolbar('kmPgTpl:svHd:pv1:pvToolbar'),new AdfRichCommandLink('kmPgTpl:svHd:pv1:pvptcl'),new AdfRichCommandLink('kmPgTpl:svHd:pv1:pvptclL'),new AdfRichCommandToolbarButton('kmPgTpl:svHd:pv1:pvOnOffLink',{'accessKey':'\uffff','text':'PowerView is Off','styleClass':'p_AFTextOnly','icon':'/epmos/common/images/pvoff.png'}),new AdfRichMenu('kmPgTpl:svHd:pv1:m2'),new AdfRichCommandMenuItem('kmPgTpl:svHd:pv1:togglePV'),new AdfRichCommandMenuItem('kmPgTpl:svHd:pv1:editPvId',{'disabled':true}),new AdfRichCommandMenuItem('kmPgTpl:svHd:pv1:newPV'),new AdfRichMenu('kmPgTpl:svHd:pv1:m3',{'disabled':true,'text':'Recent PowerViews'}),new AdfRichMenu('kmPgTpl:svHd:pv1:m4',{'disabled':true,'text':'Named PowerViews'}),new AdfRichCommandMenuItem('kmPgTpl:svHd:pv1:managePVMI',{'behaviors':new AdfShowPopupBehavior('managePV',AdfRichPopup.ALIGN_AFTER_END,'pvOnOffLink','action'),'accessKey':'\uffff','disabled':true,'text':'Manage PowerViews'}),new AdfRichGoMenuItem('kmPgTpl:svHd:pv1:learnMorePV',{'destination':'http://docs.oracle.com/cd/E25290_01/doc.60/e25224/general.htm#BABFJDGA','targetFrame':'_blank'}),new AdfRichPopup('kmPgTpl:svHd:pv1:pvAddEdit',{'contentDelivery':'lazyUncached','autoCancel':'disabled'}),new AdfRichPopup('kmPgTpl:svHd:pv1:managePV',{'contentDelivery':'lazyUncached'}),new AdfRichPopup('kmPgTpl:svHd:sug1:sggstrpp'),new AdfRichPanelGroupLayout('kmPgTpl:svHd:sug1:pglcl'),new AdfRichPopup('kmPgTpl:svHd:pop1',{'contentDelivery':'lazyUncached','autoCancel':'disabled'}),new AdfRichRegion('kmPgTpl:svHd:r1',{'viewId':'/user-menu-taskflow/userMenu','immediate':true}),new AdfRichMenuBar('kmPgTpl:svHd:r1:0:dc_mb1'),new AdfRichMenu('kmPgTpl:svHd:r1:0:dc_m1',{'text':'Hong (Available)'}),new AdfRichCommandMenuItem('kmPgTpl:svHd:r1:0:dc_cmi1'),new AdfRichCommandMenuItem('kmPgTpl:svHd:r1:0:dc_cmi2'),new AdfRichGoMenuItem('kmPgTpl:svHd:r1:0:dc_cmi3',{'destination':'http://www.oracle.com/pls/topic/lookup?ctx=mos_en&id=MOSHP1498','targetFrame':'_blank'}),new AdfRichGoMenuItem('kmPgTpl:svHd:r1:0:dc_cmi4',{'destination':'/epmos/faces/MyAccount'}),new AdfRichGoMenuItem('kmPgTpl:svHd:r1:0:dc_cmi5',{'destination':'/epmos/logout?next_url=https://login.oracle.com/sso/logout?p_done_url='}),new AdfRichCommandLink('kmPgTpl:svHd:r1:0:_afrCommandDelegate',{'partialSubmit':true}),new AdfRichCommandImageLink('kmPgTpl:svHd:cil1',{'clientListeners':{click:clickMessageCenter},'behaviors':new AdfShowPopupBehavior('p2',AdfRichPopup.ALIGN_BEFORE_END,'cil1'),'accessKey':'\uffff','text':'(0)','shortDesc':'Last Refreshed: 27-Feb-2020 17:43 CST','icon':'/epmos/common/images/email_16.png','disabledIcon':'/epmos/common/images/communication_applications_grey_16.png'}),new AdfRichPopup('kmPgTpl:svHd:p2',{'contentDelivery':'lazyUncached'}),new AdfRichCommandLink('kmPgTpl:svHd:tc1:tccl1',{'visible':false,'accessKey':'\uffff','text':'a'}),new AdfRichPopup('kmPgTpl:svHd:tc1:tcp1',{'contentDelivery':'lazyUncached','animate':'false'}),new AdfRichMenuBar('kmPgTpl:svHd:mb1'),new AdfRichMenu('kmPgTpl:svHd:m1',{'text':'Help'}),new AdfRichGoMenuItem('kmPgTpl:svHd:gnItem',{'destination':'javascript:var newWin = window.open(\'https://mosemp.us.oracle.com/epmos/faces/DocTextDisplay?type=DOC&id=1400249.1#article_no_search\',\'helpWindow\',\'width=650, height=600,location=yes,resizable=yes,scrollbars=yes,status=no\', \'true\'); ','targetFrame':'_self'}),new AdfRichGoMenuItem('kmPgTpl:svHd:gnItemj_id_1',{'destination':'javascript:var newWin = window.open(\'https://mosemp.us.oracle.com/epmos/faces/DocTextDisplay?type=DOC&id=1386336.1#article_no_search\',\'helpWindow\',\'width=650, height=600,location=yes,resizable=yes,scrollbars=yes,status=no\', \'true\'); ','targetFrame':'_self'}),new AdfRichPanelStretchLayout('kmPgTpl:svCH:psl1',{'topHeight':'0px'}),new AdfRichRegion('kmPgTpl:svCH:r1',{'immediate':true}),new AdfRichCommandLink('kmPgTpl:svCH:r1:0:_afrCommandDelegate',{'partialSubmit':true}),new AdfRichPanelStretchLayout('kmPgTpl:pt_psl1',{'bottomHeight':'25'}),new AdfRichDecorativeBox('kmPgTpl:pt_db8',{'topHeight':'26px'}),new AdfRichPanelStretchLayout('kmPgTpl:svMenu:ptpsl2',{'endWidth':'auto'}),new AdfRichNavigationPane('kmPgTpl:svMenu:np1'),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:0:cni1',{'tabName':'Knowledge','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Knowledge','destination':'/epmos/faces/secure/home/Home.jspx?nodeId=itemNode_Home940968171','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:1:cni1',{'tabName':'RCA','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'RCA','destination':'/epmos/faces/secure/rca/MyOpenRCAs.jspx?nodeId=itemNode_MyOpenRCAs940968171','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:2:cni1',{'tabName':'Customer Exceptions','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Customer Exceptions','destination':'/epmos/faces/secure/custpatchex/Home.jspx?nodeId=itemNode_CustPatchEx_HomePage940968171','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:3:cni1',{'tabName':'CMS','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'CMS','destination':'/epmos/faces/secure/cms/nominationworkbench/Home.jspx?nodeId=itemNode_CMS_homePage940968171','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:4:cni1',{'tabName':'Service Requests','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Service Requests','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:5:cni1',{'tabName':'Patches & Updates','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Patches & Updates','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:6:cni1',{'tabName':'Certifications','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Certifications','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:7:cni1',{'tabName':'Systems','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Systems','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:8:cni1',{'tabName':'Collector','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Collector','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:9:cni1',{'tabName':'Settings','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'Settings','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichCommandNavigationItem('kmPgTpl:svMenu:np1:10:cni1',{'tabName':'XNS','clientListeners':{action:[unsavedDataHandlerHook,menuTabClicked]},'partialSubmit':true,'accessKey':'\uffff','text':'XNS','targetFrame':'','icon':'/epmos/common/images/blank.gif'}),new AdfRichPanelGroupLayout('kmPgTpl:svMenu:gsb:pt_pgl1',{'layout':'horizontal','halign':'left','styleClass':'x2a4'}),new AdfRichCommandButton('kmPgTpl:svMenu:gsb:dc_cb1',{'clientListeners':{click:refreshFavMenu},'behaviors':new AdfShowPopupBehavior('fm1',AdfRichPopup.ALIGN_AFTER_START,'dc_cb1'),'partialSubmit':true,'icon':'/epmos/common/images/favorites_qualifier_arrow.png','accessKey':'\uffff','styleClass':'x23r','shortDesc':'Favorites'}),new AdfRichPopup('kmPgTpl:svMenu:gsb:fm1',{'contentDelivery':'lazyUncached'}),new AdfRichPopup('kmPgTpl:svMenu:gsb:fm2'),new AdfRichCommandButton('kmPgTpl:svMenu:gsb:cb1',{'behaviors':new AdfShowPopupBehavior('p1',AdfRichPopup.ALIGN_AFTER_START,'cb1','action'),'icon':'/epmos/ui/images/recent_searches_menuarrow_global.png','accessKey':'\uffff','styleClass':'x23u','shortDesc':'Recent Searches'}),new AdfRichPopup('kmPgTpl:svMenu:gsb:p1'),new AdfRichSubform('kmPgTpl:svMenu:gsb:subFgsb',{'defaultCommand':'menu_pt_cil2'}),new AdfRichOutputLabel('kmPgTpl:svMenu:gsb:subFgsb:pt_hiddenLabel',{'for':'kmPgTpl:svMenu:gsb:subFgsb:mGlobalSearch:pt_itG'}),new AdfRichInputText('kmPgTpl:svMenu:gsb:subFgsb:mGlobalSearch:pt_itG',{'osUrl':'https://support.oracle.com/CSP/main/ttj?userQuery=queryString&requestedSuggestions=10','clientListeners':{focus:setOracleSuggestsOrigin,keyUp:[showSuggestions,logOracleSuggestClickStream]},'simple':true,'immediate':true,'styleClass':'x23n','columns':50}),new AdfRichCommandImageLink('kmPgTpl:svMenu:gsb:subFgsb:menu_pt_cil2',{'clientListeners':{click:[logOracleSuggestClickStream,validateSearchTerm]},'accessKey':'\uffff','text':'','shortDesc':'Global Search','styleClass':'x23x','icon':'/epmos/common/images/searchiconbutton.gif'}),new AdfRichGoLink('kmPgTpl:svMenu:gsb:gl31',{'osUrl':'https://support.oracle.com/CSP/main/ttj?userQuery=queryString&requestedSuggestions=10','accessKey':'\uffff','destination':'/epmos/faces/AdvancedSearch'}),new AdfRichPanelStretchLayout('kmPgTpl:pt_psl3',{'topHeight':'auto'}),new AdfRichPanelHeader('kmPgTpl:overTitle:ot1'),new AdfRichPopup('kmPgTpl:svMsg:msgAsPop'),new AdfRichCommandLink('kmPgTpl:cl1'),new AdfPageCustomizable('kmPgTpl:pageCustomizable1',{'layoutView':false,'componentView':false,'isEditMode':false,'contentContribKey':AdfKeyStroke.getKeyStrokeFromMarshalledString('shift ctrl C'),'editModeKey':AdfKeyStroke.getKeyStrokeFromMarshalledString('shift ctrl E'),'inlineStyle':''}),new AdfRichPanelStretchLayout('kmPgTpl:pslMain'),new AdfRichPanelStretchLayout('kmPgTpl:psl1',{'startWidth':'10'}),new AdfRichRegion('kmPgTpl:r1',{'viewId':'/km-document-content-task-flow/DocumentContent','immediate':true}),new AdfRichPanelStretchLayout('kmPgTpl:r1:0:psl1',{'topHeight':'auto'}),new AdfRichPanelHeader('kmPgTpl:r1:0:ph22'),new AdfRichPopup('kmPgTpl:r1:0:srFavorite'),new AdfRichCommandImageLink('kmPgTpl:r1:0:cil4',{'immediate':true,'partialSubmit':true,'shortDesc':'Click to add to Favorites','icon':'/epmos/common/images/favorites_qualifier_notsel.png'}),new AdfRichPopup('kmPgTpl:r1:0:sug1:sggstrpp'),new AdfRichPanelGroupLayout('kmPgTpl:r1:0:sug1:pglcl'),new AdfRichPopup('kmPgTpl:r1:0:sug2:sggstrpp'),new AdfRichPanelGroupLayout('kmPgTpl:r1:0:sug2:pglcl'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol22'),new AdfRichCommandImageLink('kmPgTpl:r1:0:toBottom',{'behaviors':new AdfScrollComponentIntoViewBehavior('toTop',false),'immediate':true,'accessKey':'\uffff','text':'To Bottom','shortDesc':'To Bottom','inlineStyle':'text-decoration:none','icon':'/epmos/ui/images/quicklink_smlarrowdown_enabled.gif'}),new AdfRichSpacer('kmPgTpl:r1:0:s23',{'height':'5','width':'10'}),new AdfRichPanelBox('kmPgTpl:r1:0:pb5',{'text':'Was this document helpful?','showMaximize':false}),new AdfRichPanelStretchLayout('kmPgTpl:r1:0:psl3'),new AdfRichRegion('kmPgTpl:r1:0:r7',{'viewId':'/km-feedback-widget-task-flow/KmFeedbackWidget','immediate':true}),new AdfRichSelectOneRadio('kmPgTpl:r1:0:r7:0:sor1',{'autoSubmit':true,'label':' '}),new AdfRichPanelFormLayout('kmPgTpl:r1:0:r7:0:pfl3',{'inlineStyle':'margin-left:0;padding-left:0;'}),new AdfRichCommandLink('kmPgTpl:r1:0:r7:0:_afrCommandDelegate',{'partialSubmit':true}),new AdfRichPanelBox('kmPgTpl:r1:0:pb1',{'text':'Document Details','showMaximize':false}),new AdfRichCommandImageLink('kmPgTpl:r1:0:cil1',{'behaviors':new AdfShowPopupBehavior('comeditpopw',null,null,'click'),'partialSubmit':true,'accessKey':'\uffff','shortDesc':'Add comment','icon':'/epmos/common/images/createcomment_ena.png'}),new AdfRichPopup('kmPgTpl:r1:0:comeditpopw',{'contentDelivery':'lazyUncached','autoCancel':'disabled'}),new AdfRichGoImageLink('kmPgTpl:r1:0:wgil1',{'shortDesc':'View document statistics','icon':'/epmos/common/images/report.png'}),new AdfRichGoImageLink('kmPgTpl:r1:0:wcil1',{'shortDesc':'View authoring history','icon':'/epmos/common/images/multi_source.png'}),new AdfRichGoImageLink('kmPgTpl:r1:0:wgil2',{'email':'HONG.LIN@ORACLE.COM','documentDisplayPath':'/faces/DocumentDisplay?id=2608210.1','documentTitle':'Tuning SQLs to Optimize Smart Scan Performance','type':'Document','appContext':'/epmos','documentId':'2608210.1','clientListeners':{click:sendContentLinkEmailDoc},'accessKey':'\uffff','shortDesc':'Email link to this document','icon':'/epmos/common/images/email_16.png'}),new AdfRichGoImageLink('kmPgTpl:r1:0:wgil3',{'shortDesc':'Open document in new window','icon':'/epmos/common/images/offsite_ena.png'}),new AdfRichCommandLink('kmPgTpl:r1:0:wcl5',{'itemType':'HOWTO','itemId':'2608210.1','clientListeners':{action:printClicked1},'behaviors':new AdfShowPrintablePageBehavior(),'accessKey':'\uffff','shortDesc':'Printable Page'}),new AdfRichOutputLabel('kmPgTpl:r1:0:wol7'),new AdfRichOutputLabel('kmPgTpl:r1:0:wol6'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol28'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol27'),new AdfRichOutputLabel('kmPgTpl:r1:0:wol5'),new AdfRichOutputLabel('kmPgTpl:r1:0:wol4'),new AdfRichOutputLabel('kmPgTpl:r1:0:wol2'),new AdfRichCommandButton('kmPgTpl:r1:0:wcil3',{'partialSubmit':true}),new AdfRichCommandButton('kmPgTpl:r1:0:wcil2',{'partialSubmit':true}),new AdfRichPopup('kmPgTpl:r1:0:comeditpopwidget',{'contentDelivery':'lazyUncached','autoCancel':'disabled'}),new AdfRichPanelBox('kmPgTpl:r1:0:pb3',{'text':'Related Products','showMaximize':false}),new AdfRichCommandLink('kmPgTpl:r1:0:i33:0:cl7'),new AdfRichRegion('kmPgTpl:r1:0:r4',{'viewId':'/km-document-widget-advisor-task-flow/DocumentWidgetAdvisorInfo','immediate':true}),new AdfRichPoll('kmPgTpl:r1:0:r4:0:p1',{'interval':500,'timeout':1200000}),new AdfRichPanelBox('kmPgTpl:r1:0:r4:0:pb1',{'text':'Information Centers','showMaximize':false}),new AdfRichCommandLink('kmPgTpl:r1:0:r4:0:_afrCommandDelegate',{'partialSubmit':true}),new AdfRichRegion('kmPgTpl:r1:0:r6',{'viewId':'/km-document-widget-references-task-flow/DocumentWidgetReferences','immediate':true}),new AdfRichPoll('kmPgTpl:r1:0:r6:0:p1',{'interval':500,'timeout':1200000}),new AdfRichPanelBox('kmPgTpl:r1:0:r6:0:pb1',{'text':'Document References','showMaximize':false}),new AdfRichCommandLink('kmPgTpl:r1:0:r6:0:_afrCommandDelegate',{'partialSubmit':true}),new AdfRichPanelBox('kmPgTpl:r1:0:pb4',{'text':'Recently Viewed','showMaximize':false}),new AdfRichPanelStretchLayout('kmPgTpl:r1:0:psl2'),new AdfRichRegion('kmPgTpl:r1:0:r5',{'viewId':'/km-recent-articles-taskflow/recentArticles','immediate':true}),new AdfRichGoLink('kmPgTpl:r1:0:r5:0:gl1',{'documentDisplayURL':'/epmos/faces/DocumentDisplay','documentId':'2019634.1','clientListeners':{click:recentLinkWidgetRedirect},'accessKey':'\uffff','text':'Online Statistics Gathering for Bulk Loads [2019634.1]','destination':'/epmos/faces/DocumentDisplay?id=2019634.1&parent=WIDGET_RECENTLY_VIEWED&sourceId=2608210.1','targetFrame':'_self'}),new AdfRichGoLink('kmPgTpl:r1:0:r5:0:gl1j_id_1',{'documentDisplayURL':'/epmos/faces/DocumentDisplay','documentId':'1770039.1','clientListeners':{click:recentLinkWidgetRedirect},'accessKey':'\uffff','text':'[12c \u65b0\u6a5f\u80fd]\u3000\u30d0\u30eb\u30af\u30fb\u30ed\u30fc\u30c9\u5b9f\u884c\u6642\u306e\u30aa\u30f3\u30e9\u30a4\u30f3\u7d71\u8a08\u53ce\u96c6\u306b\u3064\u3044\u3066\u306e\u6ce8\u610f\u70b9(KROWN:168163) [1770039.1]','destination':'/epmos/faces/DocumentDisplay?id=1770039.1&parent=WIDGET_RECENTLY_VIEWED&sourceId=2608210.1','targetFrame':'_self'}),new AdfRichGoLink('kmPgTpl:r1:0:r5:0:gl1j_id_2',{'documentDisplayURL':'/epmos/faces/DocumentDisplay','documentId':'1274475.1','clientListeners':{click:recentLinkWidgetRedirect},'accessKey':'\uffff','text':'Oracle Exadata Database Machine Performance Best Practices [1274475.1]','destination':'/epmos/faces/DocumentDisplay?id=1274475.1&parent=WIDGET_RECENTLY_VIEWED&sourceId=2608210.1','targetFrame':'_self'}),new AdfRichGoLink('kmPgTpl:r1:0:r5:0:gl1j_id_3',{'documentDisplayURL':'/epmos/faces/DocumentDisplay','documentId':'2427633.1','clientListeners':{click:recentLinkWidgetRedirect},'accessKey':'\uffff','text':'Master Note For Troubleshooting Database Performance In Exadata [2427633.1]','destination':'/epmos/faces/DocumentDisplay?id=2427633.1&parent=WIDGET_RECENTLY_VIEWED&sourceId=2608210.1','targetFrame':'_self'}),new AdfRichGoLink('kmPgTpl:r1:0:r5:0:gl1j_id_4',{'documentDisplayURL':'/epmos/faces/DocumentDisplay','documentId':'1438173.1','clientListeners':{click:recentLinkWidgetRedirect},'accessKey':'\uffff','text':'Smart scan : Find the statistics related to cell offload [1438173.1]','destination':'/epmos/faces/DocumentDisplay?id=1438173.1&parent=WIDGET_RECENTLY_VIEWED&sourceId=2608210.1','targetFrame':'_self'}),new AdfRichCommandLink('kmPgTpl:r1:0:r5:0:wcl2'),new AdfRichCommandLink('kmPgTpl:r1:0:r5:0:_afrCommandDelegate',{'partialSubmit':true}),new AdfRichCommandButton('kmPgTpl:r1:0:cb1',{'clientListeners':{click:openAskCommunity},'immediate':true,'icon':'/epmos/common/images/comm_thread_15x15.png','accessKey':'\uffff','text':'Ask in Community...','inlineStyle':'vertical-align:middle; height:19px;'}),new AdfRichShowDetailHeader('kmPgTpl:r1:0:sdh2',{'disclosed':true,'shortDesc':'Attachments','text':'Attachments'}),new AdfRichShowDetailHeader('kmPgTpl:r1:0:sdh1',{'disclosed':true,'shortDesc':'Related Products','text':'Related'}),new AdfRichPanelHeader('kmPgTpl:r1:0:ph2',{'shortDesc':'Related Products'}),new AdfRichPanelHeader('kmPgTpl:r1:0:ph4',{'shortDesc':'Related Knowledge Categories'}),new AdfRichShowDetailHeader('kmPgTpl:r1:0:sdh3',{'disclosed':true,'text':'Document Attributes'}),new AdfRichOutputLabel('kmPgTpl:r1:0:ol6'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol7'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol8'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol9'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol10'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol11'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol12'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol29'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol14'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol15'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol16'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol17'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol18'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol19'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol20'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol21'),new AdfRichOutputLabel('kmPgTpl:r1:0:ol13'),new AdfRichShowDetailHeader('kmPgTpl:r1:0:sdh4',{'disclosed':true,'shortDesc':'Comments','text':'Comments'}),new AdfRichTable('kmPgTpl:r1:0:t1',{'rowBandingInterval':0,'contentDelivery':'immediate','editingMode':'none'}),new AdfRichColumn('kmPgTpl:r1:0:t1:c0',{'width':'30','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c4',{'sortProperty':'title','width':'350','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c3',{'sortProperty':'type','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c2',{'sortProperty':'status','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c5',{'sortProperty':'priority','width':'50','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c1',{'sortProperty':'from','width':'200','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c6',{'sortProperty':'to','width':'80','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c7',{'sortProperty':'implementedBy','width':'200','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c8',{'sortProperty':'createdDate','minimumWidth':12,'rowHeader':false}),new AdfRichColumn('kmPgTpl:r1:0:t1:c9',{'sortProperty':'modifiedDate','minimumWidth':12,'rowHeader':false}),new AdfRichCommandImageLink('kmPgTpl:r1:0:t1:0:gil5',{'behaviors':new AdfShowPopupBehavior('editcomment',null,null,'click'),'partialSubmit':true,'accessKey':'\uffff','shortDesc':'Edit Comment','icon':'/epmos/common/images/editComment.gif'}),new AdfRichPopup('kmPgTpl:r1:0:t1:0:editcomment',{'contentDelivery':'lazyUncached','autoCancel':'disabled'}),new AdfRichCommandLink('kmPgTpl:r1:0:t1:0:cl4',{'behaviors':new AdfShowPopupBehavior('p2'),'accessKey':'\uffff','text':'My Oracle Support Feedback'}),new AdfRichPopup('kmPgTpl:r1:0:t1:0:p2'),new AdfRichCommandImageLink('kmPgTpl:r1:0:t1:1:gil5',{'behaviors':new AdfShowPopupBehavior('editcomment',null,null,'click'),'partialSubmit':true,'accessKey':'\uffff','shortDesc':'Edit Comment','icon':'/epmos/common/images/editComment.gif'}),new AdfRichPopup('kmPgTpl:r1:0:t1:1:editcomment',{'contentDelivery':'lazyUncached','autoCancel':'disabled'}),new AdfRichCommandLink('kmPgTpl:r1:0:t1:1:cl4',{'behaviors':new AdfShowPopupBehavior('p2'),'accessKey':'\uffff','text':'Bug 30496186 has been updated. Old Status = 11, New Status = 92'}),new AdfRichPopup('kmPgTpl:r1:0:t1:1:p2'),new AdfRichCommandImageLink('kmPgTpl:r1:0:toTop',{'behaviors':new AdfScrollComponentIntoViewBehavior('s23',false),'immediate':true,'accessKey':'\uffff','text':'Back to Top','shortDesc':'Back to Top','inlineStyle':'text-decoration:none','icon':'/epmos/ui/images/quicklink_smlarrowup_enabled.gif'}),new AdfRichCommandLink('kmPgTpl:r1:0:_afrCommandDelegate',{'partialSubmit':true}),new AdfRichPanelStretchLayout('kmPgTpl:pt_psl2',{'bottomHeight':'25px'}),new AdfRichToolbar('kmPgTpl:svFt2:npFtr'),new AdfRichDialog('d1::msgDlg',{'okVisible':false,'cancelVisible':false,'cancelTextAndAccessKey':'OK','modal':false,'resize':'on','title':''}),new AdfDialogServicePopupContainer('afr::DlgSrvPopupCtnr'),new AdfRichPopup('j_id9',{'contentDelivery':'immediate'}),new AdfRichDialog('j_id10',{'okVisible':false,'cancelVisible':false,'closeIconVisible':false}));AdfPage.PAGE.setDefaultMessageHandlerComponentId("d1");AdfPage.PAGE.__initializeSessionTimeoutTimer(4500000, 300000, "https://mosemp.us.oracle.com:443/epmos/faces/DocumentDisplay?id=2608210.1");AdfPage.PAGE.__initUserInactivityTimeout(1200000);page.__setAutomationEnabled(false);page.__setCssSelectorsUncompressed(false);AdfPage.PAGE.__setViewId('/DocumentDisplay');var exScripts=AdfBootstrap._extendedScripts;for (var i=0;i<exScripts.length;i++){exScripts[i]()};AdfBootstrap._extendedScripts=null;AdfPage.PAGE.__onLoad();};window.onload=AdfBootstrap._onLoad;</script><script type="text/javascript">AdfBootstrap._extendedScripts=[function(){initializeTimeout('kmPgTpl:svHd:tc1:tccl1');},function(){setOSContextPath('https://support.oracle.com/CSP/main/ttj?userQuery=queryString&requestedSuggestions=10');},function(){setOSContextPath('https://support.oracle.com/CSP/main/ttj?userQuery=queryString&requestedSuggestions=10');}];</script><div style="display: none;" id="_afrParserDiv"></div></body><!--Created by Oracle ADF (ADF Faces API - 11.1.1.7.1 / ADF Faces Implementation - 11.1.1.7.1, RCF-revision: 53886 (branch: faces-1306-11.1.1.7.1-release, plugins: 1.2.3), Trinidad-revision: 963 (branch: 1.2.12.7.1.release-branch, plugins: 1.2.10), build: adf-faces-rt_140716_2026, patch: MLR-19231614, libNum: 4197 / ADF-Controller{Oracle-BuildSystem=Linux - java - 1.6.0_35-b10, Oracle-Version=11.1.1.7.40.65.57.3, Created-By=20.10-b01 (Sun Microsystems Inc.), Oracle-Builder=user=apfmgr host=adc00lld, Oracle-Label=JDEVADF_11.1.1.7.1_GENERIC_RELEASE, Oracle-BuildTimestamp=2014-07-23 10:19:29 -0700} ADF-Model{Oracle-BuildSystem=Linux - java - 1.6.0_35-b10, Oracle-Version=11.1.1.7.40.65.57.3, Created-By=20.10-b01 (Sun Microsystems Inc.), Oracle-Builder=user=apfmgr host=adc00lld, Oracle-Label=JDEVADF_11.1.1.7.1_GENERIC_RELEASE, Oracle-BuildTimestamp=2014-07-23 10:10:25 -0700} ADF-Share{Oracle-BuildSystem=Linux - java - 1.6.0_35-b10, Oracle-Version=11.1.1.7.40.65.57.3, Created-By=20.10-b01 (Sun Microsystems Inc.), Oracle-Builder=Official Builder, Oracle-Label=JDEVADF_11.1.1.7.1_GENERIC_130522.1249.6557.3, Oracle-BuildTimestamp=2013-06-15 02:09:59 -0700}  / powered by JavaServer Faces - 1.2), accessibility (mode:default, contrast:standard, size:medium), skin:kmportal.desktop (kmportal)--></html>
