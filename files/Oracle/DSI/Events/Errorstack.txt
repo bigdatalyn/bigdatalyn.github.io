@@ -1,0 +1,98 @@
+ERRORSTACKの取得方法(KROWN:38642) (Doc ID 1713179.1)
+
+[質問]
+本文書は、errorstackの取得方法に関して述べたものです｡
+
+[回答]
+□確認
+  errorstackのダンプファイルは、非常に大きなサイズとなる場合がございますので、以下の点を事前
+　にご確認下さい｡このファイルは、サーバープロセスのerrorstackであればUSER_DUMP_DEST、バック
+　グラウンドプロセスのであればBACKGROUND_DUMP_DESTに出力されます｡
+
+　・初期化パラメータファイルにおける、MAX_DUMP_FILE_SIZEの値
+　・USER_DUMP_DEST、BACKGROUND_DUMP_DESTで指定されたディレクトリのディスク空き容量
+
+
+□取得する情報の内容
+　errorstackを取得する際には、3つのレベルが指定できます。以下のように、レベル毎に取得できる
+　内容が異なります。
+
+  level 1  errorstackとcall stack
+  level 2  level 1 の内容に加え、process state
+  level 3  level 2 の内容に加え、コンテキスト領域(カーソルダンプ)
+
+□errorstackの取得方法
+
+1. 現行セッションのerrorstack  　
+　　　SQL>alter session set events 'immediate trace name ERRORSTACK level 3';
+
+2. 特定のエラー発生時にerrorstackを取得
+  　・初期化パラメータファイルにおける設定例
+        event="600 trace name ERRORSTACK level 3"
+           ->全セッションにおいて、ORA-600が発生時にerrorstackを出力します。
+
+　  ・現行sessionにおける例
+　　  　SQL>alter session set events '600 trace name ERRORSTACK level 3';
+           ->このセッションにおいて、この後SQLを実行中にORA-600が発生した場合、
+　　　　　　　errorstackを出力します｡
+
+3. 他のsessionのerrorstackの取得
+    ここでは、oradebugコマンドを使用します｡このコマンドは、以下のバージョンのサーバー
+    マネージャー、SQL*PLUSから実行可能となっております。
+
+     7.3.x - 8.0.x : サーバーマネージャー
+     8.1.x         : サーバーマネージャー、SQL*PLUS
+     9.x           : SQL*PLUS
+
+　　例 : 8.0.6でerrorstackの取得
+   
+    $svrmgrl
+    SVRMGR>connect internal
+    SVRMGR> select username,program,pid,spid from v$process;
+    USERNAME        PROGRAM                                  PID        SPID
+    --------------- ---------------------------------------- ---------- ---------
+                    PSEUDO                                            1
+    ora806          oracle@xxxx (PMON)                           2 12689
+    ora806          oracle@xxxx (DBW0)                           3 12691
+    ora806          oracle@xxxx (ARCH)                           4 12693
+    ora806          oracle@xxxx (LGWR)                           5 12695
+    ora806          oracle@xxxx (CKPT)                           6 12697
+    ora806          oracle@xxxx (SMON)                           7 12699
+    ora806          oracle@xxxx (RECO)                           8 12701
+    ora806          oracle@xxxx (S000)                           9 12703
+    ora806          oracle@xxxx (D000)                          10 12705
+    ora806          oracle@xxxx (TNS V1-V3)                     11 12721
+
+    SVRMGR>oradebug setospid <process ID>                <==ここにSPIDを入力
+　  もしくは、
+    SVRMGR>oradebug setorapid <process ID>               <==ここにPIDを入力
+
+    SVRMGR>oradebug unlimit                              <==出力されるファイルサイズ
+　　　　　　　　　　　　　　　　　　　　　                     の上限を無制限にする
+    SVRMGR>oradebug dump errorstack 3
+	
+	
+
+Event_parameter
+Most event accept level as event parameter. when you don't specify level explicitly, 1 is used as default.
+
+SQL> alter session set events 'sql_trace level 1';
+is same with
+SQL> alter session set events 'sql_trace';
+ 
+
+ To specify multiple parameters in event_parameters, use comma separated list. And how to specify multiple parameters for other *_parameters is same.
+
+To specify multiple event_parameters for sql_trace event.
+SQL> alter session set events 'sql_trace wait=true, bind=true';
+
+You can omit '=' and following works fine.
+SQL> alter session set events 'sql_trace wait true, bind true';
+
+Example to specify multiple action_parameter for cursortrace action.
+SQL> alter session set events 'immediate cursortrace(level=99172, address=1745700775)';
+
+
+Job event
+
+
