@@ -1,0 +1,24 @@
+
+Postgresql Oracle Index
+
+1. PostgreSQL　索引中支持NULL:
+
+(升降)索引中NULL位置： 默认 ASC NULLs Last (升序，NULL记录再索引尾部)， 如要指定 NULL放在索引前面使用 ： NULLs first
+
+2. PostgreSQL 支持部分索引:
+
+对部分行可以建立部分索引，达到减少索引大小，提高性能
+
+Oracle 12c之前没办法在部分或指定的分区上创建索引,Oracle 12c 版本中引入了Partial Indexes(部分索引), 
+无论是global还是local都可以有选择性的对部分分区创建索引。分区上有索引用索引，无索引全表扫
+partial index有两个限制条件:
+1.表是分区表
+2.不能是唯一索引
+3.建表的时候分区指定 INDEXING OFF or ON 或者 alter table 修改
+
+
+3. PostgreSQL 附加字段索引
+
+Oracle 如果查询的列都在索引上，则不需要访问表了，直接访问索引即可。 PostgreSQL 附加字段索引类似这复合索引。
+
+4. %匹配操作的索引

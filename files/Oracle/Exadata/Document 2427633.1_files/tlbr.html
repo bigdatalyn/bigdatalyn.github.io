@@ -1,0 +1,85 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style>
+body {
+border: none;
+margin: 0;
+padding: 0;
+overflow: hidden;
+background-color:transparent;
+}
+</style>
+
+<script>
+
+function Gogo(_top) {
+   function CSCO_ITB_validate_url(s){
+
+        var regexp = /^ *[a-zA-Z0-9].*/;
+        return regexp.test(s);
+
+   }
+  var on = window.parent.csco_iframe_container.onmouseout;
+  var pr=window.parent;
+  window.parent.csco_iframe_container.onmouseout = null;
+
+  var s=window.prompt("Enter URL/Web Address","");
+
+
+ if(s&&s.length){
+     if(CSCO_ITB_validate_url(s)){
+       if (navigator.userAgent.indexOf("Windows CE") == -1) {
+         if( 0 != s.search(/^https?\:\/\//i) ) {
+             s="http://"+s;
+         }
+         var mangled=_top.CSCO_WebVPN["mangle_url"](s,0);
+         _top.location.href = mangled;
+       } else { 
+         _top.location.href = "/+webvpn+/enter_url.html?url=" + escape(str); 
+       }
+     }else{
+         alert("Wrong URL!");      
+     }
+ } else {
+    pr.csco_iframe_container.onmouseout = on; 
+    pr.csco_iframe_container.onmouseout.call(pr.csco_iframe_container);
+ }
+
+}
+
+function CSCO_ITB_logout(_top)
+{
+  var on = window.parent.csco_iframe_container.onmouseout;
+  var pr=window.parent;
+  window.parent.csco_iframe_container.onmouseout = null;
+
+   if (confirm("Are you sure you want to close your session?") )
+   {
+        _top.location.href = "/+webvpn+/webvpn_logout.html";
+   } else {
+    pr.csco_iframe_container.onmouseout = on; 
+    pr.csco_iframe_container.onmouseout.call(pr.csco_iframe_container);
+   }
+}
+
+</script>
+</head>
+<body>
+<div>
+<map name="csco" border="0" id="csco">
+<area shape="rect" href="javascript:window.parent.CSCO_ITB_moveit.call(window.parent)" alt="Move to other side" title="Move to other side" coords="0, 0, 24, 24">
+
+<area shape="rect" href="javascript:Gogo(window.top)" alt="Go to address" title="Go to address" coords="24, 0, 48, 24">
+<area shape="rect" target="_top" href="https://myaccess.oraclevpn.com/+CSCOE+/portal.html" alt="Home page" title="Home page" coords="48, 0, 72, 24">
+<area shape="rect" href="javascript:window.CSCO_ITB_logout(window.top)" alt="Logout" title="Logout" coords="72, 0, 96, 24">
+</map>
+<img src="etb.gif" usemap="#csco" width="96" height="24" border="0">
+
+
+
+
+
+</div>
+
+
+</body></html>

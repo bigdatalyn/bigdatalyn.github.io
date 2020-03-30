@@ -1,0 +1,255 @@
+/*   kmstyles.css v1.0.11 - MetaLink 2.8             */
+/*   Copyright ? Oracle. All rights reserved.        */
+/*   10-Aug-2006 KMASSUCC.US                         */
+/*   10-Aug-2006 JZWARREN.UK - KM class name         */
+/*   10-Aug-2006 SMEACHUM.UK - tag specific classes, */
+/*               div codeblock, th, code, pre,       */
+/*               span fixedwidthfont                 */
+/*               and <font> inherit overide          */
+/*               <body> not used in KM notes         */
+/*   10-Aug-2006 JZWARREN.UK - Added KMASSUCC.US h1  */
+/*               and h4 defs                         */
+/*   14-Aug-2006 JZWARREN.UK - Increased h4 to 11pt  */
+/*   15-Aug-2006 JZWARREN.UK - Removed width from    */
+/*               div.kmcodeblock                     */
+/*   07-Sep-2006 JZWARREN.UK - Font sizes changed to */
+/*               percentages. Added div.kmindent1 &  */
+/*               div.kmindent2. Added font-weight:   */
+/*               600 to span.kmfixedwidthfont.       */
+/*               Padding-top added to h1,h2,h3       */
+/*               Changed codeblock margins           */
+/*   03-Jan-2007 JZWARREN.UK - Added Body Style and  */
+/*               AWIZ styles.                        */
+/*   04-Jan-2007 SMEACHUM.UK - Removed borders from  */
+/*               BODY and added font-size to TD, TH  */
+/*               and .kmnotebox                      */
+/*   15-Jan-2007 JZWARREN.UK - Removed BODY entirely */
+/*               and removed font-size from TD, TH   */
+/*               and .kmnotebox                      */
+/*   02-Feb-2007 JZWARREN.UK - vertical-align: top   */
+/*               added to th and td elements         */
+/*   24-MAY-2007 SMEACHUM.UK - margin changes for    */
+/*               codeblock inline with BUG           */
+/*               fix 6038346 + remove font-weight    */
+/*               from kmfixedwidthfont               */
+/*   25-JAN-2011 RBEARD.UK - Fix for Bug 9802466    */
+/*               Updated H1 to from 130% to 120%     */
+/*               Updated H2 to Bold, 108% to 105%    */
+/*               Updated H3 to Bold. 108% from 105%  */
+/*               Updated H4 to Bold, Dark Blue, 101%, Italics   */
+/*               Added H5 Bold, Slate Grey, 101%, Italics        */
+/*   30-APR-2013 LIMATEI.RO - Fix for Bug 16297496   */   
+
+h1.km { 
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:120%;
+        color: #333333;
+        padding-top: 1em;
+}
+h2.km {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:105%;
+        color: #333333;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #c4d1e6;
+        padding-top: 0.5em;
+        font-size: 125%;             /* Bug 16297496 */ 
+        background-color: #777773;   /* Bug 16297496 */ 
+        color: #FFFFFF;              /* Bug 16297496 */ 
+        text-transform: uppercase;   /* Bug 16297496 */ 
+        padding-top: 6px;            /* Bug 16297496 */ 
+        padding-bottom: 6px;         /* Bug 16297496 */ 
+        padding-left: 8px;           /* Bug 16297496 */
+}
+
+/* H3 set to Black */
+
+h3.km {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:105%;
+        font-weight: bold;
+        color: #333333;
+        padding-top: 0.5em;
+}
+
+/* H4 set to Dark Blue, Italics */
+
+h4.km {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:101%;
+        font-weight: bold;
+        font-style:italic;
+        color: #000088;
+        padding-top: 0.5em;
+}
+
+/* H5 set to Slate Grey, Italics  */
+
+h5.km {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:101%;
+        font-weight: bold;
+        font-style:italic;
+        color: #666666;
+        padding-top: 0.5em;
+}
+table.km {
+        border-top-width: 1px;
+        border-left-width: 1px;
+        border-top-style: solid;
+        border-left-style: solid;
+        border-top-color: #c4d1e6;
+        border-left-color: #c4d1e6;
+}
+td.km {
+        border-right-width: 1px;
+        border-bottom-width: 1px;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-right-color: #c4d1e6;
+        border-bottom-color: #c4d1e6;
+        padding: 4px;
+        vertical-align: top
+}
+th.km {
+        border-right-width: 1px;
+        border-bottom-width: 1px;
+        border-right-style: solid;
+        border-bottom-style: solid;
+        border-right-color: #c4d1e6;
+        border-bottom-color: #c4d1e6;
+        padding: 4px;
+        background-color: #dee6ef;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top
+}
+.kmnotebox {
+        background-color: #FEFCEE;
+        border: 2px solid #c1a90d;        
+        padding: 10px;
+        border: 0px;                /* Bug 16297496 */ 
+        background-color: #FFF9D7;  /* Bug 16297496 */ 
+        border: 1px solid #c1a90d;  /* Bug 16297496 */
+}
+.kmhidetext{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:103%;
+        color: #333333;
+}
+pre.km, code.km {
+        font-family:"Courier New",Courier,monospace;
+        font-size:90%;
+        white-space: -moz-pre-wrap; /* Mozilla */
+        white-space: -pre-wrap; /* Opera */
+        white-space: -o-pre-wrap; /* Opera */
+        white-space: pre-wrap; /* Standard CSS3 */
+        word-wrap: break-word; /* IE 5.5+ */ 
+}
+div.kmcodeblock {
+        background-color:#EEF3F7;
+        overflow:auto;
+        border-width:1px;
+        border-style:solid;
+        border-color:#C4D1E6;
+        padding:0.5em;
+        margin:0px;margin-top:5px; 
+        font-family:"Courier New",Courier,monospace;
+        font-size:90%;
+        xborder-width:0px;           /* Bug 16297496 */ 
+    	background-color: #E0EAF1;   /* Bug 16297496 */
+}
+div.kmindent1 {
+        display: block;
+        padding-left: 40px;
+}
+div.kmindent2 {
+        display: block;
+        padding-left: 80px;
+}
+span.kmfixedwidthfont {
+        font-family:"Courier New",Courier,monospace;
+}
+h2.awiz {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:105%;
+        color: #333333;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #c4d1e6;
+}
+h3.awiz {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:103%;
+        color: #333333;
+}
+pre.awiz, code.awiz {
+        font-family:"Courier New",Courier,monospace;
+        font-size:90%;
+}
+font {
+        font-family: inherit !important;
+}
+.bugOutputLabel{
+    font-family: Helvetica, sans-serif; 
+    font-size:130%; 
+    font-weight: bold;
+    color: #333333
+}
+.bugOutputText{
+    font-family: Helvetica, sans-serif; 
+    font-size:130%;     
+    color: #333333
+}
+.kmBrowserFavOText{
+    font-family: Tahoma, Verdana, Helvetica, sans-serif;
+    font-weight:normal;
+    font-size:11px;
+}
+.kmBrowserFavOTextSmall{
+    font-family: Tahoma, Verdana, Helvetica, sans-serif;
+    font-weight:normal;
+    font-size:9px;
+}
+.kmBrowserFavLink{
+    color:Navy; 
+    text-decoration:none;
+}
+.documentContent_links a:link       {font-family:Tahoma,Arial,Helvetica,Geneva,sans-serif;font-size:100%;font-weight:normal;color:#1C2A40}
+.documentContent_links a:active     {font-family:Tahoma,Arial,Helvetica,Geneva,sans-serif;font-size:100%;font-weight:normal;color:#800080;}
+.documentContent_links a:visited    {font-family:Tahoma,Arial,Helvetica,Geneva,sans-serif;font-size:100%;font-weight:normal;color:#800080;}
+
+.kmDialogDutton_Highlight {font-size:small; background-color:rgb(255,255,180); border-color:Red; border-style:solid;}
+.kmDialogDutton_Highlight:hover {font-size:small; background-color:rgb(255,255,100); border-color:Red; border-style:solid;}
+.kmDialogDutton_Highlight:focus {font-size:small; background-color:rgb(255,255,100); border-color:Red; border-style:solid;}
+
+.searchIconImage {
+    margin-left: -38px;
+}
+.kmContent img {
+    max-width: 100%;
+}
+
+.kmDocVisibilityInt{
+    color:rgb(238,0,0);
+    font-weight: bold;
+}
+
+.kmDocVisibilityExt{
+    color:Black;
+}
+
+.kmDocBorderInternal{
+    background-color:White;
+    position:static;
+    border-color:rgb(238,0,0);
+    border-style:solid;
+    padding-left: 5px;
+}
+
+.kmDocBorderExternal{
+    background-color:White;
+    position:static;
+}
+

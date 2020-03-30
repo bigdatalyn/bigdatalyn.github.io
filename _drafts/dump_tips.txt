@@ -1,0 +1,87 @@
+
+
+Oracle Database Hang
+
+#### Get infors for hang db
+
+If Single DB:
+
+Terminal 01:
+
+	SQL> oradebug hanganalyze 3
+
+	Wait 1 mins, Re-execute:
+
+	SQL> oradebug hanganalyze 3
+
+Terminal 02:
+
+	$ sqlplus / as sysdba
+	SQL> oradebug setmypid
+	SQL> oradebug unlimit
+	SQL> oradebug dump systemstate 266
+	Wait 2 mins
+	SQL> oradebug dump systemstate 266
+	Wait 2 mins
+	SQL> oradebug dump systemstate 266
+
+If RAC:
+
+Terminal 01:
+
+	$ sqlplus / as sysdba
+	SQL> oradebug setmypid
+	SQL> oradebug unlimit
+	SQL> oradebug -g all hanganalyze 3
+	Wait 1 mins
+	SQL> oradebug -g all hanganalyze 3
+	SQL> exit
+
+Terminal 03: 01/02 -> 03 dump system's info.
+
+	SQL> oradebug setmypid
+	SQL> oradebug unlimit
+	SQL> oradebug -g all systemstate 10
+	Wait 1 mins
+	SQL> oradebug -g all systemstate 10
+	SQL> oradebug tracefile_name
+	SQL> exit
+
+Reference:
+
+	* How To Collect 10046 Trace (SQL_TRACE) Diagnostics for Performance Issues (Doc ID 376442.1)
+
+#### Shut down in Hang mode Tips
+
+If Oracle db was hanging, maybe we can NOT connect to db via sqlplus, however we can connect to db via prelim mode.
+
+	$ sqlplus -prelim "/ as sysdba"
+
+In prelim mode, we can shut down instance but can NOT query system table like "select status from v$instance".
+
+Reference:
+
+	NOTE:986640.1 - How To Connect Using A Sqlplus Preliminary Connection
+	
+	There are two ways to connect to sqlplus using a preliminary connection.
+
+	sqlplus -prelim / as sysdba
+
+or
+
+	sqlplus /nolog
+	set _prelim on
+	connect / as sysdba
+
+#### Performance dump Tips.
+
+Confirm the pid between Client process/OS process, and dump these process infor.
+
+	SQL> oradebug setospid XXXX;
+	SQL> oradebug unlimit;
+	SQL> oradebug event 10046 trace name context forever, level 12;
+	SQL> oradebug event 10046 trace name context off;
+	
+In the mean time, confirm event in v$session_wait with active session.
+	
+	
