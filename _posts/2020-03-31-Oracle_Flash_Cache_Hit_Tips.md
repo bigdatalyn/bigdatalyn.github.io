@@ -33,9 +33,9 @@ Ref:
 
 	Oracle's Exadata Smart Flash Cache features areunique. Exadata Flash storageis not a disk replacement–Exadata software intelligence determines how and when to use the Flash storage, and how best to incorporate Flash into the database as part of a coordinated data caching strategy. Scale out Exadata storage enables the benefits of flash performance to be delivered all the way to the application. Traditionalstorage arrays have many internal and network bottlenecks that prevent realizing the benefits of flash. Flash can be added to storage arrays, but they cannotdeliver much of the potential performance to applications.
 
+[6.2.4 Monitoring Flash Cache Metrics](https://docs.oracle.com/en/engineered-systems/exadata-database-machine/sagug/exadata-storage-server-monitoring.html#GUID-CF5EFCD7-FEA2-4DF8-AA19-1DDF5E5543CF)
 
-
-
+	Flash cache metrics provide information about the utilization of flash cache, such as the number of megabytes read per second from flash cache.
 
 
 
