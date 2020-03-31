@@ -25,6 +25,12 @@ Oracle Database 11g Release 2に関する10の重要なこと – askTom Live -
 	ここで説明したフラッシュキャッシュ（Database Smart Flash Cache）は、Oracle Exadataのそれとはまったく別の、独立した機能です。データベース・サーバー上でバッファキャッシュとともに利用するもので、ストレージレベルの機能ではありません。
 
 
+
+![Flash_cache_hit]({{ "/files/Oracle/19c/AWR_Flash_cache_hit.png"}})
+
+
+
+
 #### Exadata Smart Flash Cache
 
 Ref:
