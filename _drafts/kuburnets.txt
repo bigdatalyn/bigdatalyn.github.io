@@ -1,0 +1,32 @@
+Podの作成
+Pod
+kubectl run --generator=run-pod/v1 pod名 --image=image名
+ベースを作ってyamlを編集したい場合
+kubectl run --generator=run-pod/v1 pod名 --image=image名 --dry-run -o yaml > ファイル名
+
+Takuya Niita:remote-work:  22 days ago
+Deploymentの作成
+kubectl run deployment名 --image=image名
+ベースを作ってyamlを編集したい場合
+kubectl run deployment名 --image=image名 --dry-run -o yaml ファイル名
+
+Takuya Niita:remote-work:  22 days ago
+Serviceの作成
+kubectl create service --name=<service名> --port=port番号 --target-port=target-port番号 --type=<NodePort/ClusterIP/LoadBalancerのいずれか>
+※NodePortについてはバインドするポート番号をCLIから指定できないので、yamlで設定する必要がある(たぶん) (edited) 
+
+Takuya Niita:remote-work:  22 days ago
+Service Accountの作成
+kubectl create serviceaccount serviceaccount名
+ベースを作ってyamlを編集したい場合
+kubectl create serviceaccount serviceaccount名 ---dry-run -o yaml > ファイル名
+
+Takuya Niita:remote-work:  22 days ago
+roleの作成
+kubectl create role role名 --verb=<付与したい権限(get/create/list/deleteなど> --resource=<権限を割り当てたいリソース(pod/deploymentなど)>
+※cluster roleでも同様のコマンド
+
+Takuya Niita:remote-work:  22 days ago
+rolebindingの作成
+kubectl create rolebinding rolebinding名 --role=role名 --serviceaccount=<namespace>:<service account名>
+※cluster rolebindingでも同様のコマンド
