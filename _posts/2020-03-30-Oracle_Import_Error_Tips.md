@@ -25,11 +25,11 @@ Command eg.
 
 Export command:
 
-expdp <user>/<password> SCHEMAS=<schema> DIRECTORY=<dir_dump>　DUMPFIE=<dump_file> LOGFILE=<logfile_12.1.log> VERSION=12.1
+	expdp <user>/<password> SCHEMAS=<schema> DIRECTORY=<dir_dump>　DUMPFIE=<dump_file> LOGFILE=<logfile_12.1.log> VERSION=12.1
 
 Import command:
 
-impdp <user>/<password> SCHEMAS=<schema> EXCLUDE=USER DIRECTORY=<dir_dump> DUMPFILE=<dump_file> EXCLUDE=STATISTICS LOGFILE=<logfile_12.2.log>
+	impdp <user>/<password> SCHEMAS=<schema> EXCLUDE=USER DIRECTORY=<dir_dump> DUMPFILE=<dump_file> EXCLUDE=STATISTICS LOGFILE=<logfile_12.2.log>
 
 
 Reference:
