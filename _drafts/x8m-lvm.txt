@@ -1,0 +1,148 @@
+
+
+
+
+
+
+
+copy bootflash:/nxos.7.0.3.I7.6.bin scp://root@172.16.22.81/tmp/roce2_bootflash_nxos.7.0.3.I7.6.bin
+
+
+
+
+We followed Exadata Database Machine Maintenance Guide 19 for extending /u01 from 100G to 300G.
+https://docs.oracle.com/en/engineered-systems/exadata-database-machine/dbmmn/maintaining-exadata-database-servers.html#GUID-3E1DDC16-BE71-40A4-90F7-9CBB224EE242)
+
+When running tune2fs we face following error:
+tune2fs: Bad magic number in super-block while trying to open /dev/mapper/VGExaDb-LVDbOra1
+
+We then found X8M-2 start using XFS as filesystem:
+https://docs.oracle.com/en/engineered-systems/exadata-database-machine/dbmso/new-features-exadata-system-software-release-19.html#GUID-9D778006-4C7F-4D5C-B359-513FAF3D5BA1
+
+where tune2fs is for ext filesystem. Please advise how to perform the same on X8M-2.
+
+===> Use xfs_growfs instead of resize2fs for XFS filesystem
+
+
+[root@ctdfwadsdbadm01 ~]# tune2fs -l /dev/VGExaDb/LVDbOra1 | grep resize_inode
+tune2fs: Bad magic number in super-block while trying to open /dev/VGExaDb/LVDbOra1
+Couldn't find valid filesystem superblock.
+
+
+[root@ctdfwadsdbadm01 ~]# xfs_growfs /u01
+meta-data=/dev/mapper/VGExaDb-LVDbOra1 isize=256 agcount=16, agsize=1638400 blks
+= sectsz=512 attr=2, projid32bit=1
+= crc=0 finobt=0 spinodes=0 rmapbt=0
+= reflink=0
+data = bsize=4096 blocks=26214400, imaxpct=25
+= sunit=256 swidth=256 blks
+naming =version 2 bsize=4096 ascii-ci=0 ftype=1
+log =internal bsize=4096 blocks=12800, version=2
+= sectsz=512 sunit=0 blks, lazy-count=1
+realtime =none extsz=4096 blocks=0, rtextents=0
+data blocks changed from 26214400 to 131072000
+
+[root@ctdfwadsdbadm01 ~]# df -h /u01
+Filesystem Size Used Avail Use% Mounted on
+/dev/mapper/VGExaDb-LVDbOra1 500G 76G 425G 16% /u01
+
+
+
+
+　－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+　Maintenance Guide / Exadata Database Machine 19.3.0
+　https://docs.oracle.com/en/engineered-systems/exadata-database-machine/dbmmn/maintaining-exadata-database-servers.html#GUID-490E2BFC-82AF-4AC8-8AB1-FE389C074501
+　> 2 Maintaining Database Servers of Oracle Exadata Database Machine
+　> 2.9 Extending LVM Partitions
+　－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+　マニュアルの記載内容では、tune2fs コマンドを使用した方法が案内されているが、
+　tune2fs コマンドは、ext2、ext3、ext4ファイルシステムで有効なコマンドであり、
+　xfs ファイルシステムでは有効なコマンドではないと考える。
+
+　そのため、xfs_adminコマンド、xfs_growthコマンド、xfs_infoコマンドなどを利用
+　すると考えている。下記のサポートされている手順を確認したいので教えてほしい。
+
+　- root partitionの拡張手順
+　- non root partition の拡張
+　- partitionの新規作成手順
+
+マニュアルに記載のある tune2fsコマンドを使用して、オンラインのサイズ変更オプションを
+確認する手順につきましては、xfs_growfs コマンドへ置き換えて実行いただけますでしょうか。
+
+
+＞　- root partitionの拡張手順
+
+　https://docs.oracle.com/en/engineered-systems/exadata-database-machine/dbmmn/maintaining-exadata-database-servers.html#GUID-1FB2EFF0-DFD0-4B38-9CD0-A0E1E20B670C
+　> 2.9.1 Extending the root LVM Partition
+　> 2.9.1.1 Extending the root LVM Partition on Systems Running Oracle Exadata System Software Release 11.2.3.2.1 or Later
+
+
+＞　- non root partition の拡張
+
+　https://docs.oracle.com/en/engineered-systems/exadata-database-machine/dbmmn/maintaining-exadata-database-servers.html#GUID-3E1DDC16-BE71-40A4-90F7-9CBB224EE242
+　> 2.9.2 Resizing a Non-root LVM Partition
+　> 2.9.2.1 Extending a Non-root LVM Partition on Systems Running Oracle Exadata System Software Release 11.2.3.2.1 or Later
+
+
+＞　- partitionの新規作成手順
+
+　以下をご参考ください。
+
+　(Doc ID 2032341.1) Oracle Linux: How to Create and Extend XFS File System
+
+
+
+[root@x8mdb01 ~]# lvcreate -L 1G -n kka_test_vol /dev/VGExaDb
+WARNING: xfs_external_log signature detected on /dev/VGExaDb/kka_test_vol at offset 99328. Wipe it? [y/n]: y
+Wiping xfs_external_log signature on /dev/VGExaDb/kka_test_vol.
+WARNING: xfs_external_log signature detected on /dev/VGExaDb/kka_test_vol at offset 104960. Wipe it? [y/n]: y
+Wiping xfs_external_log signature on /dev/VGExaDb/kka_test_vol.
+WARNING: xfs_external_log signature detected on /dev/VGExaDb/kka_test_vol at offset 105984. Wipe it? [y/n]: y
+Wiping xfs_external_log signature on /dev/VGExaDb/kka_test_vol.
+WARNING: xfs_external_log signature detected on /dev/VGExaDb/kka_test_vol at offset 107008. Wipe it? [y/n]: y
+Wiping xfs_external_log signature on /dev/VGExaDb/kka_test_vol.
+WARNING: xfs_external_log signature detected on /dev/VGExaDb/kka_test_vol at offset 108032. Wipe it? [y/n]: y
+Wiping xfs_external_log signature on /dev/VGExaDb/kka_test_vol.
+Logical volume "kka_test_vol" created.
+[root@x8mdb01 ~]# mkfs.xfs /dev/VGExaDb/kka_test_vol
+meta-data=/dev/VGExaDb/kka_test_vol isize=256 agcount=8, agsize=32768 blks
+= sectsz=512 attr=2, projid32bit=1
+= crc=0 finobt=0, sparse=0, rmapbt=0, reflink=0
+data = bsize=4096 blocks=262144, imaxpct=25
+= sunit=256 swidth=256 blks
+naming =version 2 bsize=4096 ascii-ci=0 ftype=1
+log =internal log bsize=4096 blocks=2560, version=2
+= sectsz=512 sunit=0 blks, lazy-count=1
+realtime =none extsz=4096 blocks=0, rtextents=0
+[root@x8mdb01 ~]# mount -t xfs /dev/VGExaDb/kka_test_vol /u02
+[root@x8mdb01 ~]# df -hT|grep u02
+/dev/mapper/VGExaDb-kka_test_vol xfs 1014M 33M 982M 4% /u02
+
+
+'y' を選択することで問題ございません。
+
+警告メッセージは、ブロックデバイスを選択した場合に、不可逆的な操作を取り消す機会を提供することを目的としています。
+
+WARNING: xfs_external_log signature detected on /dev/VGExaDb/kka_test_vol at offset 99328. Wipe it? [y/n]: y
+Wiping xfs_external_log signature on /dev/VGExaDb/kka_test_vol.
+
+上記の警告メッセージでは、オフセット 99328 （ディスクの場所または開始または現在の位置）に署名を検出したことを
+示しており、この署名を消去するかどうかを確認するための　y/n の選択となります。
+署名の保存は必要なく、作成を行っていただくことで問題ございません。
+このメッセージ自体を抑止したい場合には、lvcreate コマンドに -y オプションを付けていただき実行いただけますようお願いいたします。
+
+(Doc ID 2032341.1) Oracle Linux: How to Create and Extend XFS File System
+(Doc ID 1632127.1) XFS Filesystem on Oracle Linux
+
+(Doc ID 2583343.1) How To Reduce Or Shrink an XFS Partition
+(Doc ID 2508426.1) Oracle Linux: How to Repair XFS File System
+(Doc ID 236826.1) Supported and Recommended File Systems on Linux
+(Doc ID 2560445.1) Unable To Label XFS File System
+(Doc ID 1564398.1) Converting an Existing Root Filesystem to LVM Partiton for OL5, OL6 and OL7
+
+(Doc ID 2336925.1) Oracle Linux: Unable To Mount Newly Created XFS File System
+(Doc ID 2226011.1) Oracle Linux 7: XFS Fsck Option in /etc/fstab
+(Doc ID 2630058.1) Oracle Linux: How to Change the UUID on an XFS File System
+
+(Doc ID 560052.1) Linux OS Service 'xfs'
