@@ -31,6 +31,11 @@ icon: heart
 
 ---
 
+### About this site
+
+The views expressed on this blog are my own and do not necessarily reflect the views of Oracle.
+
+
 ### 联系我
 
 * email：[88322511@qq.com](mailto:{{ site.email }})
@@ -47,7 +52,7 @@ icon: heart
 
 这个博客主要用于记录个人技术成长和总结。
 
-2016.12.01			|  更新的模板。模版基于  [Github](http://gaohaoyang.github.io/)
+2016.12.01          |  更新的模板。模版基于  [Github](http://gaohaoyang.github.io/)
 2016.02.11          |  设计2016年阅读清单页面并追加。
 2016.02.06          |  实现首页的上下分页功能。
 2016.02.02          |  简单实现标签页和标签云。 
