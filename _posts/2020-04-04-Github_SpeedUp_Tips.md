@@ -79,7 +79,6 @@ Continue to execute ***git fetch*** to download it ...
 Finally ***checkout*** it.
 
 ```shell
-
 	# initial.
 	git init
 	# add remote git.
