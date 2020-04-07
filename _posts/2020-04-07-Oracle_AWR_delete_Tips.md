@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Oracle AWR delete Tips"
-category: Git
+category: Oracle
 tags: Oracle AWR Tips 
 ---
 
@@ -181,7 +181,7 @@ How to clear history AWR reports in sysaux tablespace?
 + Use  `DBMS_WORKLOAD_REPOSITORY.DROP_SNAPSHOT_RANGE` package to Clean up local DB's awr reports.
 
 
-##### `dbms_swrf_internal` package
+##### Use dbms_swrf_internal package
 
 ```sql
 SYS@orcl> conn / as sysdba
@@ -260,7 +260,7 @@ The  `SM/AWR` and size is `50.8` now before size was `1466 MB`.
 
 The SYSAUX tablespace is `1.5 GB` now before size was `2.3 GB`.
 
-##### Use  `DBMS_WORKLOAD_REPOSITORY.DROP_SNAPSHOT_RANGE` package
+##### Use  DBMS_WORKLOAD_REPOSITORY.DROP_SNAPSHOT_RANGE package
 
 Check the range with snap id.
 
