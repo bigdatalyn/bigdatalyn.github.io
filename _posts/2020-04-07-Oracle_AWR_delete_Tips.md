@@ -325,11 +325,15 @@ SYS@orcl>
 #### Reference
 
 Oracle Database Documentation 
+
 [Database Administrator's Guide](https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/index.html)
+
 [13.12 Managing the SYSAUX Tablespace](https://docs.oracle.com/en/database/oracle/oracle-database/19/admin/managing-tablespaces.html#GUID-30942290-88DD-4D62-816F-F7EDCE661710)
 
 PL/SQL Packages and Types Reference / 185 DBMS_WORKLOAD_REPOSITORY 
+
 [Table 185-31 DROP_SNAPSHOT_RANGE Procedure Parameters](https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_WORKLOAD_REPOSITORY.html#GUID-EB512614-FD4D-4DBF-A984-E17E1FFE6271)
+
 
 Using DBMS_SWRF_INTERNAL.UNREGISTER_DATABASE to Unregister a Cloned DBID Raises "ORA-13553: operation failed - missing parameter [SRCDBID]" (Doc ID 2039369.1)
 
