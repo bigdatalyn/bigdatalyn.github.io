@@ -35,6 +35,13 @@ Red Hat Enterprise Linux Server release 7.6 (Maipo)
 SYS@orcl>
 ```
 
+
+
+
+
+
+
+
 #### SYSAUX space is large for awr report
 
 This V$SYSAUX_OCCUPANTS view lists the following information about the occupants of the SYSAUX tablespace:
