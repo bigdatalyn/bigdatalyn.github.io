@@ -16,7 +16,7 @@ Oracle AWR delete Tips
 
 Use the following enviroments.
 
-```
+```sql
 [oracle@ora7 ~]$ sqlplus / as sysdba
 
 SQL*Plus: Release 19.0.0.0.0 - Production on Tue Apr 7 16:20:24 2020
@@ -148,7 +148,7 @@ There are two DBID in the dba_hist_wr_control beacuse of loading the awr reports
 
 [`Oracle 19c load awr report`](http://www.bigdatalyn.com/2020/03/17/Oracle_load_awr_report/)
 
-```
+```sql
 SYS@orcl> !cat hist_wr_check.sql
 col SNAP_INTERVAL for a20
 col RETENTION for a20
@@ -183,7 +183,7 @@ How to clear history AWR reports in sysaux tablespace?
 
 ##### `dbms_swrf_internal` package
 
-```
+```sql
 SYS@orcl> conn / as sysdba
 Connected.
 SYS@orcl> exec dbms_swrf_internal.cleanup_database;
@@ -264,7 +264,7 @@ The SYSAUX tablespace is `1.5 GB` now before size was `2.3 GB`.
 
 Check the range with snap id.
 
-```
+```sql
 SYS@orcl> select dbid from v$database;
 
       DBID
@@ -301,7 +301,7 @@ SYS@orcl>
 
 Use DBMS_WORKLOAD_REPOSITORY to clean up awr report via snap id's range.
 
-```
+```sql
 SYS@orcl>
     BEGIN
     DBMS_WORKLOAD_REPOSITORY.DROP_SNAPSHOT_RANGE(
