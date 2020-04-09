@@ -113,8 +113,23 @@ Maybe happened in mid-night, there are some batch job doing insert append sql an
 [Oracle 19c online statistics gathering Tips](http://www.bigdatalyn.com/2020/02/11/Oracle_Online_statistics_gathering/)
 
 
+Other Tips.
 
+- Use talbe/index parallel to limit the parallel.
 
+Tht total parallel: `parallel_threads_per_cpu  * cpu_count * rac numbers`
+
+Some sql tips:
+
+```sql
+$ show parameter parallel_threads_per_cpu
+$ show parameter cpu_count
+$ show parameter parallel
+
+$ select TABLE_NAME,DEGREE from dba_tables where table_name='<TABLE_NAME>';
+$ alter table <SCHEMA_NAME>.<TABLE_NAME> parallel <number>;
+
+```
 ### Reference
 
 [Oracle 19c online statistics gathering Tips](http://www.bigdatalyn.com/2020/02/11/Oracle_Online_statistics_gathering/)
