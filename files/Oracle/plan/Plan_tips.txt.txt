@@ -1,0 +1,118 @@
+
+https://blog.csdn.net/sinat_28472983/article/details/82382239
+
+
+http://www.undercoverlog.com/entry/2018/07/19/Oracle_%E5%AE%9F%E8%A1%8C%E8%A8%88%E7%94%BB%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95%28DBMS_XPLAN_DISPLAY_CURSOR%29
+
+set linesize 200
+SQL> col sql_id for a15
+SQL> select sql_id,sql_text from v$sqltext where sql_text like 'select * from emp%';
+SQL_ID          SQL_TEXT
+--------------- ----------------------------------------------------------------
+8wqqr7cg11y7t   select * from emp e, dept d where e.deptno = d.deptno
+SQL> set line 2000
+SQL> set pages 2000
+SQL> alter session set nls_date_format = 'yyyy/mm/dd hh24:mi:ss';
+Session altered.
+SQL> select * from table(dbms_xplan.display_cursor('&SQLID',null,'advanced'));
+Enter value for sqlid: 8wqqr7cg11y7t
+old 1: select * from table(dbms_xplan.display_cursor('&SQLID',null,'advanced'))
+new 1: select * from table(dbms_xplan.display_cursor('8wqqr7cg11y7t',null,'advanced'))
+SQL_ID 8wqqr7cg11y7t, child number 1
+-------------------------------------
+select * from emp e, dept d where e.deptno = d.deptno
+Plan hash value: 615168685
+---------------------------------------------------------------------------
+| Id | Operation        | Name | Rows | Bytes | Cost (%CPU)| Time         |
+---------------------------------------------------------------------------
+|  0 | SELECT STATEMENT |      |      |       |     6 (100)|              |
+|* 1 | HASH JOIN        |      |   14 |  1638 |     6   (0)|     00:00:01 |
+|  2 | TABLE ACCESS FULL| DEPT |    4 |   120 |     3   (0)|     00:00:01 |
+|  3 | TABLE ACCESS FULL| EMP  |   14 |  1218 |     3   (0)|     00:00:01 |
+---------------------------------------------------------------------------
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+   1 - SEL$1
+   2 - SEL$1 / D@SEL$1
+   3 - SEL$1 / E@SEL$1
+Outline Data
+-------------
+  /*+
+       BEGIN_OUTLINE_DATA
+       IGNORE_OPTIM_EMBEDDED_HINTS
+       OPTIMIZER_FEATURES_ENABLE('12.2.0.1')
+       DB_VERSION('12.2.0.1')
+       ALL_ROWS
+       OUTLINE_LEAF(@"SEL$1")
+       FULL(@"SEL$1" "D"@"SEL$1")
+       FULL(@"SEL$1" "E"@"SEL$1")
+       LEADING(@"SEL$1" "D"@"SEL$1" "E"@"SEL$1")
+       USE_HASH(@"SEL$1" "E"@"SEL$1")
+       END_OUTLINE_DATA
+   */
+Predicate Information (identified by operation id):
+---------------------------------------------------
+   1 - access("E"."DEPTNO"="D"."DEPTNO")
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+   1 - (#keys=1) "D"."DEPTNO"[NUMBER,22], "E"."DEPTNO"[NUMBER,22],
+       "D"."LOC"[VARCHAR2,13], "D"."DNAME"[VARCHAR2,14],
+       "E"."EMPNO"[NUMBER,22], "E"."ENAME"[VARCHAR2,10],
+       "E"."JOB"[VARCHAR2,9], "E"."MGR"[NUMBER,22], "E"."HIREDATE"[DATE,7],
+       "E"."SAL"[NUMBER,22], "E"."COMM"[NUMBER,22]
+   2 - (rowset=256) "D"."DEPTNO"[NUMBER,22], "D"."DNAME"[VARCHAR2,14],
+       "D"."LOC"[VARCHAR2,13]
+   3 - (rowset=256) "E"."EMPNO"[NUMBER,22], "E"."ENAME"[VARCHAR2,10],
+       "E"."JOB"[VARCHAR2,9], "E"."MGR"[NUMBER,22], "E"."HIREDATE"[DATE,7],
+       "E"."SAL"[NUMBER,22], "E"."COMM"[NUMBER,22], "E"."DEPTNO"[NUMBER,22]
+Note
+-----
+    - dynamic statistics used: dynamic sampling (level=2)
+
+124 rows selected.
+
+
+
+-- select owner,count(*) from t1 group by owner;
+VARIABLE v_sqlid VARCHAR2(13);
+begin
+select sql_id into :v_sqlid from (select sql_id,sql_text from v$sql where sql_text not like '%v_sqlid%' order by last_active_time desc) where rownum = 1;
+end;
+/
+--print v_sqlid;
+select * from table(dbms_xplan.display_cursor(:v_sqlid,null,'advanced'));
+
+
+set linesize 300 pagesize 300
+VARIABLE v_sqlid VARCHAR2(13);
+begin
+select sql_id into :v_sqlid from (select sql_id,sql_text from v$sql v where v.sql_text not like '%v_sqlid%'
+and upper(v.sql_text) NOT like '%SYS%'
+and upper(v.sql_text) NOT like'%DBMS_%'
+and v.sql_text NOT like'%$%'
+and upper(v.sql_text) NOT like'%SESSION%'
+and upper(v.sql_text) NOT like'%TEMP22%'
+and upper(v.sql_text) NOT like'%SQL_STATS_TEMP%'
+and upper(v.sql_text) NOT like'%JAVA%'
+order by last_active_time desc) where rownum = 1;
+end;
+/
+--print v_sqlid;
+select * from table(dbms_xplan.display_cursor(:v_sqlid,null,'advanced'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
