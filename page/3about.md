@@ -39,7 +39,7 @@ The views expressed on this blog are my own and do not necessarily reflect the v
 ### 联系我
 
 * email：[88322511@qq.com](mailto:{{ site.email }})
-* QQ：88322511 / Tel:13168741899
+* QQ：88322511 / Tel:131xxxx1899
 * Tweet / <a href="https://twitter.com/{{site.twitter_username}}" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a> / Facebook / <a href="https://www.facebook.com/{{site.facebook_username}}" title="Facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a> 
 * Certification: / <a href="https://www.youracclaim.com/user/hong-lin.cn" title="cclaim">acclaim</a>
 
