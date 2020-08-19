@@ -11,12 +11,19 @@ tags: Oracle Exadata Tips
 Oracle Exawatcher Tips
 
 
+![exawatcher_iosummary1]({{ "/files/Oracle/Exadata/exawatcher_iosummary1.png"}})
+
+
+
+
+
+
 
 ### ExaWatcher
 
 Exadata monitor/diag tools
 
-![exawatcher_iosummary1]({{ "/files/Oracle/Exadata/exawatcher_iosummary1.png"}})
+
 
 ExaWatcher is a utility that collects performance data on the storage servers and database servers of an Exadata system. The data collected includes operating system statistics, such as iostat, cell statistics (cellsrvstat), and network statistics.
 
@@ -60,17 +67,12 @@ The output is the following directory.
 - Exadata System Softwre 19.x
 
 ```shell
-
 systemctl status exawatcher 
-
 systemctl start exawatcher 
-
 systemctl stop exawatcher 
 
 Cron job:
-
 /etc/cron.daily/exawatcher
-
 
 ```
 
@@ -79,10 +81,8 @@ Cron job:
 ```
 Start:
 /opt/oracle.cellos/vldrun -script oswatcher
-
 Stop:
 ./StopExaWatcher.sh
-
 Check:
 ps -ef | grep -i ExaWatcher
 
@@ -99,10 +99,9 @@ Use the following scripts to clearup older logs.
 ```shell
 /opt/oracle.ExaWatcher/ExaWatcherCleanup.sh
 
+
 Configure files:
-
 /opt/oracle.ExaWatcher/ExaWatcher.conf
-
 <SpaceLimit> [sizeInMB]
 
 
@@ -111,12 +110,10 @@ Configure files:
 
 ### Reference
 
-```
+
 Oracle® Exadata Database Machine System Overview Release 20.1.0 F29255-01 June 2020
 [15.1.15 New Charts in ExaWatcher](https://docs.oracle.com/en/engineered-systems/exadata-database-machine/dbmso/new-features-exadata-system-software-release-12.html#GUID-ACC952D7-6C6B-43EC-9E6C-85E36405E2F2)
 
-
-```
 
 
 
