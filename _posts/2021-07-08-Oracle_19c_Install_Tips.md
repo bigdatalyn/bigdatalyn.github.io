@@ -169,6 +169,86 @@ Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/cdb1/cdb11.log" for furth
 
 ```
 
+### sample schema
+
+[Oracle Database Sample Schemas](https://github.com/oracle/db-sample-schemas/releases/tag/v19.2)
+
+
+```sql
+create tablespace sample datafile '/u02/oradata/CDB1/pdb1/sample01.dbf' size 300m;
+
+perl -p -i.bak -e 's#__SUB__CWD__#'$(pwd)'#g' *.sql */*.sql */*.dat
+
+-- @mksample systempw syspw hrpw oepw pmpw ixpw shpw bipw users temp /your/path/to/log/ connect_string
+@mksample.sql SysPassword1 SysPassword1 oracle oracle oracle oracle oracle oracle sample temp /home/oracle/ system/SysPassword1@ol8-19c:1521/pdb1
+```
+
+output:
+```
+Table cardinality relational and object tables
+
+OWNER  TABLE_NAME                       NUM_ROWS
+------ ------------------------------ ----------
+HR     COUNTRIES                              25
+HR     DEPARTMENTS                            27
+HR     EMPLOYEES                             107
+HR     JOBS                                   19
+HR     JOB_HISTORY                            10
+HR     LOCATIONS                              23
+HR     REGIONS                                 4
+IX     AQ$_ORDERS_QUEUETABLE_G                 0
+IX     AQ$_ORDERS_QUEUETABLE_H                 2
+IX     AQ$_ORDERS_QUEUETABLE_I                 2
+IX     AQ$_ORDERS_QUEUETABLE_L                 2
+IX     AQ$_ORDERS_QUEUETABLE_S                 4
+IX     AQ$_ORDERS_QUEUETABLE_T                 0
+IX     AQ$_STREAMS_QUEUE_TABLE_C               0
+IX     AQ$_STREAMS_QUEUE_TABLE_G               0
+IX     AQ$_STREAMS_QUEUE_TABLE_H               0
+IX     AQ$_STREAMS_QUEUE_TABLE_I               0
+IX     AQ$_STREAMS_QUEUE_TABLE_L               0
+IX     AQ$_STREAMS_QUEUE_TABLE_S               1
+IX     AQ$_STREAMS_QUEUE_TABLE_T               0
+IX     ORDERS_QUEUETABLE
+IX     STREAMS_QUEUE_TABLE
+IX     SYS_IOT_OVER_73240                      0
+IX     SYS_IOT_OVER_73269                      0
+OE     ACTION_TABLE                          132
+OE     CATEGORIES_TAB                         22
+OE     CUSTOMERS                             319
+OE     INVENTORIES                          1112
+OE     LINEITEM_TABLE                       2232
+OE     ORDERS                                105
+OE     ORDER_ITEMS                           665
+OE     PRODUCT_DESCRIPTIONS                 8640
+OE     PRODUCT_INFORMATION                   288
+OE     PRODUCT_REF_LIST_NESTEDTAB            288
+OE     PROMOTIONS                              2
+OE     PURCHASEORDER                         132
+OE     SUBCATEGORY_REF_LIST_NESTEDTAB         21
+OE     WAREHOUSES                              9
+PM     PRINT_MEDIA                             4
+PM     TEXTDOCS_NESTEDTAB                     12
+SH     CAL_MONTH_SALES_MV                     48
+SH     CHANNELS                                5
+SH     COSTS                                   0
+SH     COUNTRIES                              23
+SH     CUSTOMERS                           55500
+SH     DR$SUP_TEXT_IDX$I
+SH     DR$SUP_TEXT_IDX$K
+SH     DR$SUP_TEXT_IDX$N
+SH     DR$SUP_TEXT_IDX$U
+SH     FWEEK_PSCAT_SALES_MV                11266
+SH     PRODUCTS                               72
+SH     PROMOTIONS                            503
+SH     SALES                              918843
+SH     SALES_TRANSACTIONS_EXT
+SH     SUPPLEMENTARY_DEMOGRAPHICS           4500
+SH     TIMES                                1826
+
+56 rows selected.
+```
+
 ### Reference
 
 [Oracle Linux 8 (OL8) Installation](https://oracle-base.com/articles/linux/oracle-linux-8-installation)
