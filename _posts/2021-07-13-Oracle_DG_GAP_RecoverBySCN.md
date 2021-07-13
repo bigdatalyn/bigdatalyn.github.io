@@ -20,14 +20,14 @@ Usually, we can fix the GAP problem via tramlating the missing redolog file to s
 
 ### Recovery standby via SCN
 
-1. Stop redo apply process - Close MRP process.
+#### 1. Stop redo apply process - Close MRP process.
 
 ```sql
 SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE CANCEL;
 SQL> select name,instance_name,host_name,DB_UNIQUE_NAME,version,open_mode,to_char(startup_time,'YYYY/MM/DD HH24:MI:SS'),database_role from gv$database, v$instance;
 ```
 
-2. Confirm SCN in Standby.
+#### 2. Confirm SCN in Standby.
 
 The lowest SCN in the following command.
 ```sql
@@ -35,7 +35,7 @@ SQL> SELECT CURRENT_SCN FROM V$DATABASE;
 SQL> select min(checkpoint_change#) from v$datafile_header where file# not in (select file# from v$datafile where enabled = 'READ ONLY');
 ```
 
-3. Backup primary site via incremental backup and scn number
+#### 3. Backup primary site via incremental backup and scn number
 
 ```sql
 RMAN> BACKUP INCREMENTAL FROM SCN 12345678 DATABASE FORMAT '/tmp/DB_Inc_ForStandby_%U' tag 'FOR_STANDBY';
@@ -44,13 +44,13 @@ SCN 12345678 : the scn number came from step 2.
 
 ```
 
-4. SCP or FTP the backup file to standby.
+#### 4. SCP or FTP the backup file to standby.
    
-5. Register the increment backup file in Standby site.
+#### 5. Register the increment backup file in Standby site.
 ```sql
 RMAN> CATALOG START WITH '/tmp/Standby';
 ```
-6. Recover incremetal backup file in Standby site.
+#### 6. Recover incremetal backup file in Standby site.
 ```sql
 RMAN> RECOVER DATABASE NOREDO;
 ```
@@ -63,7 +63,8 @@ One use of this option is to use incremental backups to update full backups of N
 
 Note: Incremental backups of NOARCHIVELOG databases can only be taken after a consistent shutdown.
 ```
-7. backup controlfile in primary site and backup list datafile in Standby site.
+
+#### 7. backup controlfile in primary site and backup list datafile in Standby site.
 Primary:
 ```sql
 RMAN> BACKUP CURRENT CONTROLFILE FOR STANDBY FORMAT '/tmp/FOR_STANDBY_CTRL.back';
@@ -80,7 +81,7 @@ select file#, name from v$datafile order by file# ;
 spool off
 ```
 
-8. Recovery standby control file in standby.
+#### 8. Recovery standby control file in standby.
 ```sql
 RMAN> SHUTDOWN IMMEDIATE ;
 RMAN> STARTUP NOMOUNT;
@@ -91,6 +92,7 @@ Note:  We recommend checking the incarnation for primary and standby before comp
 Example:  `RMAN> list incarnation; `
 
 Switch copy datafile via Note:1531031.1
+
 ```sql
 -- Check the datafile which need to restore in primary.
 SQL>SELECT FILE#, NAME FROM V$DATAFILE WHERE CREATION_CHANGE# > 12345678;
@@ -103,7 +105,8 @@ switch datafile <number> to copy;
 
 ```
 
-9. Clear standby redo log groups.
+#### 9. Clear standby redo log groups.
+
 ```sql
 SQL> select GROUP# from v$logfile where TYPE='STANDBY' group by GROUP#;
 SQL> ALTER DATABASE CLEAR LOGFILE GROUP 1;
@@ -117,8 +120,9 @@ SQL> select distinct  'alter database clear logfile group ' || group# || ';' fro
 
 ```
 
-10. Restart MRP
-```
+#### 10.  Restart MRP
+  
+```sql
 SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE DISCONNECT;
 ```
 
