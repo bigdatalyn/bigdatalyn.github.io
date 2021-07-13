@@ -1,0 +1,115 @@
+
+外连接走NL时候，改变不了驱动表顺序
+
+select ename,sal,job,dname,dept.deptno from emp,dept where dept.deptno=emp.deptno(+) and dept.deptno in (10,20,40);
+select /*+ use_nl(emp,dept) leading(emp) */ ename,sal,job,dname,dept.deptno from emp,dept where dept.deptno=emp.deptno(+) and dept.deptno in (10,20,40);
+
+select ename,sal,job,dname,dept.deptno from emp,dept where dept.deptno=emp.deptno(+) and dept.deptno in (10,20,40);
+---------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                     | Name    | Starts | E-Rows | Cost (%CPU)| E-Time   | A-Rows |   A-Time   | Buffers |
+---------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT              |         |      1 |        |     5 (100)|          |      0 |00:00:00.01 |       1 |
+|*  1 |  HASH JOIN OUTER              |         |      1 |      1 |     5   (0)| 00:00:01 |      0 |00:00:00.01 |       1 |
+|   2 |   INLIST ITERATOR             |         |      1 |        |            |          |      0 |00:00:00.01 |       1 |
+|   3 |    TABLE ACCESS BY INDEX ROWID| DEPT    |      3 |      1 |     2   (0)| 00:00:01 |      0 |00:00:00.01 |       1 |
+|*  4 |     INDEX UNIQUE SCAN         | PK_DEPT |      3 |      1 |     2   (0)| 00:00:01 |      0 |00:00:00.01 |       1 |
+|*  5 |   TABLE ACCESS FULL           | EMP     |      0 |      1 |     3   (0)| 00:00:01 |      0 |00:00:00.01 |       0 |
+---------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   3 - SEL$1 / DEPT@SEL$1
+   4 - SEL$1 / DEPT@SEL$1
+   5 - SEL$1 / EMP@SEL$1
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('19.1.0')
+      DB_VERSION('19.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+      INDEX_RS_ASC(@"SEL$1" "DEPT"@"SEL$1" ("DEPT"."DEPTNO"))
+      FULL(@"SEL$1" "EMP"@"SEL$1")
+      LEADING(@"SEL$1" "DEPT"@"SEL$1" "EMP"@"SEL$1")
+      USE_HASH(@"SEL$1" "EMP"@"SEL$1")
+      END_OUTLINE_DATA
+  */
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   1 - access("DEPT"."DEPTNO"="EMP"."DEPTNO")
+   4 - access(("DEPT"."DEPTNO"=10 OR "DEPT"."DEPTNO"=20 OR "DEPT"."DEPTNO"=40))
+   5 - filter(("EMP"."DEPTNO"=10 OR "EMP"."DEPTNO"=20 OR "EMP"."DEPTNO"=40))
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+select /*+ use_nl(emp,dept) leading(emp) */ ename,sal,job,dname,dept.deptno from emp,dept where dept.deptno=emp.deptno(+) and dept.deptno in (10,20,40);
+
+---------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                     | Name    | Starts | E-Rows | Cost (%CPU)| E-Time   | A-Rows |   A-Time   | Buffers |
+---------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT              |         |      1 |        |     5 (100)|          |      0 |00:00:00.01 |       1 |
+|   1 |  NESTED LOOPS OUTER           |         |      1 |      1 |     5   (0)| 00:00:01 |      0 |00:00:00.01 |       1 |
+|   2 |   INLIST ITERATOR             |         |      1 |        |            |          |      0 |00:00:00.01 |       1 |
+|   3 |    TABLE ACCESS BY INDEX ROWID| DEPT    |      3 |      1 |     2   (0)| 00:00:01 |      0 |00:00:00.01 |       1 |
+|*  4 |     INDEX UNIQUE SCAN         | PK_DEPT |      3 |      1 |     2   (0)| 00:00:01 |      0 |00:00:00.01 |       1 |
+|*  5 |   TABLE ACCESS FULL           | EMP     |      0 |      1 |     3   (0)| 00:00:01 |      0 |00:00:00.01 |       0 |
+---------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1
+   3 - SEL$1 / DEPT@SEL$1
+   4 - SEL$1 / DEPT@SEL$1
+   5 - SEL$1 / EMP@SEL$1
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('19.1.0')
+      DB_VERSION('19.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+      INDEX_RS_ASC(@"SEL$1" "DEPT"@"SEL$1" ("DEPT"."DEPTNO"))
+      FULL(@"SEL$1" "EMP"@"SEL$1")
+      LEADING(@"SEL$1" "DEPT"@"SEL$1" "EMP"@"SEL$1")
+      USE_NL(@"SEL$1" "EMP"@"SEL$1")
+      END_OUTLINE_DATA
+  */
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   4 - access(("DEPT"."DEPTNO"=10 OR "DEPT"."DEPTNO"=20 OR "DEPT"."DEPTNO"=40))
+   5 - filter((INTERNAL_FUNCTION("EMP"."DEPTNO") AND "DEPT"."DEPTNO"="EMP"."DEPTNO"))
+
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 3 (U - Unused (2))
+---------------------------------------------------------------------------
+
+   1 -  SEL$1
+         U -  leading(emp)
+
+   3 -  SEL$1 / DEPT@SEL$1
+         U -  use_nl(emp,dept)
+
+   5 -  SEL$1 / EMP@SEL$1
+           -  use_nl(emp,dept)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
