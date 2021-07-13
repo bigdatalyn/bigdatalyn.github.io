@@ -11,6 +11,10 @@ tags: Oracle Dataguard Tips
 Oracle Dataguard GAP Recovery Tips
 
 
+
+
+
+
 ### Problems
 
 DG has GAP between primary and standby, and standby can NOT apply redo log for missing redo log files from primary site.
