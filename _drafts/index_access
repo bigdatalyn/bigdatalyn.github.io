@@ -177,3 +177,118 @@ Plan hash value: 184138476
 ///////////////////////////////////////////////////////////////
 把employee的索引字段改为NOT NULL类型，即可以走索引
 ///////////////////////////////////////////////////////////////
+
+
+HONG@pdb1> truncate table employee;
+
+Table truncated.
+
+HONG@pdb1> begin
+  2  for i in 1..500 loop
+  3  insert into employee values ('F',i);
+  4  end loop;
+  5  commit;
+  6  end;
+  7  /
+
+PL/SQL procedure successfully completed.
+
+HONG@pdb1> begin
+  2  for i in 501..1000 loop
+  3  insert into employee values ('M',i);
+  4  end loop;
+  5  commit;
+  6  end;
+  7  /
+
+PL/SQL procedure successfully completed.
+
+HONG@pdb1> select gender,count(*) from employee group by gender;
+
+G   COUNT(*)
+- ----------
+M	 500
+F	 500
+
+HONG@pdb1>
+
+HONG@pdb1> exec dbms_stats.gather_table_stats('hong','employee',cascade=>true,no_invalidate=>false);
+
+PL/SQL procedure successfully completed.
+
+HONG@pdb1>
+
+
+///////////////////////////////////////////////////////
+返回索引列大结果集 INDEX FAST FULL SCAN
+用HINT指定走索引 INDEX FULL SCAN
+///////////////////////////////////////////////////////
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	ad8c9kqc413s0, child number 0
+-------------------------------------
+select employee_id from employee
+
+Plan hash value: 2383203623
+
+-------------------------------------------------------------------------------------
+| Id  | Operation	     | Name		   | E-Rows | Cost (%CPU)| E-Time   |
+-------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |			   |	    |	  2 (100)|	    |
+|   1 |  INDEX FAST FULL SCAN| IDX_UNQ_EMPLOYEE_ID |   1000 |	  2   (0)| 00:00:01 |
+-------------------------------------------------------------------------------------
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	2p6cmg0ztvpz9, child number 0
+-------------------------------------
+select /*+ index(employee,IDX_UNQ_EMPLOYEE_ID) */ employee_id from
+employee
+
+Plan hash value: 184138476
+
+---------------------------------------------------------------------------------
+| Id  | Operation	 | Name 	       | E-Rows | Cost (%CPU)| E-Time	|
+---------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT |		       |	|     3 (100)|		|
+|   1 |  INDEX FULL SCAN | IDX_UNQ_EMPLOYEE_ID |   1000 |     3   (0)| 00:00:01 |
+---------------------------------------------------------------------------------
+
+
+
+///////////////////////////////////////////////////////
+联合索引中返回
+///////////////////////////////////////////////////////
+
+
+HONG@pdb1> drop index IDX_UNQ_EMPLOYEE_ID;
+
+Index dropped.
+
+HONG@pdb1> create index idx_uni_employee_gender_employeeid on employee(gender,employee_id);
+
+Index created.
+
+HONG@pdb1> select * from employee where employee_id=100;
+
+G EMPLOYEE_ID
+- -----------
+F	  100
+
+HONG@pdb1> @xp
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	bum8qv24s6tqp, child number 0
+-------------------------------------
+select * from employee where employee_id=100
+
+Plan hash value: 976269822
+
+------------------------------------------------------------------------------------------------
+| Id  | Operation	 | Name 			      | E-Rows | Cost (%CPU)| E-Time   |
+------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT |				      |        |     3 (100)|	       |
+|*  1 |  INDEX SKIP SCAN | IDX_UNI_EMPLOYEE_GENDER_EMPLOYEEID |      1 |     3	 (0)| 00:00:01 |
+------------------------------------------------------------------------------------------------

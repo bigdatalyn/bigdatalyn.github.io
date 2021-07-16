@@ -1,0 +1,134 @@
+//////////////////////////////////////////////////////////////////////////////
+
+修改并行属性：
+alter table employee parallel(degree 2);
+alter table employee parallel(degree default);
+alter table employee noparallel;
+
+insert select 注意点：
+
+1.insert /*+ parallel(4) append */ into xxx select * from yyy;
+
+并行只发生在select部分，insert 部分没有并行
+批量插入大量记录(百万以上) 
+commit之前会锁表(高水位线以上，直接路径写) 
+hint放在into前面; 
+nologging是关键字，不是hint
+
+2.insert /*+ parallel(4) */ into xxx select * from yyy;
+没有使用append，不会锁表，并行只发生在select: 
+
+3.真正的并行insert (多个并行进程同时 append ，锁表)
+12c之前:
+alter session enable parallel dml; 
+insert /*+ parallel(4) */into ..... 
+commit;
+alter session disable parallel dml;
+
+12c及以上:
+insert /*+ parallel(4) enable_parallel_dml */ into xxx select * from yyy;
+select部分不要再加parallel 的hint，如果前后并行度不 一致，并行被取消
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+HONG@pdb1> alter table employee parallel(degree 2);
+
+Table altered.
+
+HONG@pdb1> 
+
+
+[oracle@ol8-19c scripts]$ ora parallel
+Table with degree summary:
+
+OWNER                          DEGREE         COUNT(*)
+------------------------------ ------------ ----------
+HONG                           2                     1
+MDSYS                          DEFAULT               2
+
+Table with degree Detail:
+
+OWNER                          TABLE_NAME                     DEGREE
+------------------------------ ------------------------------ ------------
+HONG                           EMPLOYEE                       2
+MDSYS                          SDO_GR_PARALLEL                DEFAULT
+MDSYS                          SDO_GR_RDT_1                   DEFAULT
+
+Index with degree Summary:
+
+
+Index with degree Detail:
+
+
+Parallel process running:
+
+
+[oracle@ol8-19c scripts]$
+
+
+HONG@pdb1> alter table employee parallel(degree default);
+
+Table altered.
+
+HONG@pdb1> 
+
+[oracle@ol8-19c scripts]$ ora parallel
+Table with degree summary:
+
+OWNER                          DEGREE         COUNT(*)
+------------------------------ ------------ ----------
+HONG                           DEFAULT               1
+MDSYS                          DEFAULT               2
+
+Table with degree Detail:
+
+OWNER                          TABLE_NAME                     DEGREE
+------------------------------ ------------------------------ ------------
+HONG                           EMPLOYEE                       DEFAULT
+MDSYS                          SDO_GR_PARALLEL                DEFAULT
+MDSYS                          SDO_GR_RDT_1                   DEFAULT
+
+Index with degree Summary:
+
+
+Index with degree Detail:
+
+
+Parallel process running:
+
+
+[oracle@ol8-19c scripts]$ 
+
+HONG@pdb1> alter table employee noparallel;
+
+Table altered.
+
+HONG@pdb1> 
+
+[oracle@ol8-19c scripts]$ ora parallel
+Table with degree summary:
+
+OWNER                          DEGREE         COUNT(*)
+------------------------------ ------------ ----------
+MDSYS                          DEFAULT               2
+
+Table with degree Detail:
+
+OWNER                          TABLE_NAME                     DEGREE
+------------------------------ ------------------------------ ------------
+MDSYS                          SDO_GR_PARALLEL                DEFAULT
+MDSYS                          SDO_GR_RDT_1                   DEFAULT
+
+Index with degree Summary:
+
+
+Index with degree Detail:
+
+
+Parallel process running:
+
+
+[oracle@ol8-19c scripts]$ 
