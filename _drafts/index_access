@@ -1,0 +1,179 @@
+HONG@pdb1> create unique index idx_unq_employee_id on employee(employee_id);
+
+Index created.
+
+HONG@pdb1> select * from employee where employee_id=99;
+
+G EMPLOYEE_ID
+- -----------
+F	   99
+
+HONG@pdb1> @xp
+HONG@pdb1> set linesize 200 pagesize 999
+HONG@pdb1> select * from table(dbms_xplan.display_cursor(null,null,'advanced -PROJECTION -bytes iostats,last'));
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	fvp5v4f5uz5wg, child number 0
+-------------------------------------
+select * from employee where employee_id=99
+
+Plan hash value: 2394329740
+
+-------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation		    | Name		  | Starts | E-Rows | Cost (%CPU)| E-Time   | A-Rows |	 A-Time   | Buffers |
+-------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT	    |			  |	 1 |	    |	  1 (100)|	    |	   1 |00:00:00.01 |	  2 |
+|   1 |  TABLE ACCESS BY INDEX ROWID| EMPLOYEE		  |	 1 |	  1 |	  1   (0)| 00:00:01 |	   1 |00:00:00.01 |	  2 |
+|*  2 |   INDEX UNIQUE SCAN	    | IDX_UNQ_EMPLOYEE_ID |	 1 |	  1 |	  0   (0)|	    |	   1 |00:00:00.01 |	  1 |
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+INDEX UNIQUE SCAN
+
+HINT失效： index（emplyyee IDX_EMP_1
+
+HONG@pdb1> select /*+ index(employee,IDX_UNQ_EMPLOYEE_ID) */ employee_id from employee;
+
+EMPLOYEE_ID
+-----------
+	100
+	101
+	102
+	 99
+	103
+	104
+
+6 rows selected.
+
+HONG@pdb1> @xp
+HONG@pdb1> set linesize 200 pagesize 999
+HONG@pdb1> select * from table(dbms_xplan.display_cursor(null,null,'advanced -PROJECTION -bytes iostats,last'));
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	2p6cmg0ztvpz9, child number 0
+-------------------------------------
+select /*+ index(employee,IDX_UNQ_EMPLOYEE_ID) */ employee_id from
+employee
+
+Plan hash value: 2119105728
+
+----------------------------------------------------------------------------------------------------------------
+| Id  | Operation	  | Name     | Starts | E-Rows | Cost (%CPU)| E-Time   | A-Rows |   A-Time   | Buffers |
+----------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT  |	     |	    1 |        |     3 (100)|	       |      6 |00:00:00.01 |	     8 |
+|   1 |  TABLE ACCESS FULL| EMPLOYEE |	    1 |      6 |     3	 (0)| 00:00:01 |      6 |00:00:00.01 |	     8 |
+----------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1 / EMPLOYEE@SEL$1
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('19.1.0')
+      DB_VERSION('19.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+      FULL(@"SEL$1" "EMPLOYEE"@"SEL$1")
+      END_OUTLINE_DATA
+  */
+
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1 (U - Unused (1))
+---------------------------------------------------------------------------
+
+   1 -	SEL$1 / EMPLOYEE@SEL$1
+	 U -  index(employee,IDX_UNQ_EMPLOYEE_ID)
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+Query Block Registry:
+---------------------
+
+  <q o="2" f="y"><n><![CDATA[SEL$1]]></n><f><h><t><![CDATA[EMPLOYEE]]></t><s><![CDATA[SEL$1]]></s></h></f>
+	</q>
+
+
+
+51 rows selected.
+
+HONG@pdb1>
+
+///////////////////////////////////////////////////////////////
+依旧走全表扫，HINT索引失效分析：
+
+IDX_UNQ_EMPLOYEE_ID 是单键值的唯一索引，所以NULL值不会存储在其中
+如果列：EMPLOYEE_ID中出现NULL值（虽然测试数据中没有NULL值，但列类型定义没有指定NOT NULL）
+扫描IDX_UNQ_EMPLOYEE_ID 会漏掉NLL值的记录，走这个索引会得到不准的结果集合
+
+///////////////////////////////////////////////////////////////
+
+
+HONG@pdb1> desc employee
+ Name														   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ GENDER 														    VARCHAR2(1)
+ EMPLOYEE_ID														    NUMBER
+
+HONG@pdb1>
+
+HONG@pdb1> alter table employee modify employee_id number not null;
+
+Table altered.
+
+HONG@pdb1> desc employee
+ Name														   Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ GENDER 														    VARCHAR2(1)
+ EMPLOYEE_ID													   NOT NULL NUMBER
+
+HONG@pdb1>
+
+HONG@pdb1> select employee_id from employee;
+
+EMPLOYEE_ID
+-----------
+	 99
+	100
+	101
+	102
+	103
+	104
+
+6 rows selected.
+
+HONG@pdb1> @xp
+HONG@pdb1> set linesize 200 pagesize 999
+HONG@pdb1> select * from table(dbms_xplan.display_cursor(null,null,'advanced -PROJECTION -bytes iostats,last'));
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID	ad8c9kqc413s0, child number 0
+-------------------------------------
+select employee_id from employee
+
+Plan hash value: 184138476
+
+--------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation	 | Name 	       | Starts | E-Rows | Cost (%CPU)| E-Time	 | A-Rows |   A-Time   | Buffers |
+--------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT |		       |      1 |	 |     1 (100)| 	 |	6 |00:00:00.01 |       2 |
+|   1 |  INDEX FULL SCAN | IDX_UNQ_EMPLOYEE_ID |      1 |      6 |     1   (0)| 00:00:01 |	6 |00:00:00.01 |       2 |
+--------------------------------------------------------------------------------------------------------------------------
+
+///////////////////////////////////////////////////////////////
+把employee的索引字段改为NOT NULL类型，即可以走索引
+///////////////////////////////////////////////////////////////
