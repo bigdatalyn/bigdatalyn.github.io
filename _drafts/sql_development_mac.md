@@ -1,4 +1,6 @@
 
+
+
 Java SE Development Kit 16 Downloads
 https://www.oracle.com/java/technologies/javase-jdk16-downloads.html
 
@@ -11,11 +13,10 @@ List your Java Versions
 /usr/libexec/java_home -V
 
 Remove the Applet Plugin
-
 sudo rm -rf "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/"
 
 
-https://www.talkapex.com/2020/11/sqldeveloper-in-macos-big-sur/
+
 
 honglin@honglin-mac ~ % /usr/libexec/java_home -V
 Matching Java Virtual Machines (1):
