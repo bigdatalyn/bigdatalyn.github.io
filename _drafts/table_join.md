@@ -335,7 +335,6 @@ select /*+ use_nl(d,e) leading(e) */ * from dept d left join emp e on d.deptno=e
 
 
 
-
 SCOTT@pdb1> select * from hong.ss1, hong.ss2 where ss1.object_id = ss2.object_id;
 
 73023 rows selected.
@@ -730,3 +729,37 @@ Statistics
 	997  rows processed
 
 HONG@pdb1>
+
+
+
+
+
+/////////////////////////////////////////////////////////
+
+
+hash 等值关联 小表做为驱动表 
+驱动表的select 列 + 连接列 传入PGA中，连接列做 hash运算 形成 hash table
+被驱动表 连接列也做hash 运算，之后在hash table进行关联，相关联就出力数据 （被驱动表不传到PGA中）
+
+嵌套循环中被驱动表需要扫描多次，HASH连接的被驱动表只需扫描一次。
+
+UsedMeM 表示Hash连接消耗了多少PGA，如果驱动表太大，PGA不能完全容纳驱动表时候，驱动表就溢出到临时表空间，进而产生磁盘Hash连接，这个时候HASH连接性能就严重下降。
+嵌套循环不需要消耗PGA
+
+嵌套循环有传值动作，hash连接没有传值过程。
+hash连接列都不需要创建索引。
+
+/*+ swap_join_inputs(ss2) */ 的hint来更改hash join驱动表顺序，不想嵌套循环用leading(table_name)
+
+hash连接优化要点：
+驱动表的 select列和连接列都要传到pga中，所以避免select * from...而是把需要的列传到select list中，减少pga的占用，避免溢出到临时表空间
+如果无法避免溢出到临时表空间的话，可以将临时表空间创建在SSD上，加速临时数据的交换速度
+
+每个进程work area限制在1gb，驱动表过大，如4gb的话可以开启并行查询 每个查询至少 parallel(4) 将表拆分成4份
+如果驱动表非常大，几十GB情况下，应该考虑将表进行拆分，分区表
+
+
+
+
+
+/////////////////////////////////////////////////////////

@@ -1,0 +1,21 @@
+SQL> startup nomount
+
+SQL> create pfile='/tmp/cdbm061_20210312_1712.ora' from spfile;
+
+File created.
+
+SQL> alter system set sga_max_size = 48G scope=spfile sid='*';
+
+System altered.
+
+SQL> alter system set sga_target = 48G scope=spfile sid='*';
+
+System altered.
+
+SQL> shu immediate;
+
+
+
+PGA_AGGREGATE_TARGET = soft limit => more memory can be allocated
+
+PGA_AGGREGATE_LIMIT = hard limit => no more memory can be allocated.
