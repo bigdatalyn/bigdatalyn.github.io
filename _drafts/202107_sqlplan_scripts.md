@@ -342,3 +342,4 @@ ID Operation				 Name			     Rows(cardinality)	Size_Mb Column Filter			 Access
  0  SELECT STATEMENT								    44
  1   TABLE ACCESS BY INDEX ROWID BATCHED TEST					    44	     12 26/26
 *2    INDEX RANGE SCAN			 IDX_TEST_OWNER_OBJECT_NAME		    44	      5        "OBJECT_NAME" LIKE 'V_$%' "OWNER"='SCOTT' AND "OBJECT_NAME" LIKE 'V_$%'
+

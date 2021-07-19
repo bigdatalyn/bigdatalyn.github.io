@@ -1,3 +1,12 @@
+
+
+从磁盘 1次读取 1个 block到 buffer cache 就叫单块读
+从磁盘 1次读取 多个blocks到 buffer cache 就叫多块读
+
+如果数块都在buffer cache了，就不需要物理IO了，没有物理IO就不存在单块读与多块读。
+
+大多数平台，一次IO读取和写入 1MB数据，（8k*128）
+
 /////////////////////////////////////////////////////////
 
 1.全表扫
@@ -184,10 +193,81 @@ SCOTT@pdb1>
 /////////////////////////////////////////////////////////
 
 
+INDEX FAST FULL SCAN 索引快速扫描，多块读。INDEX_FFS
+
+需要从表中查询除大量数据，但是只需要获取表中部分列的数据，可以用IFFS代替全表扫来提升性能。跟全表扫的方式一样，都是按区扫描，多块读。
+
+SCOTT@pdb1> select owner,object_name from test;
+
+73033 rows selected.
 
 
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1357081020
+
+--------------------------------------------------------------------------
+| Id  | Operation	  | Name | Rows  | Bytes | Cost (%CPU)| Time	 |
+--------------------------------------------------------------------------
+|   0 | SELECT STATEMENT  |	 | 73033 |  2852K|   395   (1)| 00:00:01 |
+|   1 |  TABLE ACCESS FULL| TEST | 73033 |  2852K|   395   (1)| 00:00:01 |
+--------------------------------------------------------------------------
 
 
+Statistics
+----------------------------------------------------------
+	  1  recursive calls
+	  0  db block gets
+       6197  consistent gets
+	  0  physical reads
+	  0  redo size
+    3758342  bytes sent via SQL*Net to client
+      53944  bytes received via SQL*Net from client
+       4870  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  0  sorts (disk)
+      73033  rows processed
+
+SCOTT@pdb1> create index idx_test_owenr_object_name on test(owner,object_name,0);
+
+Index created.
+
+SCOTT@pdb1> select owner,object_name from test;
+
+73033 rows selected.
+
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 1711641806
+
+---------------------------------------------------------------------------------------------------
+| Id  | Operation	     | Name			  | Rows  | Bytes | Cost (%CPU)| Time	  |
+---------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |				  | 73033 |  2852K|   146   (0)| 00:00:01 |
+|   1 |  INDEX FAST FULL SCAN| IDX_TEST_OWENR_OBJECT_NAME | 73033 |  2852K|   146   (0)| 00:00:01 |
+---------------------------------------------------------------------------------------------------
+
+
+Statistics
+----------------------------------------------------------
+	  1  recursive calls
+	  0  db block gets
+       5376  consistent gets
+	534  physical reads
+	  0  redo size
+    3755790  bytes sent via SQL*Net to client
+      53944  bytes received via SQL*Net from client
+       4870  SQL*Net roundtrips to/from client
+	  0  sorts (memory)
+	  0  sorts (disk)
+      73033  rows processed
+
+SCOTT@pdb1>
+
+
+IFFS 代替 TFS 是因为oracle是行存储数据库。全表扫会扫表中的全部列。而IFFS只需要扫描表的部分列。
+而在Exadata中IFFS几乎没有用武之地。Exadata中有Smart Scan，全表扫会过滤不必要的列，强行用IFFS反而性能低。IN-memory也是一样，IFFS没有用武之地。
 
 
 
