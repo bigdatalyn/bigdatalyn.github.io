@@ -13,6 +13,8 @@ Oracle 19c Features in SQLDeveloper Tips
 
 ### Check Features in SQLDeveloper
 
+There are 243 features name in 19c(until 2021/07).
+
 ![Features]({{ "/files/Oracle/19c/oracle_19c_features.png"}})	
 
 
