@@ -46,6 +46,18 @@ EXTRACT( MINUTE FROM CAST( datetime AS TIMESTAMP ) ) AS Minutes,
 EXTRACT( SECOND FROM CAST( datetime AS TIMESTAMP ) ) AS Seconds
 FROM (
 SELECT TO_DATE( '2021-07-22 09:13:10', 'YYYY-MM-DD HH24:MI:SS' ) AS datetime FROM DUAL);
+
+     HOURS    MINUTES	 SECONDS
+---------- ---------- ----------
+	 9	   13	      10
+
+SELECT 
+EXTRACT( HOUR FROM CAST( datetime AS TIMESTAMP ) ) AS Hours,
+EXTRACT( MINUTE FROM CAST( datetime AS TIMESTAMP ) ) AS Minutes,
+EXTRACT( SECOND FROM CAST( datetime AS TIMESTAMP ) ) AS Seconds
+FROM (
+SELECT sysdate AS datetime FROM DUAL);
+
 ```
 
 ### CAST function
@@ -57,6 +69,9 @@ CAST converts values from one data type to another.
 CAST()函数的参数有两部分，源值和目标数据类型，中间用AS关键字分隔。
 
 ![cast_data_type]({{ "/files/Oracle/19c/cast_data_type.png"}})	
+
+
+### Reference
 
 [SQL Language Reference/CAST](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/CAST.html#GUID-5A70235E-1209-4281-8521-B94497AAEF75)
 
