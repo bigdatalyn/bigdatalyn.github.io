@@ -117,8 +117,11 @@ Plan hash value: 3740611932
 -------------------------------------------------------------------------------------------------------------------------------------------
 ```
 
-### varchar2_column=:number_var
+### varchar2_col=:number_var
 
+- varchar2_col=:number_var
+- date_col=:timestamp_var
+– number_col=:varchar2_var（hist not useful）
 Test sql:
 
 ```
@@ -214,3 +217,5 @@ Predicate Information (identified by operation id):
 
    2 - access("TEST"."SYS_NC00003$"=:B1)
 ```
+
+### 
