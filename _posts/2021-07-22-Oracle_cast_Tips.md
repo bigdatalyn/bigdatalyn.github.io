@@ -91,6 +91,15 @@ CAST()函数的参数有两部分，源值和目标数据类型，中间用AS关
 
 ![cast_data_type]({{ "/files/Oracle/19c/cast_data_type.png"}})	
 
+```
+HONG@pdb1> SELECT CAST('123.4567' AS NUMBER(10,2))  AS NUM FROM DUAL;
+
+       NUM
+----------
+    123.46
+
+HONG@pdb1>
+```
 
 ### Reference
 
