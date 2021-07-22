@@ -52,11 +52,32 @@ SELECT TO_DATE( '2021-07-22 09:13:10', 'YYYY-MM-DD HH24:MI:SS' ) AS datetime FRO
 	 9	   13	      10
 
 SELECT 
+EXTRACT( YEAR FROM CAST( datetime AS TIMESTAMP ) ) AS YEAR,
+EXTRACT( MONTH FROM CAST( datetime AS TIMESTAMP ) ) AS MONTH,
+EXTRACT( DAY FROM CAST( datetime AS TIMESTAMP ) ) AS DAY,
 EXTRACT( HOUR FROM CAST( datetime AS TIMESTAMP ) ) AS Hours,
 EXTRACT( MINUTE FROM CAST( datetime AS TIMESTAMP ) ) AS Minutes,
 EXTRACT( SECOND FROM CAST( datetime AS TIMESTAMP ) ) AS Seconds
 FROM (
 SELECT sysdate AS datetime FROM DUAL);
+
+
+HONG@pdb1>
+SELECT
+EXTRACT( YEAR FROM CAST( datetime AS TIMESTAMP ) ) AS YEAR,
+EXTRACT( MONTH FROM CAST( datetime AS TIMESTAMP ) ) AS MONTH,
+EXTRACT( DAY FROM CAST( datetime AS TIMESTAMP ) ) AS DAY,
+EXTRACT( HOUR FROM CAST( datetime AS TIMESTAMP ) ) AS Hours,
+EXTRACT( MINUTE FROM CAST( datetime AS TIMESTAMP ) ) AS Minutes,
+EXTRACT( SECOND FROM CAST( datetime AS TIMESTAMP ) ) AS Seconds
+  8  FROM (
+  9  SELECT sysdate AS datetime FROM DUAL);
+
+      YEAR	MONTH	     DAY      HOURS    MINUTES	  SECONDS
+---------- ---------- ---------- ---------- ---------- ----------
+      2021	    7	      22	 14	    23	       15
+
+HONG@pdb1>
 
 ```
 
