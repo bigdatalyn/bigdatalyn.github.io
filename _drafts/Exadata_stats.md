@@ -201,3 +201,7 @@ SQL> exec dbms_stats.set_table_stats('SCOTT', 'EXT_TBL', numrows=>100000000);
 https://blogs.oracle.com/optimizer/how-to-gather-optimizer-statistics-fast
 
 
+### Reference
+
+
+[Best Practices for Gathering Optimizer Statistics with Oracle Database 12c Release 2](https://www.oracle.com/technetwork/database/bi-datawarehousing/twp-bp-for-stats-gather-12c-1967354.pdf)
