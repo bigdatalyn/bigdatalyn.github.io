@@ -323,8 +323,13 @@ impdp时候为了提高速度往往通过并行操作
 这是为了避免impdp时候自动变成串行创建主键索引了
 
 导完数据可以：
+```
 create unique index xxx ... parallel 16 nologging;
 alter index xxx noparallel;
 alter table tab_name add constraint ... primary key(xxxx) using index xxxx novalidate; -- novalidate需要加上，避免全表串行单块读
+```
+
+
+
 
 
