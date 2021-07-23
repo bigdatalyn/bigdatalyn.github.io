@@ -15,7 +15,10 @@ List some tips of statistical information collection in the Exadata.
 
 
 
-### Exadata 统计信息：
+
+
+
+### Exadata 统计信息
 
 
 ```sql
@@ -36,6 +39,8 @@ MBRC
 SYS@cdb1>
 ```
 
+### 统计信息收集策略：数据字典统计
+
 Oracle database 固定表统计信息收集
 
 Oracle内部表 x$...表的统计信息
@@ -43,7 +48,6 @@ Oracle内部表 x$...表的统计信息
 ```sql
 SQL> execute dbms_stats.gather_fixed_objects_stats();
 ```
-### 统计信息收集策略：数据字典统计
 
 ```
 SQL> execute dbms_stats.set_gobal_prefs('AUTOSTATS_TARGET', 'ORACLE');
@@ -61,6 +65,7 @@ Automatic Optimizer Statistics Collection—用于收集各种数据库对象的
   pname为”AUTOSTATS_TARGET”，pval为以上三个值之一。
 ```
 
+一些查看属性的常用脚本：
 
 ```sql
 -- -----------------------------------------------------------------------------------
@@ -160,7 +165,6 @@ FROM dual;
 Sample:
 
 ```
-
 ANDV_ALGO_INTERNAL_OBSERVE :		  FALSE
 APPROXIMATE_NDV :			  TRUE
 APPROXIMATE_NDV_ALGORITHM :		  REPEAT OR HYPERLOGLOG
@@ -209,13 +213,102 @@ WAIT_TIME_TO_UPDATE_STATS :		  15
 ### 外部表
 
 外部表统计信息可以固定
-```
+
+```sql
 SQL> exec dbms_stats.gather_table_stats('SCOTT', 'EXT_TBL', estimate_percent=>100);
 SQL> exec dbms_stats.lock_table_stats('SCOTT', 'EXT_TBL');
 ```
 如果外部表太多数据，可以假想多点数据
-```
+```sql
 SQL> exec dbms_stats.set_table_stats('SCOTT', 'EXT_TBL', numrows=>100000000);
+```
+
+另外比较常见碰到自动收集统计信息job失败的错误
+```sql
+gather_external_table_stats returns an error from dbms_stats:
+ORA-20000: Unable to analyze TABLE "XXXX"."XXXX", insufficient privileges or does not exist
+```
+
+针对 INSERT,UPDATE,DELETE,MERGE 更新量超过10%的对象，会作为统计信息收集对象
+
+另外有时候expdp/impdp时候有一些外部表 没有清理干净导致自动收集统计信息失败
+
+类似这种表：`ET$***` 临时表
+
+这种没有清理干净，一般是bug的问题： `Bug#9466433` 等
+
+如果打Patch困难的话，可以考虑锁住这些对象表统计信息，可以接触自动收集统计信息失败的问题
+
+```sql
+SQL> select o.owner, object_name, created, last_ddl_time
+2 from dba_objects o,
+3 dba_external_tables et
+4 where o.owner=et.owner
+5 and o.object_name=et.table_name
+6 order by 1,2
+7 /
+
+OWNER OBJECT_NAME CREATED LAST_DDL_TIME
+------------------------------ ------------------------------ ------------------------- -------------------------
+TESTDEV ET$004B00010001 12-04-19 12-04-19
+TESTDEV ET$004E00040001 12-04-19 12-04-19
+
+SQL>
+```
+
+可以查看path路径在哪？
+
+```sql
+SQL> set linesize 200 trimspool on
+SQL> set pagesize 2000
+SQL> col owner form a30
+SQL> col created form a25
+SQL> col last_ddl_time form a25
+SQL> col object_name form a30
+SQL> col object_type form a25
+SQL> set longchunksize 3000
+SQL> set long 2000000000
+SQL> select OWNER,OBJECT_NAME,OBJECT_TYPE, status,to_char(CREATED,'dd-mon-yyyy hh24:mi:ss') created,to_char(LAST_DDL_TIME , 'dd-mon-yyyy hh24:mi:ss') last_ddl_time from dba_objects where object_name='ET$004B00010001';
+
+SQL> select owner, TABLE_NAME, DEFAULT_DIRECTORY_NAME, ACCESS_TYPE from dba_external_tables order by 1,2;
+
+SQL> select el.table_name, el.owner, dir.directory_path||'/'||dir.directory_name "path" from dba_external_locations el , dba_directories dir -
+where el.table_name='ET$004B00010001' and el.owner='TESTDEV' and el.directory_owner = dir.owner and el.directory_name = dir.directory_name order by 1, 2;
+
+SQL> select dbms_metadata.get_ddl('TABLE','ET$004B00010001','TESTDEV') from dual;
+```
+
+如果确认当前没在执行datapump情况下，可以手动删除。
+
+```sql
+-- locate Data Pump master tables:
+COL owner.object FORMAT a50
+
+SELECT o.status, o.object_id, o.object_type, 
+       o.owner||'.'||object_name "OWNER.OBJECT"
+  FROM dba_objects o, dba_datapump_jobs j
+ WHERE o.owner=j.owner_name AND o.object_name=j.job_name
+   AND j.job_name NOT LIKE 'BIN$%' ORDER BY 4,2;
+
+select table_name, owner from dba_external_tables;
+
+```
+确认后删除：
+
+```sql
+SQL> drop table system.&1 purge;
+```
+生成构造语句：
+
+```sql
+SELECT 'DROP TABLE '||o.owner||'.'||object_name||' PURGE;'
+FROM dba_objects o, dba_datapump_jobs j
+WHERE o.owner=j.owner_name AND o.object_name=j.job_name
+AND j.job_name NOT LIKE 'BIN$%';
+```
+不确定情况下，推荐是lock下这些外部表统计信息
+```sql
+SQL> EXECUTE DBMS_STATS.LOCK_TABLE_STATS(ownname=>'TESTDEV', tabname=>'ET$004B00010001');
 ```
 
 ### 快速获取统计信息方式
