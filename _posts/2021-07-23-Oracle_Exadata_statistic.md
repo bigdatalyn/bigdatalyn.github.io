@@ -1,15 +1,32 @@
+---
+layout: post
+title: "Oracle 19c Exadata Statistic Tips"
+category: Oracle
+tags: Oracle hint Tips
+---
+
+* content
+{:toc}
+
+Oracle 19c Exadata Statistic Tip
+
+List some tips of statistical information collection in the Exadata.
+
+
+
 
 ### Exadata 统计信息：
 
-```
+
+```sql
+SQL> select pname, PVAL1 from aux_stats$ where pname='MBRC';
+
 SQL> execute dbms_stats.gather_system_stats('EXADATA');
-
-select pname, PVAL1 from aux_stats$ where pname='MBRC';
-
 ```
+
 如果下面结果PAVL1是NULL的话，说明Exadata环境没有收集Exadata统计信息
 
-```
+```sql
 SYS@cdb1> select pname, PVAL1 from aux_stats$ where pname='MBRC';
 
 PNAME				    PVAL1
@@ -23,7 +40,7 @@ Oracle database 固定表统计信息收集
 
 Oracle内部表 x$...表的统计信息
 
-```
+```sql
 SQL> execute dbms_stats.gather_fixed_objects_stats();
 ```
 ### 统计信息收集策略：数据字典统计
@@ -210,5 +227,6 @@ https://blogs.oracle.com/optimizer/how-to-gather-optimizer-statistics-fast
 
 ### Reference
 
-
 [Best Practices for Gathering Optimizer Statistics with Oracle Database 12c Release 2](https://www.oracle.com/technetwork/database/bi-datawarehousing/twp-bp-for-stats-gather-12c-1967354.pdf)
+
+Have a good work&life! 2021/07 via LinHong
