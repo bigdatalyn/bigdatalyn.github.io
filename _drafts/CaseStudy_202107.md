@@ -40,6 +40,8 @@ xxx from y where t in (xxxxx)
 
 select /*+ leading(t@a) use_nl(t@a,t) */ ... from y where t in (select /*+ qb_name(a) */ ... t ...);
 
-5.
+有时候 in 子查询比较复杂，直接用hint把in子查询作为嵌套循环的驱动表是比较困难的，返回结果集少，可以作为嵌套循环的驱动表
+所以可以把in子查询改写为with as
+另外 with as 必须加上hint /*+ materialize */ ，这样会生成一个临时表
 
 
