@@ -675,5 +675,40 @@ where io_cell_offload_returned_bytes > 0 and io_cell_offload_eligible_bytes > 0;
 io_saved_pct 越大说明smart scan利用更充分
 
 
+### 引导SQL执行Smart Scan
+
+1.使用parallel hint
+使用并行查询时候，并行子进程默认选直接路径加载的读取方式获取数据块，同时，使用并行的sql，一般情况也会选择全表扫描
+
+2.使用full hint /*+ full(table_name) */ 来强制使用全表扫
+
+3.将索引变为 invisible
+
+4.忽略hint，有些sql加了很多hint，不修改sql的话，
+可以在session级别设置： alter session set "_optimizer_ignore_hints" = true;
+来忽略hint作用
+
+5.减少 db_cache_size 大小，其实就是间接调整了小表阈值的大小（_small_table_threshold）
+
+6.调整特大表小表的参数值
+- _small_table_threshold
+- _very_large_object_threshold
+  
+7.调整统计信息的数据块个数
+如表：（索引类似）
+- EXEC DBMS_STATS.SET_TABLE_STATS(user,'T1',numblks=>50);
+
+但必须跟 _direct_read_decision_statistics_driven 结合使用（true值）
+
+8.调整 _serial_direct_read 参数
+auto：默认，优化器选择
+always：全部直接路径加载
+never：从来不直接路径加载
+
+SQL> alter session set "_serial_direct_read" = always;
+此参数不建议设置为system级别
+
+
+
 
 
