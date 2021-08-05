@@ -1,0 +1,2557 @@
+
+CellCLI> list celldisk detail;
+         name:                   CD_00_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sda
+         devicePartition:        /dev/sda
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     fa93a19f-d4cc-49d2-a0f6-4d60ce8058e5
+         physicalDisk:           0V7E7K
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_01_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdb
+         devicePartition:        /dev/sdb
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     374246a7-08d3-4b8d-983c-08172a719111
+         physicalDisk:           03177J
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_02_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdc
+         devicePartition:        /dev/sdc
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     6f9f8d77-c516-490e-97e6-294c9c700b4a
+         physicalDisk:           0X991K
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_03_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdd
+         devicePartition:        /dev/sdd
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     0733b0eb-a288-4528-820f-c6210cf45597
+         physicalDisk:           09ZEHJ
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_04_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sde
+         devicePartition:        /dev/sde
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     ab149806-98e4-4e8c-ade0-622a311a5e62
+         physicalDisk:           0MX0TJ
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_05_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdf
+         devicePartition:        /dev/sdf
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     1bfd8423-8ca1-42c5-adee-4c0291d27311
+         physicalDisk:           0GBTRK
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_06_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdg
+         devicePartition:        /dev/sdg
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     1507dd5f-ffcd-41c2-92cd-d059de8c3112
+         physicalDisk:           0SGD2J
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_07_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdh
+         devicePartition:        /dev/sdh
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     7e2d98fc-5d80-4113-af13-87306ecbe2ea
+         physicalDisk:           0MS5PJ
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_08_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdi
+         devicePartition:        /dev/sdi
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     ed3d4425-afa0-4040-9b67-47ef6fdcdba7
+         physicalDisk:           0ZL52J
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_09_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdj
+         devicePartition:        /dev/sdj
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     0e39333b-840f-4ad1-8250-10c2de017043
+         physicalDisk:           0P1ANL
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_10_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdk
+         devicePartition:        /dev/sdk
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     761606c7-e736-4a30-9bf8-d9a461f6c5c8
+         physicalDisk:           0J7WLK
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_11_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/sdl
+         devicePartition:        /dev/sdl
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     b2f7db44-ea51-483e-b957-c240a8ecdc6c
+         physicalDisk:           0L5HYJ
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   FD_00_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/md301
+         devicePartition:        /dev/md301
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     e0187029-004d-43f5-8c4e-eee38b6429f0
+         physicalDisk:           PHAG051200C86P4CGN-1,PHAG051200C86P4CGN-2
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   FD_01_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/md304
+         devicePartition:        /dev/md304
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     422a0fd7-2f38-4f7d-aedd-ca51ffabea9a
+         physicalDisk:           PHAG0512003Z6P4CGN-2,PHAG0512003Z6P4CGN-1
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   FD_02_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/md306
+         devicePartition:        /dev/md306
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     b2638038-768d-43db-9567-2c0276b715a0
+         physicalDisk:           PHAG0512019L6P4CGN-2,PHAG0512019L6P4CGN-1
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   FD_03_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:29+09:00
+         deviceName:             /dev/md308
+         devicePartition:        /dev/md308
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     1d7ff4fc-505c-4e18-80e1-33904d4f7766
+         physicalDisk:           PHAG0512015Y6P4CGN-1,PHAG0512015Y6P4CGN-2
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   PM_00_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:30+09:00
+         deviceName:             /dev/dax4.0
+         devicePartition:        /dev/dax4.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     00290262-9c41-42a7-9e7c-2cbfd5bed425
+         physicalDisk:           8089-a2-2106-00003fa8
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_01_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:30+09:00
+         deviceName:             /dev/dax0.0
+         devicePartition:        /dev/dax0.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     979a4135-5e73-48f2-80db-c89e736d71ef
+         physicalDisk:           8089-a2-2107-0000069f
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_02_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:31+09:00
+         deviceName:             /dev/dax1.0
+         devicePartition:        /dev/dax1.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     1c6b8022-c54a-41ef-899b-95bd709aa5e7
+         physicalDisk:           8089-a2-2107-00001098
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_03_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:32+09:00
+         deviceName:             /dev/dax3.0
+         devicePartition:        /dev/dax3.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     d47860a2-2281-4c8d-8bc0-89df52c8dfa1
+         physicalDisk:           8089-a2-2106-00003f92
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_04_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:32+09:00
+         deviceName:             /dev/dax5.0
+         devicePartition:        /dev/dax5.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     3ca6a273-66d2-428b-b514-de08fa180299
+         physicalDisk:           8089-a2-2106-00003fee
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_05_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:33+09:00
+         deviceName:             /dev/dax2.0
+         devicePartition:        /dev/dax2.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     acf76d23-a1cb-47d1-b575-ee211b67f4ce
+         physicalDisk:           8089-a2-2106-00003fca
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_06_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:33+09:00
+         deviceName:             /dev/dax10.0
+         devicePartition:        /dev/dax10.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     67a8e86a-ae27-46de-944e-bfe02a2b95ff
+         physicalDisk:           8089-a2-2107-0000108b
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_07_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:34+09:00
+         deviceName:             /dev/dax6.0
+         devicePartition:        /dev/dax6.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     5aee64f2-bb42-43ae-8d16-aa46789214cf
+         physicalDisk:           8089-a2-2106-00003dec
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_08_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:35+09:00
+         deviceName:             /dev/dax7.0
+         devicePartition:        /dev/dax7.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     595c6ce9-ba2e-4334-9505-7452c0a2c1e8
+         physicalDisk:           8089-a2-2106-00003fbc
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_09_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:35+09:00
+         deviceName:             /dev/dax9.0
+         devicePartition:        /dev/dax9.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     784fe336-066f-4348-9b05-d8490f16aace
+         physicalDisk:           8089-a2-2107-000010f0
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_10_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:36+09:00
+         deviceName:             /dev/dax11.0
+         devicePartition:        /dev/dax11.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     0769f973-416d-4d3e-9fc1-407477923562
+         physicalDisk:           8089-a2-2106-00003dee
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_11_cancercel02
+         comment:                
+         creationTime:           2021-07-30T16:26:36+09:00
+         deviceName:             /dev/dax8.0
+         devicePartition:        /dev/dax8.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     c3575b8f-3483-465d-9678-161a0c051b6c
+         physicalDisk:           8089-a2-2106-00003d9b
+         size:                   125.984375G
+         status:                 normal
+
+CellCLI> 
+
+
+CellCLI> list flashcache attributes size;
+         23.28692626953125T
+
+CellCLI> list celldisk attributes name,flushstatus,flusherror
+         CD_00_cancercel02               
+         CD_01_cancercel02               
+         CD_02_cancercel02               
+         CD_03_cancercel02               
+         CD_04_cancercel02               
+         CD_05_cancercel02               
+         CD_06_cancercel02               
+         CD_07_cancercel02               
+         CD_08_cancercel02               
+         CD_09_cancercel02               
+         CD_10_cancercel02               
+         CD_11_cancercel02               
+         FD_00_cancercel02               
+         FD_01_cancercel02               
+         FD_02_cancercel02               
+         FD_03_cancercel02               
+         PM_00_cancercel02               
+         PM_01_cancercel02               
+         PM_02_cancercel02               
+         PM_03_cancercel02               
+         PM_04_cancercel02               
+         PM_05_cancercel02               
+         PM_06_cancercel02               
+         PM_07_cancercel02               
+         PM_08_cancercel02               
+         PM_09_cancercel02               
+         PM_10_cancercel02               
+         PM_11_cancercel02               
+
+CellCLI> 
+
+CellCLI> list griddisk attributes name,cachedby
+         DATAC1_CD_00_cancercel02        FD_02_cancercel02
+         DATAC1_CD_01_cancercel02        FD_00_cancercel02
+         DATAC1_CD_02_cancercel02        FD_03_cancercel02
+         DATAC1_CD_03_cancercel02        FD_01_cancercel02
+         DATAC1_CD_04_cancercel02        FD_02_cancercel02
+         DATAC1_CD_05_cancercel02        FD_00_cancercel02
+         DATAC1_CD_06_cancercel02        FD_03_cancercel02
+         DATAC1_CD_07_cancercel02        FD_01_cancercel02
+         DATAC1_CD_08_cancercel02        FD_02_cancercel02
+         DATAC1_CD_09_cancercel02        FD_00_cancercel02
+         DATAC1_CD_10_cancercel02        FD_03_cancercel02
+         DATAC1_CD_11_cancercel02        FD_01_cancercel02
+         RECOC1_CD_00_cancercel02        
+         RECOC1_CD_01_cancercel02        
+         RECOC1_CD_02_cancercel02        
+         RECOC1_CD_03_cancercel02        
+         RECOC1_CD_04_cancercel02        
+         RECOC1_CD_05_cancercel02        
+         RECOC1_CD_06_cancercel02        
+         RECOC1_CD_07_cancercel02        
+         RECOC1_CD_08_cancercel02        
+         RECOC1_CD_09_cancercel02        
+         RECOC1_CD_10_cancercel02        
+         RECOC1_CD_11_cancercel02        
+
+CellCLI> 
+
+
+
+
+
+CellCLI> list flashcache detail;
+         name:                   cancercel02_FLASHCACHE
+         cellDisk:               FD_00_cancercel02,FD_01_cancercel02,FD_02_cancercel02,FD_03_cancercel02
+         creationTime:           2021-07-30T19:13:39+09:00
+         degradedCelldisks:      
+         effectiveCacheSize:     23.28692626953125T
+         id:                     e6766d1c-0693-4b7b-bd77-86d8cdcc4a2c
+         size:                   23.28692626953125T
+         status:                 normal
+
+CellCLI> list metriccurrent fc_by_used
+         FC_BY_USED      FLASHCACHE      17,256 MB
+
+CellCLI> list physicaldisk
+         252:0           0V7E7K                  normal
+         252:1           03177J                  normal
+         252:2           0X991K                  normal
+         252:3           09ZEHJ                  normal
+         252:4           0MX0TJ                  normal
+         252:5           0GBTRK                  normal
+         252:6           0SGD2J                  normal
+         252:7           0MS5PJ                  normal
+         252:8           0ZL52J                  normal
+         252:9           0P1ANL                  normal
+         252:10          0J7WLK                  normal
+         252:11          0L5HYJ                  normal
+         FLASH_1_1       PHAG051200C86P4CGN-2    normal
+         FLASH_1_2       PHAG051200C86P4CGN-1    normal
+         FLASH_4_1       PHAG0512003Z6P4CGN-1    normal
+         FLASH_4_2       PHAG0512003Z6P4CGN-2    normal
+         FLASH_6_1       PHAG0512019L6P4CGN-1    normal
+         FLASH_6_2       PHAG0512019L6P4CGN-2    normal
+         FLASH_8_1       PHAG0512015Y6P4CGN-2    normal
+         FLASH_8_2       PHAG0512015Y6P4CGN-1    normal
+         M2_SYS_0        PHYH023601RQ240J        normal
+         M2_SYS_1        PHYH022108Y5240J        normal
+         PMEM_0_1        8089-a2-2106-00003fa8   normal
+         PMEM_0_3        8089-a2-2106-00003f92   normal
+         PMEM_0_7        8089-a2-2106-00003fee   normal
+         PMEM_0_8        8089-a2-2106-00003fca   normal
+         PMEM_0_12       8089-a2-2107-0000069f   normal
+         PMEM_0_14       8089-a2-2107-00001098   normal
+         PMEM_1_1        8089-a2-2107-0000108b   normal
+         PMEM_1_3        8089-a2-2107-000010f0   normal
+         PMEM_1_7        8089-a2-2106-00003dee   normal
+         PMEM_1_8        8089-a2-2106-00003d9b   normal
+         PMEM_1_12       8089-a2-2106-00003dec   normal
+         PMEM_1_14       8089-a2-2106-00003fbc   normal
+
+CellCLI> 
+
+
+
+通过 dbcli 对每个cell执行相同命令
+
+[root@exavm12 sehub]# cd /home/oracle/sehub/scripts
+[root@exavm12 scripts]# cat saf_cell_group
+cancercel01
+cancercel02
+cancercel03
+[root@exavm12 scripts]# dcli -g saf_cell_group -l root cellcli -e list flashcache detail
+cancercel01: name:                   cancercel01_FLASHCACHE
+cancercel01: cellDisk:               FD_00_cancercel01,FD_01_cancercel01,FD_02_cancercel01,FD_03_cancercel01
+cancercel01: creationTime:           2021-07-30T19:13:39+09:00
+cancercel01: degradedCelldisks:
+cancercel01: effectiveCacheSize:     23.28692626953125T
+cancercel01: id:                     f7e5e3af-e7f2-499d-ba12-8cea46a53a3f
+cancercel01: size:                   23.28692626953125T
+cancercel01: status:                 normal
+cancercel02: name:                   cancercel02_FLASHCACHE
+cancercel02: cellDisk:               FD_00_cancercel02,FD_01_cancercel02,FD_02_cancercel02,FD_03_cancercel02
+cancercel02: creationTime:           2021-07-30T19:13:39+09:00
+cancercel02: degradedCelldisks:
+cancercel02: effectiveCacheSize:     23.28692626953125T
+cancercel02: id:                     e6766d1c-0693-4b7b-bd77-86d8cdcc4a2c
+cancercel02: size:                   23.28692626953125T
+cancercel02: status:                 normal
+cancercel03: name:                   cancercel03_FLASHCACHE
+cancercel03: cellDisk:               FD_00_cancercel03,FD_01_cancercel03,FD_02_cancercel03,FD_03_cancercel03
+cancercel03: creationTime:           2021-07-30T19:13:39+09:00
+cancercel03: degradedCelldisks:
+cancercel03: effectiveCacheSize:     23.28692626953125T
+cancercel03: id:                     26b6bc1e-c7ed-40e9-a5c8-aebc8f9717fc
+cancercel03: size:                   23.28692626953125T
+cancercel03: status:                 normal
+[root@exavm12 scripts]# 
+
+
+SQL> create table t1 as select * from dba_objects;
+
+Table created.
+
+SQL> 
+
+SQL> select data_object_id,object_name,object_type from dba_objects where object_name in ('T1');
+
+DATA_OBJECT_ID
+--------------
+OBJECT_NAME
+--------------------------------------------------------------------------------
+OBJECT_TYPE
+-----------------------
+         22272
+T1
+TABLE
+
+
+SQL> 
+
+
+
+
+00:37:22 SQL> select count(*) from t1;
+
+Elapsed: 00:00:00.03
+
+Execution Plan
+----------------------------------------------------------
+Plan hash value: 3724264953
+
+---------------------------------------------------------------------------
+| Id  | Operation                  | Name | Rows  | Cost (%CPU)| Time     |
+---------------------------------------------------------------------------
+|   0 | SELECT STATEMENT           |      |     1 |    82   (0)| 00:00:01 |
+|   1 |  SORT AGGREGATE            |      |     1 |            |          |
+|   2 |   TABLE ACCESS STORAGE FULL| T1   | 13813 |    82   (0)| 00:00:01 |
+---------------------------------------------------------------------------
+
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+
+
+Statistics
+----------------------------------------------------------
+          8  recursive calls
+          0  db block gets
+        354  consistent gets
+        297  physical reads
+      11456  redo size
+        544  bytes sent via SQL*Net to client
+        552  bytes received via SQL*Net from client
+          2  SQL*Net roundtrips to/from client
+          0  sorts (memory)
+          0  sorts (disk)
+          1  rows processed
+
+00:37:27 SQL> 
+
+
+第一次执行没有缓冲到flashcache
+执行一次sql之后有看到缓存到flashcache了
+[root@exavm12 scripts]# dcli -g saf_cell_group -l root cellcli -e list flashcachecontent attributes cachedKeepSize,cachedsize,objectNumber where objectNumber = 22272
+[root@exavm12 scripts]# dcli -g saf_cell_group -l root cellcli -e list flashcachecontent attributes cachedKeepSize,cachedsize,objectNumber where objectNumber = 22272
+cancercel01: 0   2138112         22272
+cancercel03: 0   344064  22272
+[root@exavm12 scripts]# 
+
+
+了解flashcachecontent的属性：
+
+[root@exavm12 scripts]# dcli -g saf_cell_group -l root cellcli -e describe flashcachecontent
+cancercel01: cachedKeepSize -- Keep属性对象，flashcache缓存了多少数据块，单位 byte
+cancercel01: cachedSize  -- 数据对象在flashcache缓存了多少数据块 单位 byte
+cancercel01: cachedWriteSize  -- 数据对象在flashcache缓存了多少脏数据 单位 byte
+cancercel01: clusterName
+cancercel01: columnarCacheSize
+cancercel01: columnarKeepSize
+cancercel01: dbID
+cancercel01: dbUniqueName -- 数据库名
+cancercel01: hitCount -- IO访问时候从Flashcache访问数据的次数
+cancercel01: hoursToExpiration -- 优先级被降低还要多少时间
+cancercel01: missCount -- IO访问从磁盘访问数据的次数
+cancercel01: objectNumber -- 对应数据库中 dba_objects 视图中 data_object_id 列
+cancercel01: tableSpaceNumber
+cancercel02: cachedKeepSize
+cancercel02: cachedSize
+cancercel02: cachedWriteSize
+cancercel02: clusterName
+cancercel02: columnarCacheSize
+cancercel02: columnarKeepSize
+cancercel02: dbID
+cancercel02: dbUniqueName
+cancercel02: hitCount
+cancercel02: hoursToExpiration
+cancercel02: missCount
+cancercel02: objectNumber
+cancercel02: tableSpaceNumber
+cancercel03: cachedKeepSize
+cancercel03: cachedSize
+cancercel03: cachedWriteSize
+cancercel03: clusterName
+cancercel03: columnarCacheSize
+cancercel03: columnarKeepSize
+cancercel03: dbID
+cancercel03: dbUniqueName
+cancercel03: hitCount
+cancercel03: hoursToExpiration
+cancercel03: missCount
+cancercel03: objectNumber
+cancercel03: tableSpaceNumber
+[root@exavm12 scripts]# 
+
+
+flashcache内容分析：
+
+dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root 'cellcli -e list FLASHCACHECONTENT attributes CACHEDKEEPSIZE,CACHEDSIZE,CACHEDWRITESIZE,COLUMNARCACHESIZE,COLUMNARKEEPSIZE,DBID,DBUNIQUENAME,HITCOUNT,MISSCOUNT,OBJECTNUMBER,TABLESPACENUMBER' | /bin/awk '{print $1 "|" $2 "|" $3 "|" $4 "|" $5 "|" $6 "|" $7 "|" $8 "|" $9 "|" $10 "|" $11}' | /bin/sed "s/^/|/g" > /home/oracle/sehub/mon_flashcache_all.txt
+
+-- root execute to get details from cell
+-- prepare saf_cell_group which include cellnode name
+
+dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root 'cellcli -e list FLASHCACHECONTENT attributes CACHEDKEEPSIZE,CACHEDSIZE,CACHEDWRITESIZE,COLUMNARCACHESIZE,COLUMNARKEEPSIZE,DBID,DBUNIQUENAME,HITCOUNT,MISSCOUNT,OBJECTNUMBER,TABLESPACENUMBER' > /home/oracle/sehub/flashcache/mon_flashcache_all.txt
+
+
+-- create directory data and log
+create or replace directory fc_data as '/home/oracle/sehub/flashcache';
+grant read,write on directory fc_data to public;
+
+create or replace directory fc_log as '/home/oracle/sehub/flashcache';
+grant read,write on directory fc_log to public;
+
+-- create fc_usage and external table fc_usage_et.
+-- fc_usage_et's datas are from mon_flashcache_all.txt
+-- drop table fc_usage;
+-- drop table fc_usage_et;
+
+create table fc_usage (
+  cellNode varchar2(100),
+  cachedKeepSize number,
+  cachedSize number,
+  cachedWriteSize number,
+  columnarCacheSize number,
+  columnarKeepSize number,
+  dbID number,
+  dbUniqueName varchar2(100),
+  hitCount number,
+  missCount number,
+  objectNumber number,
+  tableSpaceNumber number
+);
+
+
+create table fc_usage_et (
+  cellNode varchar2(100),
+  cachedKeepSize number,
+  cachedSize number,
+  cachedWriteSize number,
+  columnarCacheSize number,
+  columnarKeepSize number,
+  dbID number,
+  dbUniqueName varchar2(100),
+  hitCount number,
+  missCount number,
+  objectNumber number,
+  tableSpaceNumber number
+)
+ORGANIZATION EXTERNAL
+(
+  TYPE ORACLE_LOADER
+  DEFAULT DIRECTORY fc_data
+  ACCESS PARAMETERS
+  (
+     RECORDS DELIMITED BY NEWLINE
+     logfile fc_log: 'fc.log'
+     badfile fc_log: 'fc.bad'
+     fields terminated by whitespace
+     missing field values are null
+  )
+  LOCATION ('mon_flashcache_all.txt')
+)
+REJECT LIMIT UNLIMITED ;
+
+-- select count 
+select count(*) from fc_usage_et;
+
+-- cachesize via dbname.
+
+select DBUNIQUENAME, sum(CACHEDSIZE)/1024/1024/1024 g from fc_usage_et group by rollup(DBUNIQUENAME) order by 1;
+
+select DBUNIQUENAME, OBJECTNUMBER, sum(CACHEDSIZE)/1024/1024/1024 g from fc_usage_et where DBUNIQUENAME in ('DBM01') group by DBUNIQUENAME, rollup(OBJECTNUMBER) having sum(CACHEDSIZE)/1024/1024/1024>1 order by 1,3;
+
+-- sample results:
+
+SQL> @colfmt
+COL "DBUNIQUENAME"                   FOR A15
+COL "G"                              FOR 99.999999999999999999
+SQL> select DBUNIQUENAME, sum(CACHEDSIZE)/1024/1024/1024 g from fc_usage_et  group by  rollup(DBUNIQUENAME) order by 1;
+
+DBUNIQUENAME                         G
+--------------- ----------------------
+CDBM02.CDB$ROOT  38.242778778076171875
+CDBM02.PDB$SEED   1.510780334472656250
+CDBM02.PDB1        .396392822265625000
+DBM01             9.677982330322265625
+UNKNOWN            .900226593017578125
+                 50.728160858154296875
+
+6 rows selected.
+
+SQL> 
+
+根据DB名过滤超过1g的对象
+
+select DBUNIQUENAME, OBJECTNUMBER, sum(CACHEDSIZE)/1024/1024/1024 g from fc_usage_et where DBUNIQUENAME in ('DWCS.TPCH') group by DBUNIQUENAME, rollup(OBJECTNUMBER) having sum(CACHEDSIZE)/1024/1024/1024>1 order by 1,3;
+
+
+
+SQL> select DBUNIQUENAME, OBJECTNUMBER, sum(CACHEDSIZE)/1024/1024/1024 g from fc_usage_et where DBUNIQUENAME in ('DBM01') group by DBUNIQUENAME, rollup(OBJECTNUMBER) having sum(CACHEDSIZE)/1024/1024/1024>1 order by 1,3;
+
+DBUNIQUENAME    OBJECTNUMBER                      G
+--------------- ------------ ----------------------
+DBM01             4294967295   1.467453002929687500
+DBM01             4294967293   6.185768127441406250
+DBM01                          9.677982330322265625
+
+SQL> 
+
+
+
+set lin 200 pages 200
+col OBJECT_NAME format a30
+col owner format a30
+col fc_size_g format 999,999.99
+col t_size_g format 999,999.99
+SELECT
+    fc.objectnumber,
+    db.owner,
+    db.object_name,
+    fc.fc_size_mb,
+    db.t_size_mb
+FROM
+    (
+        SELECT
+            objectnumber,
+            -- SUM(cachedsize) / 1024 / 1024 / 1024 fc_size_gb
+            SUM(cachedsize) / 1024 / 1024 / 1024 fc_size_mb
+        FROM
+            fc_usage_et
+        WHERE
+            dbuniquename = 'DBM01'
+        GROUP BY
+            objectnumber
+        HAVING
+        --    SUM(cachedsize) / 1024 / 1024 / 1024 > 1   ----> above 1gb
+            SUM(cachedsize) / 1024 / 1024  > 1   ----> 1m
+    ) fc
+    LEFT JOIN (
+        SELECT
+            co.object_name,
+            co.data_object_id,
+            co.owner,
+            cm.t_size_mb
+        FROM
+            (
+                SELECT
+                    owner,
+                    segment_name,
+                --    SUM(bytes / 1024 / 1024 / 1024) t_size_gb
+                    SUM(bytes / 1024 / 1024 ) t_size_mb
+                FROM
+                    cdb_segments
+                WHERE
+                    owner in( 'TPCH10T')
+                GROUP BY
+                    owner,segment_name
+                HAVING
+                --   SUM(bytes / 1024 / 1024 / 1024) > 1 ----> above 1gb
+                  SUM(bytes / 1024 / 1024 ) > 1 ----> above 1g 
+            ) cm,
+            cdb_objects co
+        WHERE
+            cm.segment_name = co.object_name and cm.owner=co.owner
+    ) db ON (
+        TRIM(fc.objectnumber) = db.data_object_id
+    )
+ORDER BY fc.objectnumber
+;
+
+
+
+
+
+
+
+set lin 200 pages 200
+col OBJECT_NAME format a30
+col owner format a30
+col fc_size_g format 999,999.99
+col t_size_g format 999,999.99
+SELECT
+    fc.objectnumber,
+    db.owner,
+    db.object_name,
+    fc.fc_size_g,
+    db.t_size_g
+FROM
+    (
+        SELECT
+            objectnumber,
+            SUM(cachedsize) / 1024 / 1024 / 1024 fc_size_g
+        FROM
+            fc_usage_et
+        WHERE
+            dbuniquename = 'DBM01'
+        GROUP BY
+            objectnumber
+        HAVING
+            SUM(cachedsize) / 1024 / 1024 / 1024 > 1
+    ) fc
+    LEFT JOIN (
+        SELECT
+            co.object_name,
+            co.data_object_id,
+            co.owner,
+            cm.t_size_g
+        FROM
+            (
+                SELECT
+                    owner,
+                    segment_name,
+                    SUM(bytes / 1024 / 1024 / 1024) t_size_g
+                FROM
+                    cdb_segments
+                --WHERE
+                --    owner in( 'TPCH10T')
+                GROUP BY
+                    owner,segment_name
+                HAVING
+                    SUM(bytes / 1024 / 1024 / 1024) > 1
+            ) cm,
+            cdb_objects co
+        WHERE
+            cm.segment_name = co.object_name and cm.owner=co.owner
+    ) db ON (
+        TRIM(fc.objectnumber) = db.data_object_id
+    )
+ORDER BY fc.objectnumber
+;
+
+
+ OBJECTNUMBER OWNER                          OBJECT_NAME                      FC_SIZE_G    T_SIZE_G
+------------- ------------------------------ ------------------------------ ----------- -----------
+   4294967293                                                                      6.33
+   4294967295                                                                      1.47
+
+
+
+
+查看每个DB分配的flashcache大小
+
+dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root 'cellcli -e list metriccurrent DB_FC_BY_ALLOCATED'
+
+
+[root@exavm12 ~]# dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root 'cellcli -e list metriccurrent DB_FC_BY_ALLOCATED'
+cancercel01: DB_FC_BY_ALLOCATED  ASM                     0.000 MB
+cancercel01: DB_FC_BY_ALLOCATED  CDBM02                  15,528 MB
+cancercel01: DB_FC_BY_ALLOCATED  DBM01                   3,791 MB
+cancercel01: DB_FC_BY_ALLOCATED  _OTHER_DATABASE_        319 MB
+cancercel02: DB_FC_BY_ALLOCATED  ASM                     0.000 MB
+cancercel02: DB_FC_BY_ALLOCATED  CDBM02                  15,577 MB
+cancercel02: DB_FC_BY_ALLOCATED  DBM01                   3,814 MB
+cancercel02: DB_FC_BY_ALLOCATED  _OTHER_DATABASE_        313 MB
+cancercel03: DB_FC_BY_ALLOCATED  ASM                     0.000 MB
+cancercel03: DB_FC_BY_ALLOCATED  CDBM02                  15,709 MB
+cancercel03: DB_FC_BY_ALLOCATED  DBM01                   3,821 MB
+cancercel03: DB_FC_BY_ALLOCATED  _OTHER_DATABASE_        311 MB
+[root@exavm12 ~]# 
+
+
+
+
+### 
+
+层次关系：
+physical disk -> LUN -> celldisk
+harddisk （16 * 16.03711986541748046875T）
+8块 flash disk （8*2.910957656800746917724609375T） -> 4 个 LUN （5.821910858154296875T * 4）
+2个 M2Disk  M2_SYS_0 / M2Disk / 139.698386669158935546875G
+12个 PMEM 12*126.6875G
+
+
+CellCLI> list physicaldisk
+         252:0           0G9KXE                  normal
+         252:1           0BY9PE                  normal
+         252:2           06J1BE                  normal
+         252:3           0GJ1PE                  normal
+         252:4           06HRXE                  normal
+         252:5           0GAXUE                  normal
+         252:6           08S9DE                  normal
+         252:7           0BYARE                  normal
+         252:8           0GERSE                  normal
+         252:9           0GL68E                  normal
+         252:10          0H3XNE                  normal
+         252:11          0GHP8E                  normal
+         FLASH_1_1       PHAG0452001Z6P4CGN-2    normal
+         FLASH_1_2       PHAG0452001Z6P4CGN-1    normal
+         FLASH_4_1       PHAG0512004T6P4CGN-1    normal
+         FLASH_4_2       PHAG0512004T6P4CGN-2    normal
+         FLASH_6_1       PHAG0511001E6P4CGN-1    normal
+         FLASH_6_2       PHAG0511001E6P4CGN-2    normal
+         FLASH_8_1       PHAG051200GD6P4CGN-2    normal
+         FLASH_8_2       PHAG051200GD6P4CGN-1    normal
+         M2_SYS_0        PHYH022108S8240J        normal
+         M2_SYS_1        PHYH0225001K240J        normal
+         PMEM_0_1        8089-a2-2110-00000828   normal
+         PMEM_0_3        8089-a2-2110-00000485   normal
+         PMEM_0_7        8089-a2-2110-0000082e   normal
+         PMEM_0_8        8089-a2-2110-000007b1   normal
+         PMEM_0_12       8089-a2-2110-00000eb6   normal
+         PMEM_0_14       8089-a2-2110-00000caa   normal
+         PMEM_1_1        8089-a2-2110-00000d8a   normal
+         PMEM_1_3        8089-a2-2110-00000d46   normal
+         PMEM_1_7        8089-a2-2110-00000c02   normal
+         PMEM_1_8        8089-a2-2110-00000c58   normal
+         PMEM_1_12       8089-a2-2110-00000bff   normal
+         PMEM_1_14       8089-a2-2110-00000c56   normal
+
+CellCLI> 
+
+
+CellCLI> list lun attributes name,celldisk,physicaldrives where celldisk = 'FD_00_cancercel01'
+         1_0     FD_00_cancercel01       FLASH_1_2,FLASH_1_1
+
+CellCLI> list lun
+         0_0     0_0                                     normal
+         0_1     0_1                                     normal
+         0_2     0_2                                     normal
+         0_3     0_3                                     normal
+         0_4     0_4                                     normal
+         0_5     0_5                                     normal
+         0_6     0_6                                     normal
+         0_7     0_7                                     normal
+         0_8     0_8                                     normal
+         0_9     0_9                                     normal
+         0_10    0_10                                    normal
+         0_11    0_11                                    normal
+         1_0     6513d88b:d1999530:63a65897:c0e70a26     normal
+         4_0     d6bc8e65:522d473c:e82e2692:ba372ed2     normal
+         6_0     2f01c2c0:1c37c260:63045ea8:11a835d9     normal
+         8_0     6a4047e1:e6d98f84:5bf7f293:f878e3ed     normal
+         P0_D1   533fa287-ca3c-4a02-ad86-2a2cc3cf1836    normal
+         P0_D12  310001c7-8379-4f4e-88f4-90aadb44b85e    normal
+         P0_D14  b4f5c4bf-e4d8-4abc-9887-abc5befcddcc    normal
+         P0_D3   1a2d4a54-fbc1-47ba-adb7-549b19ca2017    normal
+         P0_D7   fba4ad9d-5ccb-4aec-9f38-29bad01c7e6d    normal
+         P0_D8   dc4439ba-9aad-45a8-abd2-21ac3ea774fa    normal
+         P1_D1   ef75e123-1c05-421a-a59c-788f503c9bf2    normal
+         P1_D12  7e11bdd7-f017-4536-9d77-fcf42e3a9c54    normal
+         P1_D14  6c5a5e29-1ab6-48d5-8211-87e1dd943f03    normal
+         P1_D3   d0325d5e-7fe0-4772-8440-28165213c81b    normal
+         P1_D7   9c5fa8a7-e0d7-4007-90f7-f8c0b0f98dc4    normal
+         P1_D8   9c970f32-9caf-4f17-87ce-476c2fa440ea    normal
+
+CellCLI> list lun detail
+         name:                   0_0
+         deviceName:             /dev/sda
+         diskType:               HardDisk
+         id:                     0_0
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_0
+         physicalDrives:         252:0
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_1
+         deviceName:             /dev/sdb
+         diskType:               HardDisk
+         id:                     0_1
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_1
+         physicalDrives:         252:1
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_2
+         deviceName:             /dev/sdc
+         diskType:               HardDisk
+         id:                     0_2
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_2
+         physicalDrives:         252:2
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_3
+         deviceName:             /dev/sdd
+         diskType:               HardDisk
+         id:                     0_3
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_3
+         physicalDrives:         252:3
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_4
+         deviceName:             /dev/sde
+         diskType:               HardDisk
+         id:                     0_4
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_4
+         physicalDrives:         252:4
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_5
+         deviceName:             /dev/sdf
+         diskType:               HardDisk
+         id:                     0_5
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_5
+         physicalDrives:         252:5
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_6
+         deviceName:             /dev/sdg
+         diskType:               HardDisk
+         id:                     0_6
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_6
+         physicalDrives:         252:6
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_7
+         deviceName:             /dev/sdh
+         diskType:               HardDisk
+         id:                     0_7
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_7
+         physicalDrives:         252:7
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_8
+         deviceName:             /dev/sdi
+         diskType:               HardDisk
+         id:                     0_8
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_8
+         physicalDrives:         252:8
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_9
+         deviceName:             /dev/sdj
+         diskType:               HardDisk
+         id:                     0_9
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_9
+         physicalDrives:         252:9
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_10
+         deviceName:             /dev/sdk
+         diskType:               HardDisk
+         id:                     0_10
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_10
+         physicalDrives:         252:10
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   0_11
+         deviceName:             /dev/sdl
+         diskType:               HardDisk
+         id:                     0_11
+         isSystemLun:            FALSE
+         lunSize:                16.03711986541748046875T
+         lunUID:                 0_11
+         physicalDrives:         252:11
+         raidLevel:              0
+         lunWriteCacheMode:      "WriteBack, ReadAheadNone, Direct, No Write Cache if Bad BBU"
+         status:                 normal
+
+         name:                   1_0
+         cellDisk:               FD_00_cancercel01
+         deviceName:             /dev/md301
+         diskType:               FlashDisk
+         id:                     6513d88b:d1999530:63a65897:c0e70a26
+         isSystemLun:            FALSE
+         lunSize:                5.821910858154296875T
+         physicalDrives:         FLASH_1_2,FLASH_1_1
+         status:                 normal
+
+         name:                   4_0
+         cellDisk:               FD_01_cancercel01
+         deviceName:             /dev/md304
+         diskType:               FlashDisk
+         id:                     d6bc8e65:522d473c:e82e2692:ba372ed2
+         isSystemLun:            FALSE
+         lunSize:                5.821910858154296875T
+         physicalDrives:         FLASH_4_2,FLASH_4_1
+         status:                 normal
+
+         name:                   6_0
+         cellDisk:               FD_02_cancercel01
+         deviceName:             /dev/md306
+         diskType:               FlashDisk
+         id:                     2f01c2c0:1c37c260:63045ea8:11a835d9
+         isSystemLun:            FALSE
+         lunSize:                5.821910858154296875T
+         physicalDrives:         FLASH_6_2,FLASH_6_1
+         status:                 normal
+
+         name:                   8_0
+         cellDisk:               FD_03_cancercel01
+         deviceName:             /dev/md308
+         diskType:               FlashDisk
+         id:                     6a4047e1:e6d98f84:5bf7f293:f878e3ed
+         isSystemLun:            FALSE
+         lunSize:                5.821910858154296875T
+         physicalDrives:         FLASH_8_2,FLASH_8_1
+         status:                 normal
+
+         name:                   P0_D1
+         cellDisk:               PM_00_cancercel01
+         deviceName:             /dev/dax4.0
+         diskType:               PMEM
+         id:                     533fa287-ca3c-4a02-ad86-2a2cc3cf1836
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_0_1
+         status:                 normal
+
+         name:                   P0_D12
+         cellDisk:               PM_01_cancercel01
+         deviceName:             /dev/dax0.0
+         diskType:               PMEM
+         id:                     310001c7-8379-4f4e-88f4-90aadb44b85e
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_0_12
+         status:                 normal
+
+         name:                   P0_D14
+         cellDisk:               PM_02_cancercel01
+         deviceName:             /dev/dax1.0
+         diskType:               PMEM
+         id:                     b4f5c4bf-e4d8-4abc-9887-abc5befcddcc
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_0_14
+         status:                 normal
+
+         name:                   P0_D3
+         cellDisk:               PM_03_cancercel01
+         deviceName:             /dev/dax3.0
+         diskType:               PMEM
+         id:                     1a2d4a54-fbc1-47ba-adb7-549b19ca2017
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_0_3
+         status:                 normal
+
+         name:                   P0_D7
+         cellDisk:               PM_04_cancercel01
+         deviceName:             /dev/dax5.0
+         diskType:               PMEM
+         id:                     fba4ad9d-5ccb-4aec-9f38-29bad01c7e6d
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_0_7
+         status:                 normal
+
+         name:                   P0_D8
+         cellDisk:               PM_05_cancercel01
+         deviceName:             /dev/dax2.0
+         diskType:               PMEM
+         id:                     dc4439ba-9aad-45a8-abd2-21ac3ea774fa
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_0_8
+         status:                 normal
+
+         name:                   P1_D1
+         cellDisk:               PM_06_cancercel01
+         deviceName:             /dev/dax10.0
+         diskType:               PMEM
+         id:                     ef75e123-1c05-421a-a59c-788f503c9bf2
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_1_1
+         status:                 normal
+
+         name:                   P1_D12
+         cellDisk:               PM_07_cancercel01
+         deviceName:             /dev/dax6.0
+         diskType:               PMEM
+         id:                     7e11bdd7-f017-4536-9d77-fcf42e3a9c54
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_1_12
+         status:                 normal
+
+         name:                   P1_D14
+         cellDisk:               PM_08_cancercel01
+         deviceName:             /dev/dax7.0
+         diskType:               PMEM
+         id:                     6c5a5e29-1ab6-48d5-8211-87e1dd943f03
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_1_14
+         status:                 normal
+
+         name:                   P1_D3
+         cellDisk:               PM_09_cancercel01
+         deviceName:             /dev/dax9.0
+         diskType:               PMEM
+         id:                     d0325d5e-7fe0-4772-8440-28165213c81b
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_1_3
+         status:                 normal
+
+         name:                   P1_D7
+         cellDisk:               PM_10_cancercel01
+         deviceName:             /dev/dax11.0
+         diskType:               PMEM
+         id:                     9c5fa8a7-e0d7-4007-90f7-f8c0b0f98dc4
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_1_7
+         status:                 normal
+
+         name:                   P1_D8
+         cellDisk:               PM_11_cancercel01
+         deviceName:             /dev/dax8.0
+         diskType:               PMEM
+         id:                     9c970f32-9caf-4f17-87ce-476c2fa440ea
+         isSystemLun:            FALSE
+         lunSize:                125.998046875G
+         physicalDrives:         PMEM_1_8
+         status:                 normal
+
+CellCLI> 
+
+
+CellCLI> list physicaldisk detail
+         name:                   252:0
+         deviceId:               6
+         deviceName:             /dev/sda
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_0
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0G9KXE
+         physicalSize:           16.0380859375T
+         slotNumber:             0
+         status:                 normal
+
+         name:                   252:1
+         deviceId:               7
+         deviceName:             /dev/sdb
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_1
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0BY9PE
+         physicalSize:           16.0380859375T
+         slotNumber:             1
+         status:                 normal
+
+         name:                   252:2
+         deviceId:               5
+         deviceName:             /dev/sdc
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_2
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         06J1BE
+         physicalSize:           16.0380859375T
+         slotNumber:             2
+         status:                 normal
+
+         name:                   252:3
+         deviceId:               4
+         deviceName:             /dev/sdd
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_3
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0GJ1PE
+         physicalSize:           16.0380859375T
+         slotNumber:             3
+         status:                 normal
+
+         name:                   252:4
+         deviceId:               10
+         deviceName:             /dev/sde
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_4
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         06HRXE
+         physicalSize:           16.0380859375T
+         slotNumber:             4
+         status:                 normal
+
+         name:                   252:5
+         deviceId:               11
+         deviceName:             /dev/sdf
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_5
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0GAXUE
+         physicalSize:           16.0380859375T
+         slotNumber:             5
+         status:                 normal
+
+         name:                   252:6
+         deviceId:               9
+         deviceName:             /dev/sdg
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_6
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         08S9DE
+         physicalSize:           16.0380859375T
+         slotNumber:             6
+         status:                 normal
+
+         name:                   252:7
+         deviceId:               8
+         deviceName:             /dev/sdh
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_7
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0BYARE
+         physicalSize:           16.0380859375T
+         slotNumber:             7
+         status:                 normal
+
+         name:                   252:8
+         deviceId:               1
+         deviceName:             /dev/sdi
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_8
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0GERSE
+         physicalSize:           16.0380859375T
+         slotNumber:             8
+         status:                 normal
+
+         name:                   252:9
+         deviceId:               2
+         deviceName:             /dev/sdj
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_9
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0GL68E
+         physicalSize:           16.0380859375T
+         slotNumber:             9
+         status:                 normal
+
+         name:                   252:10
+         deviceId:               3
+         deviceName:             /dev/sdk
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_10
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0H3XNE
+         physicalSize:           16.0380859375T
+         slotNumber:             10
+         status:                 normal
+
+         name:                   252:11
+         deviceId:               0
+         deviceName:             /dev/sdl
+         diskType:               HardDisk
+         enclosureDeviceId:      252
+         errOtherCount:          0
+         luns:                   0_11
+         makeModel:              "WDC     W7218A520ORA018T"
+         physicalFirmware:       A2AG
+         physicalInsertTime:     2021-07-30T16:29:31+09:00
+         physicalInterface:      sas
+         physicalSerial:         0GHP8E
+         physicalSize:           16.0380859375T
+         slotNumber:             11
+         status:                 normal
+
+         name:                   FLASH_1_1
+         deviceName:             /dev/nvme4n1
+         diskType:               FlashDisk
+         luns:                   1_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG0452001Z6P4CGN-2
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 1; FDOM: 1"
+         status:                 normal
+
+         name:                   FLASH_1_2
+         deviceName:             /dev/nvme5n1
+         diskType:               FlashDisk
+         luns:                   1_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG0452001Z6P4CGN-1
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 1; FDOM: 2"
+         status:                 normal
+
+         name:                   FLASH_4_1
+         deviceName:             /dev/nvme6n1
+         diskType:               FlashDisk
+         luns:                   4_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG0512004T6P4CGN-1
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 4; FDOM: 1"
+         status:                 normal
+
+         name:                   FLASH_4_2
+         deviceName:             /dev/nvme7n1
+         diskType:               FlashDisk
+         luns:                   4_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG0512004T6P4CGN-2
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 4; FDOM: 2"
+         status:                 normal
+
+         name:                   FLASH_6_1
+         deviceName:             /dev/nvme0n1
+         diskType:               FlashDisk
+         luns:                   6_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG0511001E6P4CGN-1
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 6; FDOM: 1"
+         status:                 normal
+
+         name:                   FLASH_6_2
+         deviceName:             /dev/nvme1n1
+         diskType:               FlashDisk
+         luns:                   6_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG0511001E6P4CGN-2
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 6; FDOM: 2"
+         status:                 normal
+
+         name:                   FLASH_8_1
+         deviceName:             /dev/nvme2n1
+         diskType:               FlashDisk
+         luns:                   8_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG051200GD6P4CGN-2
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 8; FDOM: 1"
+         status:                 normal
+
+         name:                   FLASH_8_2
+         deviceName:             /dev/nvme3n1
+         diskType:               FlashDisk
+         luns:                   8_0
+         makeModel:              "Oracle Flash Accelerator F640 PCIe Card v3"
+         physicalFirmware:       2CV1R105
+         physicalInsertTime:     2021-07-30T16:30:00+09:00
+         physicalSerial:         PHAG051200GD6P4CGN-1
+         physicalSize:           2.910957656800746917724609375T
+         slotNumber:             "PCI Slot: 8; FDOM: 2"
+         status:                 normal
+
+         name:                   M2_SYS_0
+         deviceName:             /dev/sdm
+         diskType:               M2Disk
+         makeModel:              "INTEL SSDSCKKB240G8"
+         physicalFirmware:       XC311132
+         physicalInsertTime:     2021-07-30T16:30:05+09:00
+         physicalSerial:         PHYH022108S8240J
+         physicalSize:           139.698386669158935546875G
+         slotNumber:             "M.2 Slot: 0"
+         status:                 normal
+
+         name:                   M2_SYS_1
+         deviceName:             /dev/sdn
+         diskType:               M2Disk
+         makeModel:              "INTEL SSDSCKKB240G8"
+         physicalFirmware:       XC311132
+         physicalInsertTime:     2021-07-30T16:30:05+09:00
+         physicalSerial:         PHYH0225001K240J
+         physicalSize:           139.698386669158935546875G
+         slotNumber:             "M.2 Slot: 1"
+         status:                 normal
+
+         name:                   PMEM_0_1
+         diskType:               PMEM
+         luns:                   P0_D1
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000828
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 0; DIMM: 1"
+         status:                 normal
+
+         name:                   PMEM_0_3
+         diskType:               PMEM
+         luns:                   P0_D3
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000485
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 0; DIMM: 3"
+         status:                 normal
+
+         name:                   PMEM_0_7
+         diskType:               PMEM
+         luns:                   P0_D7
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-0000082e
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 0; DIMM: 7"
+         status:                 normal
+
+         name:                   PMEM_0_8
+         diskType:               PMEM
+         luns:                   P0_D8
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-000007b1
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 0; DIMM: 8"
+         status:                 normal
+
+         name:                   PMEM_0_12
+         diskType:               PMEM
+         luns:                   P0_D12
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000eb6
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 0; DIMM: 12"
+         status:                 normal
+
+         name:                   PMEM_0_14
+         diskType:               PMEM
+         luns:                   P0_D14
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000caa
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 0; DIMM: 14"
+         status:                 normal
+
+         name:                   PMEM_1_1
+         diskType:               PMEM
+         luns:                   P1_D1
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000d8a
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 1; DIMM: 1"
+         status:                 normal
+
+         name:                   PMEM_1_3
+         diskType:               PMEM
+         luns:                   P1_D3
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000d46
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 1; DIMM: 3"
+         status:                 normal
+
+         name:                   PMEM_1_7
+         diskType:               PMEM
+         luns:                   P1_D7
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000c02
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 1; DIMM: 7"
+         status:                 normal
+
+         name:                   PMEM_1_8
+         diskType:               PMEM
+         luns:                   P1_D8
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000c58
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 1; DIMM: 8"
+         status:                 normal
+
+         name:                   PMEM_1_12
+         diskType:               PMEM
+         luns:                   P1_D12
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000bff
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 1; DIMM: 12"
+         status:                 normal
+
+         name:                   PMEM_1_14
+         diskType:               PMEM
+         luns:                   P1_D14
+         makeModel:              "Intel NMB1XXD128GPS"
+         physicalFirmware:       2.02.00.1553
+         physicalInsertTime:     2021-07-30T16:30:18+09:00
+         physicalSerial:         8089-a2-2110-00000c56
+         physicalSize:           126.6875G
+         slotNumber:             "CPU: 1; DIMM: 14"
+         status:                 normal
+
+CellCLI> 
+
+CellCLI> list celldisk
+         CD_00_cancercel01       normal
+         CD_01_cancercel01       normal
+         CD_02_cancercel01       normal
+         CD_03_cancercel01       normal
+         CD_04_cancercel01       normal
+         CD_05_cancercel01       normal
+         CD_06_cancercel01       normal
+         CD_07_cancercel01       normal
+         CD_08_cancercel01       normal
+         CD_09_cancercel01       normal
+         CD_10_cancercel01       normal
+         CD_11_cancercel01       normal
+         FD_00_cancercel01       normal
+         FD_01_cancercel01       normal
+         FD_02_cancercel01       normal
+         FD_03_cancercel01       normal
+         PM_00_cancercel01       normal
+         PM_01_cancercel01       normal
+         PM_02_cancercel01       normal
+         PM_03_cancercel01       normal
+         PM_04_cancercel01       normal
+         PM_05_cancercel01       normal
+         PM_06_cancercel01       normal
+         PM_07_cancercel01       normal
+         PM_08_cancercel01       normal
+         PM_09_cancercel01       normal
+         PM_10_cancercel01       normal
+         PM_11_cancercel01       normal
+
+CellCLI> 
+
+CellCLI> list celldisk detail
+         name:                   CD_00_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sda
+         devicePartition:        /dev/sda
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     adb2b0cb-5ef9-41d6-bfb3-b1d9ab57c0a2
+         physicalDisk:           0G9KXE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_01_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdb
+         devicePartition:        /dev/sdb
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     2f31cdce-4761-4df7-a69d-e4e985803213
+         physicalDisk:           0BY9PE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_02_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdc
+         devicePartition:        /dev/sdc
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     300b11e4-3ba4-4d04-bc4b-8ad74e6e9079
+         physicalDisk:           06J1BE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_03_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdd
+         devicePartition:        /dev/sdd
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     0046e6b1-2f71-42f5-be1a-6de1298a6293
+         physicalDisk:           0GJ1PE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_04_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sde
+         devicePartition:        /dev/sde
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     fa4324f6-8ae0-46f1-91c8-c4093fda6be1
+         physicalDisk:           06HRXE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_05_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdf
+         devicePartition:        /dev/sdf
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     5fd7180a-da41-450c-9674-af868eb76d69
+         physicalDisk:           0GAXUE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_06_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdg
+         devicePartition:        /dev/sdg
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     148679e2-101f-407e-9059-364276b573dc
+         physicalDisk:           08S9DE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_07_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdh
+         devicePartition:        /dev/sdh
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     5aba0e70-4237-4cbb-91e3-3bee9e4fe0db
+         physicalDisk:           0BYARE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_08_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdi
+         devicePartition:        /dev/sdi
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     214d455e-fdec-43b5-92eb-7882f11f4340
+         physicalDisk:           0GERSE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_09_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdj
+         devicePartition:        /dev/sdj
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     2fe7dbb5-1c7f-4c5b-8fb0-e55f0bc8c240
+         physicalDisk:           0GL68E
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_10_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdk
+         devicePartition:        /dev/sdk
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     a98d8d44-ad2c-49f9-affb-d65800edc517
+         physicalDisk:           0H3XNE
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   CD_11_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/sdl
+         devicePartition:        /dev/sdl
+         diskType:               HardDisk
+         errorCount:             0
+         freeSpace:              12.9120635986328125T
+         id:                     f9f342a6-6e08-4794-be85-1843a2015588
+         physicalDisk:           0GHP8E
+         size:                   16.037109375T
+         status:                 normal
+
+         name:                   FD_00_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/md301
+         devicePartition:        /dev/md301
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     fa9447f7-9558-4fa0-ad84-65e1140f71a6
+         physicalDisk:           PHAG0452001Z6P4CGN-1,PHAG0452001Z6P4CGN-2
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   FD_01_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/md304
+         devicePartition:        /dev/md304
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     0c9daba2-c2f5-4b78-95c0-b6841e1fe498
+         physicalDisk:           PHAG0512004T6P4CGN-2,PHAG0512004T6P4CGN-1
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   FD_02_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/md306
+         devicePartition:        /dev/md306
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     f9ad8c2f-ca4c-430b-93ee-c776f9ee37fc
+         physicalDisk:           PHAG0511001E6P4CGN-2,PHAG0511001E6P4CGN-1
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   FD_03_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/md308
+         devicePartition:        /dev/md308
+         diskType:               FlashDisk
+         errorCount:             0
+         freeSpace:              0
+         id:                     57f46300-4d1e-4810-97ff-1b930023b351
+         physicalDisk:           PHAG051200GD6P4CGN-1,PHAG051200GD6P4CGN-2
+         size:                   5.8218994140625T
+         status:                 normal
+
+         name:                   PM_00_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:38+09:00
+         deviceName:             /dev/dax4.0
+         devicePartition:        /dev/dax4.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     9cc0633e-c80c-43d5-85c8-2f79b5e9c9d3
+         physicalDisk:           8089-a2-2110-00000828
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_01_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:39+09:00
+         deviceName:             /dev/dax0.0
+         devicePartition:        /dev/dax0.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     8e62d8f9-dc74-4c5b-a657-1ec8fe56be69
+         physicalDisk:           8089-a2-2110-00000eb6
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_02_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:40+09:00
+         deviceName:             /dev/dax1.0
+         devicePartition:        /dev/dax1.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     f30dbb9f-70ee-40fe-ac44-d27502c06996
+         physicalDisk:           8089-a2-2110-00000caa
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_03_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:40+09:00
+         deviceName:             /dev/dax3.0
+         devicePartition:        /dev/dax3.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     0ea33fe9-6a02-4a38-8c0b-0bed1a4d6fa9
+         physicalDisk:           8089-a2-2110-00000485
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_04_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:41+09:00
+         deviceName:             /dev/dax5.0
+         devicePartition:        /dev/dax5.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     676ebdfb-ff94-45c6-94aa-ac69cadcaef0
+         physicalDisk:           8089-a2-2110-0000082e
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_05_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:41+09:00
+         deviceName:             /dev/dax2.0
+         devicePartition:        /dev/dax2.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     ab596776-630e-4bbe-be6d-6cb4e3a7708c
+         physicalDisk:           8089-a2-2110-000007b1
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_06_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:42+09:00
+         deviceName:             /dev/dax10.0
+         devicePartition:        /dev/dax10.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     787e0eb0-0a6a-46dd-bcdf-c59c35e1dd7e
+         physicalDisk:           8089-a2-2110-00000d8a
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_07_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:43+09:00
+         deviceName:             /dev/dax6.0
+         devicePartition:        /dev/dax6.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     b142d7eb-64aa-41bf-ac94-38f8e840dfe4
+         physicalDisk:           8089-a2-2110-00000bff
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_08_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:43+09:00
+         deviceName:             /dev/dax7.0
+         devicePartition:        /dev/dax7.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     cdf8bb5d-af80-4132-837e-8d86cb999de7
+         physicalDisk:           8089-a2-2110-00000c56
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_09_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:44+09:00
+         deviceName:             /dev/dax9.0
+         devicePartition:        /dev/dax9.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     a0a69cff-c18a-4b20-b415-1fb4aff1bf1a
+         physicalDisk:           8089-a2-2110-00000d46
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_10_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:45+09:00
+         deviceName:             /dev/dax11.0
+         devicePartition:        /dev/dax11.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     c0886b90-6a30-4344-8452-631162b2e0a4
+         physicalDisk:           8089-a2-2110-00000c02
+         size:                   125.984375G
+         status:                 normal
+
+         name:                   PM_11_cancercel01
+         comment:                
+         creationTime:           2021-07-30T16:30:45+09:00
+         deviceName:             /dev/dax8.0
+         devicePartition:        /dev/dax8.0
+         diskType:               PMEM
+         errorCount:             0
+         freeSpace:              0
+         id:                     0e4f9eab-62e3-45b3-8259-b0ae911580fd
+         physicalDisk:           8089-a2-2110-00000c58
+         size:                   125.984375G
+         status:                 normal
+
+CellCLI> 
+
+
+
+
+CellCLI> list griddisk
+         DATAC1_CD_00_cancercel01        active
+         DATAC1_CD_01_cancercel01        active
+         DATAC1_CD_02_cancercel01        active
+         DATAC1_CD_03_cancercel01        active
+         DATAC1_CD_04_cancercel01        active
+         DATAC1_CD_05_cancercel01        active
+         DATAC1_CD_06_cancercel01        active
+         DATAC1_CD_07_cancercel01        active
+         DATAC1_CD_08_cancercel01        active
+         DATAC1_CD_09_cancercel01        active
+         DATAC1_CD_10_cancercel01        active
+         DATAC1_CD_11_cancercel01        active
+         RECOC1_CD_00_cancercel01        active
+         RECOC1_CD_01_cancercel01        active
+         RECOC1_CD_02_cancercel01        active
+         RECOC1_CD_03_cancercel01        active
+         RECOC1_CD_04_cancercel01        active
+         RECOC1_CD_05_cancercel01        active
+         RECOC1_CD_06_cancercel01        active
+         RECOC1_CD_07_cancercel01        active
+         RECOC1_CD_08_cancercel01        active
+         RECOC1_CD_09_cancercel01        active
+         RECOC1_CD_10_cancercel01        active
+         RECOC1_CD_11_cancercel01        active
+
+CellCLI>
+
+
+
+
+
+select group_number,name,type from v$asm_diskgroup;
+select group_number,mode_status,name,path,failgroup from v$asm_disk;
+
+
+SQL> select group_number,name,type from v$asm_diskgroup;
+GROUP_NUMBER NAME                           TYPE
+------------ ------------------------------ ------
+           1 DATAC1                         HIGH
+           2 RECOC1                         HIGH
+
+SQL> 
+
+SQL> select group_number,mode_status,name,path,failgroup from v$asm_disk;
+
+ GROUP_NUMBER MODE_STATUS NAME                     PATH                                                     FAILGROUP
+------------- ----------- ------------------------ -------------------------------------------------------- -----------
+            1 ONLINE      DATAC1_CD_05_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_05_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_01_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_01_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_03_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_03_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_11_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_11_cancercel01 CANCERCEL01
+            1 ONLINE      QD_DATAC1_EXAVM12        /dev/exadata_quorum/QD_DATAC1_EXAVM12                    EXAVM12
+            1 ONLINE      DATAC1_CD_01_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_01_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_04_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_04_cancercel03 CANCERCEL03
+            1 ONLINE      QD_DATAC1_EXAVM11        /dev/exadata_quorum/QD_DATAC1_EXAVM11                    EXAVM11
+            1 ONLINE      DATAC1_CD_00_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_00_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_04_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_04_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_08_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_08_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_01_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_01_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_11_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_11_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_09_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_09_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_00_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_00_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_03_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_03_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_02_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_02_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_02_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_02_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_10_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_10_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_00_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_00_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_09_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_09_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_11_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_11_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_10_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_10_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_10_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_10_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_08_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_08_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_07_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_07_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_09_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_09_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_06_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_06_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_05_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_05_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_08_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_08_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_02_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_02_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_05_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_05_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_07_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_07_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_07_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_07_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_04_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_04_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_03_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_03_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_06_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_06_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_06_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_06_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_00_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_00_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_01_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_01_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_02_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_02_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_03_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_03_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_04_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_04_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_05_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_05_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_06_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_06_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_07_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_07_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_08_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_08_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_09_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_09_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_10_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_10_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_11_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_11_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_00_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_00_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_01_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_01_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_02_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_02_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_03_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_03_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_04_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_04_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_05_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_05_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_06_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_06_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_07_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_07_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_08_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_08_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_09_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_09_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_10_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_10_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_11_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_11_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_00_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_00_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_01_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_01_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_02_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_02_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_03_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_03_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_04_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_04_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_05_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_05_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_06_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_06_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_07_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_07_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_08_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_08_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_09_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_09_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_10_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_10_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_11_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_11_cancercel03 CANCERCEL03
+            2 ONLINE      QD_RECOC1_EXAVM11        /dev/exadata_quorum/QD_RECOC1_EXAVM11                    EXAVM11
+            2 ONLINE      QD_RECOC1_EXAVM12        /dev/exadata_quorum/QD_RECOC1_EXAVM12                    EXAVM12
+
+76 rows selected.
+
+SQL> 
+
+
+SQL> select group_number,mode_status,name,path,failgroup from v$asm_disk order by 1,5;
+
+ GROUP_NUMBER MODE_STATUS NAME                     PATH                                                     FAILGROUP
+------------- ----------- ------------------------ -------------------------------------------------------- -----------
+            1 ONLINE      DATAC1_CD_03_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_03_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_02_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_02_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_01_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_01_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_11_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_11_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_05_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_05_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_06_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_06_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_08_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_08_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_09_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_09_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_00_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_00_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_04_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_04_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_10_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_10_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_07_CANCERCEL01 o/192.168.21.188;192.168.21.189/DATAC1_CD_07_cancercel01 CANCERCEL01
+            1 ONLINE      DATAC1_CD_00_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_00_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_11_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_11_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_01_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_01_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_10_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_10_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_03_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_03_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_04_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_04_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_02_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_02_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_05_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_05_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_06_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_06_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_07_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_07_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_08_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_08_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_09_CANCERCEL02 o/192.168.21.190;192.168.21.191/DATAC1_CD_09_cancercel02 CANCERCEL02
+            1 ONLINE      DATAC1_CD_06_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_06_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_08_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_08_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_02_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_02_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_05_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_05_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_07_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_07_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_10_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_10_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_03_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_03_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_11_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_11_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_04_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_04_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_00_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_00_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_01_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_01_cancercel03 CANCERCEL03
+            1 ONLINE      DATAC1_CD_09_CANCERCEL03 o/192.168.21.192;192.168.21.193/DATAC1_CD_09_cancercel03 CANCERCEL03
+            1 ONLINE      QD_DATAC1_EXAVM11        /dev/exadata_quorum/QD_DATAC1_EXAVM11                    EXAVM11
+            1 ONLINE      QD_DATAC1_EXAVM12        /dev/exadata_quorum/QD_DATAC1_EXAVM12                    EXAVM12
+            2 ONLINE      RECOC1_CD_00_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_00_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_01_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_01_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_02_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_02_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_03_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_03_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_04_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_04_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_05_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_05_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_06_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_06_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_07_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_07_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_08_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_08_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_09_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_09_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_10_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_10_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_11_CANCERCEL01 o/192.168.21.188;192.168.21.189/RECOC1_CD_11_cancercel01 CANCERCEL01
+            2 ONLINE      RECOC1_CD_00_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_00_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_01_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_01_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_02_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_02_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_03_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_03_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_04_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_04_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_11_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_11_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_06_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_06_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_07_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_07_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_08_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_08_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_09_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_09_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_10_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_10_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_05_CANCERCEL02 o/192.168.21.190;192.168.21.191/RECOC1_CD_05_cancercel02 CANCERCEL02
+            2 ONLINE      RECOC1_CD_00_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_00_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_11_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_11_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_01_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_01_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_02_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_02_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_03_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_03_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_04_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_04_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_05_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_05_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_06_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_06_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_07_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_07_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_08_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_08_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_09_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_09_cancercel03 CANCERCEL03
+            2 ONLINE      RECOC1_CD_10_CANCERCEL03 o/192.168.21.192;192.168.21.193/RECOC1_CD_10_cancercel03 CANCERCEL03
+            2 ONLINE      QD_RECOC1_EXAVM11        /dev/exadata_quorum/QD_RECOC1_EXAVM11                    EXAVM11
+            2 ONLINE      QD_RECOC1_EXAVM12        /dev/exadata_quorum/QD_RECOC1_EXAVM12                    EXAVM12
+
+76 rows selected.
+
+SQL> 
+
+
+### Exadata smart flashlog
+
+
+CellCLI> list flashlog
+         cancercel01_FLASHLOG    normal
+
+CellCLI> list flashlog detail
+         name:                   cancercel01_FLASHLOG
+         cellDisk:               FD_00_cancercel01,FD_01_cancercel01,FD_02_cancercel01,FD_03_cancercel01
+         creationTime:           2021-07-30T16:30:46+09:00
+         degradedCelldisks:      
+         effectiveSize:          512M
+         efficiency:             100.0
+         id:                     c42ea764-5dba-480b-993c-f41657fb3af8
+         size:                   512M
+         status:                 normal
+
+CellCLI> 
+
+
+[root@exavm12 ~]# dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root cellcli -e list flashlog
+cancercel01: cancercel01_FLASHLOG        normal
+cancercel02: cancercel02_FLASHLOG        normal
+cancercel03: cancercel03_FLASHLOG        normal
+[root@exavm12 ~]# dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root cellcli -e list flashlog detail
+cancercel01: name:                   cancercel01_FLASHLOG
+cancercel01: cellDisk:               FD_00_cancercel01,FD_01_cancercel01,FD_02_cancercel01,FD_03_cancercel01
+cancercel01: creationTime:           2021-07-30T16:30:46+09:00
+cancercel01: degradedCelldisks:
+cancercel01: effectiveSize:          512M
+cancercel01: efficiency:             100.0
+cancercel01: id:                     c42ea764-5dba-480b-993c-f41657fb3af8
+cancercel01: size:                   512M
+cancercel01: status:                 normal
+cancercel02: name:                   cancercel02_FLASHLOG
+cancercel02: cellDisk:               FD_00_cancercel02,FD_01_cancercel02,FD_02_cancercel02,FD_03_cancercel02
+cancercel02: creationTime:           2021-07-30T16:26:37+09:00
+cancercel02: degradedCelldisks:
+cancercel02: effectiveSize:          512M
+cancercel02: efficiency:             100.0
+cancercel02: id:                     030d7542-d2ff-44da-b5f7-7f3656eeb2c2
+cancercel02: size:                   512M
+cancercel02: status:                 normal
+cancercel03: name:                   cancercel03_FLASHLOG
+cancercel03: cellDisk:               FD_00_cancercel03,FD_01_cancercel03,FD_02_cancercel03,FD_03_cancercel03
+cancercel03: creationTime:           2021-07-30T16:25:16+09:00
+cancercel03: degradedCelldisks:
+cancercel03: effectiveSize:          512M
+cancercel03: efficiency:             100.0
+cancercel03: id:                     d842be3d-65fc-49c0-8bfb-9cd80bdd47cb
+cancercel03: size:                   512M
+cancercel03: status:                 normal
+[root@exavm12 ~]# dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root cellcli -e list flashlog attributes name,size,status
+cancercel01: cancercel01_FLASHLOG        512M    normal
+cancercel02: cancercel02_FLASHLOG        512M    normal
+cancercel03: cancercel03_FLASHLOG        512M    normal
+[root@exavm12 ~]# 
+
+
+打算创建 flashcache和flashlog的话，需要先创建flashlog，再创建flashcache。
+
+cellcli -e create flashlog all 
+
+cellcil -e create flashcache all 
+
+cellcli -e list flashlog detail
+
+创建1gb的flashlog
+
+cellcli -e create flashlog all size=1G 
+
+
+
+<1>  数据库层面
+通过下面参数来禁止使用smart flashlog功能
+
+SQL> alter system set "_enable_flash_logging"=false scope=spfile side='*';
+
+<2>  存储节点层面
+cellcli -e drop flashlog all 
+
+<3>  IORM来禁止
+
+alter iormplan dbPlan=(
+  (name=prod, flashcache=on, flashlog=on),
+  (name=dw, flashcache=on, flashlog=off)
+)
+
+flashlog 性能主要影响 log file parallel write等待事件的响应事件（很少出现大于32ms情况，不会出现大于0.5s），而不是影响整个log file sync等待事件的响应时间。 
+
+FL_ACTUAL_OUTLIERS : 0 表示没有出现日志文件写延时超过0.5秒 如果大于 1%的 FL_IO_W 指标，表示机械磁盘和PCI闪存IO非常糟糕。可能硬件问题或者配置不合理。
+FL_DISK_IO_ERRS : 不为 0 表示日志文件所在机械磁盘存在质量问题
+FL_FLASH_IO_ERRS : 不为 0 表示日志文件所在闪存存在质量问题
+FL_IO_W_SKIP_BUSY : 不为 0 表示日志文件所在磁盘太慢，或者redo产生太多，以至于flashlog中有大量重做日志未及时写入在线日志文件中
+FL_ACTUAL_OUTLIERS 判断磁盘是否太慢
+FL_IO_W_SKIP_LARGE: 不为 0 表示512 flashlog太小，可以考虑增大flashlog大小 FL_IO_W_SKIP_NO_BUFFER这个指标值很大的话，也可以考虑增大flashlog大小
+
+[root@exavm12 ~]# dcli -g /home/oracle/sehub/scripts/saf_cell_group -l root cellcli -e list metriccurrent where objecttype='FLASHLOG'
+cancercel01: FL_ACTUAL_OUTLIERS                  FLASHLOG        0 IO requests
+cancercel01: FL_BY_KEEP                          FLASHLOG        0
+cancercel01: FL_DISK_FIRST                       FLASHLOG        132,399 IO requests
+cancercel01: FL_DISK_IO_ERRS                     FLASHLOG        0 IO requests
+cancercel01: FL_EFFICIENCY_PERCENTAGE            FLASHLOG        100 %
+cancercel01: FL_EFFICIENCY_PERCENTAGE_HOUR       FLASHLOG        100 %
+cancercel01: FL_FLASH_FIRST                      FLASHLOG        618,478 IO requests
+cancercel01: FL_FLASH_IO_ERRS                    FLASHLOG        0 IO requests
+cancercel01: FL_FLASH_ONLY_OUTLIERS              FLASHLOG        0 IO requests
+cancercel01: FL_IO_DB_BY_W                       FLASHLOG        6,682 MB
+cancercel01: FL_IO_DB_BY_W_SEC                   FLASHLOG        0.000 MB/sec
+cancercel01: FL_IO_FL_BY_W                       FLASHLOG        8,505 MB
+cancercel01: FL_IO_FL_BY_W_SEC                   FLASHLOG        0.002 MB/sec
+cancercel01: FL_IO_TM_W                          FLASHLOG        32,699,272 us
+cancercel01: FL_IO_TM_W_RQ                       FLASHLOG        60.5 us/request
+cancercel01: FL_IO_W                             FLASHLOG        750,877 IO requests
+cancercel01: FL_IO_W_SKIP_BUSY                   FLASHLOG        0 IO requests
+cancercel01: FL_IO_W_SKIP_BUSY_MIN               FLASHLOG        0.0 /min
+cancercel01: FL_IO_W_SKIP_DISABLED_GD            FLASHLOG        0 IO requests
+cancercel01: FL_IO_W_SKIP_IORM_LIMIT             FLASHLOG        0 IO requests
+cancercel01: FL_IO_W_SKIP_IORM_PLAN              FLASHLOG        0 IO requests
+cancercel01: FL_IO_W_SKIP_LARGE                  FLASHLOG        0 IO requests
+cancercel01: FL_IO_W_SKIP_LOG_ON_FLASH           FLASHLOG        0 IO requests
+cancercel01: FL_IO_W_SKIP_NO_BUFFER              FLASHLOG        0 IO requests
+cancercel01: FL_IO_W_SKIP_NO_FL_DISKS            FLASHLOG        0 IO requests
+cancercel01: FL_PREVENTED_OUTLIERS               FLASHLOG        0 IO requests
+cancercel01: FL_RQ_TM_W                          FLASHLOG        75,927,155 us
+cancercel01: FL_RQ_TM_W_RQ                       FLASHLOG        124 us/request
+cancercel01: FL_RQ_W                             FLASHLOG        751,037 IO requests
+cancercel01: FL_SKIP_OUTLIERS                    FLASHLOG        0 IO requests
+cancercel02: FL_ACTUAL_OUTLIERS                  FLASHLOG        0 IO requests
+cancercel02: FL_BY_KEEP                          FLASHLOG        0
+cancercel02: FL_DISK_FIRST                       FLASHLOG        129,467 IO requests
+cancercel02: FL_DISK_IO_ERRS                     FLASHLOG        0 IO requests
+cancercel02: FL_EFFICIENCY_PERCENTAGE            FLASHLOG        100 %
+cancercel02: FL_EFFICIENCY_PERCENTAGE_HOUR       FLASHLOG        100 %
+cancercel02: FL_FLASH_FIRST                      FLASHLOG        621,420 IO requests
+cancercel02: FL_FLASH_IO_ERRS                    FLASHLOG        0 IO requests
+cancercel02: FL_FLASH_ONLY_OUTLIERS              FLASHLOG        0 IO requests
+cancercel02: FL_IO_DB_BY_W                       FLASHLOG        6,682 MB
+cancercel02: FL_IO_DB_BY_W_SEC                   FLASHLOG        0.000 MB/sec
+cancercel02: FL_IO_FL_BY_W                       FLASHLOG        8,505 MB
+cancercel02: FL_IO_FL_BY_W_SEC                   FLASHLOG        0.001 MB/sec
+cancercel02: FL_IO_TM_W                          FLASHLOG        32,448,611 us
+cancercel02: FL_IO_TM_W_RQ                       FLASHLOG        70.5 us/request
+cancercel02: FL_IO_W                             FLASHLOG        750,887 IO requests
+cancercel02: FL_IO_W_SKIP_BUSY                   FLASHLOG        0 IO requests
+cancercel02: FL_IO_W_SKIP_BUSY_MIN               FLASHLOG        0.0 /min
+cancercel02: FL_IO_W_SKIP_DISABLED_GD            FLASHLOG        0 IO requests
+cancercel02: FL_IO_W_SKIP_IORM_LIMIT             FLASHLOG        0 IO requests
+cancercel02: FL_IO_W_SKIP_IORM_PLAN              FLASHLOG        0 IO requests
+cancercel02: FL_IO_W_SKIP_LARGE                  FLASHLOG        0 IO requests
+cancercel02: FL_IO_W_SKIP_LOG_ON_FLASH           FLASHLOG        0 IO requests
+cancercel02: FL_IO_W_SKIP_NO_BUFFER              FLASHLOG        0 IO requests
+cancercel02: FL_IO_W_SKIP_NO_FL_DISKS            FLASHLOG        0 IO requests
+cancercel02: FL_PREVENTED_OUTLIERS               FLASHLOG        0 IO requests
+cancercel02: FL_RQ_TM_W                          FLASHLOG        75,546,231 us
+cancercel02: FL_RQ_TM_W_RQ                       FLASHLOG        139 us/request
+cancercel02: FL_RQ_W                             FLASHLOG        751,047 IO requests
+cancercel02: FL_SKIP_OUTLIERS                    FLASHLOG        0 IO requests
+cancercel03: FL_ACTUAL_OUTLIERS                  FLASHLOG        0 IO requests
+cancercel03: FL_BY_KEEP                          FLASHLOG        0
+cancercel03: FL_DISK_FIRST                       FLASHLOG        148,070 IO requests
+cancercel03: FL_DISK_IO_ERRS                     FLASHLOG        0 IO requests
+cancercel03: FL_EFFICIENCY_PERCENTAGE            FLASHLOG        100 %
+cancercel03: FL_EFFICIENCY_PERCENTAGE_HOUR       FLASHLOG        100 %
+cancercel03: FL_FLASH_FIRST                      FLASHLOG        602,807 IO requests
+cancercel03: FL_FLASH_IO_ERRS                    FLASHLOG        0 IO requests
+cancercel03: FL_FLASH_ONLY_OUTLIERS              FLASHLOG        0 IO requests
+cancercel03: FL_IO_DB_BY_W                       FLASHLOG        6,682 MB
+cancercel03: FL_IO_DB_BY_W_SEC                   FLASHLOG        0.000 MB/sec
+cancercel03: FL_IO_FL_BY_W                       FLASHLOG        8,505 MB
+cancercel03: FL_IO_FL_BY_W_SEC                   FLASHLOG        0.002 MB/sec
+cancercel03: FL_IO_TM_W                          FLASHLOG        33,087,610 us
+cancercel03: FL_IO_TM_W_RQ                       FLASHLOG        51.2 us/request
+cancercel03: FL_IO_W                             FLASHLOG        750,877 IO requests
+cancercel03: FL_IO_W_SKIP_BUSY                   FLASHLOG        0 IO requests
+cancercel03: FL_IO_W_SKIP_BUSY_MIN               FLASHLOG        0.0 /min
+cancercel03: FL_IO_W_SKIP_DISABLED_GD            FLASHLOG        0 IO requests
+cancercel03: FL_IO_W_SKIP_IORM_LIMIT             FLASHLOG        0 IO requests
+cancercel03: FL_IO_W_SKIP_IORM_PLAN              FLASHLOG        0 IO requests
+cancercel03: FL_IO_W_SKIP_LARGE                  FLASHLOG        0 IO requests
+cancercel03: FL_IO_W_SKIP_LOG_ON_FLASH           FLASHLOG        0 IO requests
+cancercel03: FL_IO_W_SKIP_NO_BUFFER              FLASHLOG        0 IO requests
+cancercel03: FL_IO_W_SKIP_NO_FL_DISKS            FLASHLOG        0 IO requests
+cancercel03: FL_PREVENTED_OUTLIERS               FLASHLOG        0 IO requests
+cancercel03: FL_RQ_TM_W                          FLASHLOG        76,345,765 us
+cancercel03: FL_RQ_TM_W_RQ                       FLASHLOG        105 us/request
+cancercel03: FL_RQ_W                             FLASHLOG        751,037 IO requests
+cancercel03: FL_SKIP_OUTLIERS                    FLASHLOG        0 IO requests
+[root@exavm12 ~]# 
+
+
+增大flashlog大小命令,先删除，再创建
+
+cellcli> drop flashlog
+cellcli> drop flashcache
+cellcli> create flashlog all size=1g
+cellcli> create flashcache all

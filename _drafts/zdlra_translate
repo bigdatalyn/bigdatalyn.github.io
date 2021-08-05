@@ -1,0 +1,102 @@
+数据保护方案的完整重点改造现有备份系统对 Oracle 数据库的备份和恢复， 要解决的主要问题是:
+⚫ 确保备份出来的数据库百分之百可恢复，并且能恢复到制定的任意时间 点，最大程度减少数据丢失带来的风险
+⚫ 缩短备份窗口对业务带来的影响
+⚫ 轻松应对未来的发展带来的数据量和数据库急剧增加带来的压力
+⚫ 简化数据库备份恢复的管理 现有的备份系统从技术机制上是无法保证备份出来的 Oracle 数据可恢复的，
+这会带来合规和管理上的风险;并且每天定时的数据和日志备份，会带来数据丢 失的风险，影响到生产和企业声誉;过长的备份时间窗口会影响到生产，也会使 备份系统的扩展性变差，很难适应企业业务发展和不断增长的数据量带来的要求。
+基于以上分析，通过购买备份服务器软件和硬件、磁带库，备份客户端和数 据库使用许可，在现有备份系统上进行升级改造并不是一个最佳选择。按照备份 客户端收取的大量软件使用许可既抬高了备份方案造价，也增加了备份管理的复 杂性，同时固有的技术缺陷还依然存在。
+云计算是一个大的发展方向，正在深刻改变企业计算方式，特别是近十年来， 越来越多的企业采用云计算架构来指导和建设企业 IT 系统。企业核心数据的保 护方案也有必要采用云架构来部署，建立企业的数据库保护云，为企业所有的 Oracle 数据库提供数据备份和恢复服务，这大大简化了数据库保护方案，同时
+集中统一的管理简化了运维和合规审计，数据库保护云的成本与要备份的数据库 节点数量无关，更容易适应企业未来发展的需要。
+
+
+ MAA Recommendations
+• One RecoveryAppliance(RA) per datacenter
+• Backup primary and standby databases to their respective local RA
+• No RA replication for any database with a remote standby
+• Restore operation can use any RA in any location
+
+Oracle 最高可用性架构 (MAA)的建议
+• 每个数据中心的一台恢复一体机(RA)
+• 将主数据库和备用数据库备份到各自的本地恢复一体机(RA)
+• 恢复一体机(RA)不用于远程备机数据库的复制
+• 恢复操作可以在任何位置使用任何恢复一体机(RA)
+
+
+Do your business requirements call for multiple Recovery Appliances?
+
+您的业务需求是否需要多个恢复一体机(RA)？
+
+1. Do you need the ability to backup, restore and recover during RA planned maintenance windows (2-6 hours for major upgrades) versus waiting until the planned maintenance completes?
+2. Do you require disaster recovery protection ? (e.g. data center failure, power failure)
+3. Do you require minimal data loss for all protected databases backing up to RA during its planned maintenance windows? ( you don't need to restore/recover)
+4. Do you require archive and backups operations to continue during RA planned maintenance windows(2-6 hours) versus waiting until the planned maintenance completes?
+
+您的业务需求是否需要多个恢复一体机(RA)？
+1. 您是否需要在恢复一体机(RA)计划维护时段（重大升级的 2-6 小时）期间备份、恢复和恢复的能力，而不是等到计划维护完成之后？
+2. 您是否需要灾难恢复保护？（例如数据中心故障、电源故障）
+3. 您是否要求在计划的维护时段内将备份到恢复一体机(RA)的所有受保护数据库的数据丢失降至最低？（您不需要备份/恢复）
+4. 您是否需要在恢复一体机(RA)计划维护时段（2-6 小时）期间继续存档和备份操作，而不是等到计划维护完成？
+
+如果您回答“是”，那么对于这些问题中的任何一个，都需要多个恢复一体机(RA)。
+
+✓ 对于任何问题回答“是的”：您都将需要多个恢复一体机(RA)
+✓ 对问题 #1 或 #2 的回答是：使用高可用性进行备份和恢复
+✓ 仅对问题 #3 或 #4 是：使用备份故障转移到备用设备解决方案
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+您的业务需求是否需要多个 Oracle 零数据丢失恢复一体机 (ZDLRA)？
+1. 您是否需要在 Oracle 零数据丢失恢复一体机 (ZDLRA)计划维护时段（重大升级的 2-6 小时）期间备份、恢复和恢复的能力，而不是等到计划维护完成之后？
+2. 您是否需要灾难恢复保护？ （例如数据中心故障、电源故障）
+3. 您是否要求在计划的维护时段内将备份到 Oracle 零数据丢失恢复一体机 (ZDLRA)的所有受保护数据库的数据丢失降至最低？ （您不需要备份/恢复）
+4. 您是否需要在 Oracle 零数据丢失恢复一体机 (ZDLRA)计划维护时段（2-6 小时）期间继续存档和备份操作，而不是等到计划维护完成？
+
+如果您回答“是”，那么对于这些问题中的任何一个，都需要多个恢复设备。
+
+✓ 对于任何问题回答“是的”：您都将需要多个 Oracle 零数据丢失恢复一体机 (ZDLRA)
+✓ 对问题 #1 或 #2 的回答是：使用高可用性进行备份和恢复
+✓ 仅对问题 #3 或 #4 是：使用备份故障转移到备用设备解决方案
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+针对站点级故障提供数据保护的部署方式
+
+恢复一体机(RA)之间支持远程数据同步，可以为站点失效或灾难提供公保护，也支持自动从本地或远程的恢复一体机直接恢复数据。
+
+恢复一体机(RA)复制的好处是不仅保护数据免受本地或站点范围的故障，也可以从本地或者远程设备自动恢复
+
+High Availability for Backup & Recovery
+针对高可用的备份和恢复，
+可以在计划内或计划外停机期间保持高可用性的最佳实践，也可从上游和下游获得数据库备份和恢复/可恢复性
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Backup Failover to Alternate RA
+备份故障转移到备用 RA
+
+Incrementals and Redo normally sent to Primary RA
+增量和重做通常发送到主 RA
+
+Alternate RA serves as backup staging area when primary RA is unavailable, then syncs with primary RA afterwards
+• No virtual fulls created on alternate, hence recoverability not supported
+• Space sized for ‘n’ incrementals and archived log backups during primary downtime period
+
+当主要 RA 不可用时，备用 RA 用作备份暂存区，之后主要 RA 同步
+• 没有在备用上创建虚拟完整，因此不支持可恢复性
+• 在主要停机期间为“n”个增量和归档日志备份调整空间大小
+
+Benefits:
+• Preserves backup and redo shipment continuity during planned maintenance / upgrades
+• Prevents local Fast Recovery Areas from filling up with archived logs
+• Block Change Tracking continues
+
+主恢复一体机RA不可用时，备份故障转移到备用的恢复一体机RA，备用恢复一体机RA用作备份暂存区，之后再跟主恢复一体机同步。这样可以保证在计划维护/升级期间保持备份和重做运输的连续性，也避免主快速恢复区(FRA)被归档日志填满，同时块跟踪(block change tracking)继续使用。此时远程备用恢复一体机并没有在上面创建虚拟全备份，因此不支持可恢复性。在主恢复一体机RA停机期间，备用恢复一体机需要保证从主恢复一体机RA传输过来的增量和重做日志空间大小。备用恢复一体机RA接管备份和重做日志传输，当主恢复一体机重新联机时，所有临时备份都会复制同步到主恢复一体机，并创建虚拟全备份。虚拟全备份完成后，增量和重做日志可以重新启动同步到主恢复一体机。同一数据中心的备份故障转移要求在同一子网上配置。
+- 备用恢复一体机RA的BF_FORWARD策略设定: STORE_AND_FORWARD = 'YES'
+
+Backup and redo failover destination when primary appliance is unavailable
+
+• Alternate appliance takes over backups and redo transport
+
+ When primary appliance is back online, all interim backups are replicated from alternate and virtual full backups are created on primary
+
+Once all virtual fulls are completed, backups and redo transport can restart to the primary appliance
+
+Backup Failover" within the same data center requires both Recovery Appliances to be configured on the same replication subnet.
