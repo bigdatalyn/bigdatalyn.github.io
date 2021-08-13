@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!-- saved from url=(0080)http://structureddata.org/2011/08/28/reading-active-sql-monitor-reports-offline/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Structured Data | Reading Active SQL Monitor Reports Offline</title>
+  <meta name="description" content="Active SQL Monitor Reports require some files from the Internet to render the report in the browser. That’s no big deal if you have an Internet connection, b...">
+
+  <link rel="stylesheet" href="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/main.css">
+  <link rel="canonical" href="http://structureddata.org/2011/08/28/reading-active-sql-monitor-reports-offline/">
+  <link rel="alternate" type="application/rss+xml" title="Structured Data" href="http://structureddata.org/feed.xml">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://structureddata.org/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="http://structureddata.org/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="http://structureddata.org/favicon-16x16.png">
+  <link rel="manifest" href="http://structureddata.org/manifest.json">
+  <link rel="mask-icon" sizes="any" href="http://structureddata.org/safari-pinned-tab.svg" color="#000000">
+
+  
+  <script async="" src="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/analytics.js"></script><script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-302138-10', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  
+
+  
+<script src="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/embed.js" data-timestamp="1628751144349"></script><link rel="prefetch" as="style" href="https://c.disquscdn.com/next/embed/styles/lounge.57574f0636121e8e31f1d85f9e07c4d8.css"><link rel="prefetch" as="script" href="https://c.disquscdn.com/next/embed/common.bundle.ee2555081038338ea4f41cbb3ea1bc17.js"><link rel="prefetch" as="script" href="https://c.disquscdn.com/next/embed/lounge.bundle.2ffe594ffa8649107f0678f6af0100dc.js"><link rel="prefetch" as="script" href="https://disqus.com/next/config.js"><script async="" id="dsq_recs_scr" src="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/recommendations.js"></script><link rel="prefetch" as="style" href="https://c.disquscdn.com/next/recommendations/styles/recommendations.eff219b98b7c4167b4b289065f36f391.css"><link rel="prefetch" as="script" href="https://c.disquscdn.com/next/recommendations/common.bundle.72e35017d98ea7f210961b0d5c38444a.js"><link rel="prefetch" as="script" href="https://c.disquscdn.com/next/recommendations/recommendations.bundle.469dfe150b9ceaaada5fd9a649b17de5.js"><link rel="prefetch" as="script" href="https://disqus.com/next/config.js"></head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="http://structureddata.org/">Structured Data</a>
+  
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger">
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"></path>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"></path>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"></path>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="http://structureddata.org/presentations/">Presentations</a>
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope="" itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Reading Active SQL Monitor Reports Offline</h1>
+    <p class="post-meta">
+      <time datetime="2011-08-28T17:25:44+00:00" itemprop="datePublished">
+        
+        2011-08-28
+      </time>
+      
+        • <span itemprop="author" itemscope="" itemtype="http://schema.org/Person"><span itemprop="name">Greg Rahn</span></span>
+      </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Active SQL Monitor Reports require some files from the Internet to render the report in the browser.  That’s no big deal if you have an Internet connection, but what if you do not?  Generally if you load an Active SQL Monitor Report without an Internet connection, you will just see an empty page in your browser.  There is a little trick I use to work around this issue – it’s to have a copy of the required swf and javascript files locally.  Here is how I do that on my Mac assuming a couple of things:</p>
+
+<ul>
+  <li>You know how to turn on the web server/Web Sharing in System Preferences &gt; Sharing</li>
+  <li>You know how to get <a href="http://www.gnu.org/s/wget/">wget</a> (or use <a href="http://curl.haxx.se/">curl</a> [part of OS X] to mimic the below commands)</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>### assuming you already have the web server running and have wget
+cd /Library/WebServer/Documents
+wget --mirror http://download.oracle.com/otn_software/emviewers/scripts/flashver.js
+wget --mirror http://download.oracle.com/otn_software/emviewers/scripts/loadswf.js
+wget --mirror http://download.oracle.com/otn_software/emviewers/scripts/document.js
+wget --mirror http://download.oracle.com/otn_software/emviewers/sqlmonitor/11/sqlmonitor.swf
+ln -s download.oracle.com/otn_software otn_software
+</code></pre></div></div>
+
+<p>Now edit /etc/hosts and add</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>127.0.0.1 download.oracle.com
+</code></pre></div></div>
+
+<p>Now when you load an Active SQL Monitor Report it will access those files from your local web server. Don’t forget to undo the /etc/hosts entry once you are back on the Internet.  Also, keep in mind that these files may change so re-download them from time to time.</p>
+
+<h3 id="option-2---firefox">Option 2 - Firefox</h3>
+
+<p>If <a href="http://www.mozilla.com/firefox/">Firefox</a> is your browser of choice, then there is another option.  Having successfully rendered an Active SQL Monitor Report while online, you can work offline by using File &gt; Work Offline.  This should allow the use of a cached version of the swf and javascript files.</p>
+
+  </div>
+
+  
+    
+
+  <div id="disqus_recommendations" style="margin-bottom: 12px;"><iframe id="dsq-app3757" name="dsq-app3757" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/saved_resource.html" style="width: 100% !important; border: none !important; overflow: hidden !important; height: 240px !important; display: inline !important; box-sizing: border-box !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div><div id="disqus_thread"><iframe id="dsq-app9144" name="dsq-app9144" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/saved_resource(1).html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 547px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'http://structureddata.org/2011/08/28/reading-active-sql-monitor-reports-offline/';
+      this.page.identifier = 'http://structureddata.org/2011/08/28/reading-active-sql-monitor-reports-offline/';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://structureddata.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+  
+</article>
+
+      </div>
+    </main>
+
+    
+
+  
+
+
+<iframe style="display: none;" src="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/saved_resource(2).html"></iframe><iframe style="display: none;" src="./Structured Data _ Reading Active SQL Monitor Reports Offline_files/saved_resource(3).html"></iframe></body></html>
