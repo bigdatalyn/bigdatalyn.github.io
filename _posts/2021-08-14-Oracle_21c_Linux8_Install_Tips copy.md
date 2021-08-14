@@ -16,6 +16,8 @@ The latest Innovation release of the world's most popular database, Oracle Datab
 
 [Introducing Oracle Database 21c](https://blogs.oracle.com/database/post/introducing-oracle-database-21c)
 
+![database21c]({{ "/files/Oracle/21c/21c.png"}})
+
 
 
 
@@ -747,8 +749,6 @@ System Identifier(SID):cdb1
 Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/cdb1/cdb1.log" for further details.
 [oracle@ol8-21c ~]$  
 ```
-
-![database21c]({{ "/files/Oracle/21c/21c.png"}})
 
 
 ### rlwrap install

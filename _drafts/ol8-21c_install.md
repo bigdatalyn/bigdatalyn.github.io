@@ -12,7 +12,8 @@ Download
 
 [Oracle database 21c](https://www.oracle.com/database/technologies/oracle-database-software-downloads.html)
 
-Ref
+Ref:
+
 [Oracle Database 19c Installation On Oracle Linux 8 (OL8)](https://oracle-base.com/articles/19c/oracle-db-19c-installation-on-oracle-linux-8)
 
 
@@ -679,7 +680,7 @@ dbca -silent -createDatabase                                                   \
      -emConfiguration NONE                                                     \
      -ignorePreReqs
 ```
-
+create database log:
 ```
 [oracle@ol8-21c ~]$ dbca -silent -createDatabase                                                   \
 >      -templateName General_Purpose.dbc                                         \
@@ -726,8 +727,6 @@ System Identifier(SID):cdb1
 Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/cdb1/cdb1.log" for further details.
 [oracle@ol8-21c ~]$  
 ```
-
-
 
 
 
