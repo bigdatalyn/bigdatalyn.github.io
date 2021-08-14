@@ -751,6 +751,59 @@ Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/cdb1/cdb1.log" for furthe
 ![database21c]({{ "/files/Oracle/21c/21c.png"}})
 
 
+### rlwrap install
+rlwrap download site: 
+\
+http://rpm.pbone.net/
+
+```
+root:
+wget ftp://ftp.pbone.net/mirror/download.fedora.redhat.com/pub/fedora/epel/8/Everything/x86_64/Packages/r/rlwrap-0.44-1.el8.x86_64.rpm
+rpm -ivh rlwrap-0.44-1.el8.x86_64.rpm 
+oracle:
+echo "alias sqlplus='rlwrap sqlplus'" >> /home/oracle/.bash_profile
+echo "alias rman='rlwrap rman'" >> /home/oracle/.bash_profile
+```
+log:
+```
+[root@ol8-21c ~]# wget ftp://ftp.pbone.net/mirror/download.fedora.redhat.com/pub/fedora/epel/8/Everything/x86_64/Packages/r/rlwrap-0.44-1.el8.x86_64.rpm
+--2021-08-14 16:44:40--  ftp://ftp.pbone.net/mirror/download.fedora.redhat.com/pub/fedora/epel/8/Everything/x86_64/Packages/r/rlwrap-0.44-1.el8.x86_64.rpm
+           => ‘rlwrap-0.44-1.el8.x86_64.rpm’
+Resolving ftp.pbone.net (ftp.pbone.net)... 93.179.225.212
+Connecting to ftp.pbone.net (ftp.pbone.net)|93.179.225.212|:21... connected.
+Logging in as anonymous ... Logged in!
+==> SYST ... done.    ==> PWD ... done.
+==> TYPE I ... done.  ==> CWD (1) /mirror/download.fedora.redhat.com/pub/fedora/epel/8/Everything/x86_64/Packages/r ... done.
+==> SIZE rlwrap-0.44-1.el8.x86_64.rpm ... 131428
+==> PASV ... done.    ==> RETR rlwrap-0.44-1.el8.x86_64.rpm ... done.
+Length: 131428 (128K) (unauthoritative)
+
+rlwrap-0.44-1.el8.x86_64.rpm    100%[=====================================================>] 128.35K  74.0KB/s    in 1.7s    
+
+2021-08-14 16:44:47 (74.0 KB/s) - ‘rlwrap-0.44-1.el8.x86_64.rpm’ saved [131428]
+
+[root@ol8-21c ~]# 
+[root@ol8-21c ~]# rpm -ivh rlwrap-0.44-1.el8.x86_64.rpm 
+warning: rlwrap-0.44-1.el8.x86_64.rpm: Header V4 RSA/SHA256 Signature, key ID 2f86d6a1: NOKEY
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:rlwrap-0.44-1.el8                ################################# [100%]
+/sbin/ldconfig: /etc/ld.so.conf.d/kernel-5.4.17-2102.201.3.el8uek.x86_64.conf:6: hwcap directive ignored
+[root@ol8-21c ~]# which rlwrap
+/usr/bin/rlwrap
+[root@ol8-21c ~]# su - oracle
+[oracle@ol8-21c ~]$ echo "alias sqlplus='rlwrap sqlplus'" >> /home/oracle/.bash_profile
+[oracle@ol8-21c ~]$ echo "alias rman='rlwrap rman'" >> /home/oracle/.bash_profile
+[oracle@ol8-21c ~]$ source .bash_profile
+[oracle@ol8-21c ~]$ which sqlplus
+alias sqlplus='rlwrap sqlplus'
+        /usr/bin/rlwrap
+[oracle@ol8-21c ~]$ 
+```
+
+
+
 ### Auto start in Linux 8
 
 Ref 
