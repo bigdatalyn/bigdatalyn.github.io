@@ -1,22 +1,35 @@
 
-virtualbox 6.1
-https://www.virtualbox.org/wiki/Downloads
 
-Oracle Linux 8.4
-https://www.oracle.com/linux/technologies/oracle-linux-downloads.html
+Oracle database 21c release linux at 8/13/2021
 
-Oracle database 21c
-https://www.oracle.com/database/technologies/oracle-database-software-downloads.html
+[Introducing Oracle Database 21c](https://blogs.oracle.com/database/post/introducing-oracle-database-21c)
 
-Introducing Oracle Database 21c
-https://blogs.oracle.com/database/post/introducing-oracle-database-21c
+Download
 
+[virtualbox 6.1](https://www.virtualbox.org/wiki/Downloads)
+
+[Oracle Linux 8.4](https://www.oracle.com/linux/technologies/oracle-linux-downloads.html)
+
+[Oracle database 21c](https://www.oracle.com/database/technologies/oracle-database-software-downloads.html)
+
+Ref
+[Oracle Database 19c Installation On Oracle Linux 8 (OL8)](https://oracle-base.com/articles/19c/oracle-db-19c-installation-on-oracle-linux-8)
+
+
+### Linux 8.4 install tips
+
+```
 hostonly -> network
+
 NAT -> network
+
 hostnamectl set-hostname ol8-21c
+
 timedatectl set-timezone Asia/Shanghai
+```
 
 selinux:
+```
 [root@ol8-21c ~]# grep SELINUX /etc/selinux/config 
 # SELINUX= can take one of these three values:
 # SELINUX=enforcing
@@ -24,8 +37,10 @@ SELINUX=permissive
 # SELINUXTYPE= can take one of these three values:
 SELINUXTYPE=targeted
 [root@ol8-21c ~]# 
+```
 
 firewall
+```
 [root@ol8-21c ~]# systemctl stop firewalld
 [root@ol8-21c ~]# systemctl status firewalld
 ● firewalld.service - firewalld - dynamic firewall daemon
@@ -47,9 +62,10 @@ Aug 14 14:15:47 ol8-21c systemd[1]: Stopped firewalld - dynamic firewall daemon.
 Removed /etc/systemd/system/multi-user.target.wants/firewalld.service.
 Removed /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
 [root@ol8-21c ~]# 
-
+```
 
 ssh service:
+```
 [root@ol8-21c ~]# systemctl status sshd.service
 ● sshd.service - OpenSSH server daemon
    Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
@@ -71,8 +87,10 @@ Aug 14 14:09:01 localhost.localdomain sshd[3169]: pam_unix(sshd:session): sessio
 [root@ol8-21c ~]# 
 [root@ol8-21c ~]# systemctl enable sshd.service
 [root@ol8-21c ~]# 
+```
 
 /etc/hosts and hostname
+```
 [root@ol8-21c ~]# cat /etc/hosts
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 192.168.56.101 ol8-21c
@@ -80,17 +98,20 @@ Aug 14 14:09:01 localhost.localdomain sshd[3169]: pam_unix(sshd:session): sessio
 [root@ol8-21c ~]# cat /etc/hostname
 ol8-21c
 [root@ol8-21c ~]#
-
+```
 
 Oracle Installation Prerequisites:
 
 oracle-database-preinstall-21c is still NOT provided at 2021/08/14.
 
+```
 The following rpm are provided.
 https://yum.oracle.com/repo/OracleLinux/OL8/appstream/x86_64/
 	oracle-database-preinstall-19c-1.0-1.el8.x86_64.rpm
     oracle-database-preinstall-19c-1.0-2.el8.x86_64.rpm
+```
 
+```
 [root@ol8-21c ~]# dnf install -y oracle-database-preinstall-21c
 Oracle Linux 8 BaseOS Latest (x86_64)                                                         6.7 MB/s |  39 MB     00:05    
 Oracle Linux 8 Application Stream (x86_64)                                                    4.3 MB/s |  27 MB     00:06    
@@ -190,11 +211,11 @@ Installed:
 
 Complete!
 [root@ol8-21c ~]# 
-
+```
 
 Update kernel and mount share folder
 
-
+```
 VirtualBox Oracle VM VirtualBox Extension Pack - 6.1.26 
 
 [root@ol8-21c VBox_GAs_6.1.26]# pwd
@@ -218,8 +239,9 @@ VirtualBox Guest Additions: Kernel headers not found for target kernel
 modprobe vboxguest failed
 The log file /var/log/vboxadd-setup.log may contain further information.
 [root@ol8-21c VBox_GAs_6.1.26]# 
+```
 
-
+```
 [root@ol8-21c ~]# yum update -y
 Last metadata expiration check: 0:02:20 ago on Sat 14 Aug 2021 02:49:12 PM CST.
 Dependencies resolved.
@@ -227,9 +249,11 @@ Dependencies resolved.
 [root@ol8-21c VBox_GAs_6.1.26]# uname -r
 5.4.17-2102.201.3.el8uek.x86_64
 [root@ol8-21c VBox_GAs_6.1.26]# yum install kernel-devel
+```
 
-
-
+VirtualBox Guest Additions: Kernel headers not found for target kernel 
+Solution:
+```
 yum clean all
 yum update -y
 yum install kernel -y
@@ -240,15 +264,16 @@ yum install make -y
 yum install kernel-headers kernel-devel gcc make elfutils-libelf-devel -y
 yum install kernel-uek-devel-`uname -r` -y
 reboot
+```
 
+Ref:
 
-ref:
 [/sbin/mount.vboxsf: mounting failed with the error: No such device](https://www.cnblogs.com/teacat/p/11589516.html)
 
 [Guest additionals: Kernel headers not found for target kernel](https://superuser.com/questions/1532590/guest-additionals-kernel-headers-not-found-for-target-kernel)
 
-
-
+Log:
+```
 [root@ol8-21c VBox_GAs_6.1.26]# sh VBoxLinuxAdditions.run
 Verifying archive integrity... All good.
 Uncompressing VirtualBox 6.1.26 Guest Additions for Linux........
@@ -284,10 +309,10 @@ vm_folder            425G   43G  383G  11% /mnt
 total 0
 -rwxrwxrwx. 1 root root 0 Aug 14 14:41 1.txt
 [root@ol8-21c mnt]# 
-
+```
 
 file: /etc/sysctl.conf
-
+```
 fs.file-max = 6815744
 kernel.sem = 250 32000 100 128
 kernel.shmmni = 4096
@@ -302,8 +327,9 @@ net.ipv4.conf.all.rp_filter = 2
 net.ipv4.conf.default.rp_filter = 2
 fs.aio-max-nr = 1048576
 net.ipv4.ip_local_port_range = 9000 65500
+```
 
-
+```
 [root@ol8-21c ~]# /sbin/sysctl -p
 fs.file-max = 6815744
 kernel.sem = 250 32000 100 128
@@ -320,11 +346,14 @@ net.ipv4.conf.default.rp_filter = 2
 fs.aio-max-nr = 1048576
 net.ipv4.ip_local_port_range = 9000 65500
 [root@ol8-21c ~]# 
+```
 
-
+for 21c conf
+```
 cp /etc/security/limits.d/oracle-database-preinstall-19c.conf /etc/security/limits.d/oracle-database-preinstall-21c.conf
+```
 
-
+```
 dnf install -y bc    
 dnf install -y binutils
 #dnf install -y compat-libcap1
@@ -372,15 +401,24 @@ dnf install -y libnsl
 dnf install -y libnsl.i686
 dnf install -y libnsl2
 dnf install -y libnsl2.i686
+```
 
+Oracle password:
+```
 passwd oracle
 =>oracle
+```
 
+Oracle directories
+```
 mkdir -p /u01/app/oracle/product/21.0.0/dbhome_1
 mkdir -p /u02/oradata
 chown -R oracle:oinstall /u01 /u02
 chmod -R 775 /u01 /u02
+```
 
+Oracle profile and scripts
+```
 mkdir /home/oracle/scripts
 
 cat > /home/oracle/scripts/setEnv.sh <<EOF
@@ -432,7 +470,10 @@ EOF
 
 chown -R oracle:oinstall /home/oracle/scripts
 chmod u+x /home/oracle/scripts/*.sh
+```
 
+Oracle sudo pri
+```
 [root@ol8-21c ~]# visudo
 [root@ol8-21c ~]# 
 
@@ -442,6 +483,351 @@ oracle  ALL=(ALL)       ALL
 [oracle@ol8-21c ~]$ sudo usermod -aG vboxsf $(whoami)
 [sudo] password for oracle: 
 [oracle@ol8-21c ~]$ 
+```
+
+### Oracle Database 21c Install
+
+Oracle dbhome 21c install file unzip and install
+
+```
+# Unzip software.
+cd $ORACLE_HOME
+pwd
+unzip -oq /mnt/LINUX.X64_213000_db_home.zip
+
+# Fake Oracle Linux 7.
+export CV_ASSUME_DISTID=OEL8.4
+
+```
+
+log
+```
+[root@ol8-21c ~]# su - oracle
+[oracle@ol8-21c ~]$ cd $ORACLE_HOME
+[oracle@ol8-21c dbhome_1]$ pwd
+/u01/app/oracle/product/21.0.0/dbhome_1
+[oracle@ol8-21c dbhome_1]$ unzip -oq /mnt/LINUX.X64_213000_db_home.zip
+[oracle@ol8-21c dbhome_1]$ du -sm /u01/app/oracle/product/21.0.0/dbhome_1
+6772    /u01/app/oracle/product/21.0.0/dbhome_1
+[oracle@ol8-21c dbhome_1]$ 
+```
+
+Install 21c database product.
+```
+# Silent mode.
+./runInstaller -ignorePrereq -waitforcompletion -silent                        \
+    -responseFile ${ORACLE_HOME}/install/response/db_install.rsp               \
+    oracle.install.option=INSTALL_DB_SWONLY                                    \
+    ORACLE_HOSTNAME=${ORACLE_HOSTNAME}                                         \
+    UNIX_GROUP_NAME=oinstall                                                   \
+    INVENTORY_LOCATION=${ORA_INVENTORY}                                        \
+    SELECTED_LANGUAGES=en,en_GB                                                \
+    ORACLE_HOME=${ORACLE_HOME}                                                 \
+    ORACLE_BASE=${ORACLE_BASE}                                                 \
+    oracle.install.db.InstallEdition=EE                                        \
+    oracle.install.db.OSDBA_GROUP=dba                                          \
+    oracle.install.db.OSBACKUPDBA_GROUP=dba                                    \
+    oracle.install.db.OSDGDBA_GROUP=dba                                        \
+    oracle.install.db.OSKMDBA_GROUP=dba                                        \
+    oracle.install.db.OSRACDBA_GROUP=dba                                       \
+    SECURITY_UPDATES_VIA_MYORACLESUPPORT=false                                 \
+    DECLINE_SECURITY_UPDATES=true
+```
+
+install log file
+```
+/u01/app/oracle/product/21.0.0/dbhome_1/install/response/db_2021-08-14_04-06-18PM.rsp
+/tmp/InstallActions2021-08-14_04-06-18PM/installActions2021-08-14_04-06-18PM.log
+```
+
+```
+[oracle@ol8-21c dbhome_1]$ ./runInstaller -ignorePrereq -waitforcompletion -silent                        \
+>     -responseFile ${ORACLE_HOME}/install/response/db_install.rsp               \
+>     oracle.install.option=INSTALL_DB_SWONLY                                    \
+>     ORACLE_HOSTNAME=${ORACLE_HOSTNAME}                                         \
+>     UNIX_GROUP_NAME=oinstall                                                   \
+>     INVENTORY_LOCATION=${ORA_INVENTORY}                                        \
+>     SELECTED_LANGUAGES=en,en_GB                                                \
+>     ORACLE_HOME=${ORACLE_HOME}                                                 \
+>     ORACLE_BASE=${ORACLE_BASE}                                                 \
+>     oracle.install.db.InstallEdition=EE                                        \
+>     oracle.install.db.OSDBA_GROUP=dba                                          \
+>     oracle.install.db.OSBACKUPDBA_GROUP=dba                                    \
+>     oracle.install.db.OSDGDBA_GROUP=dba                                        \
+>     oracle.install.db.OSKMDBA_GROUP=dba                                        \
+>     oracle.install.db.OSRACDBA_GROUP=dba                                       \
+>     SECURITY_UPDATES_VIA_MYORACLESUPPORT=false                                 \
+>     DECLINE_SECURITY_UPDATES=true
+Launching Oracle Database Setup Wizard...
+
+[WARNING] [INS-13014] Target environment does not meet some optional requirements.
+   CAUSE: Some of the optional prerequisites are not met. See logs for details. installActions2021-08-14_04-06-18PM.log
+   ACTION: Identify the list of failed prerequisite checks from the log: installActions2021-08-14_04-06-18PM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.
+The response file for this session can be found at:
+ /u01/app/oracle/product/21.0.0/dbhome_1/install/response/db_2021-08-14_04-06-18PM.rsp
+
+You can find the log of this install session at:
+ /tmp/InstallActions2021-08-14_04-06-18PM/installActions2021-08-14_04-06-18PM.log
+
+As a root user, execute the following script(s):
+        1. /u01/app/oraInventory/orainstRoot.sh
+        2. /u01/app/oracle/product/21.0.0/dbhome_1/root.sh
+
+Execute /u01/app/oraInventory/orainstRoot.sh on the following nodes: 
+[ol8-21c]
+Execute /u01/app/oracle/product/21.0.0/dbhome_1/root.sh on the following nodes: 
+[ol8-21c]
+
+
+Successfully Setup Software with warning(s).
+Moved the install session logs to:
+ /u01/app/oraInventory/logs/InstallActions2021-08-14_04-06-18PM
+[oracle@ol8-21c dbhome_1]$ 
+```
+
+root user execute script
+```
+As a root user, execute the following script(s):
+1. /u01/app/oraInventory/orainstRoot.sh
+2. /u01/app/oracle/product/21.0.0/dbhome_1/root.sh
+```
+
+log
+```
+[root@ol8-21c ~]# /u01/app/oraInventory/orainstRoot.sh
+Changing permissions of /u01/app/oraInventory.
+Adding read,write permissions for group.
+Removing read,write,execute permissions for world.
+
+Changing groupname of /u01/app/oraInventory to oinstall.
+The execution of the script is complete.
+[root@ol8-21c ~]# /u01/app/oracle/product/21.0.0/dbhome_1/root.sh
+Check /u01/app/oracle/product/21.0.0/dbhome_1/install/root_ol8-21c_2021-08-14_16-13-00-919126811.log for the output of root script
+[root@ol8-21c ~]# 
+```
+
+Test sqlplus
+```
+[oracle@ol8-21c ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Sat Aug 14 16:13:53 2021
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> 
+```
+
+### Oracle Database 21c Database Creation
+
+Start the listener.
+```
+lsnrctl start
+
+
+[oracle@ol8-21c ~]$ lsnrctl start
+
+LSNRCTL for Linux: Version 21.0.0.0.0 - Production on 14-AUG-2021 16:14:25
+
+Copyright (c) 1991, 2021, Oracle.  All rights reserved.
+
+Starting /u01/app/oracle/product/21.0.0/dbhome_1/bin/tnslsnr: please wait...
+
+TNSLSNR for Linux: Version 21.0.0.0.0 - Production
+Log messages written to /u01/app/oracle/diag/tnslsnr/ol8-21c/listener/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol8-21c)(PORT=1521)))
+
+Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 21.0.0.0.0 - Production
+Start Date                14-AUG-2021 16:14:25
+Uptime                    0 days 0 hr. 0 min. 0 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Log File         /u01/app/oracle/diag/tnslsnr/ol8-21c/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=ol8-21c)(PORT=1521)))
+The listener supports no services
+The command completed successfully
+[oracle@ol8-21c ~]$ 
+```
+
+Silent mode create
+
+```
+dbca -silent -createDatabase                                                   \
+     -templateName General_Purpose.dbc                                         \
+     -gdbname ${ORACLE_SID} -sid  ${ORACLE_SID} -responseFile NO_VALUE         \
+     -characterSet AL32UTF8                                                    \
+     -sysPassword SysPassword1                                                 \
+     -systemPassword SysPassword1                                              \
+     -createAsContainerDatabase true                                           \
+     -numberOfPDBs 1                                                           \
+     -pdbName ${PDB_NAME}                                                      \
+     -pdbAdminPassword PdbPassword1                                            \
+     -databaseType MULTIPURPOSE                                                \
+     -memoryMgmtType auto_sga                                                  \
+     -totalMemory 2000                                                         \
+     -storageType FS                                                           \
+     -datafileDestination "${DATA_DIR}"                                        \
+     -redoLogFileSize 50                                                       \
+     -emConfiguration NONE                                                     \
+     -ignorePreReqs
+```
+
+```
+[oracle@ol8-21c ~]$ dbca -silent -createDatabase                                                   \
+>      -templateName General_Purpose.dbc                                         \
+>      -gdbname ${ORACLE_SID} -sid  ${ORACLE_SID} -responseFile NO_VALUE         \
+>      -characterSet AL32UTF8                                                    \
+>      -sysPassword SysPassword1                                                 \
+>      -systemPassword SysPassword1                                              \
+>      -createAsContainerDatabase true                                           \
+>      -numberOfPDBs 1                                                           \
+>      -pdbName ${PDB_NAME}                                                      \
+>      -pdbAdminPassword PdbPassword1                                            \
+>      -databaseType MULTIPURPOSE                                                \
+>      -memoryMgmtType auto_sga                                                  \
+>      -totalMemory 2000                                                         \
+>      -storageType FS                                                           \
+>      -datafileDestination "${DATA_DIR}"                                        \
+>      -redoLogFileSize 50                                                       \
+>      -emConfiguration NONE                                                     \
+>      -ignorePreReqs
+Prepare for db operation
+8% complete
+Copying database files
+31% complete
+Creating and starting Oracle instance
+32% complete
+36% complete
+40% complete
+43% complete
+ 46% complete
+Completing Database Creation
+51% complete
+53% complete
+54% complete
+Creating Pluggable Databases
+58% complete
+77% complete
+Executing Post Configuration Actions
+100% complete
+Database creation complete. For details check the logfiles at:
+ /u01/app/oracle/cfgtoollogs/dbca/cdb1.
+Database Information:
+Global Database Name:cdb1
+System Identifier(SID):cdb1
+Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/cdb1/cdb1.log" for further details.
+[oracle@ol8-21c ~]$  
+```
 
 
 
+
+
+
+### Auto start in Linux 8
+
+Ref 
+[Linux 7 enable Autostarting of Oracle Database 19c Tips](http://www.bigdatalyn.com/2019/08/20/Oracle_Enable_AutoStart_Tips/)
+
+Step tips:
+
+```
+[root@ol8-21c ~]# vi /etc/init.d/dbora
+[root@ol8-21c ~]# cat /etc/init.d/dbora
+
+[root@ol8-21c ~]# chmod 750 /etc/init.d/dbora
+[root@ol8-21c ~]# systemctl enable dbora
+dbora.service is not a native service, redirecting to systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable dbora
+[root@ol8-21c ~]# /sbin/chkconfig dbora on
+[root@ol8-21c ~]# cat /etc/init.d/dbora
+#! /bin/sh -x
+#
+# chkconfig: 2345 80 05
+# description: start and stop Oracle Database Enterprise Edition on Oracle Linux 5 and 6
+#
+
+# In /etc/oratab, change the autostart field from N to Y for any
+# databases that you want autostarted.
+#
+# Create this file as /etc/init.d/dbora and execute:
+#  chmod 750 /etc/init.d/dbora
+#  chkconfig --add dbora
+#  chkconfig dbora on
+
+# Note: Change the value of ORACLE_HOME to specify the correct Oracle home
+# directory for your installation.
+# ORACLE_HOME=/u01/app/oracle/product/11.1.0/db_1
+# ORACLE_HOME=/u01/app/oracle/product/19.0.0/dbhome_1
+ORACLE_HOME=/u01/app/oracle/product/21.0.0/dbhome_1
+
+#
+# Note: Change the value of ORACLE to the login name of the oracle owner
+ORACLE=oracle
+
+PATH=${PATH}:$ORACLE_HOME/bin
+HOST=`hostname`
+PLATFORM=`uname`
+export ORACLE_HOME PATH
+
+case $1 in
+'status')
+        echo -n $"Oracle Process: "
+        su $ORACLE -c "ps -ef | grep pmon | grep -v grep; ps -ef | grep -i listener | grep -v grep;" &
+        ;;
+'start')
+        echo -n $"Starting Oracle: "
+        su $ORACLE -c "$ORACLE_HOME/bin/dbstart $ORACLE_HOME" &
+        ;;
+'stop')
+        echo -n $"Shutting down Oracle: "
+        su $ORACLE -c "$ORACLE_HOME/bin/dbshut $ORACLE_HOME" &
+        ;;
+'restart')
+        echo -n $"Shutting down Oracle: "
+        su $ORACLE -c "$ORACLE_HOME/bin/dbshut $ORACLE_HOME" &
+        sleep 5
+        echo -n $"Starting Oracle: "
+        su $ORACLE -c "$ORACLE_HOME/bin/dbstart $ORACLE_HOME" &
+        ;;
+*)
+        echo "usage: $0 {start|stop|restart}"
+        exit
+        ;;
+esac
+
+exit
+[root@ol8-21c ~]# 
+[root@ol8-21c ~]# vi /etc/oratab
+[root@ol8-21c ~]# cat /etc/oratab
+
+# This file is used by ORACLE utilities.  It is created by root.sh
+# and updated by either Database Configuration Assistant while creating
+# a database or ASM Configuration Assistant while creating ASM instance.
+
+# A colon, ':', is used as the field terminator.  A new line terminates
+# the entry.  Lines beginning with a pound sign, '#', are comments.
+#
+# Entries are of the form:
+#   $ORACLE_SID:$ORACLE_HOME:<N|Y>:
+#
+# The first and second fields are the system identifier and home
+# directory of the database respectively.  The third field indicates
+# to the dbstart utility that the database should , "Y", or should not,
+# "N", be brought up at system boot time.
+#
+# Multiple entries with the same $ORACLE_SID are not allowed.
+#
+#
+# cdb1:/u01/app/oracle/product/21.0.0/dbhome_1:N
+cdb1:/u01/app/oracle/product/21.0.0/dbhome_1:Y
+[root@ol8-21c ~]# 
+```
