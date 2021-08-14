@@ -17,7 +17,7 @@ Oracle 19c 21c parameter different Tips
 ![parameters]({{ "/files/Oracle/21c/19c_21c_parameter_diff.png"}})
 
 <p>parameters<br>
-<iframe id="parameters" src="/files/Oracle/21c/19c_21c_parameter_diff.html" width="800" height="400"></iframe></p>
+<iframe id="parameters" src="/files/Oracle/21c/19c_21c_parameter_diff.html" width="800" height="200"></iframe></p>
 <p>&nbsp;</p>
 
 
