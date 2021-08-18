@@ -1,0 +1,342 @@
+SYS@pdb1> !ora sql_profile
+
+NAME                           CREATED              STATUS   FOR DESCRIPTION                              SQL_TEXT
+------------------------------ -------------------- -------- --- ---------------------------------------- --------------------------------------------------
+coe_714t68c431a8j_3376927295   2021-08-18 12:14:32  ENABLED  YES coe 714t68c431a8j 3376927295 86014523679 select /*+ index(t1 idx_t1_object_id) */ owner,obj
+                                                                 5356618 1519726565413271702
+
+
+ora sql_profile sql_id_1 sql_id_2 phv
+
+SYS@pdb1> !ora drop profile coe_714t68c431a8j_3376927295
+
+PL/SQL procedure successfully completed.
+
+
+SYS@pdb1> !ora sql_profile
+
+
+ora sql_profile sql_id_1 sql_id_2 phv
+
+SYS@pdb1> 
+
+
+
+sql text:
+select /*+ index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1 where object_id=736;
+714t68c431a8j
+Plan hash value: 3376927295
+Plan: INDEX RANGE SCAN
+
+
+sql text:
+select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1 where object_id=736;
+sql_id: 5x95anwjnn659
+Plan hash value: 3617692013
+Plan: TABLE ACCESS FULL
+
+
+select sql_handle,plan_name,origin,enabled,accepted,sql_text from dba_sql_plan_baselines where sql_text like '%owner,object_name,object_id from t1 where object_id=736';
+
+
+var temp number;
+exec :temp := dbms_spm.load_plans_from_cursor_cache(sql_id=>'5x95anwjnn659',plan_hash_value=>3617692013);
+
+
+
+
+--查看此时的SQL plan baseline，由于没有开启自动捕获，此时查到的为空。
+HONG@pdb1> select sql_handle,plan_name,origin,enabled,accepted,sql_text from dba_sql_plan_baselines where sql_text like '%owner,object_name,object_id from t1 where object_id=736';
+
+no rows selected
+
+HONG@pdb1> 
+
+--手动生成SQL plan baseline，这里的SQL_id是原SQL产生执行计划的SQL_id,plan_hash_value是原SQL产生执行计划的plan_hash_value，即以上执行计划的内容。
+
+HONG@pdb1> var temp number;
+HONG@pdb1> exec :temp := dbms_spm.load_plans_from_cursor_cache(sql_id=>'5x95anwjnn659',plan_hash_value=>3617692013);
+
+PL/SQL procedure successfully completed.
+
+HONG@pdb1> 
+
+--再次查看SQL plan baseline，发现已经手动产生了baseline，origin=manual-load，此时的SQL plan baseline是full table scan 。
+HONG@pdb1> select sql_handle,plan_name,origin,enabled,accepted,sql_text from dba_sql_plan_baselines where sql_text like '%owner,object_name,object_id from t1 where object_id=736';
+
+SQL_HANDLE                     PLAN_NAME                                                                                                                        ORIGIN                        ENA ACC
+------------------------------ -------------------------------------------------------------------------------------------------------------------------------- ----------------------------- --- ---
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_bd65d03b62fa2838           SQL_PLAN_butfh7djgna1sdbd90e8e                                                                                                   MANUAL-LOAD-FROM-CURSOR-CACHE YES YES
+select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1
+
+HONG@pdb1> 
+
+
+--对原SQL进行hint调优，记录优化后的SQL_id，和plan_hash_value。
+
+HONG@pdb1> select /*+ index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1 where object_id=736;
+
+OWNER OBJECT_NAME  OBJECT_ID
+----- ----------- ----------
+SYS   I_OID2             736
+
+HONG@pdb1> @scripts/xp
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID  714t68c431a8j, child number 1
+-------------------------------------
+select /*+ index(t1 idx_t1_object_id) */ owner,object_name,object_id
+from t1 where object_id=736
+
+Plan hash value: 3376927295
+
+------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                           | Name             | Starts | E-Rows | Cost (%CPU)| E-Time   | A-Rows |   A-Time   | Buffers |
+------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                    |                  |      1 |        |     3 (100)|          |      1 |00:00:00.01 |       4 |
+|   1 |  TABLE ACCESS BY INDEX ROWID BATCHED| T1               |      1 |      1 |     3   (0)| 00:00:01 |      1 |00:00:00.01 |       4 |
+|*  2 |   INDEX RANGE SCAN                  | IDX_T1_OBJECT_ID |      1 |      1 |     2   (0)| 00:00:01 |      1 |00:00:00.01 |       3 |
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1 / T1@SEL$1
+   2 - SEL$1 / T1@SEL$1
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('19.1.0')
+      DB_VERSION('19.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+      INDEX_RS_ASC(@"SEL$1" "T1"@"SEL$1" "IDX_T1_OBJECT_ID")
+      BATCH_TABLE_ACCESS_BY_ROWID(@"SEL$1" "T1"@"SEL$1")
+      END_OUTLINE_DATA
+  */
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("OBJECT_ID"=736)
+
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 1
+---------------------------------------------------------------------------
+
+   1 -  SEL$1 / T1@SEL$1
+           -  index(t1 idx_t1_object_id)
+
+Query Block Registry:
+---------------------
+
+  <q o="2" f="y"><n><![CDATA[SEL$1]]></n><f><h><t><![CDATA[T1]]></t><s><![CDATA[SEL$1]]></s></h></f></q>
+
+
+
+54 rows selected.
+
+HONG@pdb1> 
+
+
+HONG@pdb1> select sql_handle,plan_name,origin,enabled,accepted,sql_text from dba_sql_plan_baselines where sql_text like '%owner,object_name,object_id from t1 where object_id=736';
+
+SQL_HANDLE                     PLAN_NAME                                                                                                                        ORIGIN                        ENA ACC
+------------------------------ -------------------------------------------------------------------------------------------------------------------------------- ----------------------------- --- ---
+SQL_TEXT
+--------------------------------------------------------------------------------
+SQL_bd65d03b62fa2838           SQL_PLAN_butfh7djgna1sdbd90e8e                                                                                                   MANUAL-LOAD-FROM-CURSOR-CACHE YES YES
+select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1
+
+
+HONG@pdb1> 
+
+--修改原SQL的SQL plan baseline，这里sql_id是优化后SQL的sql_id，plan_hash_value是优化后SQL的plan_hash_value，sql_handle是原SQL产生SQL plan baseline的sql_handle。
+
+exec :temp := dbms_spm.load_plans_from_cursor_cache(sql_id=>'714t68c431a8j',plan_hash_value=>3376927295,sql_handle=>'SQL_bd65d03b62fa2838');
+
+HONG@pdb1> exec :temp := dbms_spm.load_plans_from_cursor_cache(sql_id=>'714t68c431a8j',plan_hash_value=>3376927295,sql_handle=>'SQL_bd65d03b62fa2838');
+
+PL/SQL procedure successfully completed.
+
+HONG@pdb1> 
+
+--查看此时的SQL plan baseline，发现已经对优化后的SQL产生了新的SQL plan baseline，注意手动产生的SQL plan baseline ENABLED和ACCEPTED状态都是YES。
+HONG@pdb1> 
+COL "SQL_HANDLE"                     FOR A20
+COL "PLAN_NAME"                      FOR A30
+COL "ORIGIN"                         FOR A29
+COL "ENABLED"                        FOR A7
+COL "ACCEPTED"                       FOR A8
+COL "SQL_TEXT"                       FOR A99
+HONG@pdb1> select sql_handle,plan_name,origin,enabled,accepted,sql_text from dba_sql_plan_baselines where sql_text like '%owner,object_name,object_id from t1 where object_id=736';
+
+SQL_HANDLE           PLAN_NAME                      ORIGIN                        ENABLED ACCEPTED SQL_TEXT
+-------------------- ------------------------------ ----------------------------- ------- -------- ---------------------------------------------------------------------------------------------------
+SQL_bd65d03b62fa2838 SQL_PLAN_butfh7djgna1sb299e8c2 MANUAL-LOAD-FROM-CURSOR-CACHE YES     YES      select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1
+SQL_bd65d03b62fa2838 SQL_PLAN_butfh7djgna1sdbd90e8e MANUAL-LOAD-FROM-CURSOR-CACHE YES     YES      select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1
+
+HONG@pdb1> 
+
+--删除原SQL的SQL plan baseline，sql_handle是原SQL的sql_handle，plan_name是原SQL的plan_name。
+
+exec :temp := dbms_spm.drop_sql_plan_baseline(sql_handle=>'SQL_bd65d03b62fa2838',plan_name=>'SQL_PLAN_butfh7djgna1sdbd90e8e');
+
+HONG@pdb1> exec :temp := dbms_spm.drop_sql_plan_baseline(sql_handle=>'SQL_bd65d03b62fa2838',plan_name=>'SQL_PLAN_butfh7djgna1sdbd90e8e');
+
+PL/SQL procedure successfully completed.
+
+HONG@pdb1> 
+
+--查看修改后的SQL plan baseline，已经是index range scan类型的执行计划了。
+
+select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1 where object_id=736;
+
+HONG@pdb1> select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id from t1 where object_id=736;
+
+OWNER OBJECT_NAME  OBJECT_ID
+----- ----------- ----------
+SYS   I_OID2             736
+
+HONG@pdb1> @scripts/xp
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL_ID  5x95anwjnn659, child number 3
+-------------------------------------
+select /*+ no_index(t1 idx_t1_object_id) */ owner,object_name,object_id
+from t1 where object_id=736
+
+Plan hash value: 3376927295
+
+------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                           | Name             | Starts | E-Rows | Cost (%CPU)| E-Time   | A-Rows |   A-Time   | Buffers |
+------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                    |                  |      1 |        |     3 (100)|          |      1 |00:00:00.01 |       4 |
+|   1 |  TABLE ACCESS BY INDEX ROWID BATCHED| T1               |      1 |      1 |     3   (0)| 00:00:01 |      1 |00:00:00.01 |       4 |
+|*  2 |   INDEX RANGE SCAN                  | IDX_T1_OBJECT_ID |      1 |      1 |     2   (0)| 00:00:01 |      1 |00:00:00.01 |       3 |
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+
+   1 - SEL$1 / T1@SEL$1
+   2 - SEL$1 / T1@SEL$1
+
+Outline Data
+-------------
+
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('19.1.0')
+      DB_VERSION('19.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+      INDEX_RS_ASC(@"SEL$1" "T1"@"SEL$1" "IDX_T1_OBJECT_ID")
+      BATCH_TABLE_ACCESS_BY_ROWID(@"SEL$1" "T1"@"SEL$1")
+      END_OUTLINE_DATA
+  */
+
+Predicate Information (identified by operation id):
+---------------------------------------------------
+
+   2 - access("OBJECT_ID"=736)
+
+Hint Report (identified by operation id / Query Block Name / Object Alias):
+Total hints for statement: 7 (U - Unused (1))
+---------------------------------------------------------------------------
+
+   0 -  STATEMENT
+           -  ALL_ROWS
+           -  DB_VERSION('19.1.0')
+           -  IGNORE_OPTIM_EMBEDDED_HINTS
+           -  OPTIMIZER_FEATURES_ENABLE('19.1.0')
+
+   1 -  SEL$1 / T1@SEL$1
+         U -  no_index(t1 idx_t1_object_id) / rejected by IGNORE_OPTIM_EMBEDDED_HINTS
+           -  BATCH_TABLE_ACCESS_BY_ROWID(@"SEL$1" "T1"@"SEL$1")
+           -  INDEX_RS_ASC(@"SEL$1" "T1"@"SEL$1" "IDX_T1_OBJECT_ID")
+
+Note
+-----
+   - SQL plan baseline SQL_PLAN_butfh7djgna1sb299e8c2 used for this statement
+
+Query Block Registry:
+---------------------
+
+  <q o="2" f="y"><n><![CDATA[SEL$1]]></n><f><h><t><![CDATA[T1]]></t><s><![CDATA[SEL$1]]></s></h></f></q>
+
+
+
+66 rows selected.
+
+HONG@pdb1> 
+
+
+
+固定执行计划3.1 之 dbms_spm
+说明由于生产环境执行的sql变化较快，版本发布比较频繁，造成sql的执行计划不是很稳定，经常会有一些性能很差的sql出现
+对于这些sql，我们可以使用sql_plan_baseline对执行计划进行绑定，从而使执行计划固定下来
+ 
+注意：前提是sql最好使用绑定变量，就算有的没有绑定变量，确定字段的值不会改变才行，因为是针对sql_id进行的绑定，
+如果sql文本改变，绑定也就无意义了  
+ 
+解决办法： 
+a. 通过  alter system set cursor_sharing=FORCE;   让系统自动绑定变量
+(在11.2.0.3版本中测试，经绑定后v$SQL_PLAN执行计划变成了新的执行计划，但是通过set autot on 查看执行计划未改变)
+b.文本方式，可能通过 sqlprofile 的方式，如自动方式就可以用 force_match=>true
+
+基线的一些特点,简单归纳如下几个
+1.通过OPTIMIZER_USE_SQL_PLAN_BASELINE来控制Oracle是否使用基线，默认值为TRUE，即会自动使用基线。
+2.11g中默认是不会自动创建基线
+3.与OUTLINE和SQL Profile不同，基线中不存在分类的概念
+4.与OUTLINE和SQL Profile不同，每个SQL语句可以有多个基线。Oracle根据制定的规则来判断具体是否哪个基线
+5.基线针对RAC中所有的实例都生效
+6.基线有两个表示，一个为sql_handle，可以理解为表示语句文本的唯一标识，一个为sql_plan_name可以理解为执行计划的唯一标识
+7.不能像sql profile一样通过force_matching属性将字面值不一样的SQL语句使用一个基线应用多个语句。
+ 
+三、创建基线的几种方式
+ 
+1、自动捕获基线，通过将optimizer_cature_sql_plan_baselines设置为true，优化器为重复执行两次以上的SQL语句生成并保存基线（可以系统级或会话级修改）
+2、从SQL调优集合中加载，通过使用包dbms_spm.load_plans_from_sqlset来从SQL调优集合中加载基线
+
+
+http://blog.itpub.net/26015009/viewspace-2636130/
+
+启用自动捕获SQL plan baseline操作如下:
+1.以有相关权限的用户用SQL*Plus登录数据库
+
+为了对重复的SQL语句启用自动生成SQL Plan Baseline执行下面的语句
+
+SQL> alter system set optimizer_capture_sql_plan_baselines=true scope=both sid='*';
+System altered.
+SQL> show parameter optimizer_capture_sql_plan_baselines
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+optimizer_capture_sql_plan_baselines boolean     TRUE
+SQL>
+
+如果optimizer_capture_sql_plan_baselines设置为true，那么你可以使用dbms_spm.configure过程来对重复执行的SQL语句创建一个自动捕获过滤条件。
+自动过滤可以只捕获想要的SQL语句并排除非关键语句，这样可以节省SYSAUX表空间的使用。可以对不同的类型配置多个参数，也可以在单独的语句中对相同的参数指定多个参数值，数据库会进行组合。
+这种设置是附加型的：一个参数设置不会覆盖之前的设置。例如，下面的过滤设置用来捕获解析方案SYS或SYSTEM中的SQL语句:
+
+exec dbms_spm.configure('auto_capture_parsing_schema_name','sys',true);
+exec dbms_spm.configure('auto_capture_parsing_schema_name','system',true);
+
+select parameter_name,parameter_value from dba_sql_management_config;
+
+https://docs.oracle.com/en/database/oracle/oracle-database/19/arpls/DBMS_SPM.html#GUID-D855D4B9-D071-4BB2-A554-38479867DE76
+
+Parsing schema to include (=) or exclude (<>) for SQL plan management auto capture, depending on whether allow is TRUE or FALSE. A null value removes the filter for parameter_name entirely.
+The database only uses this filter when OPTIMIZER_CAPTURE_SQL_PLAN_BASELINES is TRUE.
+
+SQL Plan Management（SPM）in oracle 11g & 12c
+http://liupzmin.com/2017/05/04/oracle/perf/SPM-in%20oracle11g-&-12c/
