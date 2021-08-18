@@ -13,7 +13,7 @@ Oracle 19c TDE Tips
 TDE(Transparent Data Encryption) as the name suggest transparently encrypts data at rest in Oracle Databases. It stops unauthorized attempts from the operating system to access database data stored in files, without impacting how applications access the data using SQL. So we dont have any impact to Business. If the malicious user tries to open file using a HEX editor (like UltraEdit),then only non-printable characters will be present. TDE can encrypt entire application tablespaces or specific sensitive columns.
 
 - Oracle TDE is available by default in Oracle RDBMS Enteprise Edition (not in SE or SE2 Edition), but you have to purchase an Oracle Advanced Security license to use it.
-- - TDE is part of the Oracle Advanced Security, which also includes Data Redaction.
+- TDE is part of the Oracle Advanced Security, which also includes Data Redaction.
 
 
 
