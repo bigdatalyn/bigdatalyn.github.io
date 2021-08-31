@@ -1,270 +1,218 @@
 ---
 layout: post
-title: "Oracle 19c TDE Tips"
+title: "Oracle 21c RAC Linux 8 Install Tips"
 category: Oracle
-tags: Oracle 19c TDE Tips
+tags: Oracle 21c RAC Tips
 ---
 
 * content
 {:toc}
 
-Oracle 19c TDE Tips
+Oracle 21c RAC Linux 8 Install Tips
 
-TDE(Transparent Data Encryption) as the name suggest transparently encrypts data at rest in Oracle Databases. It stops unauthorized attempts from the operating system to access database data stored in files, without impacting how applications access the data using SQL. So we dont have any impact to Business. If the malicious user tries to open file using a HEX editor (like UltraEdit),then only non-printable characters will be present. TDE can encrypt entire application tablespaces or specific sensitive columns.
+Tim had prepared the install tips regarding the installtion of 21c RAC.
 
-- Oracle TDE is available by default in Oracle RDBMS Enteprise Edition (not in SE or SE2 Edition), but you have to purchase an Oracle Advanced Security license to use it.
-- TDE is part of the Oracle Advanced Security, which also includes Data Redaction.
+Very convenient and efficient!
 
+I changed VM memory size 800MB/5GB/5GB and change the DB's size to 800MB for my mac's limited memeory.
 
-
-
-
+![mac_memory]({{ "/files/Oracle/21c/rac_mac_memory.png"}})
 
 
-### Test Steps
-
-``` sql
--- WALLET_ROOT is a static parameter used to specify the base location of wallet.
-SYS@cdb1> show pdbs
-
-    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
----------- ------------------------------ ---------- ----------
-         2 PDB$SEED                       READ ONLY  NO
-         3 PDB1                           READ WRITE NO
-SYS@cdb1> show parameter wallet_
-
-NAME                                 TYPE        VALUE
------------------------------------- ----------- ------------------------------
-wallet_root                          string
-SYS@cdb1> alter system set wallet_root='$ORACLE_HOME/admin/cdb1/wallet' scope=spfile;
-
-System altered.
-
-SYS@cdb1> shu immediate;
-Database closed.
-Database dismounted.
-ORACLE instance shut down.
-SYS@cdb1> startup
-ORACLE instance started.
-
-Total System Global Area 1577055352 bytes
-Fixed Size                  9135224 bytes
-Variable Size             704643072 bytes
-Database Buffers          855638016 bytes
-Redo Buffers                7639040 bytes
-Database mounted.
-Database opened.
-SYS@cdb1> show parameter wallet_
-
-NAME                                 TYPE        VALUE
------------------------------------- ----------- ------------------------------
-wallet_root                          string      /u01/app/oracle/product/19.0.0
-                                                 /dbhome_1/admin/cdb1/wallet
-SYS@cdb1> 
-
--- tde_configuration is a dynamic parameter, no need to restart the database.
-SYS@cdb1> show parameter tde_confi
-
-NAME                                 TYPE        VALUE
------------------------------------- ----------- ------------------------------
-tde_configuration                    string
-SYS@cdb1> alter system set tde_configuration='KEYSTORE_CONFIGURATION=FILE' scope=both;
-
-System altered.
-
-SYS@cdb1> show parameter tde_confi
-
-NAME                                 TYPE        VALUE
------------------------------------- ----------- ------------------------------
-tde_configuration                    string      KEYSTORE_CONFIGURATION=FILE
-SYS@cdb1> 
+![database21c]({{ "/files/Oracle/21c/RAC_21c.png"}})
 
 
--- Create Password-Protected Keystore
-SYS@cdb1> administer key management create keystore identified by oracle;
-
-keystore altered.
-
-SYS@cdb1> 
-
--- Create Auto-Login Keystore
-SYS@cdb1> administer key management create auto_login keystore from keystore identified by oracle;
-
-keystore altered.
-
-SYS@cdb1> 
-
--- Check Keystore Files
-[oracle@ol8-19c ~]$ ls -tlr /u01/app/oracle/product/19.0.0/dbhome_1/admin/cdb1/wallet
-total 0
-drwxr-x--- 2 oracle oinstall 44 Aug 18 09:46 tde
-[oracle@ol8-19c ~]$ ls -tlr /u01/app/oracle/product/19.0.0/dbhome_1/admin/cdb1/wallet/tde
-total 8
--rw------- 1 oracle oinstall 2555 Aug 18 09:45 ewallet.p12
--rw------- 1 oracle oinstall 2600 Aug 18 09:46 cwallet.sso
-[oracle@ol8-19c ~]$ 
-
--- Open Keystore
--- To open password-protected keystore, we should use FORCE KEYSTORE clause, no matter which container you're in.
-SYS@cdb1> administer key management set keystore open force keystore identified by oracle container=all;
-
-keystore altered.
-
-SYS@cdb1> 
--- there's nothing in the keystore. So next, let's set a TDE master key in the keystore.
-SYS@cdb1> select con_id, wallet_type, status from v$encryption_wallet;
-
-    CON_ID WALLET_TYPE          STATUS
----------- -------------------- ------------------------------
-         1 PASSWORD             OPEN_NO_MASTER_KEY
-         2 PASSWORD             OPEN_NO_MASTER_KEY
-         3 PASSWORD             OPEN_NO_MASTER_KEY
-
-SYS@cdb1> 
-
--- use the master key in all container and additionally backup the old keystore.
-SYS@cdb1> administer key management set key force keystore identified by oracle with backup container=all;
-
-keystore altered.
-
-SYS@cdb1> 
-
--- There is backup for the old password-protected keystore.--> ewallet_2021081801495192.p12
-[oracle@ol8-19c ~]$ ls -tlr /u01/app/oracle/product/19.0.0/dbhome_1/admin/cdb1/wallet/tde
-total 20
--rw------- 1 oracle oinstall 2555 Aug 18 09:49 ewallet_2021081801495192.p12
--rw------- 1 oracle oinstall 5467 Aug 18 09:49 ewallet.p12
--rw------- 1 oracle oinstall 5512 Aug 18 09:49 cwallet.sso
-[oracle@ol8-19c ~]$ 
 
 
-SYS@cdb1> select con_id, wallet_type, status from v$encryption_wallet;
-
-    CON_ID WALLET_TYPE          STATUS
----------- -------------------- ------------------------------
-         1 PASSWORD             OPEN
-         2 PASSWORD             OPEN
-         3 PASSWORD             OPEN
-
-SYS@cdb1> 
-
--- To start using the auto-login keystore, we should close the password-protected keystore.
-
-SYS@cdb1> select con_id, wallet_type, status from v$encryption_wallet;
-
-    CON_ID WALLET_TYPE          STATUS
----------- -------------------- ------------------------------
-         1 PASSWORD             OPEN
-         2 PASSWORD             OPEN
-         3 PASSWORD             OPEN
-
-SYS@cdb1> administer key management set keystore close identified by oracle container=all;
-
-keystore altered.
-
-SYS@cdb1> select con_id, wallet_type, status from v$encryption_wallet;
-
-    CON_ID WALLET_TYPE          STATUS
----------- -------------------- ------------------------------
-         1 AUTOLOGIN            OPEN
-         2 AUTOLOGIN            OPEN
-         3 AUTOLOGIN            OPEN
-
-SYS@cdb1> 
-
-SYS@cdb1>  SELECT * FROM v$encryption_wallet;
-
-WRL_TYPE WRL_PARAMETER                                                  STATUS WALLET_TYPE          WALLET_OR KEYSTORE FULLY_BAC  CON_ID
--------- -------------------------------------------------------------- ------ -------------------- --------- -------- --------- -------
-FILE     /u01/app/oracle/product/19.0.0/dbhome_1/admin/cdb1/wallet/tde/ OPEN   AUTOLOGIN            SINGLE    NONE     NO              1
-FILE                                                                    OPEN   AUTOLOGIN            SINGLE    UNITED   NO              2
-FILE                                                                    OPEN   AUTOLOGIN            SINGLE    UNITED   NO              3
-
-SYS@cdb1>
-
--- if RAC, need create wallet/tde folder and copy cwallet.sso/ewallet.p12 file to this folder.
-
--- TEST create tde tablespace
-
-[oracle@ol8-19c ~]$ sqlplus sys/SysPassword1@pdb1 as sysdba
-
-SQL*Plus: Release 19.0.0.0.0 - Production on Wed Aug 18 09:56:14 2021
-Version 19.10.0.0.0
-
-Copyright (c) 1982, 2020, Oracle.  All rights reserved.
 
 
-Connected to:
-Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
-Version 19.10.0.0.0
 
-SYS@pdb1> show pdbs
 
-    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
----------- ------------------------------ ---------- ----------
-         3 PDB1                           READ WRITE NO
-SYS@pdb1> select name from v$datafile;
+### Oracle 21c RAC
 
-NAME
+
+```
+SQL> set linesize 80
+SQL> select banner_full from v$version;
+
+BANNER_FULL
 --------------------------------------------------------------------------------
-/u02/oradata/CDB1/pdb1/system01.dbf
-/u02/oradata/CDB1/pdb1/sysaux01.dbf
-/u02/oradata/CDB1/pdb1/undotbs01.dbf
-/u02/oradata/CDB1/pdb1/users01.dbf
-/u02/oradata/CDB1/pdb1/sample01.dbf
-/u02/oradata/CDB1/pdb1/test01.dbf
+Oracle Database 21c Enterprise Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
 
-6 rows selected.
 
-SYS@pdb1> create tablespace no_encry_tbs datafile '/u02/oradata/CDB1/pdb1/no_encry_tbs01.dbf' size 10m autoextend on;
+SQL> set lines 500 pages 150
+SQL> col HOST_NAME for a35
+SQL> SELECT INSTANCE_NAME, TO_CHAR(STARTUP_TIME,'YYYY/MM/DD HH24:MI:SS') "STARTUP", DATABASE_ROLE, OPEN_MODE from GV$INSTANCE, V$DATABASE order by 2;
 
-Tablespace created.
+INSTANCE_NAME    STARTUP             DATABASE_ROLE    OPEN_MODE
+---------------- ------------------- ---------------- --------------------
+cdbrac2          2021/08/31 02:30:13 PRIMARY          READ WRITE
+cdbrac1          2021/08/31 02:31:15 PRIMARY          READ WRITE
 
-SYS@pdb1> 
+SQL> 
+```
 
-SYS@pdb1> create tablespace encry_tbs datafile '/u02/oradata/CDB1/pdb1/encry_tbs01.dbf' size 10m autoextend on encryption encrypt;
 
-Tablespace created.
-
-SYS@pdb1> select name from v$datafile;
-
-NAME
+```
+[oracle@ol8-21-rac1 ~]$ source scripts/setEnv.sh 
+[oracle@ol8-21-rac1 ~]$ source scripts/db_env 
+[oracle@ol8-21-rac1 ~]$ srvctl status database -d cdbrac
+Instance cdbrac1 is running on node ol8-21-rac1
+Instance cdbrac2 is running on node ol8-21-rac2
+[oracle@ol8-21-rac1 ~]$ source scripts/grid_env 
+[oracle@ol8-21-rac1 ~]$ crsctl status res -t
 --------------------------------------------------------------------------------
-/u02/oradata/CDB1/pdb1/system01.dbf
-/u02/oradata/CDB1/pdb1/sysaux01.dbf
-/u02/oradata/CDB1/pdb1/undotbs01.dbf
-/u02/oradata/CDB1/pdb1/users01.dbf
-/u02/oradata/CDB1/pdb1/sample01.dbf
-/u02/oradata/CDB1/pdb1/test01.dbf
-/u02/oradata/CDB1/pdb1/no_encry_tbs01.dbf
-/u02/oradata/CDB1/pdb1/encry_tbs01.dbf
+Name           Target  State        Server                   State details       
+--------------------------------------------------------------------------------
+Local Resources
+--------------------------------------------------------------------------------
+ora.LISTENER.lsnr
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.chad
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.net1.network
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.ons
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+--------------------------------------------------------------------------------
+Cluster Resources
+--------------------------------------------------------------------------------
+ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.CRS.dg(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.DATA.dg(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.LISTENER_SCAN1.lsnr
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.LISTENER_SCAN2.lsnr
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.LISTENER_SCAN3.lsnr
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+ora.RECO.dg(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.asm(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              Started,STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              Started,STABLE
+ora.asmnet1.asmnetwork(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.cdbrac.db
+      1        ONLINE  ONLINE       ol8-21-rac2              Open,HOME=/u01/app/o
+                                                             racle/product/21.0.0
+                                                             /dbhome_1,STABLE
+      2        ONLINE  ONLINE       ol8-21-rac1              Open,HOME=/u01/app/o
+                                                             racle/product/21.0.0
+                                                             /dbhome_1,STABLE
+ora.cdbrac.pdb1.pdb
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        OFFLINE OFFLINE                               STABLE
+ora.cdp1.cdp
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.cdp2.cdp
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.cdp3.cdp
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+ora.cvu
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.ol8-21-rac1.vip
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+ora.ol8-21-rac2.vip
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.qosmserver
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.scan1.vip
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.scan2.vip
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.scan3.vip
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+--------------------------------------------------------------------------------
+[oracle@ol8-21-rac1 ~]$ 
+```
 
-8 rows selected.
 
-SYS@pdb1> 
+### vagrant up start log
 
-SYS@cdb1> select TABLESPACE_NAME, ENCRYPTED from dba_tablespaces;
-
-TABLESPACE_NAME                ENC
------------------------------- ---
-SYSTEM                         NO
-SYSAUX                         NO
-UNDOTBS1                       NO
-TEMP                           NO
-USERS                          NO
-SAMPLE                         NO
-TEST                           NO
-NO_ENCRY_TBS                   NO
-ENCRY_TBS                      YES
-
-9 rows selected.
-
-SYS@cdb1> 
-
+```
+lin@lin-mac dns % cd ../node2
+lin@lin-mac node2 % vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Checking if box 'oraclebase/oracle-8' version '2021.07.29' is up to date...
+==> default: Clearing any previously set forwarded ports...
+==> default: Fixed port collision for 22 => 2222. Now on port 2200.
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+    default: Adapter 2: hostonly
+    default: Adapter 3: intnet
+==> default: Forwarding ports...
+    default: 1521 (guest) => 1522 (host) (adapter 1)
+    default: 5500 (guest) => 5502 (host) (adapter 1)
+    default: 22 (guest) => 2200 (host) (adapter 1)
+==> default: Running 'pre-boot' VM customizations...
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2200
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+==> default: Configuring and enabling network interfaces...
+==> default: Mounting shared folders...
+    default: /vagrant => /Users/lin/oracle21c/vagrant/rac/ol8_21/node2
+    default: /vagrant_config => /Users/lin/oracle21c/vagrant/rac/ol8_21/config
+    default: /vagrant_scripts => /Users/lin/oracle21c/vagrant/rac/ol8_21/shared_scripts
+    default: /vagrant_software => /Users/lin/oracle21c/vagrant/rac/ol8_21/software
+==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+==> default: flag to force provisioning. Provisioners marked to run always will still run.
+lin@lin-mac node2 %
+lin@lin-mac node2 % cd ../node1
+lin@lin-mac node1 % vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Checking if box 'oraclebase/oracle-8' version '2021.07.29' is up to date...
+==> default: Clearing any previously set forwarded ports...
+==> default: Fixed port collision for 22 => 2222. Now on port 2201.
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+    default: Adapter 2: hostonly
+    default: Adapter 3: intnet
+==> default: Forwarding ports...
+    default: 1521 (guest) => 1521 (host) (adapter 1)
+    default: 5500 (guest) => 5500 (host) (adapter 1)
+    default: 22 (guest) => 2201 (host) (adapter 1)
+==> default: Running 'pre-boot' VM customizations...
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2201
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+==> default: Configuring and enabling network interfaces...
+==> default: Mounting shared folders...
+    default: /vagrant => /Users/lin/oracle21c/vagrant/rac/ol8_21/node1
+    default: /vagrant_config => /Users/lin/oracle21c/vagrant/rac/ol8_21/config
+    default: /vagrant_scripts => /Users/lin/oracle21c/vagrant/rac/ol8_21/shared_scripts
+    default: /vagrant_software => /Users/lin/oracle21c/vagrant/rac/ol8_21/software
+==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+==> default: flag to force provisioning. Provisioners marked to run always will still run.
+lin@lin-mac node1 %
 ```
 
 ### Ref
 
-[Configuring Transparent Data Encryption (TDE) with Oracle 12c](http://glennpaulley.ca/database/2015/07/configuring-transparent-data-encryption-tde-with-oracle-12c/)
+[Oracle Database 21c RAC On Oracle Linux 8 Using VirtualBox and Vagrant](https://oracle-base.com/articles/21c/oracle-db-21c-rac-installation-on-oracle-linux-8-using-virtualbox)
+
 
 Have a good work&life! 2021/08 via LinHong
