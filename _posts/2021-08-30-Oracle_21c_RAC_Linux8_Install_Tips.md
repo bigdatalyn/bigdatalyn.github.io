@@ -10,7 +10,7 @@ tags: Oracle 21c RAC Tips
 
 Oracle 21c RAC Linux 8 Install Tips
 
-Tim had prepared the install tips regarding the installtion of 21c RAC.
+[Tim](https://oracle-base.com/) had prepared the detail install tips regarding oracle 21c RAC.
 
 Very convenient and efficient!
 
