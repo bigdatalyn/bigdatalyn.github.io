@@ -1,0 +1,45 @@
+
+
+
+create bigfile tablespace test_asm datafile '+DATAC1' size 100g autoextend on maxsize 1t;
+
+alter user c##sehub default tablespace test_asm;
+
+conn c##sehub/SysPassword1@pdb1
+
+create table testa parallel 8 nologging as select * from dba_objects;
+alter session enable parallel dml;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+insert /*+ parallel(8) */ into testa select * from testa;
+commit;
+
+alter session disable parallel dml;
+
+select segment_name,bytes/1024/1024/1024 from user_segments;
