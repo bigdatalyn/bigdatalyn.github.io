@@ -25,6 +25,125 @@ The latest Innovation release of the world's most popular database, Oracle Datab
 
 
 
+### Oracle 21c RAC
+
+
+![database21c]({{ "/files/Oracle/21c/RAC_21c.png"}})
+
+```
+SQL> set linesize 80
+SQL> select banner_full from v$version;
+
+BANNER_FULL
+--------------------------------------------------------------------------------
+Oracle Database 21c Enterprise Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+
+SQL> set lines 500 pages 150
+SQL> col HOST_NAME for a35
+SQL> SELECT INSTANCE_NAME, TO_CHAR(STARTUP_TIME,'YYYY/MM/DD HH24:MI:SS') "STARTUP", DATABASE_ROLE, OPEN_MODE from GV$INSTANCE, V$DATABASE order by 2;
+
+INSTANCE_NAME    STARTUP             DATABASE_ROLE    OPEN_MODE
+---------------- ------------------- ---------------- --------------------
+cdbrac2          2021/08/31 02:30:13 PRIMARY          READ WRITE
+cdbrac1          2021/08/31 02:31:15 PRIMARY          READ WRITE
+
+SQL> 
+```
+
+
+
+
+```
+[oracle@ol8-21-rac1 ~]$ source scripts/setEnv.sh 
+[oracle@ol8-21-rac1 ~]$ source scripts/db_env 
+[oracle@ol8-21-rac1 ~]$ srvctl status database -d cdbrac
+Instance cdbrac1 is running on node ol8-21-rac1
+Instance cdbrac2 is running on node ol8-21-rac2
+[oracle@ol8-21-rac1 ~]$ source scripts/grid_env 
+[oracle@ol8-21-rac1 ~]$ crsctl status res -t
+--------------------------------------------------------------------------------
+Name           Target  State        Server                   State details       
+--------------------------------------------------------------------------------
+Local Resources
+--------------------------------------------------------------------------------
+ora.LISTENER.lsnr
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.chad
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.net1.network
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.ons
+               ONLINE  ONLINE       ol8-21-rac1              STABLE
+               ONLINE  ONLINE       ol8-21-rac2              STABLE
+--------------------------------------------------------------------------------
+Cluster Resources
+--------------------------------------------------------------------------------
+ora.ASMNET1LSNR_ASM.lsnr(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.CRS.dg(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.DATA.dg(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.LISTENER_SCAN1.lsnr
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.LISTENER_SCAN2.lsnr
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.LISTENER_SCAN3.lsnr
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+ora.RECO.dg(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.asm(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              Started,STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              Started,STABLE
+ora.asmnet1.asmnetwork(ora.asmgroup)
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.cdbrac.db
+      1        ONLINE  ONLINE       ol8-21-rac2              Open,HOME=/u01/app/o
+                                                             racle/product/21.0.0
+                                                             /dbhome_1,STABLE
+      2        ONLINE  ONLINE       ol8-21-rac1              Open,HOME=/u01/app/o
+                                                             racle/product/21.0.0
+                                                             /dbhome_1,STABLE
+ora.cdbrac.pdb1.pdb
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+      2        OFFLINE OFFLINE                               STABLE
+ora.cdp1.cdp
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.cdp2.cdp
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.cdp3.cdp
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+ora.cvu
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.ol8-21-rac1.vip
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+ora.ol8-21-rac2.vip
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.qosmserver
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.scan1.vip
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.scan2.vip
+      1        ONLINE  ONLINE       ol8-21-rac2              STABLE
+ora.scan3.vip
+      1        ONLINE  ONLINE       ol8-21-rac1              STABLE
+--------------------------------------------------------------------------------
+[oracle@ol8-21-rac1 ~]$ 
+```
+
+
+
+
 
 ### Download
 
