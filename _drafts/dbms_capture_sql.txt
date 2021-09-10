@@ -1,0 +1,254 @@
+パーティション表を対象にした dbms_stats.gather_table_stats 実行中に発行される
+以下 2種類の再帰SQLについて、用途をご教示いただけますでしょうか。
+
+(1)
+/* SQL Analyze(0) */ select /*+ full(t) parallel(t,3) parallel_index(t,3) dbms_stats cursor_sharing_exact use_weak_name_resl dynamic_sampling(0) no_monitoring xmlindex_sel_idx_tbl no_substrb_pad */to_char(count("JK43_HE_KBN")),
+.....
+,count(rowidtochar(rowid)) from "U61USER01"."U61TRN_TSBPLV30DRR" t where TBL$OR$IDX$PART$NUM("U61USER01"."U61TRN_TSBPLV30DRR",0,4,0,"ROWID") = :objn /* NDV,.....
+
+　⇒パーティション・レベルの統計収集にかかわる再帰SQLである、との認識で相違ないでしょうか。
+
+(2)
+/* SQL Analyze(0) */ select /*+ full(t) parallel(t,3) parallel_index(t,3) dbms_stats cursor_sharing_exact use_weak_name_resl dynamic_sampling(0) no_monitoring xmlindex_sel_idx_tbl no_substrb_pad */to_char(count("JK43_HE_KBN")),
+.....
+,count(rowidtochar(rowid)) from "U61USER01"."U61TRN_TSBPLV30DRR" t /* NDV,.....
+
+　⇒グローバル・レベルの統計収集にかかわる再帰SQLである、との認識で相違ないでしょうか。
+
+▼弊社調査内容
+下記観点から、上記双方とも YES の回答になるものと推測しておりますが、
+上記SQLそのものに対して言及している事例や公開情報は確認できておりません。
+
+　・dbms_stats.gather_table_stats 実行時の SQLトレースから、
+　　/* SQL Analyze(0) */ のコメントを含む再帰SQLが発行されることを確認しています。
+
+　・'TBL$OR$IDX$PART$NUM' は、パーティション・プルーニングが動作する際の
+　　再帰SQLに表れることを確認しております。
+　　このため、(1)はパーティション・レベルの情報を収集していることが想像できますが、
+　　確証を得られるような情報は確認できませんでした。
+
+　　(2)は where句が無いため、グローバル・レベルの情報を select しているものと
+　　推測いたしますが、このSQLで統計情報を収集している、との情報は得られませんでした。
+
+
+
+処理①と②につきまして、ご認識の通り、パーテーション表の
+統計収集を行う時に発行された内部的な再帰SQLとなります。
+弊社の検証結果により、ご認識の通り、処理①はパーティション・
+レベルの統計収集にかかわる再帰SQLであり、処理②は
+グローバル・レベルの統計収集にかかわる再帰SQLであります。
+
+
+
+
+準備：
+create table TEST_PARTITION1(c11 number, c12 char(2000))
+partition by range (c11)
+(partition p1 values less than (1000),
+partition p2 values less than (3000),
+partition p3 values less than (3000000),
+partition p4 values less than (maxvalue));
+
+
+insert into TEST_PARTITION1 select rownum, 'a' from dual connect by rownum<200000;
+commit;
+
+
+1. 全情報収集：
+EXEC DBMS_STATS.GATHER_TABLE_STATS (ownname => 'SCOTT', tabname =>'TEST_PARTITION1')
+
+
+select TABLE_NAME,PARTITION_NAME,LAST_ANALYZED from DBA_TAB_STATISTICS where TABLE_NAME = 'TEST_PARTITION1';
+
+TABLE_NAME PARTITION_NAME LAST_ANALYZED
+--------------- --------------- -------------------
+TEST_PARTITION1 2019-12-17 05:13:35
+TEST_PARTITION1 P4 2019-12-17 05:13:34
+TEST_PARTITION1 P3 2019-12-17 05:13:34
+TEST_PARTITION1 P2 2019-12-17 05:13:33
+TEST_PARTITION1 P1 2019-12-17 05:13:33
+
+
+-------10046-------
+
+SQL ID: fjj69avcstwqa Plan Hash: 4035835414
+
+select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms_stats
+cursor_sharing_exact use_weak_name_resl dynamic_sampling(0) no_monitoring
+xmlindex_sel_idx_tbl no_substrb_pad */to_char(count("C11")),
+substrb(dump(min("C11"),16,0,64),1,240),substrb(dump(max("C11"),16,0,64),1,
+240),to_char(count("C12")),substrb(dump(min("C12"),16,0,64),1,240),
+substrb(dump(max("C12"),16,0,64),1,240)
+from
+"SCOTT"."TEST_PARTITION1" t where
+TBL$OR$IDX$PART$NUM("SCOTT"."TEST_PARTITION1",0,4,0,"ROWID") = :objn /* NDV,
+NIL,NIL,NDV,NIL,NIL*/
+
+
+call count cpu elapsed disk query current rows
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+Parse 3 0.00 0.00 0 0 0 0
+Execute 3 0.00 0.00 0 0 0 0
+Fetch 3 0.79 1.08 0 97538 3 3
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+total 9 0.79 1.08 0 97538 3 3
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 102 (recursive depth: 1)
+Number of plan statistics captured: 3
+
+Rows (1st) Rows (avg) Rows (max) Row Source Operation
+---------- ---------- ---------- ---------------------------------------------------
+1 1 1 SORT AGGREGATE (cr=32513 pr=0 pw=0 time=360805 us)
+2000 66666 197000 OPTIMIZER STATISTICS GATHERING (cr=32513 pr=0 pw=0 time=343385 us cost=2 size=2027 card=1)
+2000 66666 197000 PARTITION RANGE SINGLE PARTITION: KEY KEY (cr=32513 pr=0 pw=0 time=151067 us cost=2 size=2027 card=1)
+2000 66666 197000 TABLE ACCESS FULL TEST_PARTITION1 PARTITION: KEY KEY (cr=32513 pr=0 pw=0 time=132548 us cost=2 size= 2027 card=1)
+
+********************************************************************************
+
+SQL ID: dj9gfmuf1j4mr Plan Hash: 1420321431
+
+select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms_stats
+cursor_sharing_exact use_weak_name_resl dynamic_sampling(0) no_monitoring
+xmlindex_sel_idx_tbl no_substrb_pad */to_char(count("C11")),
+substrb(dump(min("C11"),16,0,64),1,240),substrb(dump(max("C11"),16,0,64),1,
+240),to_char(count("C12")),substrb(dump(min("C12"),16,0,64),1,240),
+substrb(dump(max("C12"),16,0,64),1,240)
+from
+"SCOTT"."TEST_PARTITION1" t /* NDV,NIL,NIL,NDV,NIL,NIL*/
+
+
+call count cpu elapsed disk query current rows
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+Parse 1 0.00 0.00 0 0 0 0
+Execute 1 0.00 0.00 0 0 0 0
+Fetch 1 0.62 0.76 0 66811 0 1
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 102 (recursive depth: 1)
+Number of plan statistics captured: 1
+
+Rows (1st) Rows (avg) Rows (max) Row Source Operation
+---------- ---------- ---------- ---------------------------------------------------
+1 1 1 SORT AGGREGATE (cr=66811 pr=0 pw=0 time=769306 us)
+199999 199999 199999 OPTIMIZER STATISTICS GATHERING (cr=66811 pr=0 pw=0 time=726007 us cost=3 size=660920 card=328)
+199999 199999 199999 PARTITION RANGE ALL PARTITION: 1 4 (cr=66811 pr=0 pw=0 time=177031 us cost=3 size=660920 card=328)
+199999 199999 199999 TABLE ACCESS FULL TEST_PARTITION1 PARTITION: 1 4 (cr=66811 pr=0 pw=0 time=128407 us cost=3 size=6609 20 card=328)
+
+********************************************************************************
+
+2. パーテーションのみ収集
+EXEC DBMS_STATS.GATHER_TABLE_STATS (ownname => 'SCOTT', tabname =>'TEST_PARTITION1', partname=>'P3', GRANULARITY => 'PARTITION');
+
+set line 900
+alter session set nls_date_format='YYYY-MM-DD HH24:MI:SS';
+alter session set nls_timestamp_format='YYYY-MM-DD HH24:MI:SS:FFX';
+col TABLE_NAME format a15
+col PARTITION_NAME format a15
+select TABLE_NAME,PARTITION_NAME,LAST_ANALYZED from DBA_TAB_STATISTICS where TABLE_NAME = 'TEST_PARTITION1';
+
+
+TABLE_NAME PARTITION_NAME LAST_ANALYZED
+--------------- --------------- -------------------
+TEST_PARTITION1 2019-12-17 05:13:35
+TEST_PARTITION1 P4 2019-12-17 05:13:34
+TEST_PARTITION1 P3 2019-12-17 05:35:55　★
+TEST_PARTITION1 P2 2019-12-17 05:13:33
+TEST_PARTITION1 P1 2019-12-17 05:13:33
+
+
+-------------10046-------------
+
+SQL ID: fjj69avcstwqa Plan Hash: 4035835414
+
+select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms_stats
+cursor_sharing_exact use_weak_name_resl dynamic_sampling(0) no_monitoring
+xmlindex_sel_idx_tbl no_substrb_pad */to_char(count("C11")),
+substrb(dump(min("C11"),16,0,64),1,240),substrb(dump(max("C11"),16,0,64),1,
+240),to_char(count("C12")),substrb(dump(min("C12"),16,0,64),1,240),
+substrb(dump(max("C12"),16,0,64),1,240)
+from
+"SCOTT"."TEST_PARTITION1" t where
+TBL$OR$IDX$PART$NUM("SCOTT"."TEST_PARTITION1",0,4,0,"ROWID") = :objn /* NDV,
+NIL,NIL,NDV,NIL,NIL*/
+
+
+call count cpu elapsed disk query current rows
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+Parse 1 0.00 0.00 0 0 0 0
+Execute 1 0.00 0.00 0 0 0 0
+Fetch 1 0.77 1.10 0 65717 0 1
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+total 3 0.77 1.10 0 65717 0 1
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 102 (recursive depth: 1)
+Number of plan statistics captured: 1
+
+Rows (1st) Rows (avg) Rows (max) Row Source Operation
+---------- ---------- ---------- ---------------------------------------------------
+1 1 1 SORT AGGREGATE (cr=65717 pr=0 pw=0 time=1108912 us)
+197000 197000 197000 OPTIMIZER STATISTICS GATHERING (cr=65717 pr=0 pw=0 time=1056866 us cost=2 size=2027 card=1)
+197000 197000 197000 PARTITION RANGE SINGLE PARTITION: KEY KEY (cr=65717 pr=0 pw=0 time=347881 us cost=2 size=2027 card=1)
+197000 197000 197000 TABLE ACCESS FULL TEST_PARTITION1 PARTITION: KEY KEY (cr=65717 pr=0 pw=0 time=287984 us cost=2 size= 2027 card=1)
+
+2)のSQLはなし。
+
+
+3. グローバル統計収集
+
+EXEC DBMS_STATS.GATHER_TABLE_STATS (ownname => 'SCOTT', tabname =>'TEST_PARTITION1',GRANULARITY => 'GLOBAL');
+
+
+select TABLE_NAME,PARTITION_NAME,LAST_ANALYZED from DBA_TAB_STATISTICS where TABLE_NAME = 'TEST_PARTITION1';
+TABLE_NAME PARTITION_NAME LAST_ANALYZED
+--------------- --------------- -------------------
+TEST_PARTITION1 2019-12-17 05:43:57　★
+TEST_PARTITION1 P4 2019-12-17 05:13:34
+TEST_PARTITION1 P3 2019-12-17 05:35:55
+TEST_PARTITION1 P2 2019-12-17 05:13:33
+TEST_PARTITION1 P1 2019-12-17 05:13:33
+
+
+---------10046---------
+select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms_stats
+cursor_sharing_exact use_weak_name_resl dynamic_sampling(0) no_monitoring
+xmlindex_sel_idx_tbl no_substrb_pad */to_char(count("C11")),
+substrb(dump(min("C11"),16,0,64),1,240),substrb(dump(max("C11"),16,0,64),1,
+240),to_char(count("C12")),substrb(dump(min("C12"),16,0,64),1,240),
+substrb(dump(max("C12"),16,0,64),1,240)
+from
+"SCOTT"."TEST_PARTITION1" t /* NDV,NIL,NIL,NDV,NIL,NIL*/
+
+
+call count cpu elapsed disk query current rows
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+Parse 1 0.00 0.01 0 0 0 0
+Execute 1 0.00 0.00 0 0 0 0
+Fetch 1 0.85 1.04 0 66811 0 1
+------- ------ -------- ---------- ---------- ---------- ---------- ----------
+total 3 0.85 1.05 0 66811 0 1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 102 (recursive depth: 1)
+Number of plan statistics captured: 1
+
+Rows (1st) Rows (avg) Rows (max) Row Source Operation
+---------- ---------- ---------- ---------------------------------------------------
+1 1 1 SORT AGGREGATE (cr=66811 pr=0 pw=0 time=1044557 us)
+199999 199999 199999 OPTIMIZER STATISTICS GATHERING (cr=66811 pr=0 pw=0 time=988165 us cost=18423 size=401197994 card=199999)
+199999 199999 199999 PARTITION RANGE ALL PARTITION: 1 4 (cr=66811 pr=0 pw=0 time=334029 us cost=18423 size=401197994 card=199999)
+199999 199999 199999 TABLE ACCESS FULL TEST_PARTITION1 PARTITION: 1 4 (cr=66811 pr=0 pw=0 time=273909 us cost=18423 size=401197994 card=199999)
+
+
+1) の処理はなし
+ 
+
+
