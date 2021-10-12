@@ -1,0 +1,25 @@
+多表关联分析
+
+https://blog.csdn.net/baoyuhang0/article/details/120163424
+
+1.多表count下数据量，区分大表/小表
+
+2.查看选择性：
+
+select a.column_name,
+b.num_rows,
+a.num_distinct cardinality,
+round(a.num_distinct / b.num_rows * 100, 2) selectivity,
+a.histogram,
+a.num_buckets
+from dba_tab_col_statistics a ,dba_tables b
+where a.owner = b.owner
+and a.table_name = b.table_name
+and a.owner = '<schema>'
+and a.table_name = '<object_name>';
+
+3.创建合适索引
+
+被驱动表 创建索引
+关联字段 创建索引
+

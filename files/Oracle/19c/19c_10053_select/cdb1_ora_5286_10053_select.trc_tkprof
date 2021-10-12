@@ -1,0 +1,30 @@
+
+TKPROF: Release 19.0.0.0.0 - Development on Sat Oct 9 08:49:06 2021
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Trace file: cdb1_ora_5286_10053_select.trc
+Sort options: default
+
+********************************************************************************
+count    = number of times OCI procedure was executed
+cpu      = cpu time in seconds executing 
+elapsed  = elapsed time in seconds executing
+disk     = number of physical reads of buffers from disk
+query    = number of buffers gotten for consistent read
+current  = number of buffers gotten in current mode (usually for update)
+rows     = number of rows processed by the fetch or execute call
+********************************************************************************
+Trace file: cdb1_ora_5286_10053_select.trc
+Trace file compatibility: 12.2.0.0
+Sort options: default
+
+       1  session in tracefile.
+       0  user  SQL statements in trace file.
+       0  internal SQL statements in trace file.
+       0  SQL statements in trace file.
+       0  unique SQL statements in trace file.
+    6439  lines in trace file.
+       0  elapsed seconds in trace file.
+
+

@@ -1,0 +1,892 @@
+Oracle RMAN操作详解
+RMAN（Recovery Manager）：恢复管理器
+
+RMAN概念：
+
+RMAN: Recovery Manager，是备份和恢复数据库的管理工具建立备份和恢复的server process，在oracle server上做备份和恢复
+
+具有如下特点：
+
+1 ）功能类似物理备份，但比物理备份强大 N 倍，从下面的特点可以看到；
+
+2 ）可以压缩空块；
+
+3 ）可以在块水平上实现增量；
+
+4 ）可以把备份的输出打包成备份集，也可以按固定大小分割备份集；
+
+5 ）备份与恢复的过程可以自动管理；
+
+6 ）可以使用脚本（存在 Recovery catalog 中） ；
+
+RMAN的组成概念：
+
+RMAM client （RMAN客户端）
+
+用来操作备份与恢复的客户端应用，可以通过网络连接到目标数据库；
+
+target database(目标数据库)
+
+RMAN备份和恢复的数据库，就是目标库；你的备份和恢复的目标，就叫做目标库
+
+auxiliary database(辅助数据库)
+
+主库的副本，一般用于测试，主库与辅助库的DBID不同，DB_NAME可以不同
+
+Catalog database(恢复目录数据库)
+
+存放RMAN备份的元数据信息，默认存放在控制文件中，由于控制文件中分为循坏重用记录与非循环重用记录，备份信息属于循环重用记录，会不断被覆盖重用，默认会保留7天，保存时间有限，可以使用恢复目录数据库实现RMAN备份元数据信息的长久保存。
+
+media manager（介质管理器）
+
+如果想要把备份文件存放到其他设备（例如带库）就需要介质管理器。
+
+fast recovery area（闪回恢复区）
+
+默认情况下，RMAN会将备份存放在闪回恢复区中。
+
+db_recovery_file_dest
+
+db_recovery_file_dest_size
+
+视图：
+
+v$recovery_file_dest
+
+v$recovery_area_usage
+
+channel（通道）：
+
+RMAN工具到存储设备的数据流叫通道。
+
+通过这个channel，读数据到pga，处理，并且将数据写到输出磁盘。
+
+RMAN的备份策略：
+
+（满足RMAN备份策略而不在需要的备份属于过时备份obsolete）
+
+恢复时间窗：
+
+确保存在的备份能够将数据库恢复到恢复时间窗口内的任意时刻。
+
+解释：
+
+当前时间为14号，将恢复时间窗设置为7天，为7号-14号。
+
+假设存在6号的备份
+
+使用6号的备份+日志即可恢复到7天内的任一时刻，
+
+6号之前的备份就会变为过时备份。
+
+即使在7号与14号之间存在备份，但是不能恢复到7天内任一时刻，所以6号的备份不会变为过时备份。
+
+RMAN> configure retention policy to recovery window of 7 days;
+
+RMAN> configure retention policy clear;
+
+冗余保留策略：
+
+每个数据文件备份需要的数量。
+
+例如：在星期1、星期2、星期3、星期4对数据文件datafile 7进行完全备份
+
+此时数据文件datafile7 有4个完全备份。
+
+如果在配置命令中redundancy参数值为2，那么星期一和星期二的datafile7完全备份就已经过时了。
+
+如果星期5在进行另一个备份，那么星期三的datafile7完全备份就变得过时了。
+
+归档日志删除策略：
+
+归档日志备份需要保留几份，只有当满足归档日志删除策略的日志，才可以从磁盘上删除。
+
+RMAN> configure retention policy to redundancy 2;
+
+RMAN> configure retention policy clear;
+
+归档日志删除：
+
+backup archivelog all delete input（备份完成后删除）
+
+delete archivelog all（直接删除）
+
+RMAN> configure archivelog deletion policy to backed up 2 times to disk;
+
+备份归档日志时，如果归档日志已经存在2个备份，那么backup archivevlog命令将跳过这些满足数量的归档日志。
+
+其他一些RMAN环境参数设置：
+
+控制文件自动备份：
+
+当数据库启动任何备份行为或数据库物理结构发生变化，都会默认自动备份一份当前的控制文件和spfile文件；
+
+RMAN> configure controlfile autobackup on;
+
+RMAN> restore controlfile from autobackup;
+
+备份设备类型：
+
+磁带设备 SBT
+
+磁盘设备 DISK
+
+Configure default device type to disk
+
+通道设置：
+
+自动分配通道：
+
+Configure 命令来完成通道配置。如果没有用手工方式为RMAN分配通道，RMAN将利用预定义的设置来为命令自动分配通道
+
+Configure channel device type disk format ‘xxx’
+
+可配置自动分配多个通道
+
+手工分配通道：
+
+allocate channel 命令进行分配通道，这个命令只能放在run命令块中，并且它分配的通道也只作用于本run块内的命令。
+
+Run {
+
+Allocate channel d1 device type disk format ‘xxx’;
+
+Allocate channel d2 device type disk format ‘xxx’;
+
+Backup database;
+
+}
+
+并行度：
+
+通道数要与并行数相匹配，如果分配的通道数量大于已设置的并行度，RMAN仅会向与并行度匹配的通道写入数据，并且会忽略超出并行度的其他通道。
+
+RMAN> CONFIGURE DEVICE TYPE DISK PARALLELISM 2 backup type to backupset;
+
+双工备份：
+
+RMAN在创建备份集的时候，可以同时生成这个备份集的多个完全相同的副本，这样可以提高备份的可靠性。如果其中一个副本损坏，RMAN还可以利用其它副本来完成数据库修复操作。
+
+不能把备份集双工到快速恢复区，rman最多可以同时为备份集建立4个副本，在原备份集中的每个备份片都会被复制，每个副本有一个唯一副本编号。双工备份仅适用于备份集，而不适用于镜像副本。
+
+RMAN>Configure archive|datafile backup copies for device type disk|sbt clear| to n
+
+过时备份与过期备份的区别：
+
+过时备份：
+
+已经满足RMAN备份策略而不在需要的备份，就为过时备份。
+
+report obsolete
+
+delete obsolete
+
+过期备份：
+
+当DBA在磁盘上手动删除备份文件或者归档日志时，由于RMAN的备份信息以及归档信息记录在控制文件中，如果手动删除，控制文件是不知道的。
+
+需要让控制文件识别该文件已经被删除。
+
+例如手动删除磁盘上的归档日志文件，
+
+如果不进行交叉检查，RMAN会报错。
+
+crosscheck archivelog all 交叉检查
+
+delete expired archivelog all 删除过期的记录
+
+RMAN按备份类型区分：
+
+备份集备份：默认方式，使用备份集备份生成的备份文件，只能使用RMAN工具恢复
+
+backup as compressed backupset database 压缩备份集
+
+镜像副本备份：类似于操作系统上的拷贝命令cp，就是将该数据文件复制到另一个位置，镜像副本备份可以使用操作系统命令cp直接进行还原。
+
+backup as copy database
+
+备份集与备份片的概念：
+
+备份集：逻辑概念，是备份文件的集合，一个备份集包含多个备份片。
+
+备份片：物理概念，是物理文件
+
+RMAN按备份方式区分：
+
+完全备份：
+
+只备份重建数据文件所需要的所有数据块（出现失效事件后），
+
+备份片会比数据文件小好多
+
+backup as backupset full database
+
+0级增量备份：
+
+backup as backupset incrememtal level=0 database
+
+0级增量备份与完全备份的区别：
+
+0级完全备份可以使用分级增量备份。
+
+完全备份不能使用分级增量备份。
+
+分级增量备份：
+
+（1）1级差异性备份
+
+只会备份上一次1级或0级备份后被修改的数据块。
+
+backup as backupset incrememtal level=1 database
+
+（2）1级累积型备份
+
+只会备份上一次0级备份后被修改的数据块。
+
+backup as backupset incrememtal level=1 cumulative database
+
+0级备份在restore部分完成
+
+1级备份在recover部分完成
+
+增量更新备份：
+
+增量更新备份是实现镜像副本备份高效的方式
+
+利用RMAN先创建数据文件的镜像副本，然后用RMAN创建增量备份
+
+（仅创建执行了上次备份后已更改的数据块备份），并将该增量备份应用于镜像副本（而不是创建新的镜像副本）。
+
+步骤：
+
+1.用指定的标签创建数据文件的完整镜像副本备份。
+
+2.按照指定时间（如每天），使用与基本数据文件副本相同的标签建立数据文件的1级差别增量备份
+
+3.把2中建立的增量备份应用到具有相同标签的最新备份。
+
+块修改跟踪功能：
+
+加快了增量备份效率，RMAN会自行跟踪产生变化的数据块，通过块跟踪文件找到执行上次备份后被修改的数据块，当执行增量备份时，无需扫描所有的数据块，仅扫描块跟踪文件即可，可以直接定位到变化的数据块，并进行备份。
+
+RMAN备份恢复操作：
+
+参数文件备份与恢复
+
+（静态参数文件只能使用cp备份）
+
+备份：
+
+RMAN>backup spfile
+
+查看备份信息：
+
+RMAN>list backup of spfile
+
+恢复：
+
+–当恢复参数文件时，由于数据库实例未启动，RMAN此时会启动一个伪实例（dummy）来进行恢复参数文件。
+
+RMAN> startup nomount;
+
+RMAN> restore spfile from ‘/path/to/backupspfile’;
+
+–由于数据库此时不是mount状态，RMAN无法查看控制文件中记录的备份信息，无法自动搜寻spfile的备份信息，所以需要明确指定备份的spfile文件的绝对路径
+
+RMAN> shutdown abort; 
+
+–关闭伪实例
+
+控制文件备份与恢复
+
+备份：
+
+RMAN> backup current controlfile
+
+查看：
+
+RMAN> list backup of controlfile
+
+恢复：
+
+RMAN> restore controlfile from '/u01/app/oracle/fast_recovery_area/xxx
+
+恢复控制文件也需要明确指定备份的控制文件的绝对路径。
+
+注意：
+
+alter database open resetlogs
+
+什么时候用resetlogs语句？
+
+1、不完全恢复的时候
+
+2、用备份的控制文件恢复的时候
+
+3、DBA手动使用trace文件创建控制文件的时候
+
+Resetlogs ：
+
+如果当前联机重做日志可以访问，那么将它们进行归档，然后删除联机重做日志的内容，并将日志序列号重置为1。
+
+例如，在用resetlogs选项打开数据库时，当前联机重做日志序列号为1000和1001，那么数据库将日志1000和1001进行归档，
+
+最后重置联机重做日志到序列1和2。
+
+数据文件的备份
+
+分为三个级别：
+
+（1）表空间级别数据文件备份
+
+（2）指定数据文件备份
+
+（3）全库备份
+
+表空间备份与恢复：
+
+备份
+
+RMAN>backup tablespace users
+
+RMAN>backup tablespace users，example
+
+查看：
+
+RMAN>list backup of tablespace users
+
+恢复：
+
+RMAN>restore tablespace users
+
+RMAN>recover tablespace users
+
+指定数据文件备份与恢复：
+
+备份：
+
+RMAN>backup datafile 1
+
+RMAN>bacup datafile 1,2
+
+查看：
+
+RMAN>list backup of datafile 1,2
+
+恢复:
+
+RMAN>restore datafile 1
+
+RMAN>recover datafile 1
+
+全库备份与恢复：
+
+备份：
+
+RMAN>backup database
+
+压缩备份集方式
+
+RMAN>backup as compressed backupset database
+
+查看
+
+RMAN>list backup
+
+恢复：
+
+RMAN>restore database
+
+RMAN>recover database
+
+归档日志备份与恢复：
+
+备份：
+
+归档日志默认会被RMAN识别
+
+RMAN>backup archivelog all
+
+–在使用backup archivelog all命令进行备份时，RMAN会在备份过程中试图进行一次日志切换。
+
+RMAN>backup archivelog all delete input
+
+备份归档日志并删除归档日志
+
+RMAN> backup archivelog from scn 1804209; 
+
+–指定备份归档日志的起始点
+
+使用backup xxx plus archivelog 备份归档重做日志的流程：
+
+1.执行alter system archivelog current 语句对当前的redo进行归档
+
+2.执行backup archivelog all命令备份所有归档重做日志文件
+
+3.执行backup命令对指定的数据文件等进行备份
+
+4.再次执行alter system archive log current对当前的redo进行归档
+
+5.对备份期间新生成的尚未备份的归档重做日志文件进行备份。
+
+查看：
+
+查看归档日志备份：
+
+RMAN>list backup of archivelog all
+
+查看当前所有的归档日志文件：
+
+RMAN>list archivelog all
+
+RMAN>list copy of archivelog all
+
+恢复：
+
+RMAN>restore archivelog all
+
+RMAN>restore archivelog from scn 1804209; 指定恢复范围
+
+恢复归档日志文件到指定位置：
+
+run
+
+{
+
+set archivelog destination to ‘xxxx’；
+
+restore archivelog all；
+
+}
+
+不完全恢复：
+
+RMAN> restore database;
+
+RMAN> recover database until scn 1671928;
+
+恢复到指定SCN号
+
+RMAN> alter database open resetlogs;
+
+RMAN管理与维护：
+
+crosscheck  --校验备份文件与备份元数据信息之间的一致性；
+
+RMAN> crosscheck backup;  --校验所有的备份
+
+RMAN> delete expired backup;  --删除过期备份
+
+RMAN> crosscheck archivelog all; --校验所有的归档日志
+
+丢失的备份或归档日志会被标识为过期
+
+RMAN> delete expired archivelog all;  --删除所有过期状态的归档日志
+
+catalog  --将备份文件信息注册到控制文件中；
+
+RMAN> catalog datafilecopy ‘/u01/app/backup/tbs_bmr01.dbf’;
+
+RMAN> catalog start with ‘/u01/app/backup’; 
+
+–将某个路径下面所有的文件都注册到控制文件
+
+report --报告信息；
+
+RMAN> report schema; 
+
+–查看当前目标库的可备份数据
+
+RMAN> report obsolete; 
+
+–查看过时备份
+
+RMAN> report need backup; 
+
+–查看哪些文件，没有达到备份的保留策略
+
+RMAN>report need backup days 7 database；
+
+–显示需要超过7天归档日志才能恢复的数据文件
+
+RMAN>report need backup incremental 3;
+
+显示需要应用超过3个增量备份的文件进行恢复
+
+RMAN>report need backup redundancy 3；
+
+显示要满足基于冗余保留策略（3个备份）需要备份的对象。
+
+RMAN>report unrecoverable
+
+报告受不可恢复操作影响的数据文件。
+
+（由于受到了非日志操作(nologging,如直接路径中的insert操作)的影响而需要备份数据库文件，即列出所有不可恢复的数据文件。）
+
+list --列表命令：
+
+RMAN> list backup; 
+
+–查看所有备份
+
+RMAN> list archivelog all; 
+
+–查看归档日志
+
+RMAN> list backup of archivelog all; 
+
+–查看所有备份的归档日志状态
+
+RMAN> list backupset; 
+
+–查看备份集
+
+RMAN> list backup of tablespace tbs_bmr; 
+
+–查看指定类型的备份
+
+RMAN> list copy;
+
+–查看数据文件和控制文件的镜像复制，以及归档日志
+
+delete --删除命令：
+
+RMAN> delete archivelog all; 
+
+–删除归档日志
+
+（如果配置归档日志删除策略，只能删除满足归档日志删除策略的归档日志）
+
+RMAN> delete backup； 
+
+–删除所有备份
+
+RMAN> delete obsolete； 
+
+–删除过时备份
+
+（满足备份策略而不在需要的备份）
+
+RMAN> delete backupset 55; 
+
+–删除指定备份集
+
+RMAN> delete backup； 
+
+–删除所有备份
+
+RMAN> delete backuppiece 55; 
+
+–删除备份片
+
+RMAN> delete expired backup; 
+
+–删除过期备份
+
+（crosscheck 交叉检查出过期的备份）
+
+RMAN> delete expired archivelog all; 
+
+–删除过期状态的归档日志
+
+（crosscheck 交叉检查出过期的归档日志）
+
+RMAN>backup xxx delete input
+
+（命令先备份文件到磁盘上，然后删除备份过的源文件）
+
+RMAN>delete noprompt obsolete
+
+可以将该删除操作设置为无须提示输入信息。脚本时使用
+
+备份的高级操作：
+
+限制备份集中的文件数
+
+filesperset 默认为64
+
+当每次要备份的文件数超过filesperset设置的值时，RMAN将备份的文件分割到多个备份集。
+
+假设filesperset使用默认值：
+
+RMAN> backup as backupset (datafile 3,4,5,6,7) (datafile 8,9);
+
+3,4,5,6,7 存储到一个备份集
+
+8,9存储到一个备份集
+
+多段备份：
+
+section
+
+例子：假设users表空间只有一个900MB的数据文件，并配置3个SBT通道，SBT设备并行参数设置为3，可将表空间的这个数据文件分解成文件区：
+
+RMAN>backup section size 300M tablespace users；
+
+3个SBT通道各备份users表空间的数据文件中的300M文件区域。
+
+备份优化跳过指定文件：
+
+Skip readonly 跳过只读
+
+Skip offline 跳过脱机文件
+
+Skip inaccessible 跳过不可访问的文件
+
+手动更新备份和副本的资料库状态：
+
+change
+
+当备份无法找到或者有被迁移时，可运行change xxx unavailable命令
+
+RMAN在restore或recover命令中不使用unavailable状态的文件
+
+如果后来找到丢失的文件，那么可以通过change … available命令再次更新其状态为可用。
+
+RMAN还原时的备份选项与优化：
+
+1.备份选择
+
+RMAN优先选择最近可用的备份。
+
+如果备份集和镜像副本在同一时间点，那么RMAN优先选择镜像副本。因为RMAN从镜像副本还原比从备份集还原更快。
+
+RMAN的Restore命令将在配置通道的所有设备类型上搜索备份。
+
+2.验证数据库文件和备份：
+
+验证是指检查数据库文件是否有坏块或备份集是否可以用于还原。
+
+Validate 、 backup validate 和 restore … validate
+
+Validate：
+
+使用validate命令可以手动检查数据库文件中物理损坏或逻辑损坏和数据文件丢失，或者确定备份集是否可以用于还原。
+
+当怀疑备份集中的一个或多个备份片丢失或已损坏时，用validate backupset命令进行验证。该命令检查备份集中的每个块以确保备份可以被还原。
+
+RMAN>validate database include current controlfile plus archivelog
+
+如果RMAN检查到了坏块，就会向
+
+v$database_block_corruption 视图添加相关信息。
+
+backup validate ：
+
+RMAN就像真正备份时一样读取整个要备份的文件，但RMAN实际上并不产生任何备份集或镜像副本
+
+restore … validate:
+
+restore命令的validate选项是让RMAN自行选择要检查的备份集。
+
+只是读取备份而不影响数据文件的使用
+
+其他测试措施：
+
+recover … test ：试验修复。
+
+修复模拟，应用重写日志的方法与正常修复一样，但是它不会将其更改写入磁盘并且在试验完成后回滚其更改。
+
+试验修复只是在内存中进行。
+
+预览还原中要用的备份：
+
+1.restore … preview
+
+可以显示在restore操作中要使用的每个备份的详细信息列表，以及在restore操作完成后进行修复的目标SCN。
+
+只是访问资料库查询元数据确保他们可以还原，并不实际读取备份文件
+
+2.restore … validate header
+
+该命令除了列出还原和修复所需的文件外，它还验证备份文件头部以确定磁盘或介质管理目录中文件是否与RMAN资料库中的元数据一致。
+
+还原修复时所需的归档重做日志：
+
+RMAN在执行修复操作时，根据修复的需要自动从备份中还原归档重做日志文件。
+
+如果想节省在recover命令期间还原这些文件所需的时间，可以手动还原归档重做日志。
+
+如果灾难修复期间丢失归档重做日志，那么修复命令用until available redo选项来自动将数据库修复到最后一个可用的归档重做日志，这个选项只能在修复整个数据库时有用。
+
+在修复数据库文件、表空间不能使用。
+
+如果要将某些数据文件还原到新位置：
+
+使用set newname 重命名数据文件
+
+run
+
+{
+
+set newname for datafile 2 to ‘xxx’;
+
+set newname for datafile 3 to ‘xxx’;
+
+set newname for datafile 4 to ‘xxx’;
+
+restore database;
+
+switch datafile all;
+
+recover database;
+
+}
+
+如果RMAN在修复期间将归档日志还原到快速恢复区域
+
+那么将在归档日志应用到数据文件后自动删除它们。
+
+可以使用
+
+RMAN>recover database delete archivelog
+
+从磁盘删除修复不再需要的已还原的归档日志。
+
+切换到镜像副本的完全恢复：
+
+假定数据库丢失数据文件5，要切换到数据文件副本并进行修复操作：
+
+RMAN>alter database datafile 5 offline
+
+RMAN>switch datafile 5 to copy
+
+RMAN>recover datafile 5
+
+RMAN自动还原归档日志和增量备份，在应用完成后自动删除它们
+
+RMAN>alter database datafile 5 online
+
+所有数据文件损坏，但存在所有数据文件的镜像副本：
+
+RMAN>switch database to copy
+
+RMAN>recover database
+
+块介质修复:
+
+使用recover … block命令修复数据文件的指定块。
+
+块介质恢复将保留受影响的数据文件处于联机状态，只还原和修复损坏的块。（在恢复期间只有实际恢复的块不可用）
+
+块级数据丢失通常是由于间歇性随机IO错误导致，它们不会导致大量数据丢失和内存信息损坏。
+
+RMAN>recover datafile 8 block 13;
+
+RMAN高级恢复技术：
+
+1.
+
+恢复非归档模式的数据库与恢复归档模式的数据库的过程类型。
+
+两者主要区别：一是只有一致的备份才可用于还原非归档模式的数据库；
+
+二是因为非归档模式的数据库不存在归档重做日志，所以无法进行介质恢复，
+
+当修复非归档模式数据库时，在recover 命令中指定noredo选型以指明RMAN不会尝试应用归档重做日志。否则，RMAN返回错误。
+
+2
+
+在用备份控制文件修复数据库后，不论日志是否可用
+
+始终需要用open resetlogs 选项打开数据库。
+
+执行recover database时
+
+如果redo可用，那么RMAN可以找到它们并应用这些日志。
+
+如果redo不可用，那么需要until子句指定修复的目标时间、SCN或日志序列号。
+
+否则出现RMAN-7054。
+
+在run块中使用set until操作将限制修复到归档重做日志的尾部。
+
+如果不使用set until操作限制 执行recover database读取归档日志时，会一直寻找归档日志文件，直到无法找到下一个归档日志文件为止，并报告错误，这个错误不代表出问题，然后查看数据文件头部与控制文件中记录的SCN是否一致，如果一致则直接 open resetlogs。
+
+如果最后创建的归档重做日志具有序列号N，那么指定until sequence n+1，以便RMAN应用到日志序列号N后停止。
+
+如果使用恢复目录数据库，并且数据库名称在恢复目录中不是唯一的，那么必须在还原控制文件之前执行SET DBID命令。
+
+例如：
+
+–set dbid 123456
+
+run{
+
+set newname for datafile 1 to ‘xxxx’
+
+set newname for datafile 2 to ‘xxxx’
+
+set newname for datafile 3 to ‘xxxx’
+
+allocate channel t1 device type disk;
+
+restore controlfile from autobackup;
+
+alter database mount;
+
+set until sequence 124 thread 1;
+
+restore database;
+
+switch datafile all;
+
+recover database;
+
+}
+
+RMAN>alter database open resetlogs
+
+查看DBID：
+
+控制文件自动备份文件名上记录了数据库的DBID
+
+RMAN连接时会显示DBID
+
+Select dbid from v$database
+
+含有RMAN备份信息的数据字典：
+
+RMAN备份作业
+
+v $RMAN_BACKUP_JOB_DETAILS
+
+处于备份模式中的联机数据文件状态（热备份）
+
+V $BACKUP
+
+归档日志备份
+
+v $ backup_archivelog_details
+
+控制文件备份
+
+v $ backup_controlfiles_details
+
+控制文件和数据文件副本
+
+v$ backup_copy_details
+
+-控制文件和数据文件
+
+v$ backup_datafile
+
+v$ backup_datafile_details
+
+已备份的文件
+
+v$ backup_files
+
+备份片文件
+
+v$ backup_piece
+
+v$ backup_piece_details
+
+备份集
+
+v$ backup_set
+
+v$ backup_set_details
+
+
