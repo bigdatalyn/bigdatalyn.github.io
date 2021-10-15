@@ -33,10 +33,12 @@ SQL> execute dbms_stats.set_gobal_prefs('AUTOSTATS_TARGET', 'ORACLE');
 ```
 
 ```sql
-Automatic Optimizer Statistics Collection—用于收集各种数据库对象的统计信息。这里又有三种模式：
+Automatic Optimizer Statistics Collection
+—用于收集各种数据库对象的统计信息。这里又有三种模式：
 ‘ALL’ – Statistics are collected for all objects in the system
 ‘ORACLE’ – Statistics are collected for all Oracle owned objects
 ‘AUTO’ – Oracle decides for which objects to collect statistics
+
 可以通过以下API进行设置
       DBMS_STATS.SET_GLOBAL_PREFS (
         pname VARCHAR2,

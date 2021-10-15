@@ -12,9 +12,7 @@
 查询，复杂，表的连接也可以在存储服务器上进行
 
 解析sql语句，table所在表，extent在哪，磁盘中load数据到data buffer，
-
 整张表返回
-
 查询结果集中过滤数据
 
 满足条件的行返回给客户
@@ -43,7 +41,12 @@ Cell上并进行谓词过滤，列过滤，表连接的过滤，只返回结果�
 
 那些谓词可以过滤
 
-select * from v$sqlfn_metadata where offload='YES'
+
+select * from v$sqlfn_metadata where offloadable='YES';
+
+
+19c:
+444 rows selected.
 
 ++++++++++++++++++++++++++++++
 
@@ -69,15 +72,13 @@ scan加密解密也是放到cell上，减少数据库服务器的负载
 
 打分函数，score fuction
 
-
-
 ++++++++++++++++++++++++++++++
 
 Smart scan发生的条件
 4个条件，部分的sql语句操作
 OLTP 少量数据，传统index即可解决，就不用smart scan
 
-1.对象的全table/ndex的扫描，数据量大
+1.对象的全table/index的扫描，数据量大
 2.数据不被load buffer cache，直接load到PGA里面
 并行查询
 串行的direct path
@@ -91,9 +92,6 @@ cell_smart_scan_capable
 ++++++++++++++++++++++++++++++
 
 fast full scan 扫描反向索引，压缩索引
-
-
-
 
 ++++++++++++++++++++++++++++++
 
