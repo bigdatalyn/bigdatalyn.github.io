@@ -159,6 +159,45 @@ SELECT * FROM (SELECT SEGMENT_NAME,OWNER,TABLESPACE_NAME,BYTES/1024/1024 "SIZE(M
 ```
 
 
+#### EXECUTION_DAYS_TO_EXPIRE Tips
+
+Since AUTO_STATS_ADVISOR_TASK records are not purged from WRI$_ADV_OBJECTS, the SYSAUX space usage is growing rapidly.
+
+The EXECUTION_DAYS_TO_EXPIRE parameter is set to 30 (by default) for AUTO_STATS_ADVISOR_TASK.
+
+In Multitenant environment (CDB/PDB), even after applying the aforesaid respective RU patch, the expired AUTO_STATS_ADVISOR_TASK data is NOT purged automatically from PDB despite the default setting of EXECUTION_DAYS_TO_EXPIRE to 30 or to any custom value. In CDB, the expired tasks are purged through Auto-Purge window. In such cases, the expired tasks can be deleted manually using the above command in PDB to clear the SYSAUX space due to AUTO_STATS_ADVISOR_TASK pertaining to the particular PDB. There is an enhancement request raised to implement the Auto-Purge mechanism of expired advisor tasks from PDB as well.
+
+If the default 30 days retention period is not required with the interest of SYSAUX space consumption then EXECUTION_DAYS_TO_EXPIRE parameter value can be adjusted. Following commands can be used to modify the parameter to custom value as per the requirement to purge the statistics advisor data with lesser retention period. In this example, it is set to 10.
+
+```sql
+SYS@cdb1> col parameter_name format a35
+SYS@cdb1> col parameter_value format a20
+SYS@cdb1> set lines 120
+SYS@cdb1> select TASK_NAME,parameter_name, parameter_value FROM DBA_ADVISOR_PARAMETERS WHERE task_name='AUTO_STATS_ADVISOR_TASK' and PARAMETER_NAME='EXECUTION_DAYS_TO_EXPIRE';
+
+TASK_NAME		  PARAMETER_NAME		      PARAMETER_VALUE
+------------------------- ----------------------------------- --------------------
+AUTO_STATS_ADVISOR_TASK   EXECUTION_DAYS_TO_EXPIRE	      30
+
+SYS@cdb1> exec prvt_advisor.delete_expired_tasks;
+
+PL/SQL procedure successfully completed.
+
+SYS@cdb1> EXEC DBMS_ADVISOR.SET_TASK_PARAMETER(task_name=> 'AUTO_STATS_ADVISOR_TASK', parameter=> 'EXECUTION_DAYS_TO_EXPIRE', value => 10);
+
+PL/SQL procedure successfully completed.
+
+SYS@cdb1> select TASK_NAME,parameter_name, parameter_value FROM DBA_ADVISOR_PARAMETERS WHERE task_name='AUTO_STATS_ADVISOR_TASK' and PARAMETER_NAME='EXECUTION_DAYS_TO_EXPIRE';
+
+TASK_NAME		  PARAMETER_NAME		      PARAMETER_VALUE
+------------------------- ----------------------------------- --------------------
+AUTO_STATS_ADVISOR_TASK   EXECUTION_DAYS_TO_EXPIRE	      10
+
+SYS@cdb1>
+```
+
+
+
 ### Reference
 
 How To Recreate the SYSAUX Tablespace (Doc ID 468116.1)
@@ -170,6 +209,7 @@ How to Address Issues Where AWR Data Uses Significant Space in the SYSAUX Tables
 
 SYSAUX 表領域が肥大化した場合の対応方法(KROWN:125796) (Doc ID 1740178.1)
 
+How To Purge Optimizer Statistics Advisor Old Records From 12.2 Onwards (Doc ID 2660128.1)
 
 
 Have a good work&life! 2022/01 via LinHong
