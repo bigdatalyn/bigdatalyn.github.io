@@ -201,7 +201,9 @@ SYS@cdb1>
 ### Reference
 
 How To Recreate the SYSAUX Tablespace (Doc ID 468116.1)
+
 How to Reduce SYSAUX Tablespace Occupancy Due to Fragmented TABLEs and INDEXes (Doc ID 1563921.1)
+
 How to Address Issues Where AWR Data Uses Significant Space in the SYSAUX Tablespace (Doc ID 287679.1)
 
 12.2.0.1への移行後Statistics Advisor の機能により SYSAUX表領域が大きくなる (Doc ID 2355243.1)
@@ -211,6 +213,9 @@ SYSAUX 表領域が肥大化した場合の対応方法(KROWN:125796) (Doc ID 17
 
 How To Purge Optimizer Statistics Advisor Old Records From 12.2 Onwards (Doc ID 2660128.1)
 
+　Bug 27983174 - lnx-183-mdb:got ORA-12012, ORA-20001 and ORA-6512 err from ora$at_os_opt_sy_xxx (Doc ID 27983174.8)
+
+自動 UNDO 管理を使用している UNDO 表領域の変更、再作成方法(KROWN:136322) (Doc ID 1746713.1)	
 
 Have a good work&life! 2022/01 via LinHong
 
