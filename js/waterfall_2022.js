@@ -33,14 +33,7 @@
         title: 'PostgreSQL指南：内幕探索 [The Internals of PostgreSQL for Database Administr] ',
         core_tech: 'Database',
         description: 'font color="#FF8000">介绍了 PostgreSQL 内部的工作原理。为深入学习 PostgreSQL 源代码的导读手册，对于理解数据库原 理与 PostgreSQL 内部实现大有裨益。</font>'
-    }, {
-        demo_link: 'https://item.jd.com/12487298.html',
-        img_link: '/files/books/PostgresqlIntroduce.png',
-        code_link: 'https://item.jd.com/12487298.html',
-        title: '由浅入深PostgreSQL ',
-        core_tech: '开源数据库',
-        description: '<font color="#AE57A4">深入介绍了开源数据库管理系统PostgreSQL的主要特性，包括并发控制、索引、高级SQL处理、日志和统计、查询优化、存储过程、安全性、高可用等。作者是具有18年PG（PostgreSQL）数据库经验的国外大牛。译者彭煜玮先生，武汉大学计算机学院副教授，PostgreSQL中国社区的核心成员。</font>'
-    }, {
+    },  {
         demo_link: 'http://www.amazon.cn/Oracle-Database-9i-10g-11g%E7%BC%96%E7%A8%8B%E8%89%BA%E6%9C%AF-%E6%B7%B1%E5%85%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84-%E5%87%AF%E7%89%B9/dp/B004I91HDI/ref=sr_1_1?s=books&ie=UTF8&qid=1455417615&sr=1-1',
         img_link: '/files/books/OracleArt.jpg',
         code_link: 'http://www.amazon.cn/Oracle-Database-9i-10g-11g%E7%BC%96%E7%A8%8B%E8%89%BA%E6%9C%AF-%E6%B7%B1%E5%85%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84-%E5%87%AF%E7%89%B9/dp/B004I91HDI/ref=sr_1_1?s=books&ie=UTF8&qid=1455417615&sr=1-1',
