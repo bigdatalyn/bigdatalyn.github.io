@@ -1,99 +1,14 @@
-[oracle@ol8-19c ~]$ dbca -silent -deleteDatabase -sourceDB cdb1
-Enter SYS user password:
-
-[WARNING] [DBT-19202] The Database Configuration Assistant will delete the Oracle instances and datafiles for your database. All information in the database will be destroyed.
-Prepare for db operation
-32% complete
-Connecting to database
-35% complete
-39% complete
-42% complete
-45% complete
-48% complete
-52% complete
-65% complete
-Updating network configuration files
-68% complete
-Deleting instance and datafiles
-84% complete
-100% complete
-Database deletion completed.
-Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/cdb1/cdb12.log" for further details.
-[oracle@ol8-19c ~]$
 
 
 
 
-dbca -silent -createDatabase                                                   \
-     -templateName General_Purpose.dbc                                         \
-     -gdbname cdb1 -sid cdb1 -responseFile NO_VALUE         \
-     -characterSet AL32UTF8                                                    \
-     -sysPassword Oracle123                                                 \
-     -systemPassword Oracle123                                              \
-     -createAsContainerDatabase true                                           \
-     -numberOfPDBs 1                                                           \
-     -pdbName PDB1                                                      \
-     -pdbAdminPassword PdbPassword1                                            \
-     -databaseType MULTIPURPOSE                                                \
-     -memoryMgmtType auto_sga                                                  \
-     -totalMemory 2000                                                         \
-     -storageType FS                                                           \
-     -datafileDestination "/u02/oradata"                                        \
-     -redoLogFileSize 50                                                       \
-     -emConfiguration NONE                                                     \
-     -ignorePreReqs
 
 
+#### ORA-04062 error
 
+DBCA fails with Error: ORA-04062: signature of package "SYS.DBMS_BACKUP_RESTORE" has been changed
 
-dbca -silent -createDatabase                                                   \
-     -templateName General_Purpose.dbc                                         \
-     -gdbname cdb1 -sid  cdb1 -responseFile NO_VALUE         \
-     -characterSet AL32UTF8                                                    \
-     -sysPassword welcome1                                                 \
-     -systemPassword welcome1                                              \
-     -createAsContainerDatabase true                                           \
-     -numberOfPDBs 1                                                           \
-     -pdbName pdb01                                                      \
-     -pdbAdminPassword PdbPassword1                                            \
-     -databaseType MULTIPURPOSE                                                \
-     -memoryMgmtType auto_sga                                                  \
-     -totalMemory 2000                                                         \
-     -storageType FS                                                           \
-     -datafileDestination "/u02/oradata"                                        \
-     -redoLogFileSize 50                                                       \
-     -emConfiguration NONE                                                     \
-     -ignorePreReqs
-
-dbca -silent -createDatabase -responseFile $script_dir/dbca.rsp
-
-
-
-dbca -silent -deleteDatabase -sourceDB cdb2 -sysDBAUserName SysPassword1 -sysDBAPassword SysPassword1
-
-dbca -silent -deleteDatabase -sourceDB cdb1 -sysDBAUserName SysPassword1 -sysDBAPassword SysPassword1
-
-dbca -silent -createDatabase \
- -templateName General_Purpose.dbc \
- -gdbname cdb2 -sid cdb2 -responseFile NO_VALUE \
- -characterSet AL32UTF8 \
- -sysPassword oracle \
- -systemPassword oracle \
- -createAsContainerDatabase true \
- -numberOfPDBs 1 \
- -pdbName pdb1 \
- -pdbAdminPassword oracle \
- -databaseType MULTIPURPOSE \
- -memoryMgmtType auto_sga \
- -totalMemory 2000 \
- -storageType FS \
- -datafileDestination "/u02/oradata/" \
- -redoLogFileSize 50 \
- -emConfiguration NONE \
- -ignorePreReqs
-
-dbca -silent -deleteDatabase -sourceDB cdb2 -sysDBAUserName oracle -sysDBAPassword oracle
-
+```sql 
 [oracle@ol8-19c dbhome_1]$ cat /u01/app/oracle/cfgtoollogs/dbca/cdb2/cdb21.log
 [ 2022-01-21 10:00:18.615 CST ] [WARNING] [DBT-06208] The 'SYS' password entered does not conform to the Oracle recommended standards.
 [ 2022-01-21 10:00:18.615 CST ] [WARNING] [DBT-06208] The 'PDBADMIN' password entered does not conform to the Oracle recommended standards.
@@ -111,8 +26,153 @@ DBCA_PROGRESS : 31%
 DBCA_PROGRESS : 8%
 DBCA_PROGRESS : 0%
 [oracle@ol8-19c dbhome_1]$
+```
+
+```sql
+[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=channel ORA_DISK_1: SID=29 device type=DISK
+[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-00571: ===================================================
+========
+[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS =======
+========
+[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-00571: ===================================================
+========
+[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-03002: failure of restore command at 01/21/2022 10:43:50
+[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=ORA-04062: signature of package "SYS.DBMS_BACKUP_RESTORE" has b
+een changed
+[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN>
+
+```
 
 
+
+#### Reason
+
+ORA-04062: signature of package "SYS.DBMS_BACKUP_RESTORE" has been changed when using DBCA on 19c (Doc ID 2741745.1)	
+
+Note: The cause is known, But seems there is a conflict between the rman version packages that is coming from the patch vs rman version packages used by DBCA Template.
+
+```
+1-. Create a fresh Installed for 19.03.00.00 or rollback 19C PSU
+2-. Run DBCA to create CDB
+3-. Re-apply 19C RU and run datapatch
+
+
+Once the Database is created and/or upgraded, if still receiving
+
+SYS.DBMS_BACKUP_RESTORE version is not current
+
+ 
+
+Then follow steps from: 2741760.1 - PL/SQL package SYS.DBMS_BACKUP_RESTORE version is not current
+
+
+Recompile the RMAN packages and procedures by connecting to the target database as SYSDBA and execute: 
+
+$ sqlplus / as sysdba
+
+SQL> @$ORACLE_HOME/rdbms/admin/dbmsrman.sql
+SQL> @$ORACLE_HOME/rdbms/admin/dbmsbkrs.sql
+SQL> @$ORACLE_HOME/rdbms/admin/prvtrmns.plb
+SQL> @$ORACLE_HOME/rdbms/admin/prvtbkrs.plb
+
+ 
+
+Note: The cause is known, But seems there is a conflict between the rman version packages that is coming from the patch vs rman version packages used by DBCA Template.
+
+This note only applied when creating a Database using DBCA  and Patch has been applied before database as been created.
+```
+
+#### Re-Install Database 
+
+```
+[oracle@ol8-19c software]$ ls -tlr LINUX.X64_193000_db_home.zip
+-rwxrwx--- 1 root vboxsf 3059705302 Jul  7  2021 LINUX.X64_193000_db_home.zip
+[oracle@ol8-19c software]$ pwd
+/software
+[oracle@ol8-19c software]$ cd $ORACLE_HOME
+[oracle@ol8-19c dbhome_2]$ cd ../dbhome_1/
+[oracle@ol8-19c dbhome_1]$ unzip -oq /software/LINUX.X64_193000_db_home.zip
+[oracle@ol8-19c dbhome_1]$ export CV_ASSUME_DISTID=OEL7.6
+[oracle@ol8-19c dbhome_1]$ pwd
+/u01/app/oracle/product/19.0.0/dbhome_1
+[oracle@ol8-19c dbhome_1]$ export ORACLE_HOME=/u01/app/oracle/product/19.0.0/dbhome_1
+[oracle@ol8-19c dbhome_1]$ ./runInstaller -ignorePrereq -waitforcompletion -silent                        \
+>     -responseFile ${ORACLE_HOME}/install/response/db_install.rsp               \
+>     oracle.install.option=INSTALL_DB_SWONLY                                    \
+>     ORACLE_HOSTNAME=${ORACLE_HOSTNAME}                                         \
+>     UNIX_GROUP_NAME=oinstall                                                   \
+>     INVENTORY_LOCATION=${ORA_INVENTORY}                                        \
+>     SELECTED_LANGUAGES=en,en_GB                                                \
+>     ORACLE_HOME=${ORACLE_HOME}                                                 \
+>     ORACLE_BASE=${ORACLE_BASE}                                                 \
+>     oracle.install.db.InstallEdition=EE                                        \
+>     oracle.install.db.OSDBA_GROUP=dba                                          \
+>     oracle.install.db.OSBACKUPDBA_GROUP=dba                                    \
+>     oracle.install.db.OSDGDBA_GROUP=dba                                        \
+>     oracle.install.db.OSKMDBA_GROUP=dba                                        \
+>     oracle.install.db.OSRACDBA_GROUP=dba                                       \
+>     SECURITY_UPDATES_VIA_MYORACLESUPPORT=false                                 \
+>     DECLINE_SECURITY_UPDATES=true
+perl: warning: Setting locale failed.
+perl: warning: Please check that your locale settings:
+	LANGUAGE = (unset),
+	LC_ALL = (unset),
+	LC_CTYPE = "UTF-8",
+	LANG = "en_US.UTF-8"
+    are supported and installed on your system.
+perl: warning: Falling back to a fallback locale ("en_US.UTF-8").
+Launching Oracle Database Setup Wizard...
+
+[WARNING] [INS-13014] Target environment does not meet some optional requirements.
+   CAUSE: Some of the optional prerequisites are not met. See logs for details. /u01/app/oraInventory/logs/InstallActions2022-01-21_11-54-20AM/installActions2022-01-21_11-54-20AM.log
+   ACTION: Identify the list of failed prerequisite checks from the log: /u01/app/oraInventory/logs/InstallActions2022-01-21_11-54-20AM/installActions2022-01-21_11-54-20AM.log. Then either from the log file or from installation manual find the appropriate configuration to meet the prerequisites and fix it manually.
+The response file for this session can be found at:
+ /u01/app/oracle/product/19.0.0/dbhome_1/install/response/db_2022-01-21_11-54-20AM.rsp
+
+You can find the log of this install session at:
+ /u01/app/oraInventory/logs/InstallActions2022-01-21_11-54-20AM/installActions2022-01-21_11-54-20AM.log
+
+As a root user, execute the following script(s):
+	1. /u01/app/oracle/product/19.0.0/dbhome_1/root.sh
+
+Execute /u01/app/oracle/product/19.0.0/dbhome_1/root.sh on the following nodes:
+[ol8-19c]
+[oracle@ol8-19c dbhome_1]$ su -
+Password:
+[root@ol8-19c ~]# /u01/app/oraInventory/orainstRoot.sh
+-bash: /u01/app/oraInventory/orainstRoot.sh: No such file or directory
+[root@ol8-19c ~]# /u01/app/oracle/product/19.0.0/dbhome_1/root.sh
+Check /u01/app/oracle/product/19.0.0/dbhome_1/install/root_ol8-19c_2022-01-21_11-56-47-912597304.log for the output of root script
+[root@ol8-19c ~]# cat /u01/app/oracle/product/19.0.0/dbhome_1/install/root_ol8-19c_2022-01-21_11-56-47-912597304.log
+Performing root user operation.
+
+The following environment variables are set as:
+    ORACLE_OWNER= oracle
+    ORACLE_HOME=  /u01/app/oracle/product/19.0.0/dbhome_1
+   Copying dbhome to /usr/local/bin ...
+   Copying oraenv to /usr/local/bin ...
+   Copying coraenv to /usr/local/bin ...
+
+Entries will be added to the /etc/oratab file as needed by
+Database Configuration Assistant when a database is created
+Finished running generic part of root script.
+Now product-specific root actions will be performed.
+Oracle Trace File Analyzer (TFA) is available at : /u01/app/oracle/product/19.0.0/dbhome_1/bin/tfactl
+[root@ol8-19c ~]# exit
+logout
+[oracle@ol8-19c dbhome_1]$
+```
+
+####  recreate cdb/pdb use as below command.
+
+```
+dbca -silent -createDatabase -templateName General_Purpose.dbc -createAsContainerDatabase true -numberOfPDBs 1 -pdbName orclpdb -gdbname oradb.example.com -sid oradb -sysPassword oracle -systemPassword oracle -pdbAdminPassword oracle -characterSet AL32UTF8 -memoryPercentage 50 -responseFile NO_VALUE -emConfiguration LOCAL
+```
+
+###
+
+dbca sample for creating cdb/pdb.
+```sql
 dbca -silent -createDatabase \
  -templateName General_Purpose.dbc \
  -gdbname cdb3 -sid cdb3 -responseFile NO_VALUE \
@@ -131,9 +191,7 @@ dbca -silent -createDatabase \
  -redoLogFileSize 50 \
  -emConfiguration NONE \
  -ignorePreReqs
-
-
-
+```
 Error in DBCA (create a CDB) - "Error while restoring PDB backup piece" is met during the "Creating and starting Oracle Instance" step (Doc ID 2831203.1)	
 
 CAUSE
@@ -145,67 +203,3 @@ This should resolve this issue.
 
 
 Steps To Recreate Central Inventory(oraInventory) In RDBMS Homes (Doc ID 556834.1)	
-
-
-Recreate the central inventory
-
-
-[oracle@ol8-19c bin]$ cat /etc/oraInst.loc
-inventory_loc=/u01/app/oraInventory
-inst_group=oinstall
-[oracle@ol8-19c bin]$ ls -tlr /u01/app/oraInventory
-total 8
--rwxrwx--- 1 oracle oinstall 1617 Jul  8  2021 orainstRoot.sh
--rw-rw---- 1 oracle oinstall   56 Jul  8  2021 oraInst.loc
-drwxrwx--- 3 oracle oinstall  205 Jul 19  2021 logs
-drwxrwx--- 2 oracle oinstall   81 Jul 19  2021 ContentsXML
-[oracle@ol8-19c bin]$ cd /u01/app/
-[oracle@ol8-19c app]$ ls -tlr
-total 0
-drwxrwxr-x. 9 oracle oinstall 112 Jan 21 09:48 oracle
-drwxrwx---  4 oracle oinstall  78 Jan 21 10:15 oraInventory
-[oracle@ol8-19c app]$ mv oraInventory oraInventory_orig
-[oracle@ol8-19c app]$ ls -tlr
-total 0
-drwxrwxr-x. 9 oracle oinstall 112 Jan 21 09:48 oracle
-drwxrwx---  4 oracle oinstall  78 Jan 21 10:15 oraInventory_orig
-[oracle@ol8-19c app]$ pwd
-/u01/app
-[oracle@ol8-19c app]$ cd $ORACLE_HOME/oui/bin
-[oracle@ol8-19c bin]$ echo $ORACLE_HOME
-/u01/app/oracle/product/19.0.0/dbhome_1
-[oracle@ol8-19c bin]$ ./runInstaller -silent -ignoreSysPrereqs -attachHome ORACLE_HOME="/u01/app/oracle/product/19.0.0/dbhome_1" ORACLE_HOME_NAME="OraDb19c_home1"
-Starting Oracle Universal Installer...
-
-Checking swap space: must be greater than 500 MB.   Actual 4053 MB    Passed
-The inventory pointer is located at /etc/oraInst.loc
-You can find the log of this install session at:
- /u01/app/oraInventory/logs/AttachHome2022-01-21_10-21-14AM.log
-'AttachHome' was successful.
-[oracle@ol8-19c bin]$
-[oracle@ol8-19c bin]$ ls -tlr /u01/app/oraInventory
-total 0
-drwxrwx--- 2 oracle oinstall 135 Jan 21 10:21 logs
-drwxrwx--- 2 oracle oinstall  60 Jan 21 10:21 ContentsXML
-[oracle@ol8-19c bin]$
-
-
-
-
-DBCA fails with Error: ORA-04062: signature of package "SYS.DBMS_BACKUP_RESTORE" has been changed
-
-[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=channel ORA_DISK_1: SID=29 device type=DISK
-[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-00571: ===================================================
-========
-[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS =======
-========
-[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-00571: ===================================================
-========
-[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN-03002: failure of restore command at 01/21/2022 10:43:50
-[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=ORA-04062: signature of package "SYS.DBMS_BACKUP_RESTORE" has b
-een changed
-[Thread-68] [ 2022-01-21 10:43:50.874 CST ] [RMANUtil$RMANUtilErrorListener.handleError:1386]  ERROR=RMAN>
-
-
-
-dbca -silent -createDatabase -templateName General_Purpose.dbc -createAsContainerDatabase true -numberOfPDBs 1 -pdbName orclpdb -gdbname oradb.example.com -sid oradb -sysPassword oracle -systemPassword oracle -pdbAdminPassword oracle -characterSet AL32UTF8 -memoryPercentage 50 -responseFile NO_VALUE -emConfiguration LOCAL
