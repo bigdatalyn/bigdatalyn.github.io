@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle Basic SQL 002 Tips"
+title: "Oracle Basic SQL 003 Tips"
 category: Oracle
 tags: Oracle SQL Tips
 ---
@@ -11,7 +11,7 @@ tags: Oracle SQL Tips
 
 
 
-Oracle Basic SQL 002 Study Tips
+Oracle Basic SQL 003 Study Tips
 
 01. IN/EXISTS/INNER JOIN
 
