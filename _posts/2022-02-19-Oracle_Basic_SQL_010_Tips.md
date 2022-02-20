@@ -13,11 +13,28 @@ tags: Oracle SQL Tips
 
 Oracle Basic SQL 010 Study Tips
 
-1. MULTI-TABLE INSERT with no where
-2. MULTI-TABLE INSERT with where
-3. INSERT FIRST
-4. INSERT ALL(row-column conversion)
+1. Update and Update with EXISTS
+2. Update via VIEW
+3. Update viw MERGE INTO
 
+Multi-table association update, Please use merge into or update via VIEW.
+
+MERGE INTO Tips.
+
+- Only Update the target table after MERGET INTO. Can NOT Update the USING table.
+- UPDATE and INSERT are performed at the same time if there is insert.
+- Can NOT update the column which is the JOIN column.
+- the on condition should use ().
+
+```
+merge into xxx
+using ()
+on ()
+when matched then
+update ...
+when not matched then
+insert ... values ...
+```
 
 
 
@@ -434,6 +451,7 @@ Plan hash value: 657231492
 |   7 |      TABLE ACCESS FULL	       | EMP	     |	    1 |      8 |     3	 (0)| 00:00:01 |      8 |00:00:00.01 |	     2 |
 --------------------------------------------------------------------------------------------------------------------------------
 ```
+
 
 
 ### Reference
