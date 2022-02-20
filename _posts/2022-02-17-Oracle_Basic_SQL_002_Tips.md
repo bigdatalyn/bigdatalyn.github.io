@@ -8,12 +8,10 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 002 Study Tips
 
 01. or union/union all
+
 
 
 
