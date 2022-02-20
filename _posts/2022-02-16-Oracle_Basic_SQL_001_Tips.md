@@ -8,9 +8,6 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 001 Study Tips
 
 01. null first/null last
