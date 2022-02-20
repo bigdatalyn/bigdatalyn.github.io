@@ -8,9 +8,6 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 010 Study Tips
 
 1. Update and Update with EXISTS
@@ -35,6 +32,8 @@ update ...
 when not matched then
 insert ... values ...
 ```
+
+
 
 
 
