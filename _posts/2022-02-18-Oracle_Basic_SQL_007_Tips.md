@@ -8,9 +8,6 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 007 Study Tips
 
 List department name with only department name and no employees in it.

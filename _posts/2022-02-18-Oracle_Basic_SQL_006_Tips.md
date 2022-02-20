@@ -8,9 +8,6 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 006 Study Tips
 
 list employee infor and list the manager's name.

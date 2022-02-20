@@ -8,15 +8,13 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 009 Study Tips
 
 1. MULTI-TABLE INSERT with no where
 2. MULTI-TABLE INSERT with where
 3. INSERT FIRST
 4. INSERT ALL(row-column conversion)
+
 
 
 

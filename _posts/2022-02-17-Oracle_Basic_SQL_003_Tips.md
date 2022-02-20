@@ -8,9 +8,6 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 003 Study Tips
 
 01. IN/EXISTS/INNER JOIN

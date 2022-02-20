@@ -8,14 +8,12 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 008 Study Tips
 
 INSERT default value.
 
 Use view to protect default value.
+
 
 
 

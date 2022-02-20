@@ -8,18 +8,14 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 004 Study Tips
 
 01. INNER JOIN
-
 02. LEFT JOIN
-
 03. RIGHT JOIN
-
 04. FULL JOIN
+
+
 
 
 

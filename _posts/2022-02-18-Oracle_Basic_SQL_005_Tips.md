@@ -8,12 +8,9 @@ tags: Oracle SQL Tips
 * content
 {:toc}
 
-
-
-
 Oracle Basic SQL 005 Study Tips
 
-
+- LEFT OUNT with WHERE
 
 
 
