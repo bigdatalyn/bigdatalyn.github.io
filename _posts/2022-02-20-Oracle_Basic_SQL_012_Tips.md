@@ -15,7 +15,9 @@ Generate a continuous number
 - connect by level   
 
 Query iterate over the string one by one
-- 
+- connect by level
+
+
 
 
 
