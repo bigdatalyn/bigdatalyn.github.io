@@ -14,6 +14,9 @@ Remove characters from a string
 - translate
 - regexp_replace
 
+Split strings and numbers
+- regexp_replace
+
 
 
 
@@ -79,6 +82,53 @@ abcdef adef
 SQL>
 
 ```
+
+### Split strings and numbers
+
+```
+create or replace view v_str_num as 
+select 'abc123' as data from dual union all
+select 'efg456' as data from dual union all
+select '789hig' as data from dual;
+
+select regexp_replace(data, '[0-9]', '') as str, regexp_replace(data, '[^0-9]', '') as num from v_str_num;
+```
+
+Split strings and numbers
+
+```sql
+SQL>
+create or replace view v_str_num as
+  2  select 'abc123' as data from dual union all
+  3  select 'efg456' as data from dual union all
+  4  select '789hig' as data from dual;
+
+View created.
+
+SQL>
+SQL> select * from v_str_num;
+
+DATA
+------
+abc123
+efg456
+789hig
+
+SQL>
+SQL> 
+COL "STR"                            FOR A3
+COL "NUM"                            FOR A3
+SQL> select regexp_replace(data, '[0-9]', '') as str, regexp_replace(data, '[^0-9]', '') as num from v_str_num;
+
+STR NUM
+--- ---
+abc 123
+efg 456
+hig 789
+
+SQL>
+```
+
 
 ### Reference
 
