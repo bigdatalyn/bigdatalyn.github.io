@@ -14,8 +14,9 @@ Sub-queries in select can be converted to left join (use_hj/use_nl)
 Tips: The execution plan has the `OUTER` keyword
 
 标量子查询可以转left join外连接（use_hj/use_nl)
-Tips:执行计划有`OUTER`关键字
-
+Tips:
+执行计划有`OUTER`关键字
+如果有group by,先汇总，后关联
 
 
 
