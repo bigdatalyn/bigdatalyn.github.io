@@ -1,14 +1,18 @@
 ---
 layout: post
-title: "MySQL Basic SQL 001 - Install Tips"
+title: "MySQL Study 001 - Install Tips"
 category: MySQL
-tags: MySQL Tips Install
+tags: MySQL Tips
 ---
 
 * content
 {:toc}
 
-MySQL Basic SQL 001 - Install Tips
+MySQL Study 001 - Install Tips
+
+- MySQL 5.6/5.7 Install Tips
+
+
 
 
 
