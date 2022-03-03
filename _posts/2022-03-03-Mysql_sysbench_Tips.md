@@ -183,6 +183,68 @@ Creating file test_file.2
 Creating file test_file.3
 1073741824 bytes written in 27.85 seconds (36.76 MiB/sec).
 [root@centos7 ~]#
+-- 随机读
+[root@centos7 ~]# sysbench --test=fileio --file-num=4 --file-block-size=16k --file-total-size=1g --file-test-mode=rndrd --file-extra-flags=direct --time=10 --max-requests=0 --threads=4 --report-interval=1 run
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+sysbench 1.0.20 (using bundled LuaJIT 2.1.0-beta2)
+
+Running the test with following options:
+Number of threads: 4
+Report intermediate results every 1 second(s)
+Initializing random number generator from current time
+
+
+Extra file open flags: directio
+4 files, 256MiB each
+1GiB total file size
+Block size 16KiB
+Number of IO requests: 0
+Read/Write ratio for combined random IO test: 1.50
+Periodic FSYNC enabled, calling fsync() each 100 requests.
+Calling fsync() at the end of test, Enabled.
+Using synchronous I/O mode
+Doing random read test
+Initializing worker threads...
+
+Threads started!
+
+[ 1s ] reads: 28.78 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.319
+[ 2s ] reads: 30.44 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.343
+[ 3s ] reads: 31.54 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.295
+[ 4s ] reads: 30.47 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.496
+[ 5s ] reads: 30.61 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.367
+[ 6s ] reads: 28.79 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.697
+[ 7s ] reads: 30.04 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.250
+[ 8s ] reads: 30.79 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.295
+[ 9s ] reads: 26.37 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.205
+[ 10s ] reads: 30.09 MiB/s writes: 0.00 MiB/s fsyncs: 0.00/s latency (ms,95%): 1.250
+
+File operations:
+    reads/s:                      1906.50
+    writes/s:                     0.00
+    fsyncs/s:                     0.00
+
+Throughput:
+    read, MiB/s:                  29.79
+    written, MiB/s:               0.00
+
+General statistics:
+    total time:                          10.0029s
+    total number of events:              19074
+
+Latency (ms):
+         min:                                    0.03
+         avg:                                    2.08
+         max:                                  184.93
+         95th percentile:                        1.37
+         sum:                                39768.03
+
+Threads fairness:
+    events (avg/stddev):           4768.5000/16.89
+    execution time (avg/stddev):   9.9420/0.05
+
+[root@centos7 ~]#
+
 ```
 
 ### Reference
