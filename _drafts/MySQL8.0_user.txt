@@ -1,0 +1,63 @@
+
+
+```
+(root@localhost) [mysql]>\_> select host,user,plugin,authentication_string from mysql.user;
++-----------+------------------+-----------------------+------------------------------------------------------------------------+
+| host      | user             | plugin                | authentication_string                                                  |
++-----------+------------------+-----------------------+------------------------------------------------------------------------+
+| %         | app_dev          | caching_sha2_password |                                                                        |
+| %         | sbtest_user      | caching_sha2_password | $A$005$nX[n5sl%>TP%*Bs;7umyGJ//rEs02Sht8F07.BJCi5CmsQ/3Vh28fxUGx6A |
+| %         | senior_dba       | caching_sha2_password |                                                                        |
+| %         | tom              | caching_sha2_password | $A$005$L*5;!:J&~?Mn6=bKkfsKo.YI1K3qPD93vvxsHYxzYQ9kH2AJTc.q45kRW/ |
+| localhost | mysql.infoschema | caching_sha2_password | $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED |
+| localhost | mysql.session    | caching_sha2_password | $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED |
+| localhost | mysql.sys        | caching_sha2_password | $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED |
+| localhost | root             | mysql_native_password | *84AAC12F54AB666ECFC2A83C676908C8BBC381B1                              |
++-----------+------------------+-----------------------+------------------------------------------------------------------------+
+8 rows in set (0.00 sec)
+
+(root@localhost) [mysql]>\_>
+(root@localhost) [mysql]>\_> UPDATE mysql.user SET plugin='mysql_native_password' WHERE user='sbtest_user';;
+Query OK, 1 row affected (0.00 sec)
+
+(root@localhost) [mysql]>\_> alter user 'sbtest_user'@'%' identified with mysql_native_password by '12345678';
+Query OK, 0 rows affected (0.01 sec)
+
+(root@localhost) [mysql]>\_> select host,user,plugin,authentication_string from mysql.user;
++-----------+------------------+-----------------------+------------------------------------------------------------------------+
+| host      | user             | plugin                | authentication_string                                                  |
++-----------+------------------+-----------------------+------------------------------------------------------------------------+
+| %         | app_dev          | caching_sha2_password |                                                                        |
+| %         | sbtest_user      | mysql_native_password | *84AAC12F54AB666ECFC2A83C676908C8BBC381B1                              |
+| %         | senior_dba       | caching_sha2_password |                                                                        |
+| %         | tom              | caching_sha2_password | $A$005$L*5;!:J&~?Mn6=bKkfsKo.YI1K3qPD93vvxsHYxzYQ9kH2AJTc.q45kRW/ |
+| localhost | mysql.infoschema | caching_sha2_password | $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED |
+| localhost | mysql.session    | caching_sha2_password | $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED |
+| localhost | mysql.sys        | caching_sha2_password | $A$005$THISISACOMBINATIONOFINVALIDSALTANDPASSWORDTHATMUSTNEVERBRBEUSED |
+| localhost | root             | mysql_native_password | *84AAC12F54AB666ECFC2A83C676908C8BBC381B1                              |
++-----------+------------------+-----------------------+------------------------------------------------------------------------+
+8 rows in set (0.00 sec)
+
+(root@localhost) [mysql]>\_>
+(root@localhost) [mysql]>\_> flush privileges;
+Query OK, 0 rows affected (0.01 sec)
+
+(root@localhost) [mysql]>\_> exit
+Bye
+[root@centos7 tests]#
+[root@centos7 tests]# mysql -usbtest_user -h127.0.0.1 -P3380 -p12345678
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 24
+Server version: 8.0.28 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+(sbtest_user@127.0.0.1) [(none)]>\_>
+```

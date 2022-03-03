@@ -11,6 +11,7 @@ tags: MySQL Tips
 MySQL Study 006 - sysbench tool Tips
 
 - Install and test
+- sysbench test mysql 8.0
 
 
 
@@ -246,6 +247,232 @@ Threads fairness:
 [root@centos7 ~]#
 
 ```
+
+### sysbench test mysql 8.0
+
+- create sbtest01 database and sbtest_user.
+
+```
+mysql> create database sbtest01
+mysql> create user sbtest_user identified by '12345678';
+mysql> grant all on sbtest.* to 'sbtest_user'@'%';
+mysql> show grants for sbtest_user;
+```
+
+- prepare test data in sbtest01 via sysbench and `/usr/share/sysbench/oltp_read_write.lua`.
+
+Note: prepare/run/cleanup option!
+
+```
+sysbench \
+--db-driver=mysql \
+--mysql-user=sbtest_user \
+--mysql_password=12345678 \
+--mysql-db=sbtest01 \
+--mysql-host=192.168.56.21 \
+--mysql-port=3380 \
+--tables=4 \
+--table-size=10000 \
+/usr/share/sysbench/oltp_read_write.lua prepare
+
+
+sysbench \
+--db-driver=mysql \
+--mysql-user=sbtest_user \
+--mysql_password=12345678 \
+--mysql-db=sbtest01 \
+--mysql-host=192.168.56.21 \
+--mysql-port=3380 \
+--tables=4 \
+--table-size=10000 \
+/usr/share/sysbench/oltp_read_write.lua cleanup
+
+
+sysbench \
+--db-driver=mysql \
+--mysql-user=sbtest_user \
+--mysql_password=12345678 \
+--mysql-db=sbtest01 \
+--mysql-host=192.168.56.21 \
+--mysql-port=3380 \
+--tables=4 \
+--table-size=10000 \
+--events=0 \
+--time=60 \
+--threads=4 \
+--report-interval=5 \
+/usr/share/sysbench/oltp_read_write.lua run
+
+
+--events=N                      limit for total number of events [0]
+--time=N                        limit for total execution time in seconds [10]
+--rate=N                        average transactions rate. 0 for unlimited rate [0]
+
+
+```
+
+- sysbench mysql test sample(prepare/cleanup)
+  
+```
+[root@centos7 ~]# sysbench \
+> --db-driver=mysql \
+> --mysql-user=sbtest_user \
+> --mysql_password=12345678 \
+> --mysql-db=sbtest01 \
+> --mysql-host=192.168.56.21 \
+> --mysql-port=3380 \
+> --tables=4 \
+> --table-size=10000 \
+> /usr/share/sysbench/oltp_read_write.lua prepare
+sysbench 1.0.20 (using bundled LuaJIT 2.1.0-beta2)
+
+Creating table 'sbtest1'...
+Inserting 10000 records into 'sbtest1'
+Creating a secondary index on 'sbtest1'...
+Creating table 'sbtest2'...
+Inserting 10000 records into 'sbtest2'
+Creating a secondary index on 'sbtest2'...
+Creating table 'sbtest3'...
+Inserting 10000 records into 'sbtest3'
+Creating a secondary index on 'sbtest3'...
+Creating table 'sbtest4'...
+Inserting 10000 records into 'sbtest4'
+Creating a secondary index on 'sbtest4'...
+[root@centos7 ~]#
+
+[root@centos7 ~]# sysbench \
+> --db-driver=mysql \
+> --mysql-user=sbtest_user \
+> --mysql_password=12345678 \
+> --mysql-db=sbtest01 \
+> --mysql-host=192.168.56.21 \
+> --mysql-port=3380 \
+> --tables=4 \
+> --table-size=10000 \
+> /usr/share/sysbench/oltp_read_write.lua cleanup
+sysbench 1.0.20 (using bundled LuaJIT 2.1.0-beta2)
+
+Dropping table 'sbtest1'...
+Dropping table 'sbtest2'...
+Dropping table 'sbtest3'...
+Dropping table 'sbtest4'...
+[root@centos7 ~]#
+```
+
+- sysbench test data sample
+
+```
+(root@localhost) [(none)]>\_> use sbtest01;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+(root@localhost) [sbtest01]>\_> show tables;
++--------------------+
+| Tables_in_sbtest01 |
++--------------------+
+| sbtest1            |
+| sbtest2            |
+| sbtest3            |
+| sbtest4            |
++--------------------+
+4 rows in set (0.00 sec)
+
+(root@localhost) [sbtest01]>\_> show create table sbtest1 \G
+*************************** 1. row ***************************
+       Table: sbtest1
+Create Table: CREATE TABLE `sbtest1` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `k` int NOT NULL DEFAULT '0',
+  `c` char(120) NOT NULL DEFAULT '',
+  `pad` char(60) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `k_1` (`k`)
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+1 row in set (0.00 sec)
+
+(root@localhost) [sbtest01]>\_>
+(root@localhost) [sbtest01]>\_> select * from sbtest1 limit 1 \G
+*************************** 1. row ***************************
+ id: 1
+  k: 4993
+  c: 83868641912-28773972837-60736120486-75162659906-27563526494-20381887404-41576422241-93426793964-56405065102-33518432330
+pad: 67847967377-48000963322-62604785301-91415491898-96926520291
+1 row in set (0.00 sec)
+
+(root@localhost) [sbtest01]>\_>
+```
+
+- sysbench mysql test sample(run)
+
+```
+[root@centos7 ~]# sysbench \
+> --db-driver=mysql \
+> --mysql-user=sbtest_user \
+> --mysql_password=12345678 \
+> --mysql-db=sbtest01 \
+> --mysql-host=192.168.56.21 \
+> --mysql-port=3380 \
+> --tables=4 \
+> --table-size=10000 \
+> --events=0 \
+> --time=60 \
+> --threads=4 \
+> --report-interval=5 \
+> /usr/share/sysbench/oltp_read_write.lua run
+sysbench 1.0.20 (using bundled LuaJIT 2.1.0-beta2)
+
+Running the test with following options:
+Number of threads: 4
+Report intermediate results every 5 second(s)
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+[ 5s ] thds: 4 tps: 148.64 qps: 2984.93 (r/w/o: 2089.91/596.95/298.07) lat (ms,95%): 50.11 err/s: 0.00 reconn/s: 0.00
+[ 10s ] thds: 4 tps: 150.29 qps: 3006.34 (r/w/o: 2105.22/600.55/300.57) lat (ms,95%): 50.11 err/s: 0.00 reconn/s: 0.00
+[ 15s ] thds: 4 tps: 121.02 qps: 2420.32 (r/w/o: 1693.63/484.66/242.03) lat (ms,95%): 89.16 err/s: 0.00 reconn/s: 0.00
+[ 20s ] thds: 4 tps: 141.75 qps: 2833.83 (r/w/o: 1984.92/565.41/283.50) lat (ms,95%): 51.02 err/s: 0.00 reconn/s: 0.00
+[ 25s ] thds: 4 tps: 146.47 qps: 2929.68 (r/w/o: 2049.23/587.50/292.95) lat (ms,95%): 51.94 err/s: 0.00 reconn/s: 0.00
+[ 30s ] thds: 4 tps: 141.59 qps: 2828.13 (r/w/o: 1980.82/564.35/282.97) lat (ms,95%): 51.02 err/s: 0.00 reconn/s: 0.00
+[ 35s ] thds: 4 tps: 138.65 qps: 2775.15 (r/w/o: 1941.87/555.79/277.49) lat (ms,95%): 53.85 err/s: 0.00 reconn/s: 0.00
+[ 40s ] thds: 4 tps: 143.83 qps: 2876.95 (r/w/o: 2014.19/575.11/287.66) lat (ms,95%): 51.94 err/s: 0.00 reconn/s: 0.00
+[ 45s ] thds: 4 tps: 143.12 qps: 2866.02 (r/w/o: 2006.30/573.48/286.24) lat (ms,95%): 49.21 err/s: 0.00 reconn/s: 0.00
+[ 50s ] thds: 4 tps: 129.62 qps: 2590.84 (r/w/o: 1813.90/517.69/259.24) lat (ms,95%): 56.84 err/s: 0.00 reconn/s: 0.00
+[ 55s ] thds: 4 tps: 126.49 qps: 2526.05 (r/w/o: 1767.89/505.17/252.99) lat (ms,95%): 58.92 err/s: 0.00 reconn/s: 0.00
+[ 60s ] thds: 4 tps: 140.42 qps: 2808.90 (r/w/o: 1965.55/562.50/280.85) lat (ms,95%): 52.89 err/s: 0.00 reconn/s: 0.00
+SQL statistics:
+    queries performed:
+        read:                            117096
+        write:                           33456
+        other:                           16728
+        total:                           167280
+    transactions:                        8364   (139.27 per sec.)
+    queries:                             167280 (2785.42 per sec.)
+    ignored errors:                      0      (0.00 per sec.)
+    reconnects:                          0      (0.00 per sec.)
+
+General statistics:
+    total time:                          60.0539s
+    total number of events:              8364
+
+Latency (ms):
+         min:                                    4.58
+         avg:                                   28.69
+         max:                                  149.94
+         95th percentile:                       52.89
+         sum:                               239940.24
+
+Threads fairness:
+    events (avg/stddev):           2091.0000/15.48
+    execution time (avg/stddev):   59.9851/0.03
+
+[root@centos7 ~]#
+```
+
 
 ### Reference
 
