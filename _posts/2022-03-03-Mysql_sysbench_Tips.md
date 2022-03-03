@@ -478,6 +478,8 @@ Threads fairness:
 
 [MySQL](https://www.mysql.com/)
 
+[使用sysbench对mysql压力测试](https://developer.aliyun.com/article/47347)
+
 
 Have a good work&life! 2022/03 via LinHong
 
