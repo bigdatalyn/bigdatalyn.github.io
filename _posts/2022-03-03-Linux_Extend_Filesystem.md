@@ -166,6 +166,7 @@ I/O size (minimum/optimal): 512 bytes / 512 bytes
 
 [root@centos7 ~]#
 ```
+
 `/dev/sda3        41943040    62914559    10485760   83  Linux` can be used after reboot virtualbox os.
 
 
