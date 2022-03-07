@@ -94,6 +94,8 @@ Disk identifier: 0x000beddc
 
 Format the /dev/sda(root vg) via following commands.
 - m / n / p / w
+
+
 ```
 Command (m for help): m
 Command action
