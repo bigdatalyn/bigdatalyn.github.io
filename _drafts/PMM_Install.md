@@ -83,38 +83,51 @@ docker run -d \
 -p 80:80 \
 --volumes-from pmm-data percona/pmm-server:2
 
+docker run -d -p 80:80  -e METRICS_RETENTION=720h -e SERVER_USER=admin -e SERVER_PASSWORD=admin --volumes-from pmm-data --name pmm-server --restart always percona/pmm-server:2
+docker run -d -p 443:443 --volumes-from pmm-data --name pmm-server -e SERVER_USER=admin -e SERVER_PASSWORD=admin --restart always percona/pmm-server:2
+
+
+
+docker run -d \
+-e METRICS_RETENTION=720h \
+-e SERVER_USER=admin \
+-e SERVER_PASSWORD=admin \
+--volumes-from pmm-data percona/pmm-server:2
+
+[root@centos7 ~]# docker create \
+> -v /opt/prometheus/data \
+> -v /opt/consul-data \
+> -v /var/lib/mysql \
+> -v /var/lib/grafana \
+> --name pmm-data \
+> percona/pmm-server:2 /bin/true
+dd0494618740965638f9bf23277f743008547d1bc0a0217aadd2de53aa9f1027
+[root@centos7 ~]# docker ps -a
+CONTAINER ID        IMAGE                  COMMAND             CREATED             STATUS              PORTS               NAMES
+dd0494618740        percona/pmm-server:2   "/bin/true"         5 seconds ago       Created                                 pmm-data
+[root@centos7 ~]#
+[root@centos7 ~]#
+[root@centos7 ~]#
 [root@centos7 ~]# docker run -d \
 > -e METRICS_RETENTION=720h \
 > -e SERVER_USER=admin \
 > -e SERVER_PASSWORD=admin \
 > -p 80:80 \
 > --volumes-from pmm-data percona/pmm-server:2
-938ac008ac88a26ee6719aa0c3860b6a1e4b3d3e4385268374659cc865f37c6e
-[root@centos7 ~]#
-[root@centos7 ~]#
-[root@centos7 ~]# docker ps
+4eddf01a7f3bdf6da6c9faf4969d8c4e2c68e3b48a2a7e32527ab0e281b45b6e
+[root@centos7 ~]# docker ps -a
 CONTAINER ID        IMAGE                  COMMAND                CREATED             STATUS                            PORTS                         NAMES
-938ac008ac88        percona/pmm-server:2   "/opt/entrypoint.sh"   3 seconds ago       Up 2 seconds (health: starting)   0.0.0.0:80->80/tcp, 443/tcp   zealous_yonath
+4eddf01a7f3b        percona/pmm-server:2   "/opt/entrypoint.sh"   3 seconds ago       Up 2 seconds (health: starting)   0.0.0.0:80->80/tcp, 443/tcp   xenodochial_jang
+dd0494618740        percona/pmm-server:2   "/bin/true"            21 seconds ago      Created                                                         pmm-data
 [root@centos7 ~]#
-
-
-
-[root@centos7 ~]# docker ps
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-[root@centos7 ~]# docker run -d -p 80:80 --volumes-from pmm-data --name pmm-server --restart always percona/pmm-server:2
-83f7ff195a2d0b1e7c0aa171b6fabf0da63ea9afa40a76496925f5baad28211b
-[root@centos7 ~]# docker ps
-CONTAINER ID        IMAGE                  COMMAND                CREATED             STATUS                           PORTS                         NAMES
-83f7ff195a2d        percona/pmm-server:2   "/opt/entrypoint.sh"   2 seconds ago       Up 1 second (health: starting)   0.0.0.0:80->80/tcp, 443/tcp   pmm-server
-[root@centos7 ~]#
-[root@centos7 ~]# docker exec -it pmm-server /bin/bash
-[root@83f7ff195a2d opt]#
-[root@83f7ff195a2d ~]# cd /etc/grafana/
-[root@83f7ff195a2d grafana]# ls -l
+[root@centos7 ~]# docker exec -it xenodochial_jang /bin/bash
+[root@4eddf01a7f3b opt]#
+[root@4eddf01a7f3b ~]# cd /etc/grafana/
+[root@4eddf01a7f3b grafana]# ls -l
 total 40
 -rw-r--r-- 1 grafana grafana 35298 Dec 13 09:46 grafana.ini
 -rw-r--r-- 1 grafana grafana  2270 Dec  3 13:55 ldap.toml
-[root@83f7ff195a2d grafana]#
+[root@4eddf01a7f3b grafana]#
 
 ```
 
@@ -125,6 +138,17 @@ PMM Server HomePage
 
 ### Client Install
 
+
+[root@centos7 ~]# ls -tlr /usr/lib/sysctl.d/00-system.conf
+-rw-r--r--. 1 root root 293 Oct 13  2020 /usr/lib/sysctl.d/00-system.conf
+[root@centos7 ~]# vi /usr/lib/sysctl.d/00-system.conf
+[root@centos7 ~]#
+[root@centos7 ~]#
+[root@centos7 ~]#
+[root@centos7 ~]# systemctl restart network
+[root@centos7 ~]# sysctl net.ipv4.ip_forward
+net.ipv4.ip_forward = 1
+[root@centos7 ~]#
 
 Yum Install
 ```
@@ -145,6 +169,16 @@ rpm -ivh pmm2-client-2.16.0-6.el7.x86_64.rpm
 
 ### Config PMM-Server
 
+[root@centos7 ~]# ls -tlr /usr/lib/sysctl.d/00-system.conf
+-rw-r--r--. 1 root root 293 Oct 13  2020 /usr/lib/sysctl.d/00-system.conf
+[root@centos7 ~]# vi /usr/lib/sysctl.d/00-system.conf
+[root@centos7 ~]#
+[root@centos7 ~]#
+[root@centos7 ~]#
+[root@centos7 ~]# systemctl restart network
+[root@centos7 ~]# sysctl net.ipv4.ip_forward
+net.ipv4.ip_forward = 1
+[root@centos7 ~]#
 
 pmm-admin config --server 192.168.56.21:80 --server-user admin --server-password admin
 
