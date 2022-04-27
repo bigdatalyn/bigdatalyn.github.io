@@ -20,6 +20,13 @@ Execution plans, execution statistics, data volume, etc. Those have to be taken 
 
 SQLT helps gathering these info.
 
+
+
+
+
+
+
+
 ### Download SQLT and Install SQLT
 
 Download SQLT: All About the SQLT Diagnostic Tool (Doc ID 215187.1)
