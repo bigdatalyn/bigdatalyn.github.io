@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle SQLT Tips"
+title: "Oracle SQLcl Tips"
 category: Oracle
 tags: Oracle SQLcl Tips
 ---
