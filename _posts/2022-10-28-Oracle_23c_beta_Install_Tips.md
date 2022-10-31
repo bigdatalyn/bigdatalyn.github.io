@@ -10,6 +10,16 @@ tags: Oracle 23c Tips
 
 Oracle 23c Beta Install Tips
 
+![ocw-23c-announcement]({{ "/files/Oracle/23c/ocw-23c-announcement.png"}})	
+
+
+
+
+
+
+
+
+
 ### Env
 
 Prepare 23c env file(Ref 21c)
@@ -135,6 +145,8 @@ Check /u23/app/oracle/product/23.0.0/dbhome_1/install/root_ol8-21c_2022-10-28_23
 
 
 ```
+
+![slient_install-23c-product]({{ "/files/Oracle/23c/slient_install-23c-product.png"}})	
 
 lsnrctl 
 ```
@@ -279,6 +291,10 @@ SQL>
 
 ```
 
+![23c-sqlplus]({{ "/files/Oracle/23c/23c-sqlplus.png"}})	
+
+
+
 ### fdisk new disk
 
 ```
@@ -395,6 +411,11 @@ vm_folder            425G  251G  175G  59% /mnt
 [Oracle Beta Programs](https://tinyurl.com/OracleBeta)
 
 [Oracle Database 23c Beta Program](https://blogs.oracle.com/database/post/oracle-database-23c-beta-program)
+
+Refer:
+
+![23c-help]({{ "/files/Oracle/23c/23c-help.png"}})
+
 
 Have a good work&life! 2022/10 via LinHong
 
