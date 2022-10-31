@@ -191,6 +191,7 @@ The command completed successfully
 ```
 
 create cdb/pdb via silent mode
+
 ```
 dbca -silent -createDatabase                                                   \
      -templateName General_Purpose.dbc                                         \
