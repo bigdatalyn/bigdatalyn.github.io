@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle 23c New features - Encryption of Tablespaces in an Oracle Data Guard  Tips"
+title: "Oracle 23c New features - DBCA Support for Standard Edition High Availability Tips"
 category: Oracle
 tags: Oracle 23c Features Tips
 ---
