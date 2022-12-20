@@ -1,0 +1,258 @@
+
+How to Get Data from Existing Table to Flat File Usable by SQL*Loader (Doc ID 123852.1)	
+
+DISCLAIMER
+---------------
+This script is provided for educational purposes only and not supported by Oracle Support Services. It has been tested internally, however, and works as documented. We do not guarantee that it will work for you, so be sure to test it in your environment before relying on it.
+
+Proofread this script before using it! Due to the differences in the way text editors, e-mail packages and operating systems handle text formatting (spaces, tabs and carriage returns), this script may not be in an executable state when you first receive it. Check over the script to ensure that errors of this type are corrected.
+
+PURPOSE
+-------
+
+Explains how to get data from an existing table to flat file usable by 
+SQL*Loader.
+
+ 
+SCOPE & APPLICATION
+-------------------
+
+DBAs and Developers.
+
+
+How to get data from existing table to flat file usable by SQL*Loader:
+======================================================================
+ 
+The script at end of this bulletin spools STRING, NUMBER and DATE data from 
+tables in the format of a SQL*Loader controlfile. If you remove the first 
+"control section" of the spool file, you will have a 'coma separated values' 
+formated file.
+
+Syntax:
+  sqlplus username/password @csv <table_owner> <table_name> <list_of_columns>
+or if you already are in sqlplus:
+  @csv <table_owner> <table_name> <list_of_columns>
+e.g.:
+  sqlplus scott/tiger@orcl @csv scott emp "*"
+or
+  sqlplus scott/tiger@matu @csv scott emp 'empno, ename'
+or if you already are in sqlplus:
+  @csv scott emp 'empno, ename'
+
+It will generate file <table_name>.lst. 
+You can use file <table_name>.lst as control file for sqlload into new table:
+  export NLS_DATE_FORMAT=DD.MM.YYYY HH24:MI:SS
+  sqlldr username/password control=<table_name>.lst
+e.g.:
+  export NLS_DATE_FORMAT=DD.MM.YYYY HH24:MI:SS
+  sqlldr test/test@orcl control=emp.lst
+
+WARNING:
+1. You have to set "NLS_DATE_FORMAT=DD.MM.YYYY HH24:MI:SS" in your environment 
+   for sqlloader session.
+2. You have to have pre-created tables in your target database for sqlloader. 
+   You can follow steps from Note 123851.1 to create them.
+
+HINT:
+You can generate script invoking this script for every table of user SCOTT by:
+spool scott_tables
+select '@csv scott '||table_name||' * ' from dba_tables where owner='SCOTT';
+spool off
+You have to remove "quit" at end of script csv.sql in this case.
+
+
+============ Script csv.sql ==================
+set serveroutput on size 1000000
+set pages 0
+set colsep ''
+set term off
+set wrap on 
+set verify off
+set heading off
+set sqlprompt ''
+set showmode off
+set feedback off
+spool csv.tmp
+declare
+  type VMrec is record(
+    column_name all_tab_columns.column_name%type,
+    data_type all_tab_columns.data_type%type,
+	data_length all_tab_columns.data_length%type
+  );
+  r VMrec;
+  colNum number;
+  myColumn all_tab_columns.column_name%type;
+  r_owner varchar2(30) := '&1';
+  r_table_name varchar2(30) := '&2';
+  clist varchar2(4000) := '&3';
+  ls number := 0;
+  starting boolean := true;
+
+begin
+  if clist = '*' then
+    clist:='';
+    for r in (select column_name from all_tab_columns
+               where owner=upper(r_owner)
+                 and table_name=upper(r_table_name))
+    loop
+	  if starting then
+	    starting:=false;
+	  else
+	    clist:=clist||',';
+	  end if;
+      clist:=clist||r.column_name;
+    end loop;
+  else
+    clist:=upper(clist);
+  end if;
+  starting:=true;
+
+  loop
+    colNum:=instr(clist,',');
+	if colNum>0 then
+      myColumn:=substr(clist,0,colNum-1);
+	  clist:=substr(clist,colNum+1,4000);
+	else
+	  myColumn:=clist;
+	  clist:='';
+	end if;
+	myColumn:=rtrim(ltrim(myColumn));
+	if myColumn is null then
+	  exit;
+	end if;
+    select column_name, data_type, data_length into r
+	  from all_tab_columns 
+     where table_name=upper(r_table_name)
+	   and owner=upper(r_owner)
+	   and column_name = myColumn;
+  
+    if(r.data_type='DATE') then
+	  ls:=ls+21;
+	else
+      ls := ls + r.data_length;
+	end if;
+  end loop;
+  dbms_output.put_line('set linesize '||ls);
+  dbms_output.put_line('set colsep '||chr(39)||chr(39)); -- dont put space between columns
+  dbms_output.put_line('set wrap on'); -- don't truncate long lines. Wrap them.
+  dbms_output.put_line('set verify off'); -- don't list sql statement
+  dbms_output.put_line('set heading off'); -- don't show column heading
+  dbms_output.put_line('set sqlprompt '||chr(39)||chr(39)); -- supress prompt
+  dbms_output.put_line('set showmode off'); -- dont show old and new value
+  dbms_output.put_line('set feedback off'); -- dont show number of rows returned by query
+  dbms_output.put_line('select ');
+
+  starting:=true;
+  clist:='&3';
+  if clist = '*' then
+    -- to ensure order of columns
+    clist:='';
+    for r in (select column_name from all_tab_columns
+               where owner=upper(r_owner)
+                 and table_name=upper(r_table_name))
+    loop
+	  if starting then
+	    starting:=false;
+	  else
+	    clist:=clist||',';
+	  end if;
+      clist:=clist||r.column_name;
+    end loop;
+  else
+  clist:=upper(clist);
+  end if;
+  starting:=true;
+
+  loop
+    colNum:=instr(clist,',');
+	if colNum>0 then
+      myColumn:=substr(clist,0,colNum-1);
+	  clist:=substr(clist,colNum+1,4000);
+	else
+	  myColumn:=clist;
+	  clist:='';
+	end if;
+	myColumn:=rtrim(ltrim(myColumn));
+	if myColumn is null then
+	  exit;
+	end if;
+    select column_name, data_type, data_length into r
+	  from all_tab_columns 
+     where table_name=upper(r_table_name)
+	   and owner=upper(r_owner)
+	   and column_name = myColumn;
+
+    if starting then
+	  starting:=false;
+	else
+	  dbms_output.put_line(','||'chr(44)'||',');
+	end if;
+
+    if instr(r.data_type,'CHAR')>0 then
+      dbms_output.put_line('chr(34),'||r.column_name||',chr(34)');
+    else if r.data_type='NUMBER' then
+      dbms_output.put_line(r.column_name);
+    else if r.data_type='DATE' then
+      dbms_output.put_line('chr(34),'||'to_char('||r.column_name||','||chr(39)||'DD.MM.YYYY HH24:MI:SS'||chr(39)||')'||',chr(34)');
+    end if;
+    end if;
+    end if;
+  end loop;
+  dbms_output.put_line(' from '||r_table_name||';');
+
+  exception
+  when others then
+    dbms_output.put_line('Encontered: '||sqlerrm||' ... for '||r_owner||'.'||r_table_name||'.'||myColumn);
+end;   
+/
+spool off
+spool &2
+declare
+r_owner varchar2(30) := '&1';
+r_table_name varchar2(30) := '&2';
+clist varchar2(4000) := '&3';
+starting boolean := true;
+begin
+  if clist = '*' then
+    clist:='';
+    for r in (select column_name from all_tab_columns
+               where owner=upper(r_owner)
+                 and table_name=upper(r_table_name))
+    loop
+	  if starting then
+	    starting:=false;
+	  else
+	    clist:=clist||',';
+	  end if;
+      clist:=clist||chr(39)||r.column_name||chr(39);
+    end loop;
+  else
+    clist:=replace(clist,' ','');
+    clist:=upper(clist);
+    clist:=replace(clist,',',chr(39)||','||chr(39));
+    clist:=chr(39)||clist||chr(39);
+  end if;
+  starting:=true;
+
+  dbms_output.put_line('LOAD DATA INFILE *');
+  dbms_output.put_line('INTO TABLE '||r_table_name);
+  dbms_output.put_line('FIELDS TERMINATED BY '||chr(39)||','||chr(39));
+  dbms_output.put_line('OPTIONALLY ENCLOSED BY '||chr(39)||chr(34)||chr(39));
+  dbms_output.put_line('(');
+  for r in (select column_name, data_type from all_tab_columns 
+             where table_name=upper(r_table_name)
+			   and owner=upper(r_owner)
+   			   and instr(clist,column_name)>0)
+  loop
+    if starting then
+	  starting:=false;
+	else
+	  dbms_output.put_line(',');
+	end if;
+    dbms_output.put_line(r.column_name);
+  end loop;
+  dbms_output.put_line(') BEGINDATA ');  
+end;
+/
+
+
