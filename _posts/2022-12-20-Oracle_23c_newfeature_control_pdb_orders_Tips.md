@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle 23c New features - Real-Time SQL Monitoring Enhancements Tips"
+title: "Oracle 23c New features - Control PDB Open Order Enhancements Tips"
 category: Oracle
 tags: Oracle 23c Features Tips
 ---
@@ -8,7 +8,7 @@ tags: Oracle 23c Features Tips
 * content
 {:toc}
 
-Oracle 23c New features - Real-Time SQL Monitoring Enhancements Tips
+Oracle 23c New features - Control PDB Open Order Tips
 
 ![ocw-23c-announcement]({{ "/files/Oracle/23c/ocw-23c-announcement.png"}})	
 
