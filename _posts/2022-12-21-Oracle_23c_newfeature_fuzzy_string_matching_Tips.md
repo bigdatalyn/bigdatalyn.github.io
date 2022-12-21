@@ -1,7 +1,6 @@
 ---
 layout: post
-title: "Oracle 23c New features - Data Quality Operators in Oracle Database
- Tips"
+title: "Oracle 23c New features - Data Quality Operators in Oracle Database Tips"
 category: Oracle
 tags: Oracle 23c Features Tips
 ---
