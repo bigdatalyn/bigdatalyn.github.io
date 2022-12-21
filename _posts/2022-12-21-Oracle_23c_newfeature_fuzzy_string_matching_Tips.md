@@ -45,7 +45,9 @@ This operator mainly implements the Double Metaphone algorithm. If the keyword D
 ```
 This operator supports the following keywords, each representing the corresponding supported algorithm: LEVENSHTEIN, JARO_WINKLER, BIGRAM and TRIGRAM, WHOLE_WORD_MATCH, and LONGEST_COMMON_SUBSTRING.
 ```
+
 Test in 23c.
+
 ```
 HONG@pdb1> select phonic_encode(DOUBLE_METAPHONE, 'smith') c1, phonic_encode(DOUBLE_METAPHONE_ALT, 'smith') c2 from dual;
 
@@ -58,7 +60,6 @@ HONG@pdb1> select fuzzy_match(LEVENSHTEIN, 'Mohamed Tarik', 'Mo Tariq') from dua
 FUZZY_MATCH(LEVENSHTEIN,'MOHAMEDTARIK','MOTARIQ')
 -------------------------------------------------
 					       54
-
 HONG@pdb1> 
 ```
 
