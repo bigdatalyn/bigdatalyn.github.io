@@ -1,97 +1,67 @@
 ---
 layout: post
-title: "Oracle 23c New features - SQL_HISTORY_ENABLED Tips"
+title: "Oracle OCW2022 RWP Performance Up Tips"
 category: Oracle
-tags: Oracle 23c Features Tips
+tags: Oracle Performance Tips
 ---
 
 * content
 {:toc}
 
-Oracle 23c New features - SQL_HISTORY_ENABLED Tips
+Oracle OCW2022 RWP Performance Up Tips
 
-![ocw-23c-announcement]({{ "/files/Oracle/23c/ocw-23c-announcement.png"}})	
-
-
-Oracle Database 23c introduces MAX_COLUMNS parameter
-
-Use SQL_HISTORY_ENABLED to enable or disable SQL history monitoring.
-
-To enable SQL history monitoring, set this parameter to ON. This feature monitors user-issued SQL statements in each user session on a best effort, depending on memory capacity. DDL, DML, and query statements are monitored; SQL statements issued in the background and recursive SQL statements are excluded. The monitored information is exposed by the V$SQL_HISTORY dynamic performance view.
-
-To disable SQL history monitoring, set this parameter to OFF.
-
-
-
-
-
-
-
-
-### SQL_HISTORY_ENABLED
-
-![23c-sql_history_enabled]({{ "/files/Oracle/23c/sql_history_enabled.png"}})
-
-Test:
-```
-SYS@cdb1> show parameter sql_history
-
-NAME				     TYPE	 VALUE
------------------------------------- ----------- ------------------------------
-sql_history_enabled		     boolean	 FALSE
-SYS@cdb1> alter system set sql_history_enabled=true;
-
-System altered.
-
-SYS@cdb1> exit
-Disconnected from Oracle Database 23c Enterprise Edition Release 23.0.0.0.0 - Beta
-Version 23.1.0.0.0
-[oracle@ol8-23c ~]$ sqlplus / as sysdba
-
-SQL*Plus: Release 23.0.0.0.0 - Beta on Wed Dec 21 13:50:22 2022
-Version 23.1.0.0.0
-
-Copyright (c) 1982, 2022, Oracle.  All rights reserved.
-
-
-Connected to:
-Oracle Database 23c Enterprise Edition Release 23.0.0.0.0 - Beta
-Version 23.1.0.0.0
-
-SYS@cdb1> alter session set nls_date_format = 'YYYY-MM-DD HH24:MI:SS';
-
-Session altered.
-
-SYS@cdb1> show parameter sql_history
-
-NAME				     TYPE	 VALUE
------------------------------------- ----------- ------------------------------
-sql_history_enabled		     boolean	 TRUE
-SYS@cdb1> 
-```
+Study case
 
 ```
-SET TERMOUT OFF
-COL "SQL_ID"                         FOR A13
-COL "ELAPSED_TIME"                   FOR 999999999999
-COL "CPU_TIME"                       FOR 99999999
-COL "PHYSICAL_READ_BYTES"            FOR 9999999999999999999
-COL "USER_IO_WAIT_TIME"              FOR 99999999999999999
-COL "SQL_TEXT"                       FOR A100
-select sql_id,elapsed_time,cpu_time,physical_read_bytes,user_io_wait_time,sql_text from v$sql_history order by 2;
+• Better cardinality estimates
+• Better execution plans
+• More access paths available
+• Ability for the optimizer to perform many transformations and optimizations (join elimination,materialized view rewrites, In-Memory Aggregation transformation, and many more)
+• Partition pruning
+• Exploit other technologies for optimal performance
+    • Parallel Execution
+    • Materialized Views
+    • Compression
+    • Database In-Memory
 ```
 
-[10.55 V$SQL_HISTORY](https://docs-stage.oracle.com/en/database/oracle/oracle-database/23/refrn/V-SQL_HISTORY.html)
+ADW 
+```
+Autonomous Database can help address some problems:
+• Augments bad/stale stats
+• Dynamic statistics may correct some cardinality estimates (do not solely rely on dynamic statistics)
+• Stats quality (every column has a histogram)
+• Use of features like IMA, Columnar Cache in Flash is available
 
-![23c-view_sql_history]({{ "/files/Oracle/23c/view_sql_history.png"}})
+Where Autonomous Database cannot help:
+• Suboptimal schema design
+• Wrong data types on join keys
+• Lack of constraints
+• Sub-optimal partitioning strategy
+```
 
-![23c-TestSQL01]({{ "/files/Oracle/23c/TestSQL01.png"}})
+
+
+
+
+
+
+
+
+### Some slides
+
+![OCW2022_Query]({{ "/files/Oracle/23c/OCW2022_Query.png"}})	
+
+![InitialPerformance]({{ "/files/Oracle/23c/InitialPerformance.png"}})	
+
+![ocw_2022_rwp]({{ "/files/Oracle/23c/ocw_2022_rwp.png"}})	
+
 
 
 
 ### Reference 
 
-[2.205 MAX_COLUMNS](https://docs-stage.oracle.com/en/database/oracle/oracle-database/23/refrn/MAX_COLUMNS.html)
+[Hints and Tips for Fast and Predictable Query Performance with Star Schemas Session LRN3511](https://static.rainfocus.com/oracle/cloudworld/sess/1657090896477001W6Zk/finalsessionfile/LRN3511_OCW_RWP_STAR_FINAL_1666055065567001XB2U.pdf)
 
 Refer:
 
