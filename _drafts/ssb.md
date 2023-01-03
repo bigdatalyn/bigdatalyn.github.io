@@ -472,9 +472,9 @@ FROM USER_TAB_COLUMNS;
 
 alter session set NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS';  
 
-select table_name,num_rows,blocks,last_analyzed from user_tables where table_name in ('PART');
+select table_name,num_rows,blocks,last_analyzed from user_tables where table_name in ('LINEORDER','PART','SUPPLIER','CUSTOMER','DATE_DIM');
 
-select table_name,index_name,t.blevel,t.num_rows,t.leaf_blocks,t.last_analyzed from user_indexes t where table_name in ('T1','T2');  
+select table_name,index_name,t.blevel,t.num_rows,t.leaf_blocks,t.last_analyzed from user_indexes t where table_name in ('LINEORDER','PART','SUPPLIER','CUSTOMER','DATE_DIM');  
 
 说明：
 -- table_name：展示表名 --num_rows：最后一次统计时的行数 --blocks：非当前块数，最后一次统计时的块数 --last_analyzed ：最后一次统计的时间 
