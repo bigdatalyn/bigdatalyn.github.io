@@ -1,0 +1,1178 @@
+
+
+
+
+### MySQL5.7 配置解压安装
+
+
+[MySQL Community Downloads](https://dev.mysql.com/downloads/mysql/)
+
+```
+[root@ol8mysql vagrant]# tar -zxvf mysql-5.7.40-el7-x86_64.tar.gz 
+
+[root@ol8mysql vagrant]# mv mysql-5.7.40-el7-x86_64 /usr/local/mysql
+
+[root@ol8mysql01 ~]# chattr -i /etc/shadow /etc/group /etc/gshadow /etc/passwd
+[root@ol8mysql01 ~]# groupadd mysql
+[root@ol8mysql01 ~]# mkdir -p /home/mysql
+[root@ol8mysql01 ~]# useradd mysql -g mysql -d /home/mysql -s /sbin/nolgin
+useradd: warning: the home directory already exists.
+Not copying any file from skel directory into it.
+[root@ol8mysql01 ~]# chattr +i /etc/shadow /etc/group /etc/gshadow /etc/passwd
+[root@ol8mysql01 ~]# 
+[root@ol8mysql01 ~]# cat .bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
+basedir=/usr/local/mysql
+datadir=/home/mysql
+[root@ol8mysql01 ~]# 
+[root@ol8mysql01 ~]# source .bash_profile
+[root@ol8mysql01 ~]# echo $basedir
+/usr/local/mysql
+[root@ol8mysql01 ~]# ls -tlr /usr/local/mysql
+total 268
+-rw-r--r--.  1 vagrant vagrant    566 Aug 30 03:50 README
+-rw-r--r--.  1 vagrant vagrant 255077 Aug 30 03:50 LICENSE
+drwxr-xr-x.  3 vagrant vagrant   4096 Jan  4 07:02 include
+drwxr-xr-x.  4 vagrant vagrant     30 Jan  4 07:02 man
+drwxr-xr-x.  2 vagrant vagrant     55 Jan  4 07:02 docs
+drwxr-xr-x.  2 vagrant vagrant   4096 Jan  4 07:02 bin
+drwxr-xr-x.  2 vagrant vagrant     90 Jan  4 07:02 support-files
+drwxr-xr-x. 28 vagrant vagrant   4096 Jan  4 07:02 share
+drwxr-xr-x.  5 vagrant vagrant    230 Jan  4 07:02 lib
+[root@ol8mysql01 ~]# cp -rf $basedir/support-files/mysql.server /etc/init.d/mysql
+[root@ol8mysql01 ~]# chown -R mysql:mysql $basedir $datadir
+[root@ol8mysql01 ~]# ln -f -s /usr/local/mysql/bin/mysql /usr/bin/mysql
+[root@ol8mysql01 ~]# ln -f -s /usr/local/mysql/bin/mysqldump /usr/bin/mysqldump
+[root@ol8mysql01 ~]# ln -f -s /usr/local/mysql/bin/mysqladmin /usr/bin/mysqladmin
+[root@ol8mysql01 ~]# ln -f -s /usr/local/mysql/bin/mysqlshow /usr/bin/mysqlshow
+[root@ol8mysql01 ~]# ln -f -s /usr/local/mysql/bin/mysqld /usr/bin/mysqld
+[root@ol8mysql01 ~]# 
+```
+
+### mysql 自启动
+
+```
+[root@ol8mysql01 ~]# chkconfig --add mysql
+[root@ol8mysql01 ~]# chkconfig --level 2345 mysql on
+[root@ol8mysql01 ~]# 
+```
+
+### my.cnf
+
+```
+[root@ol8mysql ~]# cat /etc/my.cnf 
+[client]
+port = 3306
+socket = /tmp/mysql5.7_3306.sock
+loose-default-character-set=utf8
+
+[mysqld]
+init-connect='SET NAMES utf8'
+basedir=/usr/local/mysql	        	#根据自己的安装目录填写 
+datadir=/home/mysql/data		#根据自己的mysql数据目录填写
+socket=/tmp/mysql5.7_3306.sock
+max_connections=200				# 允许最大连接数
+character-set-server=utf8			# 服务端使用的字符集默认为8比特编码的latin1字符集
+default-storage-engine=INNODB			# 创建新表时将使用的默认存储引擎
+[root@ol8mysql ~]# 
+```
+
+
+
+### MySQL 5.7 mysqld初始化
+
+```
+[root@ol8mysql01 ~]# mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/home/mysql/data
+2023-01-04T07:18:24.926757Z 0 [Warning] TIMESTAMP with implicit DEFAULT value is deprecated. Please use --explicit_defaults_for_timestamp server option (see documentation for more details).
+2023-01-04T07:18:25.083779Z 0 [Warning] InnoDB: New log files created, LSN=45790
+2023-01-04T07:18:25.120781Z 0 [Warning] InnoDB: Creating foreign key constraint system tables.
+2023-01-04T07:18:25.198092Z 0 [Warning] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: fa61af12-8bff-11ed-ae45-0800273ad4dd.
+2023-01-04T07:18:25.202122Z 0 [Warning] Gtid table is not ready to be used. Table 'mysql.gtid_executed' cannot be opened.
+2023-01-04T07:18:25.348937Z 0 [Warning] A deprecated TLS version TLSv1 is enabled. Please use TLSv1.2 or higher.
+2023-01-04T07:18:25.351091Z 0 [Warning] A deprecated TLS version TLSv1.1 is enabled. Please use TLSv1.2 or higher.
+2023-01-04T07:18:25.353656Z 0 [Warning] CA certificate ca.pem is self signed.
+2023-01-04T07:18:25.463361Z 1 [Note] A temporary password is generated for root@localhost: Vooo(q(Vo8i%
+[root@ol8mysql01 ~]# 
+```
+
+### 启动mysql
+
+```
+[root@ol8mysql01 ~]# service mysql start
+Starting MySQL.Logging to '/home/mysql/data/ol8mysql01.err'.
+ SUCCESS! 
+[root@ol8mysql01 ~]# 
+```
+
+### Linux8 有缺失的包
+
+```
+[root@ol8mysql01 data]# mysql -uroot -p
+mysql: error while loading shared libraries: libncurses.so.5: cannot open shared object file: No such file or directory
+[root@ol8mysql01 data]#
+
+https://blog.csdn.net/A_stubborn_man/article/details/123850033
+
+yum install libaio 
+
+https://stackoverflow.com/questions/51698044/libncurses-so-5-cannot-open-shared-library-fedora
+
+yum install ncurses-compat-libs
+
+yum install  libncurses.so.5
+```
+
+### 修改root密码（第一次用临时密码登录）
+
+```
+[root@ol8mysql01 data]# mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.40
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
+ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+mysql> set password=password('mysql');
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> update user set authentication_string=PASSWORD('mysql') where User='root';
+ERROR 1046 (3D000): No database selected
+mysql> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.01 sec)
+
+mysql> 
+```
+
+
+### Slave 搭建
+
+```
+[root@ol8mysql ~]# cat /etc/my.cnf
+[client]
+port = 3306
+socket = /tmp/mysql5.7_3306.sock
+loose-default-character-set=utf8
+
+[mysqld]
+init-connect='SET NAMES utf8'
+basedir=/usr/local/mysql	        	#根据自己的安装目录填写 
+datadir=/home/mysql		#根据自己的mysql数据目录填写
+socket=/tmp/mysql5.7_3306.sock
+max_connections=200				# 允许最大连接数
+character-set-server=utf8			# 服务端使用的字符集默认为8比特编码的latin1字符集
+default-storage-engine=INNODB			# 创建新表时将使用的默认存储引擎
+
+##GTID
+log_bin=mysql-bin
+#log_bin_basename=/home/mysql/mysql-bin
+log_bin_index=/home/mysql/mysql-bin.index
+binlog_format=ROW
+server-id=1
+expire_logs_days=10
+[root@ol8mysql ~]# 
+
+[root@ol8mysql ~]# mysqladmin var -uroot -pmysql  | grep server_id
+mysqladmin: [Warning] Using a password on the command line interface can be insecure.
+| server_id                                                | 1                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| server_id_bits                                           | 32                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+[root@ol8mysql ~]# 
+```
+
+#### master gzip
+
+```
+[root@ol8mysql ~]# mysqldump -f -hlocalhost -uroot -pmysql --default-character-set=utf8 --single-transaction -R --triggers -q --all-databases | gzip > master.dmp.gz
+mysqldump: [Warning] Using a password on the command line interface can be insecure.
+[root@ol8mysql ~]# 
+[root@ol8mysql ~]# scp master.dmp.gz ol8mysql01:/tmp
+root@ol8mysql01's password: 
+master.dmp.gz                                                                                                                                                     100%  189KB  18.5MB/s   00:00    
+[root@ol8mysql ~]# 
+
+
+Slave:
+
+[root@ol8mysql01 tmp]# gzip -d master.dmp.gz
+[root@ol8mysql01 tmp]# mysql -uroot -p < master.dmp 
+Enter password: 
+[root@ol8mysql01 tmp]# 
+
+
+
+Master:
+
+mysql> grant replication slave,replication client on *.* to 'repl'@'%' identified by 'repl12345';
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+
+mysql> 
+
+Slave:
+
+change master to 
+   master_host='ol8mysql',
+   master_user='repl',
+   master_password='repl12345',
+   master_port=3306,
+   master_auto_position=0;
+
+
+mysql> change master to 
+    ->    master_host='ol8mysql',
+    ->    master_user='repl',
+    ->    master_password='repl12345',
+    ->    master_port=3306,
+    ->    master_auto_position=0;
+Query OK, 0 rows affected, 2 warnings (0.03 sec)
+
+mysql> 
+mysql> show slave status\G
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting for master to send event
+                  Master_Host: ol8mysql
+                  Master_User: repl
+                  Master_Port: 3306
+                Connect_Retry: 60
+              Master_Log_File: mysql-bin.000002
+          Read_Master_Log_Pos: 457
+               Relay_Log_File: ol8mysql01-relay-bin.000003
+                Relay_Log_Pos: 670
+        Relay_Master_Log_File: mysql-bin.000002
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB: 
+          Replicate_Ignore_DB: 
+           Replicate_Do_Table: 
+       Replicate_Ignore_Table: 
+      Replicate_Wild_Do_Table: 
+  Replicate_Wild_Ignore_Table: 
+                   Last_Errno: 0
+                   Last_Error: 
+                 Skip_Counter: 0
+          Exec_Master_Log_Pos: 457
+              Relay_Log_Space: 1095
+              Until_Condition: None
+               Until_Log_File: 
+                Until_Log_Pos: 0
+           Master_SSL_Allowed: No
+           Master_SSL_CA_File: 
+           Master_SSL_CA_Path: 
+              Master_SSL_Cert: 
+            Master_SSL_Cipher: 
+               Master_SSL_Key: 
+        Seconds_Behind_Master: 0
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: 0
+                Last_IO_Error: 
+               Last_SQL_Errno: 0
+               Last_SQL_Error: 
+  Replicate_Ignore_Server_Ids: 
+             Master_Server_Id: 1
+                  Master_UUID: f66c560c-8c07-11ed-b4ea-0800273ad4dd
+             Master_Info_File: /home/mysql/data/master.info
+                    SQL_Delay: 0
+          SQL_Remaining_Delay: NULL
+      Slave_SQL_Running_State: Slave has read all relay log; waiting for more updates
+           Master_Retry_Count: 86400
+                  Master_Bind: 
+      Last_IO_Error_Timestamp: 
+     Last_SQL_Error_Timestamp: 
+               Master_SSL_Crl: 
+           Master_SSL_Crlpath: 
+           Retrieved_Gtid_Set: 
+            Executed_Gtid_Set: 
+                Auto_Position: 0
+         Replicate_Rewrite_DB: 
+                 Channel_Name: 
+           Master_TLS_Version: 
+1 row in set (0.00 sec)
+
+mysql> 
+```
+测试：
+
+Master：
+```
+mysql> create database test;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| test               |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql>
+``` 
+Slave:
+```
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| test               |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+```
+
+
+
+
+### MySQL 结构文件
+
+```
+[root@ol8mysql mysql]# ls -l
+total 122992
+-rw-r-----. 1 mysql mysql       56 Jan  4 08:15 auto.cnf
+-rw-------. 1 mysql mysql     1680 Jan  4 08:15 ca-key.pem
+-rw-r--r--. 1 mysql mysql     1112 Jan  4 08:15 ca.pem
+-rw-r--r--. 1 mysql mysql     1112 Jan  4 08:15 client-cert.pem
+-rw-------. 1 mysql mysql     1676 Jan  4 08:15 client-key.pem
+-rw-r-----  1 mysql mysql      308 Jan  4 09:34 ib_buffer_pool
+-rw-r-----. 1 mysql mysql 12582912 Jan  4 10:00 ibdata1
+-rw-r-----. 1 mysql mysql 50331648 Jan  4 10:00 ib_logfile0
+-rw-r-----. 1 mysql mysql 50331648 Jan  4 08:15 ib_logfile1
+-rw-r-----  1 mysql mysql 12582912 Jan  4 09:45 ibtmp1
+drwxr-x---. 2 mysql mysql     4096 Jan  4 08:15 mysql
+-rw-r-----  1 mysql mysql      177 Jan  4 09:34 mysql-bin.000001
+-rw-r-----  1 mysql mysql     1059 Jan  4 10:00 mysql-bin.000002
+-rw-r-----  1 mysql mysql       38 Jan  4 09:35 mysql-bin.index
+-rw-r-----. 1 mysql mysql    28271 Jan  4 09:54 ol8mysql.err
+-rw-r-----  1 mysql mysql        5 Jan  4 09:35 ol8mysql.pid
+drwxr-x---. 2 mysql mysql     8192 Jan  4 08:15 performance_schema
+-rw-------. 1 mysql mysql     1680 Jan  4 08:15 private_key.pem
+-rw-r--r--. 1 mysql mysql      452 Jan  4 08:15 public_key.pem
+-rw-r--r--. 1 mysql mysql     1112 Jan  4 08:15 server-cert.pem
+-rw-------. 1 mysql mysql     1680 Jan  4 08:15 server-key.pem
+drwxr-x---. 2 mysql mysql     8192 Jan  4 08:15 sys
+drwxr-x---  2 mysql mysql       48 Jan  4 10:00 test
+[root@ol8mysql mysql]# ls -lt test
+total 112
+-rw-r----- 1 mysql mysql 98304 Jan  4 10:00 t1.ibd
+-rw-r----- 1 mysql mysql  8586 Jan  4 10:00 t1.frm
+-rw-r----- 1 mysql mysql    61 Jan  4 09:56 db.opt
+[root@ol8mysql mysql]# 
+```
+
+ib_logfile1  : innodb特有日志文件/redo文件（可以设置多组,默认两组）
+
+mysql-bin.000001: 二进制日志，binlog，数据变化都会在二进制日志文件里面记录，从库还有relay log
+
+
+ibtmp1:innodb临时表的独立表空间
+ibdata1:系统表空间
+
+t1.frm:表结构信息文件
+.ibd表数据文件
+
+上面相关参数
+```
+mysql> show global variables like 'innodb_data%';
++-----------------------+------------------------+
+| Variable_name         | Value                  |
++-----------------------+------------------------+
+| innodb_data_file_path | ibdata1:12M:autoextend |
+| innodb_data_home_dir  |                        |
++-----------------------+------------------------+
+2 rows in set (0.00 sec)
+
+mysql> show global variables like 'innodb_file%';
++--------------------------+-----------+
+| Variable_name            | Value     |
++--------------------------+-----------+
+| innodb_file_format       | Barracuda |
+| innodb_file_format_check | ON        |
+| innodb_file_format_max   | Barracuda |
+| innodb_file_per_table    | ON        |
++--------------------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> 
+```
+
+```
+innodb_data_file_path
+innodb_file_per_table
+```
+
+```
+https://blog.csdn.net/ichen820/article/details/107837751
+
+当没有配置innodb_data_file_path时，默认innodb_data_file_path = ibdata1:12M:autoextend
+
+[mysqld]
+innodb_data_file_path = ibdata1:12M:autoextend
+
+当需要改为1G时，不能直接在配置文件把 ibdata1 改为 1G ,
+
+[mysqld]
+innodb_data_file_path = ibdata1:1G:autoextend
+
+否则启动服务之后，从错误日志看到如下报错：
+2019-03-29T06:47:32.044316Z 0 [ERROR] InnoDB: The Auto-extending innodb_system data file './ibdata1' is of a different size 768 pages (rounded down to MB) than specified in the .cnf file: initial 65536 pages, max 0 (relevant if non-zero) pages!
+
+大致意思就是ibdata1的大小不是 65536page16KB/1024KB=1G ,而是 786page16KB/1024KB=12M
+（未使用压缩页）
+
+方法一：推荐
+而应该再添加一个 ibdata2:1G ，如下：
+[mysqld]
+innodb_data_file_path = ibdata1:12M;ibdata2:1G:autoextend
+
+重启数据库！
+```
+MySQL是单进程多线程架构
+
+###  慢日志
+
+默认没开启慢日志开关
+```
+mysql> show variables like 'slow%';
++---------------------+-------------------------------+
+| Variable_name       | Value                         |
++---------------------+-------------------------------+
+| slow_launch_time    | 2                             |
+| slow_query_log      | OFF                           |
+| slow_query_log_file | /home/mysql/ol8mysql-slow.log |
++---------------------+-------------------------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+```
+配置慢日志和没用索引查询
+```
+slow_query_log=on
+slow_query_log_file=/home/mysql/ol8mysql-slow.log
+long_query_time=1
+log_queries_not_using_indexes=on
+```
+```
+mysql> show variables like 'long_query%';
++-----------------+----------+
+| Variable_name   | Value    |
++-----------------+----------+
+| long_query_time | 1.000000 |
++-----------------+----------+
+1 row in set (0.00 sec)
+
+mysql> show variables like 'slow%';
++---------------------+-------------------------------+
+| Variable_name       | Value                         |
++---------------------+-------------------------------+
+| slow_launch_time    | 2                             |
+| slow_query_log      | ON                            |
+| slow_query_log_file | /home/mysql/ol8mysql-slow.log |
++---------------------+-------------------------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+```
+相关命令
+```
+//查询慢查询时间
+show variables like "long_query_time";默认10s 
+//查看慢查询配置情况
+show status like "%slow_queries%"; 
+//查看慢查询日志路径
+show variables like "%slow%";
+```
+
+### 第三方工具查询慢日志
+
+https://zhuanlan.zhihu.com/p/257975998
+
+https://zhuanlan.zhihu.com/p/266468756#:~:text=1.1.2%20%E5%A6%82%E6%9E%9Csysbench%E6%8A%9B%E5%87%BA%E5%A6%82%E4%B8%8BMySQL%E9%93%BE%E6%8E%A5%E5%BA%93%E7%9A%84%E9%94%99%E8%AF%AF%EF%BC%8C%E5%AD%97%E9%9D%A2%E6%84%8F%E6%80%9D%E5%B0%B1%E6%98%AF%E6%89%93%E4%B8%8D%E5%BC%80%E5%85%B1%E4%BA%AB%E5%BA%93%E6%96%87%E4%BB%B6libmysqlclient.so.20%20sysbench%3A%20error%20while%20loading%20shared%20libraries%3A,shared%20object%20file%3A%20No%20such%20file%20or%20directory
+
+
+
+```
+wget https://www.percona.com/downloads/percona-toolkit/3.2.1/binary/redhat/7/x86_64/percona-toolkit-3.2.1-1.el7.x86_64.rpm
+
+yum -y install perl-DBI.x86_64 
+yum -y install perl-DBD-MySQL.x86_64
+yum -y install perl-IO-Socket-SSL.noarch
+yum -y install perl-Digest-MD5.x86_64
+yum -y install perl-TermReadKey.x86_64
+
+rpm -ivh percona-toolkit-3.2.1-1.el7.x86_64.rpm
+
+show variables like '%slow%';
+
+show variables like 'long_query_time';
+
+set global long_query_time=0.001000;
+
+show global variables like 'long_query_time';
+
+show variables like 'long_query_time';
+```
+
+### benchmark tool
+
+https://dev.mysql.com/downloads/benchmarks.html
+
+DBT2 Benchmark Tool
+The DBT2 Benchmark Tool can be used to run automated benchmarks for MySQL and MySQL Cluster. It supports three types of benchmarks:
+- DBT2
+- SysBench
+- flexAsynch
+
+```
+yum -y install make automake libtool pkgconfig libaio-devel vim-common
+
+tar -zxvf sysbench-0.4.12.16.tar.gz 
+
+cd sysbench-0.4.12.16
+
+./autogen.sh
+
+~
+./autogen.sh: running `automake -c --foreign --add-missing' 
+configure.ac:22: installing 'config/compile'
+configure.ac:17: installing 'config/missing'
+sysbench/Makefile.am: installing 'config/depcomp'
+./autogen.sh: running `autoconf' 
+configure.ac:49: error: possibly undefined macro: AC_LIB_PREFIX
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+Can't execute autoconf
+[root@ol8mysql sysbench-0.4.12.16]# cat configure.ac | grep AC_LIB_PREFIX
+AC_LIB_PREFIX()
+[root@ol8mysql sysbench-0.4.12.16]# vi configure.ac
+[root@ol8mysql sysbench-0.4.12.16]# cat configure.ac | grep AC_LIB_PREFIX
+### AC_LIB_PREFIX()
+[root@ol8mysql sysbench-0.4.12.16]# 
+
+
+./configure && make && make install
+
+跟mysql结合
+
+./configure --with-mysql-includes=/usr/local/mysql/include/ --with-mysql-libs=/usr/local/mysql/lib/
+make
+make install
+
+```
+
+lib包错误
+```
+[root@ol8mysql ~]# find / -name sysbench
+/usr/local/bin/sysbench
+/vagrant/sysbench-0.4.12.16/sysbench
+/vagrant/sysbench-0.4.12.16/sysbench/sysbench
+[root@ol8mysql ~]# /usr/local/bin/sysbench --version
+/usr/local/bin/sysbench: error while loading shared libraries: libmysqlclient.so.20: cannot open shared object file: No such file or directory
+[root@ol8mysql ~]# 
+[root@ol8mysql ~]# 
+[root@ol8mysql ~]# 
+[root@ol8mysql ~]# find / -name libmysqlclient.so.20
+/usr/local/mysql/lib/libmysqlclient.so.20
+[root@ol8mysql ~]# ln -s /usr/local/mysql/lib/libmysqlclient.so.20 /usr/lib
+[root@ol8mysql ~]# echo '/usr/lib' >> /etc/ld.so.conf
+[root@ol8mysql ~]# ldconfig
+[root@ol8mysql ~]# 
+```
+
+
+测试生成10000行数据
+
+```
+[root@ol8mysql ~]# sysbench --version
+sysbench 0.4.12.10
+[root@ol8mysql ~]# 
+
+sysbench --test=oltp --oltp-table-size=100000 --mysql-db=test --mysql-user=root --mysql-password='mysql' --mysql-socket='/tmp/mysql5.7_3306.sock' prepare
+```
+
+```
+mysql> use test;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select count(*) from sbtest;
++----------+
+| count(*) |
++----------+
+|   100000 |
++----------+
+1 row in set (0.02 sec)
+
+mysql> 
+```
+
+```
+sysbench --mysql-host=192.168.80.54 --mysql-port=21021 --mysql-user=root --mysql-password=123 /usr/share/sysbench/oltp_common.lua --tables=10 --table_size=100000 prepare
+
+其中--tables=10表示创建10个测试表，--table_size=100000表示每个表中插入10W行数据，prepare表示这是准备数的过程。
+```
+
+如果想要清除这10个表，可使用cleanup命令。
+```
+sysbench --mysql-host=192.168.80.54 --mysql-port=21021 --mysql-user=root --mysql-password=123 /usr/share/sysbench/oltp_common.lua --tables=10 --table_size=100000 cleanup
+
+```
+
+pt-query-digest 分析慢日志
+https://zhuanlan.zhihu.com/p/257975998
+```
+[root@ol8mysql mysql]# pt-query-digest ol8mysql-slow.log | more
+
+# 180ms user time, 30ms system time, 40.81M rss, 110.42M vsz
+# Current date: Thu Jan  5 03:52:21 2023
+# Hostname: ol8mysql
+# Files: ol8mysql-slow.log
+# Overall: 14 total, 4 unique, 0.00 QPS, 0.00x concurrency _______________
+# Time range: 2023-01-04T10:41:01 to 2023-01-05T03:47:23
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time             6s    25ms      3s   430ms      2s   842ms    82ms
+# Lock time          115ms       0    17ms     8ms    12ms     5ms    10ms
+# Rows sent              3       0       1    0.21    0.99    0.41       0
+# Rows examine      97.66k       0  97.66k   6.98k       0  24.99k       0
+# Query size         5.82M      15 595.74k 425.55k 590.13k 266.57k 590.13k
+
+# Profile
+# Rank Query ID                         Response time Calls R/Call V/M   I
+# ==== ================================ ============= ===== ====== ===== =
+#    1 0x59A74D08D407B5EDF9A57DD5A41...  5.0039 83.2%     2 2.5019  0.20 SELECT
+#    2 0x117A81DC278F5B7E0E94318F24B...  0.9403 15.6%    10 0.0940  0.01 INSERT sbtest
+# MISC 0xMISC                            0.0719  1.2%     2 0.0360   0.0 <2 ITEMS>
+
+# Query 1: 0.00 QPS, 0.00x concurrency, ID 0x59A74D08D407B5EDF9A57DD5A41825CA at byte 404
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.20
+# Time range: 2023-01-04T10:41:01 to 2023-01-05T02:59:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         14       2
+# Exec time     83      5s      2s      3s      3s      3s   707ms      3s
+# Lock time      0       0       0       0       0       0       0       0
+# Rows sent     66       2       1       1       1       1       0       1
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     0      30      15      15      15      15       0      15
+# String:
+# Databases    test
+# Hosts        localhost
+# Users        root
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms
+#  10ms
+# 100ms
+#    1s  ################################################################
+#  10s+
+# EXPLAIN /*!50100 PARTITIONS*/
+select sleep(3)\G
+```
+
+### 清理慢日志
+
+```
+mysql> show variables like 'log_output%';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| log_output    | FILE  |
++---------------+-------+
+1 row in set (0.00 sec)
+
+mysql> show variables like '%slow%';
++---------------------------+-------------------------------+
+| Variable_name             | Value                         |
++---------------------------+-------------------------------+
+| log_slow_admin_statements | OFF                           |
+| log_slow_slave_statements | OFF                           |
+| slow_launch_time          | 2                             |
+| slow_query_log            | ON                            |
+| slow_query_log_file       | /home/mysql/ol8mysql-slow.log |
++---------------------------+-------------------------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+```
+
+如果是table show_log
+```
+mysql> use mysql;
+mysql> SET GLOBAL slow_query_log = 'OFF';
+mysql> ALTER TABLE slow_log RENAME slow_log_drop;
+mysql> CREATE TABLE slow_log LIKE slow_log_drop;
+mysql> SET GLOBAL slow_query_log = 'ON';
+mysql> DROP TABLE slow_log_drop;
+
+-- log_output 默认是FILE，表示慢查询日志输入至日志文件，可以通过set修改输出为TABLE
+-- log_queries_not_using_indexes 默认是OFF，表示是否记录没有使用索引的查询
+-- slow_query_log 默认是OFF，表示是否打开慢查询
+-- long_query_time默认是 10.000000，表示记录超过时间的慢查询
+```
+
+如果是FILE(不关闭开关的话，os层面句柄释放不了)
+```
+先关闭慢日志，使用  set global slow_query_log=off;
+关闭之后再次检查下慢日志的状态
+重置慢日志的路径，路径可以根据自己的服务器配置
+后再开慢日志开关 set global slow_query_log=off;
+之后测试
+```
+
+
+### MariaDB Audit Plugin
+
+https://www.cnblogs.com/kerrycode/p/12966190.html
+
+https://blog.csdn.net/endzhi/article/details/107317958
+
+下面是官方网址关于MariaDB Audit Plugin的介绍，更多资料请参考
+
+https://mariadb.com/kb/en/mariadb-audit-plugin/
+
+官方下载地址：
+https://downloads.mariadb.org/mariadb/+releases/
+
+https://mirrors.xtom.jp/mariadb//mariadb-10.10.2/bintar-linux-systemd-x86_64/mariadb-10.10.2-linux-systemd-x86_64.tar.gz
+
+这里我们下载mariadb-10.10.2-linux-systemd-x86_64.tar.gz测试验证一下。插件server_audit.so一般位于目录./lib/plugin下面。
+```
+tar -xzvf mariadb-10.10.2-linux-systemd-x86_64.tar.gz
+cd mariadb-10.10.2-linux-systemd-x86_64
+find ./ -name "server_audit.so"
+
+[root@ol8mysql mariadb-10.10.2-linux-systemd-x86_64]# find ./ -name "server_audit.so"
+./lib/plugin/server_audit.so
+[root@ol8mysql mariadb-10.10.2-linux-systemd-x86_64]#
+
+ll /usr/local/mysql/lib/plugin
+
+cp ./lib/plugin/server_audit.so /usr/local/mysql/lib/plugin/
+```
+由于MySQL的社区版不支持审计系统，可通过第三方插件实现，此次采用MariaDB的server_audit插件来记录{时间，节点，用户，源IP，事件类型，库，语句，影响行数}，
+注：从mysql8开始已不支持该插件。（好像mysql-5.7.34后也不支持了）
+
+### lsof 查看文件句柄
+
+命令介绍
+https://www.cnblogs.com/wanng/p/lsof-cmd.html
+
+lsof 是 List Open File 的缩写, 它主要用来获取被进程打开文件的信息，我们都知道，在Linux中，一切皆文件，lsof命令可以查看所有已经打开了的文件，比如: 普通文件，目录，特殊的块文件，管道，socket套接字，设备，Unix域套接字等等，同时，它还可以结合 grep 以及 ps 命令进行更多的高级搜索
+
+安装
+lsof 命令默认是没有安装的，而且它的使用需要有root权限或者赋予普通用于sudo权限, 使用以下命令安装
+
+查看mysql用户打开的文件
+```
+[root@ol8mysql ~]# lsof -u mysql
+COMMAND  PID  USER   FD   TYPE             DEVICE  SIZE/OFF     NODE NAME
+mysqld  7087 mysql  cwd    DIR              252,0      4096 33563782 /home/mysql
+mysqld  7087 mysql  rtd    DIR              252,0       259      128 /
+mysqld  7087 mysql  txt    REG              252,0 250703328 68340060 /usr/local/mysql/bin/mysqld
+mysqld  7087 mysql  DEL    REG               0,18              34830 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34829 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34828 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34827 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34826 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34825 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34824 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34823 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34822 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34821 /[aio]
+mysqld  7087 mysql  mem    REG              252,0     54352     1808 /usr/lib64/libnss_files-2.28.so
+mysqld  7087 mysql  mem    REG              252,0   2089152     1796 /usr/lib64/libc-2.28.so
+mysqld  7087 mysql  mem    REG              252,0    103784   355469 /usr/lib64/libgcc_s-8-20210514.so.1
+mysqld  7087 mysql  mem    REG              252,0   1598776     1800 /usr/lib64/libm-2.28.so
+mysqld  7087 mysql  mem    REG              252,0   1661416     1965 /usr/lib64/libstdc++.so.6.0.25
+mysqld  7087 mysql  mem    REG              252,0     42744     1814 /usr/lib64/librt-2.28.so
+mysqld  7087 mysql  mem    REG              252,0    136032     1949 /usr/lib64/libcrypt.so.1.1.0
+mysqld  7087 mysql  mem    REG              252,0     51192     3031 /usr/lib64/libnuma.so.1.0.0
+mysqld  7087 mysql  mem    REG              252,0     34208     2211 /usr/lib64/libaio.so.1.0.1
+mysqld  7087 mysql  mem    REG              252,0     19584     1798 /usr/lib64/libdl-2.28.so
+mysqld  7087 mysql  mem    REG              252,0    150152     1810 /usr/lib64/libpthread-2.28.so
+mysqld  7087 mysql  mem    REG              252,0   1106304   355458 /usr/lib64/ld-2.28.so
+mysqld  7087 mysql  DEL    REG               0,18              34831 /[aio]
+mysqld  7087 mysql  DEL    REG               0,18              34820 /[aio]
+mysqld  7087 mysql    0r   CHR                1,3       0t0     9806 /dev/null
+mysqld  7087 mysql    1w   REG              252,0     36690 33579534 /home/mysql/ol8mysql.err
+mysqld  7087 mysql    2w   REG              252,0     36690 33579534 /home/mysql/ol8mysql.err
+mysqld  7087 mysql    3u   REG              252,0        57 33762105 /home/mysql/mysql-bin.index
+mysqld  7087 mysql    4uW  REG              252,0  50331648 34021379 /home/mysql/ib_logfile0
+mysqld  7087 mysql    5u   REG              252,0         0 67810963 /tmp/ibi5us3F (deleted)
+mysqld  7087 mysql    6u   REG              252,0         0 67810964 /tmp/ibQ4W6hB (deleted)
+mysqld  7087 mysql    7u   REG              252,0         0 67810965 /tmp/ibVNZABJ (deleted)
+mysqld  7087 mysql    8u   REG              252,0         0 67810966 /tmp/ib6DHoiy (deleted)
+mysqld  7087 mysql    9uW  REG              252,0  50331648 34021381 /home/mysql/ib_logfile1
+mysqld  7087 mysql   10uW  REG              252,0  12582912 34021378 /home/mysql/ibdata1
+mysqld  7087 mysql   11uW  REG              252,0  12582912 33579568 /home/mysql/ibtmp1
+mysqld  7087 mysql   12u   REG              252,0         0 67810967 /tmp/ibwMDpw7 (deleted)
+mysqld  7087 mysql   13uW  REG              252,0     98304 34021404 /home/mysql/mysql/plugin.ibd
+mysqld  7087 mysql   14w   REG              252,0   6105269 33579569 /home/mysql/ol8mysql-slow.log
+mysqld  7087 mysql   15uW  REG              252,0     98304 34043796 /home/mysql/mysql/gtid_executed.ibd
+mysqld  7087 mysql   16uW  REG              252,0   9437184 34021414 /home/mysql/mysql/help_topic.ibd
+mysqld  7087 mysql   17uW  REG              252,0    163840 34021418 /home/mysql/mysql/help_relation.ibd
+mysqld  7087 mysql   18uW  REG              252,0     98304 34043786 /home/mysql/mysql/innodb_table_stats.ibd
+mysqld  7087 mysql   19uW  REG              252,0     98304 34043788 /home/mysql/mysql/innodb_index_stats.ibd
+mysqld  7087 mysql   20uW  REG              252,0     98304 67810975 /home/mysql/test/t1.ibd
+mysqld  7087 mysql   21w   REG              252,0   6229857 33762103 /home/mysql/mysql-bin.000003
+mysqld  7087 mysql   22u  IPv6              34835       0t0      TCP *:mysql (LISTEN)
+mysqld  7087 mysql   23u  unix 0xffff8c8d3b369200       0t0    34836 /tmp/mysql5.7_3306.sock type=STREAM
+mysqld  7087 mysql   24uW  REG              252,0     98304 34043798 /home/mysql/mysql/server_cost.ibd
+mysqld  7087 mysql   25uW  REG              252,0     98304 34043800 /home/mysql/mysql/engine_cost.ibd
+mysqld  7087 mysql   26u   REG              252,0      4096 34021398 /home/mysql/mysql/user.MYI
+mysqld  7087 mysql   27u   REG              252,0       500 34021399 /home/mysql/mysql/user.MYD
+mysqld  7087 mysql   28u   REG              252,0      5120 34021395 /home/mysql/mysql/db.MYI
+mysqld  7087 mysql   29u   REG              252,0       976 34021396 /home/mysql/mysql/db.MYD
+mysqld  7087 mysql   30u   REG              252,0      9216 34043802 /home/mysql/mysql/proxies_priv.MYI
+mysqld  7087 mysql   31u   REG              252,0       837 34043803 /home/mysql/mysql/proxies_priv.MYD
+mysqld  7087 mysql   32uW  REG              252,0     98304 34021430 /home/mysql/mysql/time_zone_leap_second.ibd
+mysqld  7087 mysql   33uW  REG              252,0     98304 34021422 /home/mysql/mysql/time_zone_name.ibd
+mysqld  7087 mysql   34uW  REG              252,0     98304 34021424 /home/mysql/mysql/time_zone.ibd
+mysqld  7087 mysql   35uW  REG              252,0     98304 34021428 /home/mysql/mysql/time_zone_transition_type.ibd
+mysqld  7087 mysql   36uW  REG              252,0     98304 34021426 /home/mysql/mysql/time_zone_transition.ibd
+mysqld  7087 mysql   37u   REG              252,0      9216 34021408 /home/mysql/mysql/tables_priv.MYI
+mysqld  7087 mysql   38u   REG              252,0      1894 34021409 /home/mysql/mysql/tables_priv.MYD
+mysqld  7087 mysql   39u   REG              252,0      4096 34021411 /home/mysql/mysql/columns_priv.MYI
+mysqld  7087 mysql   40u   REG              252,0         0 34021412 /home/mysql/mysql/columns_priv.MYD
+mysqld  7087 mysql   41u   REG              252,0      4096 34021435 /home/mysql/mysql/procs_priv.MYI
+mysqld  7087 mysql   42u   REG              252,0         0 34021436 /home/mysql/mysql/procs_priv.MYD
+mysqld  7087 mysql   43uW  REG              252,0     98304 34021406 /home/mysql/mysql/servers.ibd
+mysqld  7087 mysql   44uW  REG              252,0     98304 34043792 /home/mysql/mysql/slave_master_info.ibd
+mysqld  7087 mysql   45uW  REG              252,0     98304 34043790 /home/mysql/mysql/slave_relay_log_info.ibd
+mysqld  7087 mysql   46uW  REG              252,0     98304 34043794 /home/mysql/mysql/slave_worker_info.ibd
+mysqld  7087 mysql   47u   REG              252,0      2048 34043780 /home/mysql/mysql/event.MYI
+mysqld  7087 mysql   48u   REG              252,0         0 34043781 /home/mysql/mysql/event.MYD
+mysqld  7087 mysql   50u  IPv6              34856       0t0      TCP ol8mysql:mysql->ol8mysql01:46624 (ESTABLISHED)
+mysqld  7087 mysql   51r   REG              252,0   6229857 33762103 /home/mysql/mysql-bin.000003
+mysqld  7087 mysql   52uW  REG              252,0  32505856 67604687 /home/mysql/test/sbtest.ibd
+[root@ol8mysql ~]# 
+```
+
+有这样一种场景，有一个服务正在往日志文件中写日志，这个时候，不小心把正在写入的日志文件删除了
+上面的场景中，日志文件虽然被删除了，但是文件仍然是打开着的，它仍然占用文件系统的空间，我们可以结合 grep 命令找出这种打开着，但是已经被删除的文件
+```
+[root@ol8mysql ~]# lsof -u mysql | grep deleted
+mysqld  7087 mysql    5u   REG              252,0         0 67810963 /tmp/ibi5us3F (deleted)
+mysqld  7087 mysql    6u   REG              252,0         0 67810964 /tmp/ibQ4W6hB (deleted)
+mysqld  7087 mysql    7u   REG              252,0         0 67810965 /tmp/ibVNZABJ (deleted)
+mysqld  7087 mysql    8u   REG              252,0         0 67810966 /tmp/ib6DHoiy (deleted)
+mysqld  7087 mysql   12u   REG              252,0         0 67810967 /tmp/ibwMDpw7 (deleted)
+[root@ol8mysql ~]# 
+```
+
+
+列出所有打开了的网络文件和端口号上打开的文件
+```
+[root@ol8mysql ~]# lsof -i
+COMMAND    PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+chronyd    765  chrony    5u  IPv4  22205      0t0  UDP localhost:323 
+chronyd    765  chrony    6u  IPv6  22206      0t0  UDP localhost:323 
+sshd       774    root    3u  IPv4  22638      0t0  TCP *:ssh (LISTEN)
+sshd       774    root    4u  IPv6  22649      0t0  TCP *:ssh (LISTEN)
+NetworkMa 4250    root   25u  IPv4  81990      0t0  UDP ol8mysql:bootpc->_gateway:bootps 
+NetworkMa 4250    root   35u  IPv4  29795      0t0  UDP ol8mysql:bootpc->_gateway:bootps 
+sshd      5229    root    4u  IPv4  31626      0t0  TCP ol8mysql:ssh->_gateway:62115 (ESTABLISHED)
+sshd      5241 vagrant    4u  IPv4  31626      0t0  TCP ol8mysql:ssh->_gateway:62115 (ESTABLISHED)
+sshd      5899    root    4u  IPv4  32667      0t0  TCP ol8mysql:ssh->_gateway:62538 (ESTABLISHED)
+sshd      5901 vagrant    4u  IPv4  32667      0t0  TCP ol8mysql:ssh->_gateway:62538 (ESTABLISHED)
+mysqld    7087   mysql   22u  IPv6  34835      0t0  TCP *:mysql (LISTEN)
+mysqld    7087   mysql   50u  IPv6  34856      0t0  TCP ol8mysql:mysql->ol8mysql01:46624 (ESTABLISHED)
+[root@ol8mysql ~]# 
+[root@ol8mysql ~]# lsof -i:3306
+COMMAND  PID  USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+mysqld  7087 mysql   22u  IPv6  34835      0t0  TCP *:mysql (LISTEN)
+mysqld  7087 mysql   50u  IPv6  34856      0t0  TCP ol8mysql:mysql->ol8mysql01:46624 (ESTABLISHED)
+[root@ol8mysql ~]# 
+```
+
+杀死指定用户的所有进程
+kill -9 `lsof -t -u mysql`
+
+### 常用命令
+
+```
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| test               |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> show engines;
++--------------------+---------+----------------------------------------------------------------+--------------+------+------------+
+| Engine             | Support | Comment                                                        | Transactions | XA   | Savepoints |
++--------------------+---------+----------------------------------------------------------------+--------------+------+------------+
+| InnoDB             | DEFAULT | Supports transactions, row-level locking, and foreign keys     | YES          | YES  | YES        |
+| MRG_MYISAM         | YES     | Collection of identical MyISAM tables                          | NO           | NO   | NO         |
+| MEMORY             | YES     | Hash based, stored in memory, useful for temporary tables      | NO           | NO   | NO         |
+| BLACKHOLE          | YES     | /dev/null storage engine (anything you write to it disappears) | NO           | NO   | NO         |
+| MyISAM             | YES     | MyISAM storage engine                                          | NO           | NO   | NO         |
+| CSV                | YES     | CSV storage engine                                             | NO           | NO   | NO         |
+| ARCHIVE            | YES     | Archive storage engine                                         | NO           | NO   | NO         |
+| PERFORMANCE_SCHEMA | YES     | Performance Schema                                             | NO           | NO   | NO         |
+| FEDERATED          | NO      | Federated MySQL storage engine                                 | NULL         | NULL | NULL       |
++--------------------+---------+----------------------------------------------------------------+--------------+------+------------+
+9 rows in set (0.00 sec)
+
+mysql> select database();
++------------+
+| database() |
++------------+
+| NULL       |
++------------+
+1 row in set (0.00 sec)
+
+mysql>
+mysql> show create database test;
++----------+---------------------------------------------------------------+
+| Database | Create Database                                               |
++----------+---------------------------------------------------------------+
+| test     | CREATE DATABASE `test` /*!40100 DEFAULT CHARACTER SET utf8 */ |
++----------+---------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> show tables from test;
++----------------+
+| Tables_in_test |
++----------------+
+| sbtest         |
+| t1             |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> 
+mysql> show create table test.sbtest\G
+*************************** 1. row ***************************
+       Table: sbtest
+Create Table: CREATE TABLE `sbtest` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `k` int(10) unsigned NOT NULL DEFAULT '0',
+  `c` char(120) NOT NULL DEFAULT '',
+  `pad` char(60) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `k` (`k`)
+) ENGINE=InnoDB AUTO_INCREMENT=100001 DEFAULT CHARSET=utf8
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> select user();
++----------------+
+| user()         |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> show engine innodb status\G
+*************************** 1. row ***************************
+  Type: InnoDB
+  Name: 
+Status: 
+=====================================
+2023-01-05 04:59:12 0x7fd49c23b700 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 56 seconds
+-----------------
+BACKGROUND THREAD
+-----------------
+srv_master_thread loops: 4 srv_active, 0 srv_shutdown, 18144 srv_idle
+srv_master_thread log flush and writes: 18148
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 37
+OS WAIT ARRAY INFO: signal count 33
+RW-shared spins 0, rounds 30, OS waits 15
+RW-excl spins 0, rounds 0, OS waits 0
+RW-sx spins 0, rounds 0, OS waits 0
+Spin rounds per wait: 30.00 RW-shared, 0.00 RW-excl, 0.00 RW-sx
+------------
+TRANSACTIONS
+------------
+Trx id counter 3362
+Purge done for trx's n:o < 3362 undo n:o < 0 state: running but idle
+History list length 0
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 422026137835344, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
+I/O thread 1 state: waiting for completed aio requests (log thread)
+I/O thread 2 state: waiting for completed aio requests (read thread)
+I/O thread 3 state: waiting for completed aio requests (read thread)
+I/O thread 4 state: waiting for completed aio requests (read thread)
+I/O thread 5 state: waiting for completed aio requests (read thread)
+I/O thread 6 state: waiting for completed aio requests (write thread)
+I/O thread 7 state: waiting for completed aio requests (write thread)
+I/O thread 8 state: waiting for completed aio requests (write thread)
+I/O thread 9 state: waiting for completed aio requests (write thread)
+Pending normal aio reads: [0, 0, 0, 0] , aio writes: [0, 0, 0, 0] ,
+ ibuf aio reads:, log i/o's:, sync i/o's:
+Pending flushes (fsync) log: 0; buffer pool: 0
+297 OS file reads, 1741 OS file writes, 167 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 0.00 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 0, seg size 2, 0 merges
+merged operations:
+ insert 0, delete mark 0, delete 0
+discarded operations:
+ insert 0, delete mark 0, delete 0
+Hash table size 34679, node heap has 1 buffer(s)
+Hash table size 34679, node heap has 1 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+0.00 hash searches/s, 0.00 non-hash searches/s
+---
+LOG
+---
+Log sequence number 29079368
+Log flushed up to   29079368
+Pages flushed up to 29079368
+Last checkpoint at  29079359
+0 pending log flushes, 0 pending chkp writes
+56 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total large memory allocated 137428992
+Dictionary memory allocated 128613
+Buffer pool size   8192
+Free buffers       6408
+Database pages     1782
+Old database pages 637
+Modified db pages  0
+Pending reads      0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 0, not young 0
+0.00 youngs/s, 0.00 non-youngs/s
+Pages read 266, created 1516, written 1578
+0.00 reads/s, 0.00 creates/s, 0.00 writes/s
+No buffer pool page gets since the last printout
+Pages read ahead 0.00/s, evicted without access 0.00/s, Random read ahead 0.00/s
+LRU len: 1782, unzip_LRU len: 0
+I/O sum[0]:cur[0], unzip sum[0]:cur[0]
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+0 read views open inside InnoDB
+Process ID=7087, Main thread ID=140550715991808, state: sleeping
+Number of rows inserted 100000, updated 0, deleted 0, read 100013
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 0.00 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================
+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> show grants for 'root'@'localhost';
++---------------------------------------------------------------------+
+| Grants for root@localhost                                           |
++---------------------------------------------------------------------+
+| GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION |
+| GRANT PROXY ON ''@'' TO 'root'@'localhost' WITH GRANT OPTION        |
++---------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> 
+mysql> show create user 'root'@'localhost';
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CREATE USER for root@localhost                                                                                                                                            |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CREATE USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' AS '*E74858DB86EBA20BC33D0AECAE8A8108C56B17FA' REQUIRE NONE PASSWORD EXPIRE DEFAULT ACCOUNT UNLOCK |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> show processlist;
++----+------+------------------+------+-------------+-------+---------------------------------------------------------------+------------------+
+| Id | User | Host             | db   | Command     | Time  | State                                                         | Info             |
++----+------+------------------+------+-------------+-------+---------------------------------------------------------------+------------------+
+|  3 | repl | ol8mysql01:46624 | NULL | Binlog Dump | 66524 | Master has sent all binlog to slave; waiting for more updates | NULL             |
+| 10 | root | localhost        | NULL | Query       |     0 | starting                                                      | show processlist |
++----+------+------------------+------+-------------+-------+---------------------------------------------------------------+------------------+
+2 rows in set (0.00 sec)
+
+mysql> show status;
+mysql> select user,host from mysql.user;
++---------------+-----------+
+| user          | host      |
++---------------+-----------+
+| repl          | %         |
+| mysql.session | localhost |
+| mysql.sys     | localhost |
+| root          | localhost |
++---------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> 
+
+mysql> select * from information_schema.routines\G
+```
