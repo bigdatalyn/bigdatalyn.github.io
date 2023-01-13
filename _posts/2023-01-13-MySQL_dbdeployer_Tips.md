@@ -488,6 +488,8 @@ https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_covering_index
 
 [dbdeployer 的功能特性](https://github.com/datacharmer/dbdeployer/blob/master/docs/features.md)
 
+[dbdeployer MySQL沙盒部署详解](https://www.cnblogs.com/easydb/p/13741861.html)
+
 Have a good work&life! 2023/01 via LinHong
 
 
