@@ -1,15 +1,24 @@
+---
+layout: post
+title: "MySQL dbdeployer tool Tips"
+category: MySQL
+tags: MySQL Tips
+---
+
+* content
+{:toc}
+
+MySQL dbdeployer tool Tips
+
+DBdeployer is a tool that deploys MySQL database servers easily. This is a port of MySQL-Sandbox, originally written in Perl, and re-designed from the ground up in Go. 
+
+
+
+
+
 
 
 ### dbdeployer
-
-[如何使用 dbdeployer 快速搭建 MySQL 测试环境](https://my.oschina.net/actiontechoss/blog/3134499)
-
-[dbdeployer 官方手册](https://github.com/datacharmer/dbdeployer)
-
-[MySQL 各历史版本下载链接](https://downloads.mysql.com/archives/community/)
-
-[dbdeployer 的功能特性](https://github.com/datacharmer/dbdeployer/blob/master/docs/features.md)
-
 
 安装
 ```
@@ -148,10 +157,9 @@ shell> dbdeployer downloads get-unpack mysql-8.0.20-linux-x86_64-minimal.tar.xz
 
 dbdeployer downloads get-unpack mysql-5.6.44.tar.xz 
 dbdeployer downloads get-unpack mysql-5.7.26.tar.xz 
-
 ```
 
-deploy和测试
+deploy single 实例和测试
 ```
 [root@ol8mysql01 mysql_package]# dbdeployer deploy single 8.0
 # 8.0 => 8.0.20
@@ -245,7 +253,6 @@ mysql [localhost:8020] {msandbox} (test) > show variables like 'secure%';
 mysql [localhost:8020] {msandbox} (test) > 
 
 这个secure_file_priv应该为空，不然在读写文件时就会受到限制，甚至为NULL时无法读写，改的话很容易，在mysql的配置文件中加入一行secure_file_priv=然后重启mysql服务即可。
-
 ```
 结果:
 best_covering_index_scan
@@ -470,4 +477,17 @@ jsonviewer.stack.hu
 https://dev.mysql.com/doc/refman/8.0/en/range-optimization.html#range-access-skip-scan
 https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_covering_index
 ```
+
+### Reference 
+
+[如何使用 dbdeployer 快速搭建 MySQL 测试环境](https://my.oschina.net/actiontechoss/blog/3134499)
+
+[dbdeployer 官方手册](https://github.com/datacharmer/dbdeployer)
+
+[MySQL 各历史版本下载链接](https://downloads.mysql.com/archives/community/)
+
+[dbdeployer 的功能特性](https://github.com/datacharmer/dbdeployer/blob/master/docs/features.md)
+
+Have a good work&life! 2023/01 via LinHong
+
 
