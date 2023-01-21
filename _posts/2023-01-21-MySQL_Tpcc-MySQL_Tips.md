@@ -306,7 +306,7 @@ nohup /root/tpcc-mysql/tpcc_start -h127.0.0.1 -dtpcc4 -ulin -pmysql -P8032 -w4 -
 
 - New-Order 事务的吞吐量（TPM）
 - 延迟 
-  
+
 ```
 Throughput，简称 tpmC。
 按照 TPC 的定义，流量指标描述了系统在执行 Payment、Order-status、Delivery、Stock-Level 这四种交易时，每分钟处理 New-Order 交易的数量。所有交易的响应时间必须满足 TPC-C 测试规范的要求。
