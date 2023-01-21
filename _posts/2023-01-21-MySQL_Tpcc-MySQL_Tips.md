@@ -148,6 +148,7 @@ unix  2      [ ACC ]     STREAM     LISTENING     67541    10833/mysqld         
 ```
 
 默认权限:
+
 |user name	|password	| privileges|
 |:----|:----|:----|
 |root@localhost	|msandbox |all on *.* with grant option|
@@ -179,7 +180,7 @@ mysql> flush privileges;
 # /opt/mysql/8.0.32/bin/mysqladmin create tpcc4 -h127.0.0.1 -P8032 -ulin -pmysql
 
 -- 删除是:
-/opt/mysql/8.0.32/bin/mysqladmin -h127.0.0.1 -P8032 -ulin -pmysql drop tpcc
+/opt/mysql/8.0.32/bin/mysqladmin -h127.0.0.1 -P8032 -ulin -pmysql drop tpcc4
 
 [root@ol8mysql01 msb_8_0_32]# /opt/mysql/8.0.32/bin/mysqladmin create tpcc4 -h127.0.0.1 -P8032 -ulin -pmysql
 mysqladmin: [Warning] Using a password on the command line interface can be insecure.
@@ -187,7 +188,9 @@ mysqladmin: [Warning] Using a password on the command line interface can be inse
 ```
 
 解决`mysqladmin: [Warning] Using a password on the command...`问题
+
 明文密码文件，生产环境谨慎使用
+
 ```
 # touch /etc/tpcc.password
 
@@ -303,6 +306,7 @@ nohup /root/tpcc-mysql/tpcc_start -h127.0.0.1 -dtpcc4 -ulin -pmysql -P8032 -w4 -
 
 - New-Order 事务的吞吐量（TPM）
 - 延迟 
+  
 ```
 Throughput，简称 tpmC。
 按照 TPC 的定义，流量指标描述了系统在执行 Payment、Order-status、Delivery、Stock-Level 这四种交易时，每分钟处理 New-Order 交易的数量。所有交易的响应时间必须满足 TPC-C 测试规范的要求。
