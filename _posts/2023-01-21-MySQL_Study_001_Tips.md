@@ -12,10 +12,10 @@ MySQL 8.0 Study 001 Tips
 
 学习系列
 
-- 01. 死锁案例
-- 02. 存量直方图导入功能(MySQL 8.0.31 最新小版本)
-- 03. 数据库时间与系统时间不一致
-- 04. show engine innodb status 查看
+- 死锁案例
+- 存量直方图导入功能(MySQL 8.0.31 最新小版本)
+- 数据库时间与系统时间不一致
+- show engine innodb status 查看
 
 
 
@@ -470,7 +470,7 @@ select name,comment,count,status from information_schema.innodb_metrics where na
 
 [TPCC-MySQL](https://github.com/Percona-Lab/tpcc-mysql)
 
-[技术分享 | 使用 SQL 语句来简化 show engine innodb status 的结果解读](https://opensource.actionsky.com/20221208-sql/)
+[使用 SQL 语句来简化 show engine innodb status 的结果解读](https://opensource.actionsky.com/20221208-sql/)
 
 Have a good work&life! 2023/01 via LinHong
 
