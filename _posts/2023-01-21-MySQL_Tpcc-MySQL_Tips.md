@@ -86,6 +86,7 @@ dbdeployer -> mysql 8.0.32
 手动下载 8.0.32 的tar包，并用 dbdeployer 安装 
 ```
 https://dev.mysql.com/downloads/
+
 mysql-8.0.32-linux-glibc2.17-x86_64-minimal.tar.xz
 
 # ls -tlr mysql-8.0.32-linux-glibc2.17-x86_64-minimal.tar.xz 
