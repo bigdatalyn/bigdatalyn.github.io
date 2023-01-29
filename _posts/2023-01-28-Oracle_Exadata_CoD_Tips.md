@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "OCI SSH Key Tips"
-category: OCI
-tags: OCI Tips
+title: "Exadata CoD Tips"
+category: Exadata
+tags: Exadata Tips
 ---
 
 * content
