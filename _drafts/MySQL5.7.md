@@ -98,3 +98,56 @@ J
 kAm` 1S?mysql_native_password^CConnection closed by foreign host.
 [root@ol8mysql01 ~]# 
 ```
+
+
+
+### 索引组织表
+
+Index Organized Table 
+
+- 索引组织起来的表
+- 根据主键顺序组织存放的
+
+主键:
+- Innodb 每张表都哟一个主键
+- 表中有一个 非空唯一索引，即为主键
+- 多个非空唯一索引，选第一个定义的索引为主键
+- 若没有非空唯一索引，自动创建一个6字节为主键
+
+
+```
+mysql [localhost:8032] {msandbox} (test) > create table z(a int not null, b int null, c int not null,d int not null, unique key(b),unique key(d),unique key(c));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql [localhost:8032] {msandbox} (test) > show create table z\G
+*************************** 1. row ***************************
+       Table: z
+Create Table: CREATE TABLE `z` (
+  `a` int NOT NULL,
+  `b` int DEFAULT NULL,
+  `c` int NOT NULL,
+  `d` int NOT NULL,
+  UNIQUE KEY `d` (`d`),
+  UNIQUE KEY `c` (`c`),
+  UNIQUE KEY `b` (`b`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+1 row in set (0.00 sec)
+
+mysql [localhost:8032] {msandbox} (test) > desc z
+    -> ;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| a     | int  | NO   |     | NULL    |       |
+| b     | int  | YES  | UNI | NULL    |       |
+| c     | int  | NO   | UNI | NULL    |       |
+| d     | int  | NO   | PRI | NULL    |       |
++-------+------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql [localhost:8032] {msandbox} (test) > 
+```
+
+### B+树
+
+索引组织表的算法
