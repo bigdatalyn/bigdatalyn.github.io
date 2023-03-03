@@ -249,6 +249,25 @@ WHERE
 
 [参考](https://cloud.tencent.com/developer/article/1059628)
 
+How To List All The Named Events Set For A Database (Doc ID 436036.1)	
+
+```
+1. identify the session 
+
+   SQL> select p.pid, p.spid, s.username 
+        from v$process p, v$session s 
+        where p.addr = s.paddr; 
+
+
+2. Attach to the desired session 
+
+   SQL> connect / as sysdba
+   SQL> oradebug setorapid <pid>
+   - OR - 
+   SQL> oradebug setospid <spid>
+   ...
+```
+
 Have a good work&life! 2023/03 via LinHong
 
 
