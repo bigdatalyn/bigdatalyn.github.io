@@ -298,6 +298,7 @@ python是大小写敏感
 ### 字符串
 
 半角单引号或者双引号
+
 >>> print('字符串')
 字符串
 >>> name='张三'
@@ -305,4 +306,26 @@ python是大小写敏感
 张三
 >>> 
 
+python2: raw_python()
+input会猜测数字int和float，一般用raw_input
 
+
+### 播放音频文件
+
+调用WinAPI系统接口
+
+第三方库:
+- pygame
+- pyaudio
+
+OS模块，请求OS打开文件并播放
+- 默认播放器
+
+import os
+system()
+
+os.system('start d:/...mp3')
+os.system('open /User/...mp3')
+
+
+os.system('open /Users/honglin/Desktop/WechatIMG3753.jpeg')
