@@ -328,4 +328,29 @@ os.system('start d:/...mp3')
 os.system('open /User/...mp3')
 
 
-os.system('open /Users/honglin/Desktop/WechatIMG3753.jpeg')
+os.system('open /Users/honglin/Desktop/WechatIMG3753.jpeg
+
+
+### if else
+
+- if 关键字后要有 空格
+- if else 句尾必须有 冒号
+- 分支必须整齐缩进
+
+缩进表示从属关系
+
+if x==3 :
+两个等号表示判断等于
+
+不用TAB键控制缩进（避免其他平台编辑器转换问题）用空格进行
+
+if ... :
+elif ... :
+elif ... :
+else:
+
+
+### 
+
+
+
