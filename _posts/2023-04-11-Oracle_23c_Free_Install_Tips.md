@@ -26,6 +26,29 @@ vagrant up
 Download : [oracle-database-free-23c-1.0-1.el8.x86_64.rpm](https://download.oracle.com/otn-pub/otn_software/db-free/oracle-database-free-23c-1.0-1.el8.x86_64.rpm?AuthParam=1681181743_17a540bc3922bea8b00f2f2b47fa6a54)
 
 
+```
+[vagrant@localhost ~]$ sqlplus system/oracle
+
+SQL*Plus: Release 23.0.0.0.0 - Developer-Release on Tue Apr 11 03:27:33 2023
+Version 23.2.0.0.0
+
+Copyright (c) 1982, 2023, Oracle.  All rights reserved.
+
+Last Successful login time: Tue Apr 11 2023 03:27:14 +00:00
+
+Connected to:
+Oracle Database 23c Free, Release 23.0.0.0.0 - Developer-Release
+Version 23.2.0.0.0
+
+SQL> select 2023+4;
+
+    2023+4
+----------
+      2027
+
+SQL> 
+```
+
 Logs
 ```
 honglin@honglin-mac vagrant-oracle-database-23c-free % vagrant up
