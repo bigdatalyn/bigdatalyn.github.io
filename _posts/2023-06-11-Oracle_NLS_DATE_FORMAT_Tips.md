@@ -25,6 +25,12 @@ SYSDATE
 ```
 
 
+
+
+
+
+
+
 ### SOLUTION
 
 Configured NLS_DATE_FORMAT environment variable.
