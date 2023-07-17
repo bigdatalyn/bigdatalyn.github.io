@@ -21,6 +21,21 @@ alter session set nls_date_format = 'YYYY-MM-DD HH24:MI:SS';
 select t2.username,t2.sid,t2.serial#,t2.logon_time from v$locked_object t1,v$session t2 where t1.session_id=t2.sid order by t2.logon_time;
 --关闭被锁对象连接 / kill session which have lock.
 alter system kill session '26,45052';
+
+-- RAC环境下kill 对应的session
+COL "SID"                            FOR 999
+COL "SERIAL#"                        FOR 9999999
+COL "INST_ID"                        FOR 9999999
+COL "KILL_SESSION_CMD_TEXT"          FOR A41
+COL "SQL_ID"                         FOR A13
+COL "PROCESS"                        FOR A7
+COL "USERNAME"                       FOR A8
+COL "SQL_TEXT"                       FOR A100
+select s1.sid,s1.serial#,s1.inst_id,'alter system kill session '''||s1.sid||','||s1.serial#||',@'||s1.inst_id||''';' as kill_session_cmd_text,s1.sql_id,s1.process,s1.username,s2.sql_text from gv$session s1, gv$sql s2 where s1.sql_id=s2.sql_id and s1.inst_id=s2.inst_id and s1.username='SYS';
+
+ SID  SERIAL#  INST_ID KILL_SESSION_CMD_TEXT			 SQL_ID        PROCESS USERNAME SQL_TEXT
+---- -------- -------- ----------------------------------------- ------------- ------- -------- ----------------------------------------------------------------------------------------------------
+  74	21111	     1 alter system kill session '74,21111,@1';  g4pkmrqrgxg3b 1790    SYS	select count(*) from dba_objects
 ```
 
 
