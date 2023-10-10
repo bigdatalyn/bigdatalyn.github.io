@@ -50,7 +50,10 @@ end;
 
 ![sql_report02]({{ "/files/Oracle/23c/SQLLR/sql_report02.jpg"}})
 
-![SQLR_ggyuy60qqy2w2_3rd.html]({{ "/files/Oracle/23c/SQLLR/SQLR_ggyuy60qqy2w2_3rd.html"}})
+<p>SQLR_ggyuy60qqy2w2_3rd<br>
+<iframe id="SQLR_ggyuy60qqy2w2_3rd" src="/files/Oracle/23c/SQLLR/SQLR_ggyuy60qqy2w2_3rd.html" width="800" height="800"></iframe></p>
+<p>&nbsp;</p>
+
 
 ### Referece
 
