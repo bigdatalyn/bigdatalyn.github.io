@@ -1,0 +1,951 @@
+<html><head>
+<style type="text/css">
+body {font:10pt Arial,Helvetica,Verdana,Geneva,sans-serif; 
+color:black; background:white;}
+a {font-weight:bold; color:#663300;}
+a.l {font-weight:bold; color:#663300;} /* line in brownish */
+a.nl {text-decoration:none; color:#336699;} /* no line in blue */
+pre {font:8pt Monaco,"Courier New",Courier,monospace;} /* for code */
+h1 {font-size:16pt; font-weight:bold; color:#336699;}
+h2 {font-size:14pt; font-weight:bold; color:#336699;}
+h3 {font-size:12pt; font-weight:bold; color:#336699;}
+h4 {font-size:10pt; font-weight:bold; color: red;}
+li {font-size:10pt; font-weight:bold; color:#336699; padding:0.1em 0 0 0;}
+table {font-size:8pt; color:black; background:white;}
+th {font-weight:bold; background:#cccc99; color:#336699; 
+vertical-align:bottom; padding-left:3pt; padding-right:3pt; 
+padding-top:1pt; padding-bottom:1pt;}
+td {text-align:left; background:#fcfcf0; vertical-align:top; 
+padding-left:3pt; padding-right:3pt; padding-top:1pt; padding-bottom:1pt;}
+td.c {text-align:center;} /* center */
+td.l {text-align:left;} /* left (default) */
+td.r {text-align:right;} /* right */
+font.n {font-size:8pt; font-style:italic; color:#336699;}
+font.f {font-size:8pt; color:#999999;} /* footnote in gray */
+td.red {font-weight:bold; color:#336699;}
+#summary1 {font-weight: bold; font-size: 16pt; color:#336699;}
+#summary2 {font-weight: bold; font-size: 14pt; color:#336699;}
+#summary3 {font-weight: bold; font-size: 12pt; color:#336699;}
+summary:hover {background-color: #FFFF99;}
+.button  {cursor: pointer;}
+.button1 {border-radius: 8px; background-color: #FFFF99; color: black;}
+.button1:hover {background-color: #4CAF50;color: white;}
+.tab {tab-size:30;}
+.tab1 {tab-size:22;}
+</style>
+</head>
+<h1>SQL Report SQLID: ggyuy60qqy2w2</h1>
+<h2><a name="MAIN_MENU"></a></h2>
+<body>
+<div id="overDiv"  style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<pre class="tab1"><H3>PLANS		GLOBAL		CURSOR SHARING AND BINDS		</H3></pre>
+<pre class="tab"><a href="#LAST_EXEC_PLAN">Last Execution Plan</a>		<a href="#SQL_TEXT">SQL Text</a>		<a href="#MEM_BINDS">Peeked vs Monitored Bind Values - In Memory</a>	</pre>
+<pre class="tab"><a href="#PLAN_SUMMARY">Plan Summary</a>		<a href="#SQL_HIST">SQL History</a>		<a href="#CAP_BINDS">Peeked vs Captured Bind Values - In Memory</a>	</pre>
+<pre class="tab"><a href="#ALL_EXEC_PLAN">All Execution Plans</a>		<a href="#MOD_SYS">Parameters(Non-Default Values)</a>	<a href="#AWR_BINDS">Peeked vs Captured Bind Values - AWR</a>	</pre>
+<pre class="tab"><a href="#HIST_EXEC_PLAN">Historical Execution Plans</a>		<a href="#INST_PARAMS">Instance Parameters</a>				</pre>
+<pre class="tab"><a href="#PLAN_OBJECTS">Plan Control Objects</a>		<a href="#OBSERVATIONS">Observations</a>				</pre>
+<pre class="tab">		<a href="#DBMS_PREFS">DBMS_STATS Table Preferences</a>				</pre>
+<br>
+<pre class="tab1"><H3>TABLES		INDEXES		ACTIVE SESSION HISTORY(ASH)		</H3></pre>
+<pre class="tab"><a href="#TABLE_COLUMNS">Table Columns</a>		<a href="#INDEX_COLUMNS">Index Columns</a>		<a href="#ASH_P_M">ASH by Plan (in Memory)</a>		</pre>
+<pre class="tab"><a href="#TABLE_PARTITIONS">Table Partitions</a>		<a href="#INDEX_PARTITIONS">Index Partitions</a>		<a href="#ASH_PL_M">ASH by Plan Line (in Memory)</a>		</pre>
+<pre class="tab"><a href="#TABLE_CONSTRAINTS">Table Constraints</a>				<a href="#ASH_P">ASH by Plan </a>		</pre>
+<pre class="tab"><a href="#TABLE_MODS">Table Modifications</a>				<a href="#ASH_PL">ASH by Plan Line</a>		</pre>
+<br>
+<pre class="tab1"><H3>MISCELLANEOUS						</H3></pre>
+<pre class="tab"><a href="#OBJ_DEPENDENCY">SQL Object Dependency</a>						</pre>
+<br>
+</tr>
+</td>
+<br><a name="SQL_TEXT"></a><details open><br/><summary id="summary2">SQL Text</summary>
+The SQL text of the target query<br><br>
+<table style="width:100%"><tbody><tr><th>Text</th></tr>
+<tr><td>select /*+ test01 */object_id,object_name,object_type from t1 where object_id = 9527</td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="OBSERVATIONS"></a><details open><br/><summary id="summary2">Observations</summary>
+The system observations<br><br>
+<table style="width:100%"><tbody><tr><th>#</th><th>Priority</th><th>Type</th><th>Name</th><th>Object</th><th>Observation</th><th>Details</th></tr>
+<tr><td>1</td><td>50</td><td>DBMS_STATS</td><td>SYSTEM STATISTICS</td><td></td><td>Workload CBO System Statistics are not gathered. CBO is using default values.(150)</td><td>Consider gathering workload system statistics using DBMS_STATS.GATHER_SYSTEM_STATS.<br>
+See also <a target="MOS" href="^^doc_link.465787.1">465787.1</a>.</td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="TABLE_COLUMNS"></a><details open><br/><summary id="summary2">Table Columns</summary>
+A list of physical Table attributes<br><br>
+</table>
+<h3><a name="TABLE_NAME: SYSTEM.T1">TABLE_NAME: SYSTEM.T1</a></h3>
+<table style="width:100%"><tbody><th>Indexes</th><th>Column<br>ID</th><th>Column<br>Name</th><th>Data<br>Type</th><th>Data<br>Default</th><th>Nullable</th><th>Num<br>Nulls</th><th>Sample<br>Size</th><th>Num<br>Distinct</th><th>Low<br>Value</th><th>High<br>Value</th><th>Last<br>Analysed</th><th>Average<br>Col Length</th><th>Density</th><th>Num<br>Buckets</th><th>Histogram</th><th>Hidden<br>Column</th><th>Virtual<br>Column</th><th>Global<br>Stats</th><th>User<br>Stats</th></tr>
+<td>1</td><td>4</td><td>OBJECT_ID</td><td>NUMBER</td><td></td><td>Y</td><td>0</td><td>70838</td><td>70838</td><td>2</td><td>71797</td><td>2023-10-10/16:14:15</td><td>5</td><td>  1.411672e-05</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>1</td><td></td><td>SYS_NC00029$</td><td>NUMBER</td><td>0</td><td>Y</td><td>0</td><td>70838</td><td>1</td><td>0</td><td>0</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>YES</td><td>YES</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>1</td><td>OWNER</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>24</td><td>APPQOSSYS</td><td>XDB</td><td>2023-10-10/16:14:15</td><td>5</td><td>  4.166667e-02</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>2</td><td>OBJECT_NAME</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>57068</td><td>/8477e677_AMD64CodeGeneratorAMD64MIR2LIRConverterAMD64RedundantE</td><td>schedFileWatcherJava</td><td>2023-10-10/16:14:15</td><td>39</td><td>  1.752296e-05</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>3</td><td>SUBOBJECT_NAME</td><td>VARCHAR2</td><td></td><td>Y</td><td>40079</td><td>30759</td><td>723</td><td>$VSN_1</td><td>WRR_REPLAY_THREAD_P1</td><td>2023-10-10/16:14:15</td><td>7</td><td>  1.383126e-03</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>5</td><td>DATA_OBJECT_ID</td><td>NUMBER</td><td></td><td>Y</td><td>63521</td><td>7317</td><td>7278</td><td>2</td><td>71792</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.374004e-04</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>6</td><td>OBJECT_TYPE</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>48</td><td>CLUSTER</td><td>XML SCHEMA</td><td>2023-10-10/16:14:15</td><td>10</td><td>  2.083333e-02</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>7</td><td>CREATED</td><td>DATE</td><td></td><td>Y</td><td>0</td><td>70838</td><td>658</td><td>2023-09-02 23:29:01</td><td>2023-10-10 15:53:06</td><td>2023-10-10/16:14:15</td><td>8</td><td>  1.519757e-03</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>8</td><td>LAST_DDL_TIME</td><td>DATE</td><td></td><td>Y</td><td>0</td><td>70838</td><td>821</td><td>2008-11-18 10:54:01</td><td>2023-10-10 15:56:01</td><td>2023-10-10/16:14:15</td><td>8</td><td>  1.218027e-03</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>9</td><td>TIMESTAMP</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>753</td><td>1990-08-26:11:25:00</td><td>2023-10-10:15:56:01</td><td>2023-10-10/16:14:15</td><td>20</td><td>  1.328021e-03</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>10</td><td>STATUS</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>2</td><td>INVALID</td><td>VALID</td><td>2023-10-10/16:14:15</td><td>7</td><td>  5.000000e-01</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>11</td><td>TEMPORARY</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>2</td><td>N</td><td>Y</td><td>2023-10-10/16:14:15</td><td>2</td><td>  5.000000e-01</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>12</td><td>GENERATED</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>2</td><td>N</td><td>Y</td><td>2023-10-10/16:14:15</td><td>2</td><td>  5.000000e-01</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>13</td><td>SECONDARY</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>2</td><td>N</td><td>Y</td><td>2023-10-10/16:14:15</td><td>2</td><td>  5.000000e-01</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>14</td><td>NAMESPACE</td><td>NUMBER</td><td></td><td>Y</td><td>0</td><td>70838</td><td>24</td><td>1</td><td>147</td><td>2023-10-10/16:14:15</td><td>4</td><td>  4.166667e-02</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>15</td><td>EDITION_NAME</td><td>VARCHAR2</td><td></td><td>Y</td><td>70838</td><td></td><td>0</td><td></td><td></td><td>2023-10-10/16:14:15</td><td>0</td><td>  0.000000e+00</td><td>0</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>16</td><td>SHARING</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>4</td><td>DATA LINK</td><td>NONE</td><td>2023-10-10/16:14:15</td><td>14</td><td>  2.500000e-01</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>17</td><td>EDITIONABLE</td><td>VARCHAR2</td><td></td><td>Y</td><td>43313</td><td>27525</td><td>2</td><td>N</td><td>Y</td><td>2023-10-10/16:14:15</td><td>2</td><td>  5.000000e-01</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>18</td><td>ORACLE_MAINTAINED</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>2</td><td>N</td><td>Y</td><td>2023-10-10/16:14:15</td><td>2</td><td>  5.000000e-01</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>19</td><td>APPLICATION</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>1</td><td>N</td><td>N</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>20</td><td>DEFAULT_COLLATION</td><td>VARCHAR2</td><td></td><td>Y</td><td>55383</td><td>15455</td><td>1</td><td>USING_NLS_COMP</td><td>USING_NLS_COMP</td><td>2023-10-10/16:14:15</td><td>5</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>21</td><td>DUPLICATED</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>1</td><td>N</td><td>N</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>22</td><td>SHARDED</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>1</td><td>N</td><td>N</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>23</td><td>IMPORTED_OBJECT</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>1</td><td>N</td><td>N</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>24</td><td>SYNCHRONOUS_DUPLICATED</td><td>VARCHAR2</td><td></td><td>Y</td><td>0</td><td>70838</td><td>1</td><td>N</td><td>N</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>25</td><td>CREATED_APPID</td><td>NUMBER</td><td></td><td>Y</td><td>70838</td><td></td><td>0</td><td></td><td></td><td>2023-10-10/16:14:15</td><td>0</td><td>  0.000000e+00</td><td>0</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>26</td><td>CREATED_VSNID</td><td>NUMBER</td><td></td><td>Y</td><td>70838</td><td></td><td>0</td><td></td><td></td><td>2023-10-10/16:14:15</td><td>0</td><td>  0.000000e+00</td><td>0</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>27</td><td>MODIFIED_APPID</td><td>NUMBER</td><td></td><td>Y</td><td>70838</td><td></td><td>0</td><td></td><td></td><td>2023-10-10/16:14:15</td><td>0</td><td>  0.000000e+00</td><td>0</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+<td>0</td><td>28</td><td>MODIFIED_VSNID</td><td>NUMBER</td><td></td><td>Y</td><td>70838</td><td></td><td>0</td><td></td><td></td><td>2023-10-10/16:14:15</td><td>0</td><td>  0.000000e+00</td><td>0</td><td>NONE</td><td>NO</td><td>NO</td><td>YES</td><td>NO</td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="TABLE_CONSTRAINTS"></a><details open><br/><summary id="summary2">Table Constraints</summary>
+Table constraints and if they are enabled or not<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="TABLE_PARTITIONS"></a><details open><br/><summary id="summary2">Table Partitions</summary>
+A list of partitions and their physical attributes<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="TABLE_MODS"></a><details open><br/><summary id="summary2">Table Modifications</summary>
+Table insert, updates, deletes and other physical changes<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="DBMS_PREFS"></a><details open><br/><summary id="summary2">DBMS_STATS Table Preferences</summary>
+The DBMS_STATS Table preferences<br><br>
+<table style="width:100%"><tbody><tr><th>OBJECT_OWNER</th><th>OBJECT_NAME</th><th>PREFERENCE_NAME</th><th>PREFERENCE_VALUE</th></tr>
+<tr><td>SYSTEM</td><td>T1</td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="INDEX_COLUMNS"></a><details open><br/><summary id="summary2">Index Columns</summary>
+Physical attributes of indexed columns and if they are used in the plan or not<br><br>
+</table>
+<h3><a name="TABLE_NAME: SYSTEM.T1">TABLE_NAME: SYSTEM.T1</a></h3>
+<table style="width:100%"><tbody><th>Used?</th><th>Index<br>Name</th><th>Index<br>Owner</th><th>Column<br>Position</th><th>Column<br>ID</th><th>Column<br>Name</th><th>Desc/<br>Asc</th><th>Num<br>Nulls</th><th>Sample<br>Size</th><th>Num<br>Distinct</th><th>Low<br>Value</th><th>High<br>Value</th><th>Last<br>Analyzed</th><th>Average<br>Column<br>Length</th><th>Density</th><th>Num<br>Buckets</th><th>Histogram</th><th>Global<br>Stats?</th><th>User<br>Stats?</th></tr>
+<td>N</td><td>IDX_OBJECT_ID0</td><td>SYSTEM</td><td>1</td><td>4</td><td>OBJECT_ID</td><td>ASC</td><td>0</td><td>70838</td><td>70838</td><td>2</td><td>71797</td><td>2023-10-10/16:14:15</td><td>5</td><td>  1.411672e-05</td><td>1</td><td>NONE</td><td>YES</td><td>NO</td></tr>
+<td>N</td><td>IDX_OBJECT_ID0</td><td>SYSTEM</td><td>2</td><td></td><td>SYS_NC00029$</td><td>ASC</td><td>0</td><td>70838</td><td>1</td><td>0</td><td>0</td><td>2023-10-10/16:14:15</td><td>2</td><td>  1.000000e+00</td><td>1</td><td>NONE</td><td>YES</td><td>NO</td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="INDEX_PARTITIONS"></a><details open><br/><summary id="summary2">Index Partitions</summary>
+Partition information for partitioned indexes<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="OBJ_DEPENDENCY"></a><details open><br/><summary id="summary2">SQL Object Dependency</summary>
+Dependency description between objects<br><br>
+<table style="width:100%"><tbody><tr><th>OWNER</th><th>Object<br>Name</th><th>Object<br>Type</th></tr>
+<tr><td></td><td>SYSTEM</td><td>UNDEFINED/INVALID</td></tr>
+<tr><td>SYSTEM</td><td>T1</td><td>TABLE</td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="SQL_HIST"></a><details open><br/><summary id="summary2">SQL History</summary>
+Historical execution information in chronological order<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="PLAN_SUMMARY"></a><details open><br/><summary id="summary2">Plan Summary</summary>
+Execution Plans performance metrics for SQL while still in memory. Plans ordered by average elapsed time.<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="LAST_EXEC_PLAN"></a><details open><br/><summary id="summary2">Last Execution Plan</summary>
+The execution plan found in memory<br><br>
+<pre>
+
+Inst: 1   Child: 0   Plan hash value: 3617692013
+ 
+-----------------------------------------------------------------------------------
+| Id  | exeOrd| Operation         | Name | E-Rows |E-Bytes| Cost (%CPU)| E-Time   |
+-----------------------------------------------------------------------------------
+|   0 |  N/A  | SELECT STATEMENT  |      |        |       |   412 (100)|          |
+<mark ID="mark_fmt">|*  1 |  N/A  |  TABLE ACCESS FULL| T1   |      1 |    54 |   412   (1)| 00:00:01 |</mark>
+-----------------------------------------------------------------------------------
+ 
+</pre></details><details><summary ID="summary4">Query Block Name / Object Alias (identified by operation id):</summary><pre>
+ 
+   1 - SEL$1 / "T1"@"SEL$1"
+ 
+</pre></details><details><summary ID="summary4">Outline Data</summary><pre>
+ 
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('23.1.0')
+      DB_VERSION('23.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+<mark ID="mark_fmt">      FULL(@"SEL$1" "T1"@"SEL$1")</mark>
+      END_OUTLINE_DATA
+  */
+ 
+</pre></details><details open><summary ID="summary4">Predicate Information (identified by operation id):</summary><pre>
+ 
+   1 - filter("OBJECT_ID"=9527)
+ 
+</pre></details><details><summary ID="summary4">Column Projection Information (identified by operation id):</summary><pre>
+ 
+   1 - "OBJECT_NAME"[VARCHAR2,128], "OBJECT_ID"[NUMBER,22], 
+       "OBJECT_TYPE"[VARCHAR2,23]
+ 
+</pre></details><details><summary ID="summary4">Hint Report (identified by operation id / Query Block Name / Object Alias):</summary><pre>
+Total hints for statement: 1 (E - Syntax error (1))
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$1
+         E -  test01
+ 
+</pre></details><details open><summary ID="summary4">Note</summary><pre>
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+ 
+</pre></details><details><summary ID="summary4">Query Block Registry:</summary><pre>
+ 
+  SEL$1 (PARSER) [FINAL]
+ 
+</pre>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="ALL_EXEC_PLAN"></a><details open><br/><summary id="summary2">All Execution Plans</summary>
+All execution plans from non-memory sources<br><br>
+<pre>
+
+Inst: 1   Child: 0   Plan hash value: 3617692013
+ 
+-----------------------------------------------------------------------------------
+| Id  | exeOrd| Operation         | Name | E-Rows |E-Bytes| Cost (%CPU)| E-Time   |
+-----------------------------------------------------------------------------------
+|   0 |  | SELECT STATEMENT  |      |        |       |   412 (100)|          |
+<mark ID="mark_fmt">|*  1 |  |  TABLE ACCESS FULL| T1   |      1 |    54 |   412   (1)| 00:00:01 |</mark>
+-----------------------------------------------------------------------------------
+ 
+</pre></details><details><summary ID="summary4">Query Block Name / Object Alias (identified by operation id):</summary><pre>
+ 
+   1 - SEL$1 / "T1"@"SEL$1"
+ 
+</pre></details><details><summary ID="summary4">Outline Data</summary><pre>
+ 
+  /*+
+      BEGIN_OUTLINE_DATA
+      IGNORE_OPTIM_EMBEDDED_HINTS
+      OPTIMIZER_FEATURES_ENABLE('23.1.0')
+      DB_VERSION('23.1.0')
+      ALL_ROWS
+      OUTLINE_LEAF(@"SEL$1")
+<mark ID="mark_fmt">      FULL(@"SEL$1" "T1"@"SEL$1")</mark>
+      END_OUTLINE_DATA
+  */
+ 
+</pre></details><details open><summary ID="summary4">Predicate Information (identified by operation id):</summary><pre>
+ 
+   1 - filter("OBJECT_ID"=9527)
+ 
+</pre></details><details><summary ID="summary4">Column Projection Information (identified by operation id):</summary><pre>
+ 
+   1 - "OBJECT_NAME"[VARCHAR2,128], "OBJECT_ID"[NUMBER,22], 
+       "OBJECT_TYPE"[VARCHAR2,23]
+ 
+</pre></details><details><summary ID="summary4">Hint Report (identified by operation id / Query Block Name / Object Alias):</summary><pre>
+Total hints for statement: 1 (E - Syntax error (1))
+---------------------------------------------------------------------------
+ 
+   1 -  SEL$1
+         E -  test01
+ 
+</pre></details open><details><summary ID="summary4">Note</summary><pre>
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+ 
+</pre></details><details><summary ID="summary4">Query Block Registry:</summary><pre>
+ 
+  SEL$1 (PARSER) [FINAL]
+ 
+</pre>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="HIST_EXEC_PLAN"></a><details open><br/><summary id="summary2">Historical Execution Plans</summary>
+Historical execution plans including Outline data<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="PLAN_OBJECTS"></a><details open><br/><summary id="summary2">Plan Control Objects</summary>
+Information related to Profiles and Baselines<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="MOD_SYS"></a><details><br/><summary id="summary2">Parameters(Non-Default Values)</summary>
+A list of system parameters with non-default values<br><br>
+<table style="width:100%"><tbody><tr><th>Rownum</th><th>Parameter<br>Name</th><th>Instance<br>ID</th><th>Ordinal</th><th>Is<br>Default</th><th>Is<br>Modified</th><th>Value</th><th>Display<br>Value</th><th>Description</th></tr>
+<tr><td>1</td><td>_datafile_write_errors_crash_instance</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>FALSE</td><td></td><td>datafile write errors crash instance</td></tr>
+<tr><td>2</td><td>_db_writer_coalesce_area_size</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>16777216</td><td>16M</td><td>Size of memory allocated to dbwriter for coalescing writes</td></tr>
+<tr><td>3</td><td>_disable_interface_checking</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>disable interface checking at startup</td></tr>
+<tr><td>4</td><td>_enable_NUMA_support</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable NUMA support and optimizations</td></tr>
+<tr><td>5</td><td>_file_size_increase_increment</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>2143289344</td><td>2044M</td><td>Amount of file size increase increment, in bytes</td></tr>
+<tr><td>6</td><td>_fix_control</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>18960760:on</td><td></td><td>bug fix control parameter</td></tr>
+<tr><td>7</td><td>_gc_policy_time</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>20</td><td></td><td>how often to make object policy decisions in minutes</td></tr>
+<tr><td>8</td><td>_gc_undo_affinity</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>if TRUE, enable undo affinity</td></tr>
+<tr><td>9</td><td>compatible</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>23.0.0.0</td><td></td><td>Database will be completely compatible with this software version</td></tr>
+<tr><td>10</td><td>control_files</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+RECO/CDB23C_ZGH_KIX/CONTROLFILE/current.256.1149786007</td><td></td><td>control file names list</td></tr>
+<tr><td>11</td><td>control_management_pack_access</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>DIAGNOSTIC+TUNING</td><td></td><td>declares which manageability packs are enabled</td></tr>
+<tr><td>12</td><td>cpu_count</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>8</td><td></td><td>maximum number of CPUs</td></tr>
+<tr><td>13</td><td>cursor_sharing</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>EXACT</td><td></td><td>cursor sharing mode</td></tr>
+<tr><td>14</td><td>db_block_checking</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>OFF</td><td></td><td>header checking and data and index block checking</td></tr>
+<tr><td>15</td><td>db_block_checksum</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TYPICAL</td><td></td><td>store checksum in db blocks and check during reads</td></tr>
+<tr><td>16</td><td>db_block_size</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>8192</td><td></td><td>Size of database block in bytes</td></tr>
+<tr><td>17</td><td>db_create_file_dest</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+DATA</td><td></td><td>default database location</td></tr>
+<tr><td>18</td><td>db_create_online_log_dest_1</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+RECO</td><td></td><td>online log/controlfile destination #1</td></tr>
+<tr><td>19</td><td>db_domain</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>sub01030811150.dbvcn.oraclevcn.com</td><td></td><td>directory part of global database name stored with CREATE DATABASE</td></tr>
+<tr><td>20</td><td>db_files</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>1024</td><td></td><td>max allowable # db files</td></tr>
+<tr><td>21</td><td>db_lost_write_protect</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TYPICAL</td><td></td><td>enable lost write detection</td></tr>
+<tr><td>22</td><td>db_name</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>cdb23c</td><td></td><td>database name specified in CREATE DATABASE</td></tr>
+<tr><td>23</td><td>db_recovery_file_dest</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+RECO</td><td></td><td>default database recovery file location</td></tr>
+<tr><td>24</td><td>db_recovery_file_dest_size</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>273804165120</td><td>255G</td><td>database recovery files size limit</td></tr>
+<tr><td>25</td><td>db_unique_name</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>cdb23c_zgh_kix</td><td></td><td>Database Unique Name</td></tr>
+<tr><td>26</td><td>diagnostic_dest</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>/u01/app/oracle</td><td></td><td>diagnostic base directory</td></tr>
+<tr><td>27</td><td>dispatchers</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>(PROTOCOL=TCP) (SERVICE=cdb23cXDB)</td><td></td><td>specifications of dispatchers</td></tr>
+<tr><td>28</td><td>enable_ddl_logging</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable ddl logging</td></tr>
+<tr><td>29</td><td>enable_pluggable_database</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>Enable Pluggable Database</td></tr>
+<tr><td>30</td><td>fast_start_mttr_target</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>300</td><td></td><td>MTTR target in seconds</td></tr>
+<tr><td>31</td><td>filesystemio_options</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>setall</td><td></td><td>IO operations on filesystem files</td></tr>
+<tr><td>32</td><td>global_names</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>enforce that database links have same name as remote database</td></tr>
+<tr><td>33</td><td>local_listener</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>LISTENER_CDB23C</td><td></td><td>local listener</td></tr>
+<tr><td>34</td><td>log_archive_format</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>%t_%s_%r.dbf</td><td></td><td>archival destination format</td></tr>
+<tr><td>35</td><td>log_buffer</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>134217728</td><td>128M</td><td>redo circular buffer size</td></tr>
+<tr><td>36</td><td>nls_language</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>AMERICAN</td><td></td><td>NLS language name</td></tr>
+<tr><td>37</td><td>nls_territory</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>AMERICA</td><td></td><td>NLS territory name</td></tr>
+<tr><td>38</td><td>open_cursors</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>1000</td><td></td><td>max # cursors per session</td></tr>
+<tr><td>39</td><td>os_authent_prefix</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>ops$</td><td></td><td>prefix for auto-logon accounts</td></tr>
+<tr><td>40</td><td>parallel_execution_message_size</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>16384</td><td></td><td>message buffer size for parallel execution</td></tr>
+<tr><td>41</td><td>parallel_threads_per_cpu</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>2</td><td></td><td>number of parallel execution threads per CPU</td></tr>
+<tr><td>42</td><td>pga_aggregate_limit</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>16374562816</td><td>15616M</td><td>limit of aggregate PGA memory for the instance or PDB</td></tr>
+<tr><td>43</td><td>pga_aggregate_target</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>8187281408</td><td>7808M</td><td>Target size for the aggregate PGA memory consumed by the instance</td></tr>
+<tr><td>44</td><td>processes</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>800</td><td></td><td>user processes</td></tr>
+<tr><td>45</td><td>remote_login_passwordfile</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>EXCLUSIVE</td><td></td><td>password file usage parameter</td></tr>
+<tr><td>46</td><td>session_cached_cursors</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>100</td><td></td><td>Number of cursors to cache in a session.</td></tr>
+<tr><td>47</td><td>sga_target</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>0</td><td></td><td>Target size of SGA</td></tr>
+<tr><td>48</td><td>spatial_vector_acceleration</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable spatial vector acceleration</td></tr>
+<tr><td>49</td><td>sql92_security</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>require select privilege for searched update/delete</td></tr>
+<tr><td>50</td><td>tde_configuration</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td></td><td></td><td>Per-PDB configuration for Transparent Data Encryption</td></tr>
+<tr><td>51</td><td>undo_retention</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>900</td><td></td><td>undo retention in seconds</td></tr>
+<tr><td>52</td><td>undo_tablespace</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>UNDOTBS1</td><td></td><td>use/switch undo tablespace</td></tr>
+<tr><td>53</td><td>use_large_pages</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>only</td><td></td><td>Use large pages if available (TRUE/FALSE/ONLY)</td></tr>
+<tr><td>54</td><td>wallet_root</td><td>1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>/opt/oracle/dcs/commonstore/wallets/cdb23c_zgh_kix</td><td></td><td>wallet root instance initialization parameter</td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="INST_PARAMS"></a><details><br/><summary id="summary2">Instance Parameters</summary>
+All parameter settings, including hidden parameters<br><br>
+<table style="width:100%"><tbody><tr><th>Rownum</th><th>Parameter<br>Name</th><th>Ordinal</th><th>Is<br>Default</th><th>Is<br>Modified</th><th>Value</th><th>Display<br>Value</th><th>Description</th></tr>
+<tr><td>1</td><td>DBFIPS_140</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable use of crypographic libraries in FIPS mode, public</td></tr>
+<tr><td>2</td><td>_datafile_write_errors_crash_instance</td><td>1</td><td>FALSE</td><td>FALSE</td><td>FALSE</td><td></td><td>datafile write errors crash instance</td></tr>
+<tr><td>3</td><td>_db_writer_coalesce_area_size</td><td>1</td><td>FALSE</td><td>FALSE</td><td>16777216</td><td>16M</td><td>Size of memory allocated to dbwriter for coalescing writes</td></tr>
+<tr><td>4</td><td>_disable_interface_checking</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>disable interface checking at startup</td></tr>
+<tr><td>5</td><td>_enable_NUMA_support</td><td>1</td><td>FALSE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable NUMA support and optimizations</td></tr>
+<tr><td>6</td><td>_file_size_increase_increment</td><td>1</td><td>FALSE</td><td>FALSE</td><td>2143289344</td><td>2044M</td><td>Amount of file size increase increment, in bytes</td></tr>
+<tr><td>7</td><td>_fix_control</td><td>1</td><td>FALSE</td><td>FALSE</td><td>18960760:on</td><td></td><td>bug fix control parameter</td></tr>
+<tr><td>8</td><td>_gc_policy_time</td><td>1</td><td>FALSE</td><td>FALSE</td><td>20</td><td></td><td>how often to make object policy decisions in minutes</td></tr>
+<tr><td>9</td><td>_gc_undo_affinity</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>if TRUE, enable undo affinity</td></tr>
+<tr><td>10</td><td>active_instance_count</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>number of active instances in the cluster database</td></tr>
+<tr><td>11</td><td>adg_account_info_tracking</td><td>1</td><td>TRUE</td><td>FALSE</td><td>LOCAL</td><td></td><td>ADG user account info tracked in standby(LOCAL) or in Primary(GLOBAL)</td></tr>
+<tr><td>12</td><td>adg_redirect_dml</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable DML Redirection from ADG</td></tr>
+<tr><td>13</td><td>allow_global_dblinks</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>LDAP lookup for DBLINKS</td></tr>
+<tr><td>14</td><td>allow_group_access_to_sga</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Allow read access for SGA to users of Oracle owner group</td></tr>
+<tr><td>15</td><td>allow_legacy_reco_protocol</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Should the database allow the legacy RECO protocol</td></tr>
+<tr><td>16</td><td>allow_rowid_column_type</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Allow creation of rowid column</td></tr>
+<tr><td>17</td><td>allow_weak_crypto</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Allow weak crypto usage in DBMS_CRYPTO</td></tr>
+<tr><td>18</td><td>approx_for_aggregation</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Replace exact aggregation with approximate aggregation</td></tr>
+<tr><td>19</td><td>approx_for_count_distinct</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Replace count distinct with approx_count_distinct</td></tr>
+<tr><td>20</td><td>approx_for_percentile</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>Replace percentile_* with approx_percentile</td></tr>
+<tr><td>21</td><td>aq_tm_processes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>number of AQ Time Managers to start</td></tr>
+<tr><td>22</td><td>archive_lag_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Maximum number of seconds of redos the standby could lose</td></tr>
+<tr><td>23</td><td>asm_diskgroups</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>disk groups to mount automatically</td></tr>
+<tr><td>24</td><td>asm_diskstring</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>disk set locations for discovery</td></tr>
+<tr><td>25</td><td>asm_io_processes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>20</td><td></td><td>number of I/O processes per domain in the ASM IOSERVER instance</td></tr>
+<tr><td>26</td><td>asm_power_limit</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>number of parallel relocations for disk rebalancing</td></tr>
+<tr><td>27</td><td>asm_preferred_read_failure_groups</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>preferred read failure groups</td></tr>
+<tr><td>28</td><td>audit_file_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td>/u01/app/oracle/product/23.0.0.0/dbhome_1/rdbms/audit</td><td></td><td>Directory in which auditing files are to reside</td></tr>
+<tr><td>29</td><td>audit_sys_operations</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable sys auditing</td></tr>
+<tr><td>30</td><td>audit_syslog_level</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Syslog facility and level</td></tr>
+<tr><td>31</td><td>audit_trail</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>enable system auditing</td></tr>
+<tr><td>32</td><td>auto_start_pdb_services</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Automatically start all PDB services on PDB Open</td></tr>
+<tr><td>33</td><td>autotask_max_active_pdbs</td><td>1</td><td>TRUE</td><td>FALSE</td><td>2</td><td></td><td>Setting for Autotask Maximum Maintenance PDBs</td></tr>
+<tr><td>34</td><td>awr_pdb_autoflush_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Enable/Disable AWR automatic PDB flushing</td></tr>
+<tr><td>35</td><td>awr_pdb_max_parallel_slaves</td><td>1</td><td>TRUE</td><td>FALSE</td><td>10</td><td></td><td>maximum concurrent AWR PDB MMON slaves per instance</td></tr>
+<tr><td>36</td><td>awr_snapshot_time_offset</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Setting for AWR Snapshot Time Offset</td></tr>
+<tr><td>37</td><td>background_core_dump</td><td>1</td><td>TRUE</td><td>FALSE</td><td>partial</td><td></td><td>Core Size for Background Processes</td></tr>
+<tr><td>38</td><td>background_dump_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td>/u01/app/oracle/product/23.0.0.0/dbhome_1/rdbms/log</td><td></td><td>Detached process dump directory</td></tr>
+<tr><td>39</td><td>backup_tape_io_slaves</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>BACKUP Tape I/O slaves</td></tr>
+<tr><td>40</td><td>bitmap_merge_area_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1048576</td><td></td><td>maximum memory allow for BITMAP MERGE</td></tr>
+<tr><td>41</td><td>blank_trimming</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>blank trimming semantics parameter</td></tr>
+<tr><td>42</td><td>blockchain_table_max_no_drop</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>maximum idle retention minutes for blockchain tables</td></tr>
+<tr><td>43</td><td>blockchain_table_retention_threshold</td><td>1</td><td>TRUE</td><td>FALSE</td><td>16</td><td></td><td>maximum retention without TABLE RETENTION privilege</td></tr>
+<tr><td>44</td><td>buffer_pool_keep</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Number of database blocks/latches in keep buffer pool</td></tr>
+<tr><td>45</td><td>buffer_pool_recycle</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Number of database blocks/latches in recycle buffer pool</td></tr>
+<tr><td>46</td><td>cdb_cluster</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>if TRUE startup in CDB Cluster mode</td></tr>
+<tr><td>47</td><td>cdb_cluster_name</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>CDB Cluster name</td></tr>
+<tr><td>48</td><td>cell_offload_compaction</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ADAPTIVE</td><td></td><td>Cell packet compaction strategy</td></tr>
+<tr><td>49</td><td>cell_offload_decryption</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable SQL processing offload of encrypted data to cells</td></tr>
+<tr><td>50</td><td>cell_offload_parameters</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Additional cell offload parameters</td></tr>
+<tr><td>51</td><td>cell_offload_plan_display</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AUTO</td><td></td><td>Cell offload explain plan display</td></tr>
+<tr><td>52</td><td>cell_offload_processing</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable SQL processing offload to cells</td></tr>
+<tr><td>53</td><td>cell_offloadgroup_name</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Set the offload group name</td></tr>
+<tr><td>54</td><td>circuits</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>max number of circuits</td></tr>
+<tr><td>55</td><td>client_prefetch_rows</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Client prefetch rows value</td></tr>
+<tr><td>56</td><td>client_result_cache_lag</td><td>1</td><td>TRUE</td><td>FALSE</td><td>3000</td><td></td><td>client result cache maximum lag in milliseconds</td></tr>
+<tr><td>57</td><td>client_result_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>client result cache max size in bytes</td></tr>
+<tr><td>58</td><td>client_statistics_level</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TYPICAL</td><td></td><td>Client Statistics Level</td></tr>
+<tr><td>59</td><td>clonedb</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>clone database</td></tr>
+<tr><td>60</td><td>clonedb_dir</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>CloneDB Directory</td></tr>
+<tr><td>61</td><td>cluster_database</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>if TRUE startup in cluster database mode</td></tr>
+<tr><td>62</td><td>cluster_interconnects</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>interconnects for RAC use</td></tr>
+<tr><td>63</td><td>commit_logging</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>transaction commit log write behaviour</td></tr>
+<tr><td>64</td><td>commit_point_strength</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>Bias this node has toward not preparing in a two-phase commit</td></tr>
+<tr><td>65</td><td>commit_wait</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>transaction commit log wait behaviour</td></tr>
+<tr><td>66</td><td>commit_write</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>transaction commit log write behaviour</td></tr>
+<tr><td>67</td><td>common_user_prefix</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Enforce restriction on a prefix of a Common User/Role/Profile name</td></tr>
+<tr><td>68</td><td>compatible</td><td>1</td><td>FALSE</td><td>FALSE</td><td>23.0.0.0</td><td></td><td>Database will be completely compatible with this software version</td></tr>
+<tr><td>69</td><td>connection_brokers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>((TYPE=DEDICATED)(BROKERS=1))</td><td></td><td>connection brokers specification</td></tr>
+<tr><td>70</td><td>connection_brokers</td><td>2</td><td>TRUE</td><td>FALSE</td><td>((TYPE=EMON)(BROKERS=1))</td><td></td><td>connection brokers specification</td></tr>
+<tr><td>71</td><td>container_data</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ALL</td><td></td><td>which containers should data be returned from?</td></tr>
+<tr><td>72</td><td>containers_parallel_degree</td><td>1</td><td>TRUE</td><td>FALSE</td><td>65535</td><td></td><td>Parallel degree for a CONTAINERS() query</td></tr>
+<tr><td>73</td><td>control_file_record_keep_time</td><td>1</td><td>TRUE</td><td>FALSE</td><td>7</td><td></td><td>control file record keep time in days</td></tr>
+<tr><td>74</td><td>control_files</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+RECO/CDB23C_ZGH_KIX/CONTROLFILE/current.256.1149786007</td><td></td><td>control file names list</td></tr>
+<tr><td>75</td><td>control_management_pack_access</td><td>1</td><td>FALSE</td><td>FALSE</td><td>DIAGNOSTIC+TUNING</td><td></td><td>declares which manageability packs are enabled</td></tr>
+<tr><td>76</td><td>core_dump_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td>/u01/app/oracle/diag/rdbms/cdb23c_zgh_kix/cdb23c/cdump</td><td></td><td>Core dump directory</td></tr>
+<tr><td>77</td><td>cpu_count</td><td>1</td><td>FALSE</td><td>FALSE</td><td>8</td><td></td><td>maximum number of CPUs</td></tr>
+<tr><td>78</td><td>cpu_min_count</td><td>1</td><td>TRUE</td><td>FALSE</td><td>8</td><td></td><td>minimum number of CPUs required</td></tr>
+<tr><td>79</td><td>create_bitmap_area_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>8388608</td><td></td><td>size of create bitmap buffer for bitmap index</td></tr>
+<tr><td>80</td><td>create_stored_outlines</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>create stored outlines for DML statements</td></tr>
+<tr><td>81</td><td>cursor_bind_capture_destination</td><td>1</td><td>TRUE</td><td>FALSE</td><td>memory+disk</td><td></td><td>Allowed destination for captured bind variables</td></tr>
+<tr><td>82</td><td>cursor_invalidation</td><td>1</td><td>TRUE</td><td>FALSE</td><td>IMMEDIATE</td><td></td><td>default for DDL cursor invalidation semantics</td></tr>
+<tr><td>83</td><td>cursor_sharing</td><td>1</td><td>FALSE</td><td>FALSE</td><td>EXACT</td><td></td><td>cursor sharing mode</td></tr>
+<tr><td>84</td><td>cursor_space_for_time</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>use more memory in order to get faster execution</td></tr>
+<tr><td>85</td><td>data_guard_max_io_time</td><td>1</td><td>TRUE</td><td>FALSE</td><td>240</td><td></td><td>maximum I/O time before process considered hung</td></tr>
+<tr><td>86</td><td>data_guard_max_longio_time</td><td>1</td><td>TRUE</td><td>FALSE</td><td>240</td><td></td><td>maximum long I/O time before process considered hung</td></tr>
+<tr><td>87</td><td>data_guard_sync_latency</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Data Guard SYNC latency</td></tr>
+<tr><td>88</td><td>data_transfer_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of data transfer cache</td></tr>
+<tr><td>89</td><td>db_16k_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of cache for 16K buffers</td></tr>
+<tr><td>90</td><td>db_2k_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of cache for 2K buffers</td></tr>
+<tr><td>91</td><td>db_32k_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of cache for 32K buffers</td></tr>
+<tr><td>92</td><td>db_4k_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of cache for 4K buffers</td></tr>
+<tr><td>93</td><td>db_8k_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of cache for 8K buffers</td></tr>
+<tr><td>94</td><td>db_big_table_cache_percent_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Big table cache target size in percentage</td></tr>
+<tr><td>95</td><td>db_block_buffers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Number of database blocks cached in memory</td></tr>
+<tr><td>96</td><td>db_block_checking</td><td>1</td><td>FALSE</td><td>FALSE</td><td>OFF</td><td></td><td>header checking and data and index block checking</td></tr>
+<tr><td>97</td><td>db_block_checksum</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TYPICAL</td><td></td><td>store checksum in db blocks and check during reads</td></tr>
+<tr><td>98</td><td>db_block_size</td><td>1</td><td>FALSE</td><td>FALSE</td><td>8192</td><td></td><td>Size of database block in bytes</td></tr>
+<tr><td>99</td><td>db_cache_advice</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ON</td><td></td><td>Buffer cache sizing advisory</td></tr>
+<tr><td>100</td><td>db_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of DEFAULT buffer pool for standard block size buffers</td></tr>
+<tr><td>101</td><td>db_create_file_dest</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+DATA</td><td></td><td>default database location</td></tr>
+<tr><td>102</td><td>db_create_online_log_dest_1</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+RECO</td><td></td><td>online log/controlfile destination #1</td></tr>
+<tr><td>103</td><td>db_create_online_log_dest_2</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>online log/controlfile destination #2</td></tr>
+<tr><td>104</td><td>db_create_online_log_dest_3</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>online log/controlfile destination #3</td></tr>
+<tr><td>105</td><td>db_create_online_log_dest_4</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>online log/controlfile destination #4</td></tr>
+<tr><td>106</td><td>db_create_online_log_dest_5</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>online log/controlfile  destination #5</td></tr>
+<tr><td>107</td><td>db_domain</td><td>1</td><td>FALSE</td><td>FALSE</td><td>sub01030811150.dbvcn.oraclevcn.com</td><td></td><td>directory part of global database name stored with CREATE DATABASE</td></tr>
+<tr><td>108</td><td>db_file_multiblock_read_count</td><td>1</td><td>TRUE</td><td>FALSE</td><td>128</td><td></td><td>db block to be read each IO</td></tr>
+<tr><td>109</td><td>db_file_name_convert</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>datafile name convert patterns and strings for standby/clone db</td></tr>
+<tr><td>110</td><td>db_files</td><td>1</td><td>FALSE</td><td>FALSE</td><td>1024</td><td></td><td>max allowable # db files</td></tr>
+<tr><td>111</td><td>db_flash_cache_file</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>flash cache file for default block size</td></tr>
+<tr><td>112</td><td>db_flash_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>flash cache size for db_flash_cache_file</td></tr>
+<tr><td>113</td><td>db_flashback_log_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Separate creation directory for flashback database logs</td></tr>
+<tr><td>114</td><td>db_flashback_log_dest_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size limit of separate creation directory for flashback             database logs</td></tr>
+<tr><td>115</td><td>db_flashback_retention_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1440</td><td></td><td>Maximum Flashback Database log retention time in minutes.</td></tr>
+<tr><td>116</td><td>db_index_compression_inheritance</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>options for table or tablespace level compression inheritance</td></tr>
+<tr><td>117</td><td>db_keep_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of KEEP buffer pool for standard block size buffers</td></tr>
+<tr><td>118</td><td>db_lost_write_protect</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TYPICAL</td><td></td><td>enable lost write detection</td></tr>
+<tr><td>119</td><td>db_name</td><td>1</td><td>FALSE</td><td>FALSE</td><td>cdb23c</td><td></td><td>database name specified in CREATE DATABASE</td></tr>
+<tr><td>120</td><td>db_performance_profile</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Database performance category</td></tr>
+<tr><td>121</td><td>db_recovery_file_dest</td><td>1</td><td>FALSE</td><td>FALSE</td><td>+RECO</td><td></td><td>default database recovery file location</td></tr>
+<tr><td>122</td><td>db_recovery_file_dest_size</td><td>1</td><td>FALSE</td><td>FALSE</td><td>273804165120</td><td>255G</td><td>database recovery files size limit</td></tr>
+<tr><td>123</td><td>db_recycle_cache_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of RECYCLE buffer pool for standard block size buffers</td></tr>
+<tr><td>124</td><td>db_securefile</td><td>1</td><td>TRUE</td><td>FALSE</td><td>PREFERRED</td><td></td><td>permit securefile storage during lob creation</td></tr>
+<tr><td>125</td><td>db_ultra_safe</td><td>1</td><td>TRUE</td><td>FALSE</td><td>OFF</td><td></td><td>Sets defaults for other parameters that control protection levels</td></tr>
+<tr><td>126</td><td>db_unique_name</td><td>1</td><td>FALSE</td><td>FALSE</td><td>cdb23c_zgh_kix</td><td></td><td>Database Unique Name</td></tr>
+<tr><td>127</td><td>db_unrecoverable_scn_tracking</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Track nologging SCN in controlfile</td></tr>
+<tr><td>128</td><td>db_writer_processes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>number of background database writer  processes to start</td></tr>
+<tr><td>129</td><td>dbnest_enable</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>database Nest enable</td></tr>
+<tr><td>130</td><td>dbnest_pdb_fs_conf</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>PDB Filesystem configuration</td></tr>
+<tr><td>131</td><td>dbwr_io_slaves</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>DBWR I/O slaves</td></tr>
+<tr><td>132</td><td>ddl_lock_timeout</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>timeout to restrict the time that ddls wait for dml lock</td></tr>
+<tr><td>133</td><td>default_credential</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>default credential session parameter</td></tr>
+<tr><td>134</td><td>default_sharing</td><td>1</td><td>TRUE</td><td>FALSE</td><td>METADATA</td><td></td><td>Default sharing clause</td></tr>
+<tr><td>135</td><td>deferred_segment_creation</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>defer segment creation to first insert</td></tr>
+<tr><td>136</td><td>dg_broker_config_file1</td><td>1</td><td>TRUE</td><td>FALSE</td><td>/u01/app/oracle/product/23.0.0.0/dbhome_1/dbs/dr1cdb23c_zgh_kix.dat</td><td></td><td>data guard broker configuration file #1</td></tr>
+<tr><td>137</td><td>dg_broker_config_file2</td><td>1</td><td>TRUE</td><td>FALSE</td><td>/u01/app/oracle/product/23.0.0.0/dbhome_1/dbs/dr2cdb23c_zgh_kix.dat</td><td></td><td>data guard broker configuration file #2</td></tr>
+<tr><td>138</td><td>dg_broker_start</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>start Data Guard broker (DMON process)</td></tr>
+<tr><td>139</td><td>diagnostic_dest</td><td>1</td><td>FALSE</td><td>FALSE</td><td>/u01/app/oracle</td><td></td><td>diagnostic base directory</td></tr>
+<tr><td>140</td><td>diagnostics_control</td><td>1</td><td>TRUE</td><td>FALSE</td><td>IGNORE</td><td></td><td>controls response when 'enabling diagnostics' privilege is absent</td></tr>
+<tr><td>141</td><td>disable_pdb_feature</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Disable features</td></tr>
+<tr><td>142</td><td>disk_asynch_io</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Use asynch I/O for random access devices</td></tr>
+<tr><td>143</td><td>dispatchers</td><td>1</td><td>FALSE</td><td>FALSE</td><td>(PROTOCOL=TCP) (SERVICE=cdb23cXDB)</td><td></td><td>specifications of dispatchers</td></tr>
+<tr><td>144</td><td>distributed_lock_timeout</td><td>1</td><td>TRUE</td><td>FALSE</td><td>60</td><td></td><td>number of seconds a distributed transaction waits for a lock</td></tr>
+<tr><td>145</td><td>dml_locks</td><td>1</td><td>TRUE</td><td>FALSE</td><td>5384</td><td></td><td>dml locks - one for each table modified in a transaction</td></tr>
+<tr><td>146</td><td>dnfs_batch_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>4096</td><td></td><td>Max number of dNFS asynch I/O requests queued per session</td></tr>
+<tr><td>147</td><td>drcp_connection_limit</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>DRCP connection limit</td></tr>
+<tr><td>148</td><td>drcp_dedicated_opt</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NO</td><td></td><td>Turn on/off dedicated optimization for DRCP</td></tr>
+<tr><td>149</td><td>dst_upgrade_insert_conv</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Enables/Disables internal conversions during DST upgrade</td></tr>
+<tr><td>150</td><td>enable_automatic_maintenance_pdb</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Enable/Disable Automated Maintenance for Non-Root PDB</td></tr>
+<tr><td>151</td><td>enable_ddl_logging</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable ddl logging</td></tr>
+<tr><td>152</td><td>enable_dnfs_dispatcher</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable DNFS Dispatcher</td></tr>
+<tr><td>153</td><td>enable_goldengate_replication</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>goldengate replication enabled</td></tr>
+<tr><td>154</td><td>enable_imc_with_mira</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable IMC with  multi instance redo apply</td></tr>
+<tr><td>155</td><td>enable_per_pdb_drcp</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Turn on/off per PDB DRCP</td></tr>
+<tr><td>156</td><td>enable_pluggable_database</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>Enable Pluggable Database</td></tr>
+<tr><td>157</td><td>enabled_PDBs_on_standby</td><td>1</td><td>TRUE</td><td>FALSE</td><td>*</td><td></td><td>List of Enabled PDB patterns</td></tr>
+<tr><td>158</td><td>encrypt_new_tablespaces</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ALWAYS</td><td></td><td>whether to encrypt newly created tablespaces</td></tr>
+<tr><td>159</td><td>error_message_details</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ON</td><td></td><td>print additional explanatory error details</td></tr>
+<tr><td>160</td><td>event</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>debug event control - default null string</td></tr>
+<tr><td>161</td><td>external_keystore_credential_location</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>external keystore credential location</td></tr>
+<tr><td>162</td><td>fal_client</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>FAL client</td></tr>
+<tr><td>163</td><td>fal_server</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>FAL server list</td></tr>
+<tr><td>164</td><td>fast_start_io_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Upper bound on recovery reads</td></tr>
+<tr><td>165</td><td>fast_start_mttr_target</td><td>1</td><td>FALSE</td><td>FALSE</td><td>300</td><td></td><td>MTTR target in seconds</td></tr>
+<tr><td>166</td><td>fast_start_parallel_rollback</td><td>1</td><td>TRUE</td><td>FALSE</td><td>LOW</td><td></td><td>max number of parallel recovery slaves that may be used</td></tr>
+<tr><td>167</td><td>file_mapping</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable file mapping</td></tr>
+<tr><td>168</td><td>fileio_network_adapters</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Network Adapters for File I/O</td></tr>
+<tr><td>169</td><td>filesystemio_options</td><td>1</td><td>FALSE</td><td>FALSE</td><td>setall</td><td></td><td>IO operations on filesystem files</td></tr>
+<tr><td>170</td><td>fixed_date</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>fixed SYSDATE value</td></tr>
+<tr><td>171</td><td>forward_listener</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>forward listener</td></tr>
+<tr><td>172</td><td>gcs_server_processes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>number of background gcs server processes to start</td></tr>
+<tr><td>173</td><td>global_names</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>enforce that database links have same name as remote database</td></tr>
+<tr><td>174</td><td>global_txn_processes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>number of background global transaction processes to start</td></tr>
+<tr><td>175</td><td>group_by_position_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable/disable group by position</td></tr>
+<tr><td>176</td><td>hash_area_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>131072</td><td></td><td>size of in-memory hash work area</td></tr>
+<tr><td>177</td><td>heartbeat_batch_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>5</td><td></td><td>Number of heartbeats to be sent in a batch</td></tr>
+<tr><td>178</td><td>heat_map</td><td>1</td><td>TRUE</td><td>FALSE</td><td>OFF</td><td></td><td>ILM Heatmap Tracking</td></tr>
+<tr><td>179</td><td>hi_shared_memory_address</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>SGA starting address (high order 32-bits on 64-bit platforms)</td></tr>
+<tr><td>180</td><td>hs_autoregister</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable automatic server DD updates in HS agent self-registration</td></tr>
+<tr><td>181</td><td>http_proxy</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>http_proxy</td></tr>
+<tr><td>182</td><td>hybrid_read_only</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Hybrid read only mode allows CDB common user to patch the PDB</td></tr>
+<tr><td>183</td><td>identity_provider_config</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Identity Provider Configuration</td></tr>
+<tr><td>184</td><td>identity_provider_type</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>Identity Provider Type</td></tr>
+<tr><td>185</td><td>ifile</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>include file in init.ora</td></tr>
+<tr><td>186</td><td>ignore_session_set_param_errors</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Ignore errors during alter session param set</td></tr>
+<tr><td>187</td><td>inmemory_adg_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Enable IMC support on ADG</td></tr>
+<tr><td>188</td><td>inmemory_automatic_level</td><td>1</td><td>TRUE</td><td>FALSE</td><td>OFF</td><td></td><td>Enable Automatic In-Memory management</td></tr>
+<tr><td>189</td><td>inmemory_clause_default</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Default in-memory clause for new tables</td></tr>
+<tr><td>190</td><td>inmemory_deep_vectorization</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>In-Memory Deep Vectorization Enabled</td></tr>
+<tr><td>191</td><td>inmemory_expressions_usage</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ENABLE</td><td></td><td>Controls which In-Memory Expressions are populated in-memory</td></tr>
+<tr><td>192</td><td>inmemory_force</td><td>1</td><td>TRUE</td><td>FALSE</td><td>DEFAULT</td><td></td><td>Force tables to be in-memory or not</td></tr>
+<tr><td>193</td><td>inmemory_graph_algorithm_execution</td><td>1</td><td>TRUE</td><td>FALSE</td><td>DEFAULT</td><td></td><td>Controls the fall-back action of graph algorithm execution if in-memory execution is not possible</td></tr>
+<tr><td>194</td><td>inmemory_max_populate_servers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>maximum inmemory populate servers</td></tr>
+<tr><td>195</td><td>inmemory_optimized_arithmetic</td><td>1</td><td>TRUE</td><td>FALSE</td><td>DISABLE</td><td></td><td>Controls whether or not DSBs are stored in-memory</td></tr>
+<tr><td>196</td><td>inmemory_prefer_xmem_memcompress</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Prefer to store tables with given memcompress levels in xmem</td></tr>
+<tr><td>197</td><td>inmemory_prefer_xmem_priority</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Prefer to store tables with given priority levels in xmem</td></tr>
+<tr><td>198</td><td>inmemory_query</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ENABLE</td><td></td><td>Specifies whether in-memory queries are allowed</td></tr>
+<tr><td>199</td><td>inmemory_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size in bytes of in-memory area</td></tr>
+<tr><td>200</td><td>inmemory_trickle_repopulate_servers_percent</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>inmemory trickle repopulate servers percent</td></tr>
+<tr><td>201</td><td>inmemory_virtual_columns</td><td>1</td><td>TRUE</td><td>FALSE</td><td>MANUAL</td><td></td><td>Controls which user-defined virtual columns are stored in-memory</td></tr>
+<tr><td>202</td><td>inmemory_xmem_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size in bytes of in-memory xmem area</td></tr>
+<tr><td>203</td><td>instance_abort_delay_time</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>time to delay an internal initiated abort (in seconds)</td></tr>
+<tr><td>204</td><td>instance_groups</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>list of instance group names</td></tr>
+<tr><td>205</td><td>instance_mode</td><td>1</td><td>TRUE</td><td>FALSE</td><td>READ-WRITE</td><td></td><td>indicates whether the instance read-only or read-write or read-mostly</td></tr>
+<tr><td>206</td><td>instance_name</td><td>1</td><td>TRUE</td><td>FALSE</td><td>cdb23c</td><td></td><td>instance name supported by the instance</td></tr>
+<tr><td>207</td><td>instance_number</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>instance number</td></tr>
+<tr><td>208</td><td>instance_type</td><td>1</td><td>TRUE</td><td>FALSE</td><td>RDBMS</td><td></td><td>type of instance to be executed</td></tr>
+<tr><td>209</td><td>instant_restore</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>instant repopulation of datafiles</td></tr>
+<tr><td>210</td><td>iorm_limit_policy</td><td>1</td><td>TRUE</td><td>FALSE</td><td>RM_PLAN</td><td></td><td>Policy used to compute Exadata IORM limit</td></tr>
+<tr><td>211</td><td>ipddb_enable</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable IPD/DB data collection</td></tr>
+<tr><td>212</td><td>java_jit_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Java VM JIT enabled</td></tr>
+<tr><td>213</td><td>java_max_sessionspace_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>max allowed size in bytes of a Java sessionspace</td></tr>
+<tr><td>214</td><td>java_pool_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size in bytes of java pool</td></tr>
+<tr><td>215</td><td>java_restrict</td><td>1</td><td>TRUE</td><td>FALSE</td><td>none</td><td></td><td>Restrict Java VM Access</td></tr>
+<tr><td>216</td><td>java_soft_sessionspace_limit</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>warning limit on size in bytes of a Java sessionspace</td></tr>
+<tr><td>217</td><td>job_queue_processes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>160</td><td></td><td>maximum number of job queue slave processes</td></tr>
+<tr><td>218</td><td>json_behavior_flags</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>control json behaviors</td></tr>
+<tr><td>219</td><td>json_expression_check</td><td>1</td><td>TRUE</td><td>FALSE</td><td>off</td><td></td><td>enable/disable JSON query statement check</td></tr>
+<tr><td>220</td><td>kafka_config_file</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>KSR pub/sub external message bus(KGMPS) CONFIGuration file</td></tr>
+<tr><td>221</td><td>large_pool_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size in bytes of large pool</td></tr>
+<tr><td>222</td><td>ldap_directory_access</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>RDBMS's LDAP access option</td></tr>
+<tr><td>223</td><td>ldap_directory_sysauth</td><td>1</td><td>TRUE</td><td>FALSE</td><td>no</td><td></td><td>OID usage parameter</td></tr>
+<tr><td>224</td><td>license_max_sessions</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>maximum number of non-system user sessions allowed</td></tr>
+<tr><td>225</td><td>license_max_users</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>maximum number of named users that can be created in the database</td></tr>
+<tr><td>226</td><td>license_sessions_warning</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>warning level for number of non-system user sessions</td></tr>
+<tr><td>227</td><td>listener_networks</td><td>1</td><td>TRUE</td><td>FALSE</td><td>(( NAME=net1)(LOCAL_LISTENER=(ADDRESS=(PROTOCOL=TCP)(HOST=hong23c-vip.sub01030811150.dbvcn.oraclevcn.com)(PORT=1521))))</td><td></td><td>listener registration networks</td></tr>
+<tr><td>228</td><td>load_without_compile</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>Load PL/SQL or Database objects without compilation</td></tr>
+<tr><td>229</td><td>lob_signature_enable</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable lob signature</td></tr>
+<tr><td>230</td><td>local_listener</td><td>1</td><td>FALSE</td><td>FALSE</td><td>LISTENER_CDB23C</td><td></td><td>local listener</td></tr>
+<tr><td>231</td><td>lock_name_space</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>lock name space used for generating lock names for standby/clone database</td></tr>
+<tr><td>232</td><td>lock_sga</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Lock entire SGA in physical memory</td></tr>
+<tr><td>233</td><td>log_archive_config</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>log archive config</td></tr>
+<tr><td>234</td><td>log_archive_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination text string</td></tr>
+<tr><td>235</td><td>log_archive_dest_1</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #1 text string</td></tr>
+<tr><td>236</td><td>log_archive_dest_10</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #10 text string</td></tr>
+<tr><td>237</td><td>log_archive_dest_11</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #11 text string</td></tr>
+<tr><td>238</td><td>log_archive_dest_12</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #12 text string</td></tr>
+<tr><td>239</td><td>log_archive_dest_13</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #13 text string</td></tr>
+<tr><td>240</td><td>log_archive_dest_14</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #14 text string</td></tr>
+<tr><td>241</td><td>log_archive_dest_15</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #15 text string</td></tr>
+<tr><td>242</td><td>log_archive_dest_16</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #16 text string</td></tr>
+<tr><td>243</td><td>log_archive_dest_17</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #17 text string</td></tr>
+<tr><td>244</td><td>log_archive_dest_18</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #18 text string</td></tr>
+<tr><td>245</td><td>log_archive_dest_19</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #19 text string</td></tr>
+<tr><td>246</td><td>log_archive_dest_2</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #2 text string</td></tr>
+<tr><td>247</td><td>log_archive_dest_20</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #20 text string</td></tr>
+<tr><td>248</td><td>log_archive_dest_21</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #21 text string</td></tr>
+<tr><td>249</td><td>log_archive_dest_22</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #22 text string</td></tr>
+<tr><td>250</td><td>log_archive_dest_23</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #23 text string</td></tr>
+<tr><td>251</td><td>log_archive_dest_24</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #24 text string</td></tr>
+<tr><td>252</td><td>log_archive_dest_25</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #25 text string</td></tr>
+<tr><td>253</td><td>log_archive_dest_26</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #26 text string</td></tr>
+<tr><td>254</td><td>log_archive_dest_27</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #27 text string</td></tr>
+<tr><td>255</td><td>log_archive_dest_28</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #28 text string</td></tr>
+<tr><td>256</td><td>log_archive_dest_29</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #29 text string</td></tr>
+<tr><td>257</td><td>log_archive_dest_3</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #3 text string</td></tr>
+<tr><td>258</td><td>log_archive_dest_30</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #30 text string</td></tr>
+<tr><td>259</td><td>log_archive_dest_31</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #31 text string</td></tr>
+<tr><td>260</td><td>log_archive_dest_4</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #4 text string</td></tr>
+<tr><td>261</td><td>log_archive_dest_5</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #5 text string</td></tr>
+<tr><td>262</td><td>log_archive_dest_6</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #6 text string</td></tr>
+<tr><td>263</td><td>log_archive_dest_7</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #7 text string</td></tr>
+<tr><td>264</td><td>log_archive_dest_8</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #8 text string</td></tr>
+<tr><td>265</td><td>log_archive_dest_9</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>archival destination #9 text string</td></tr>
+<tr><td>266</td><td>log_archive_dest_state_1</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #1 state text string</td></tr>
+<tr><td>267</td><td>log_archive_dest_state_10</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #10 state text string</td></tr>
+<tr><td>268</td><td>log_archive_dest_state_11</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #11 state text string</td></tr>
+<tr><td>269</td><td>log_archive_dest_state_12</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #12 state text string</td></tr>
+<tr><td>270</td><td>log_archive_dest_state_13</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #13 state text string</td></tr>
+<tr><td>271</td><td>log_archive_dest_state_14</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #14 state text string</td></tr>
+<tr><td>272</td><td>log_archive_dest_state_15</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #15 state text string</td></tr>
+<tr><td>273</td><td>log_archive_dest_state_16</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #16 state text string</td></tr>
+<tr><td>274</td><td>log_archive_dest_state_17</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #17 state text string</td></tr>
+<tr><td>275</td><td>log_archive_dest_state_18</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #18 state text string</td></tr>
+<tr><td>276</td><td>log_archive_dest_state_19</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #19 state text string</td></tr>
+<tr><td>277</td><td>log_archive_dest_state_2</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #2 state text string</td></tr>
+<tr><td>278</td><td>log_archive_dest_state_20</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #20 state text string</td></tr>
+<tr><td>279</td><td>log_archive_dest_state_21</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #21 state text string</td></tr>
+<tr><td>280</td><td>log_archive_dest_state_22</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #22 state text string</td></tr>
+<tr><td>281</td><td>log_archive_dest_state_23</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #23 state text string</td></tr>
+<tr><td>282</td><td>log_archive_dest_state_24</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #24 state text string</td></tr>
+<tr><td>283</td><td>log_archive_dest_state_25</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #25 state text string</td></tr>
+<tr><td>284</td><td>log_archive_dest_state_26</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #26 state text string</td></tr>
+<tr><td>285</td><td>log_archive_dest_state_27</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #27 state text string</td></tr>
+<tr><td>286</td><td>log_archive_dest_state_28</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #28 state text string</td></tr>
+<tr><td>287</td><td>log_archive_dest_state_29</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #29 state text string</td></tr>
+<tr><td>288</td><td>log_archive_dest_state_3</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #3 state text string</td></tr>
+<tr><td>289</td><td>log_archive_dest_state_30</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #30 state text string</td></tr>
+<tr><td>290</td><td>log_archive_dest_state_31</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #31 state text string</td></tr>
+<tr><td>291</td><td>log_archive_dest_state_4</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #4 state text string</td></tr>
+<tr><td>292</td><td>log_archive_dest_state_5</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #5 state text string</td></tr>
+<tr><td>293</td><td>log_archive_dest_state_6</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #6 state text string</td></tr>
+<tr><td>294</td><td>log_archive_dest_state_7</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #7 state text string</td></tr>
+<tr><td>295</td><td>log_archive_dest_state_8</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #8 state text string</td></tr>
+<tr><td>296</td><td>log_archive_dest_state_9</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>archival destination #9 state text string</td></tr>
+<tr><td>297</td><td>log_archive_duplex_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>duplex archival destination text string</td></tr>
+<tr><td>298</td><td>log_archive_format</td><td>1</td><td>FALSE</td><td>FALSE</td><td>%t_%s_%r.dbf</td><td></td><td>archival destination format</td></tr>
+<tr><td>299</td><td>log_archive_max_processes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>4</td><td></td><td>maximum number of active ARCH processes</td></tr>
+<tr><td>300</td><td>log_archive_min_succeed_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>minimum number of archive destinations that must succeed</td></tr>
+<tr><td>301</td><td>log_archive_trace</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Establish archive operation tracing level</td></tr>
+<tr><td>302</td><td>log_buffer</td><td>1</td><td>FALSE</td><td>FALSE</td><td>134217728</td><td>128M</td><td>redo circular buffer size</td></tr>
+<tr><td>303</td><td>log_checkpoint_interval</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td># redo blocks checkpoint threshold</td></tr>
+<tr><td>304</td><td>log_checkpoint_timeout</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1800</td><td></td><td>Maximum time interval between checkpoints in seconds</td></tr>
+<tr><td>305</td><td>log_checkpoints_to_alert</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>log checkpoint begin/end to alert file</td></tr>
+<tr><td>306</td><td>log_file_name_convert</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>logfile name convert patterns and strings for standby/clone db</td></tr>
+<tr><td>307</td><td>long_module_action</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Use longer module and action</td></tr>
+<tr><td>308</td><td>main_workload_type</td><td>1</td><td>TRUE</td><td>FALSE</td><td>OLTP</td><td></td><td>Main workload type</td></tr>
+<tr><td>309</td><td>mandatory_user_profile</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Enforce Mandatory Password Profile for multitenant database</td></tr>
+<tr><td>310</td><td>max_auth_servers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>25</td><td></td><td>Maximum size of auth pool</td></tr>
+<tr><td>311</td><td>max_columns</td><td>1</td><td>TRUE</td><td>FALSE</td><td>STANDARD</td><td></td><td>maximum number of columns allowed in table or view</td></tr>
+<tr><td>312</td><td>max_datapump_jobs_per_pdb</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AUTO</td><td></td><td>maximum number of concurrent Data Pump Jobs per PDB</td></tr>
+<tr><td>313</td><td>max_datapump_parallel_per_job</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AUTO</td><td></td><td>maximum number of parallel processes per Data Pump Job</td></tr>
+<tr><td>314</td><td>max_dispatchers</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>max number of dispatchers</td></tr>
+<tr><td>315</td><td>max_dump_file_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>32M</td><td></td><td>Maximum size (in bytes) of dump file</td></tr>
+<tr><td>316</td><td>max_idle_blocker_time</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>maximum idle time for a blocking session in minutes</td></tr>
+<tr><td>317</td><td>max_idle_time</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>maximum session idle time in minutes</td></tr>
+<tr><td>318</td><td>max_iops</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>MAX IO per second</td></tr>
+<tr><td>319</td><td>max_mbps</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>MAX MB per second</td></tr>
+<tr><td>320</td><td>max_pdbs</td><td>1</td><td>TRUE</td><td>FALSE</td><td>4098</td><td></td><td>max number of pdbs allowed in CDB or Application ROOT</td></tr>
+<tr><td>321</td><td>max_saga_duration</td><td>1</td><td>TRUE</td><td>FALSE</td><td>86400</td><td></td><td>default value for max saga duration</td></tr>
+<tr><td>322</td><td>max_shared_servers</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>max number of shared servers</td></tr>
+<tr><td>323</td><td>max_string_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>STANDARD</td><td></td><td>controls maximum size of VARCHAR2, NVARCHAR2, and RAW types in SQL</td></tr>
+<tr><td>324</td><td>memoptimize_pool_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Size of cache for imoltp buffers</td></tr>
+<tr><td>325</td><td>memoptimize_write_area_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>changes memoptimize write area size</td></tr>
+<tr><td>326</td><td>memoptimize_writes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>HINT</td><td></td><td>write data to IGA without memoptimize_write hint</td></tr>
+<tr><td>327</td><td>memory_max_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Maximum memory size</td></tr>
+<tr><td>328</td><td>memory_max_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Max size for Memory Target</td></tr>
+<tr><td>329</td><td>memory_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Target memory size</td></tr>
+<tr><td>330</td><td>memory_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Target size of Oracle SGA and PGA memory</td></tr>
+<tr><td>331</td><td>min_auth_servers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>Minimum size of auth pool</td></tr>
+<tr><td>332</td><td>mle_prog_languages</td><td>1</td><td>TRUE</td><td>FALSE</td><td>all</td><td></td><td>Enable Multilingual Engine</td></tr>
+<tr><td>333</td><td>mle_regexp_accelerator</td><td>1</td><td>TRUE</td><td>FALSE</td><td>SQL</td><td></td><td>Accelerate regular expression evaluation using MLE</td></tr>
+<tr><td>334</td><td>multishard_query_data_consistency</td><td>1</td><td>TRUE</td><td>FALSE</td><td>strong</td><td></td><td>consistency setting for multishard queries</td></tr>
+<tr><td>335</td><td>multishard_query_partial_results</td><td>1</td><td>TRUE</td><td>FALSE</td><td>not allowed</td><td></td><td>enable partial results for multishard queries</td></tr>
+<tr><td>336</td><td>native_blockchain_features</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Native block chain enable/disable</td></tr>
+<tr><td>337</td><td>nls_calendar</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>NLS calendar system name</td></tr>
+<tr><td>338</td><td>nls_comp</td><td>1</td><td>TRUE</td><td>FALSE</td><td>BINARY</td><td></td><td>NLS comparison</td></tr>
+<tr><td>339</td><td>nls_currency</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>NLS local currency symbol</td></tr>
+<tr><td>340</td><td>nls_date_format</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>NLS Oracle date format</td></tr>
+<tr><td>341</td><td>nls_date_language</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>NLS date language name</td></tr>
+<tr><td>342</td><td>nls_dual_currency</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Dual currency symbol</td></tr>
+<tr><td>343</td><td>nls_iso_currency</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>NLS ISO currency territory name</td></tr>
+<tr><td>344</td><td>nls_language</td><td>1</td><td>FALSE</td><td>FALSE</td><td>AMERICAN</td><td></td><td>NLS language name</td></tr>
+<tr><td>345</td><td>nls_length_semantics</td><td>1</td><td>TRUE</td><td>FALSE</td><td>BYTE</td><td></td><td>create columns using byte or char semantics by default</td></tr>
+<tr><td>346</td><td>nls_nchar_conv_excp</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>NLS raise an exception instead of allowing implicit conversion</td></tr>
+<tr><td>347</td><td>nls_numeric_characters</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>NLS numeric characters</td></tr>
+<tr><td>348</td><td>nls_sort</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>NLS linguistic definition name</td></tr>
+<tr><td>349</td><td>nls_territory</td><td>1</td><td>FALSE</td><td>FALSE</td><td>AMERICA</td><td></td><td>NLS territory name</td></tr>
+<tr><td>350</td><td>nls_time_format</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>time format</td></tr>
+<tr><td>351</td><td>nls_time_tz_format</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>time with timezone format</td></tr>
+<tr><td>352</td><td>nls_timestamp_format</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>time stamp format</td></tr>
+<tr><td>353</td><td>nls_timestamp_tz_format</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>timestamp with timezone format</td></tr>
+<tr><td>354</td><td>noncdb_compatible</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Non-CDB Compatible</td></tr>
+<tr><td>355</td><td>object_cache_max_size_percent</td><td>1</td><td>TRUE</td><td>FALSE</td><td>10</td><td></td><td>percentage of maximum size over optimal of the user session's object cache</td></tr>
+<tr><td>356</td><td>object_cache_optimal_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>51200000</td><td></td><td>optimal size of the user session's object cache in bytes</td></tr>
+<tr><td>357</td><td>ofs_threads</td><td>1</td><td>TRUE</td><td>FALSE</td><td>4</td><td></td><td>Number of OFS threads</td></tr>
+<tr><td>358</td><td>olap_page_pool_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size of the olap page pool in bytes</td></tr>
+<tr><td>359</td><td>one_step_plugin_for_pdb_with_tde</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Facilitate one-step plugin for PDB with TDE encrypted data</td></tr>
+<tr><td>360</td><td>open_cursors</td><td>1</td><td>FALSE</td><td>FALSE</td><td>1000</td><td></td><td>max # cursors per session</td></tr>
+<tr><td>361</td><td>open_links</td><td>1</td><td>TRUE</td><td>FALSE</td><td>4</td><td></td><td>max # open links per session</td></tr>
+<tr><td>362</td><td>open_links_per_instance</td><td>1</td><td>TRUE</td><td>FALSE</td><td>4</td><td></td><td>max # open links per instance</td></tr>
+<tr><td>363</td><td>optimizer_adaptive_plans</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>controls all types of adaptive plans</td></tr>
+<tr><td>364</td><td>optimizer_adaptive_reporting_only</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>use reporting-only mode for adaptive optimizations</td></tr>
+<tr><td>365</td><td>optimizer_adaptive_statistics</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>controls all types of adaptive statistics</td></tr>
+<tr><td>366</td><td>optimizer_capture_sql_plan_baselines</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>automatic capture of SQL plan baselines for repeatable statements</td></tr>
+<tr><td>367</td><td>optimizer_capture_sql_quarantine</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable automatic creation/update of sql quarantine configuration</td></tr>
+<tr><td>368</td><td>optimizer_cross_shard_resiliency</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enables resilient execution of cross shard queries</td></tr>
+<tr><td>369</td><td>optimizer_dynamic_sampling</td><td>1</td><td>TRUE</td><td>FALSE</td><td>2</td><td></td><td>optimizer dynamic sampling</td></tr>
+<tr><td>370</td><td>optimizer_features_enable</td><td>1</td><td>TRUE</td><td>FALSE</td><td>23.1.0</td><td></td><td>optimizer plan compatibility parameter</td></tr>
+<tr><td>371</td><td>optimizer_ignore_hints</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enables the embedded hints to be ignored</td></tr>
+<tr><td>372</td><td>optimizer_ignore_parallel_hints</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enables embedded parallel hints to be ignored</td></tr>
+<tr><td>373</td><td>optimizer_index_caching</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>optimizer percent index caching</td></tr>
+<tr><td>374</td><td>optimizer_index_cost_adj</td><td>1</td><td>TRUE</td><td>FALSE</td><td>100</td><td></td><td>optimizer index cost adjustment</td></tr>
+<tr><td>375</td><td>optimizer_inmemory_aware</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>optimizer in-memory columnar awareness</td></tr>
+<tr><td>376</td><td>optimizer_mode</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ALL_ROWS</td><td></td><td>optimizer mode</td></tr>
+<tr><td>377</td><td>optimizer_real_time_statistics</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>optimizer real time statistics on conventional DML</td></tr>
+<tr><td>378</td><td>optimizer_secure_view_merging</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>optimizer secure view merging and predicate pushdown/movearound</td></tr>
+<tr><td>379</td><td>optimizer_session_type</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NORMAL</td><td></td><td>Controls Auto Index</td></tr>
+<tr><td>380</td><td>optimizer_use_invisible_indexes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Usage of invisible indexes (TRUE/FALSE)</td></tr>
+<tr><td>381</td><td>optimizer_use_pending_statistics</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Control whether to use optimizer pending statistics</td></tr>
+<tr><td>382</td><td>optimizer_use_sql_plan_baselines</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>use of SQL plan baselines for captured sql statements</td></tr>
+<tr><td>383</td><td>optimizer_use_sql_quarantine</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable use of sql quarantine</td></tr>
+<tr><td>384</td><td>os_authent_prefix</td><td>1</td><td>FALSE</td><td>FALSE</td><td>ops$</td><td></td><td>prefix for auto-logon accounts</td></tr>
+<tr><td>385</td><td>os_roles</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>retrieve roles from the operating system</td></tr>
+<tr><td>386</td><td>outbound_dblink_protocols</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ALL</td><td></td><td>Outbound DBLINK Protocols allowed</td></tr>
+<tr><td>387</td><td>parallel_adaptive_multi_user</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable adaptive setting of degree for multiple user streams</td></tr>
+<tr><td>388</td><td>parallel_degree_limit</td><td>1</td><td>TRUE</td><td>FALSE</td><td>CPU</td><td></td><td>limit placed on degree of parallelism</td></tr>
+<tr><td>389</td><td>parallel_degree_policy</td><td>1</td><td>TRUE</td><td>FALSE</td><td>MANUAL</td><td></td><td>policy used to compute the degree of parallelism (MANUAL/LIMITED/AUTO/ADAPTIVE)</td></tr>
+<tr><td>390</td><td>parallel_execution_message_size</td><td>1</td><td>FALSE</td><td>FALSE</td><td>16384</td><td></td><td>message buffer size for parallel execution</td></tr>
+<tr><td>391</td><td>parallel_force_local</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>force single instance execution</td></tr>
+<tr><td>392</td><td>parallel_instance_group</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>instance group to use for all parallel operations</td></tr>
+<tr><td>393</td><td>parallel_max_servers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>320</td><td></td><td>maximum parallel query servers per instance</td></tr>
+<tr><td>394</td><td>parallel_min_degree</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>controls the minimum DOP computed by Auto DOP</td></tr>
+<tr><td>395</td><td>parallel_min_percent</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>minimum percent of threads required for parallel query</td></tr>
+<tr><td>396</td><td>parallel_min_servers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>32</td><td></td><td>minimum parallel query servers per instance</td></tr>
+<tr><td>397</td><td>parallel_min_time_threshold</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AUTO</td><td></td><td>threshold above which a plan is a candidate for parallelization (in seconds)</td></tr>
+<tr><td>398</td><td>parallel_servers_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>128</td><td></td><td>instance target in terms of number of parallel servers</td></tr>
+<tr><td>399</td><td>parallel_threads_per_cpu</td><td>1</td><td>FALSE</td><td>FALSE</td><td>2</td><td></td><td>number of parallel execution threads per CPU</td></tr>
+<tr><td>400</td><td>paranoid_concurrency_mode</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable strictly durable query data gets</td></tr>
+<tr><td>401</td><td>pdb_file_name_convert</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>PDB file name convert patterns and strings for create cdb/pdb</td></tr>
+<tr><td>402</td><td>pdb_lockdown</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>pluggable database lockdown profile</td></tr>
+<tr><td>403</td><td>pdb_os_credential</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>pluggable database OS credential to bind</td></tr>
+<tr><td>404</td><td>pdb_template</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>PDB template</td></tr>
+<tr><td>405</td><td>pdc_file_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>8392704</td><td>8196K</td><td>size (in bytes) of the pmem direct commit file</td></tr>
+<tr><td>406</td><td>permit_92_wrap_format</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>allow 9.2 or older wrap format in PL/SQL</td></tr>
+<tr><td>407</td><td>pga_aggregate_limit</td><td>1</td><td>FALSE</td><td>FALSE</td><td>16374562816</td><td>15616M</td><td>limit of aggregate PGA memory for the instance or PDB</td></tr>
+<tr><td>408</td><td>pga_aggregate_target</td><td>1</td><td>FALSE</td><td>FALSE</td><td>8187281408</td><td>7808M</td><td>Target size for the aggregate PGA memory consumed by the instance</td></tr>
+<tr><td>409</td><td>pkcs11_library_location</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>PKCS#11 library location for Transparent Data Encryption</td></tr>
+<tr><td>410</td><td>plscope_settings</td><td>1</td><td>TRUE</td><td>FALSE</td><td>IDENTIFIERS:NONE</td><td></td><td>plscope_settings controls the compile time collection, cross reference, and storage of PL/SQL source code identifier and SQL statement data</td></tr>
+<tr><td>411</td><td>plsql_ccflags</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>PL/SQL ccflags</td></tr>
+<tr><td>412</td><td>plsql_code_type</td><td>1</td><td>TRUE</td><td>FALSE</td><td>INTERPRETED</td><td></td><td>PL/SQL code-type</td></tr>
+<tr><td>413</td><td>plsql_debug</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>PL/SQL debug</td></tr>
+<tr><td>414</td><td>plsql_implicit_conversion_bool</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>PL/SQL: Implicit conversion for boolean</td></tr>
+<tr><td>415</td><td>plsql_optimize_level</td><td>1</td><td>TRUE</td><td>FALSE</td><td>2</td><td></td><td>PL/SQL optimize level</td></tr>
+<tr><td>416</td><td>plsql_v2_compatibility</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>PL/SQL version 2.x compatibility flag</td></tr>
+<tr><td>417</td><td>plsql_warnings</td><td>1</td><td>TRUE</td><td>FALSE</td><td>DISABLE:ALL</td><td></td><td>PL/SQL compiler warnings settings</td></tr>
+<tr><td>418</td><td>pmem_filestore</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Persistent Memory Filestore list</td></tr>
+<tr><td>419</td><td>pre_page_sga</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>pre-page sga for process</td></tr>
+<tr><td>420</td><td>private_temp_table_prefix</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ORA$PTT_</td><td></td><td>Private temporary table prefix</td></tr>
+<tr><td>421</td><td>processes</td><td>1</td><td>FALSE</td><td>FALSE</td><td>800</td><td></td><td>user processes</td></tr>
+<tr><td>422</td><td>processor_group_name</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Name of the processor group that this instance should run in.</td></tr>
+<tr><td>423</td><td>query_rewrite_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>allow rewrite of queries using materialized views if enabled</td></tr>
+<tr><td>424</td><td>query_rewrite_integrity</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enforced</td><td></td><td>perform rewrite using materialized views with desired integrity</td></tr>
+<tr><td>425</td><td>rdbms_server_dn</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>RDBMS's Distinguished Name</td></tr>
+<tr><td>426</td><td>read_only</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Restrict WRITE operations in user session</td></tr>
+<tr><td>427</td><td>read_only_open_delayed</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>if TRUE delay opening of read only files until first access</td></tr>
+<tr><td>428</td><td>recovery_parallelism</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>number of server processes to use for parallel recovery</td></tr>
+<tr><td>429</td><td>recyclebin</td><td>1</td><td>TRUE</td><td>FALSE</td><td>on</td><td></td><td>recyclebin processing</td></tr>
+<tr><td>430</td><td>redo_transport_user</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Data Guard transport user when using password file</td></tr>
+<tr><td>431</td><td>remote_dependencies_mode</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TIMESTAMP</td><td></td><td>remote-procedure-call dependencies mode parameter</td></tr>
+<tr><td>432</td><td>remote_listener</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>remote listener</td></tr>
+<tr><td>433</td><td>remote_login_passwordfile</td><td>1</td><td>FALSE</td><td>FALSE</td><td>EXCLUSIVE</td><td></td><td>password file usage parameter</td></tr>
+<tr><td>434</td><td>remote_os_roles</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>allow non-secure remote clients to use os roles</td></tr>
+<tr><td>435</td><td>remote_recovery_file_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>default remote database recovery file location for refresh/relocate</td></tr>
+<tr><td>436</td><td>replication_dependency_tracking</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>tracking dependency for Replication parallel propagation</td></tr>
+<tr><td>437</td><td>resource_limit</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>master switch for resource limit</td></tr>
+<tr><td>438</td><td>resource_manage_goldengate</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>goldengate resource manager enabled</td></tr>
+<tr><td>439</td><td>resource_manager_cpu_allocation</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Resource Manager CPU allocation</td></tr>
+<tr><td>440</td><td>resource_manager_cpu_scope</td><td>1</td><td>TRUE</td><td>FALSE</td><td>INSTANCE_ONLY</td><td></td><td>scope of CPU resource management</td></tr>
+<tr><td>441</td><td>resource_manager_plan</td><td>1</td><td>TRUE</td><td>FALSE</td><td>SCHEDULER:DEFAULT_MAINTENANCE_PLAN</td><td></td><td>resource mgr top plan</td></tr>
+<tr><td>442</td><td>result_cache_auto_blocklist</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ON</td><td></td><td>whether to run the auto blocklisting algorithm</td></tr>
+<tr><td>443</td><td>result_cache_execution_threshold</td><td>1</td><td>TRUE</td><td>FALSE</td><td>2</td><td></td><td>minimum executions before a PL/SQL function is cached</td></tr>
+<tr><td>444</td><td>result_cache_integrity</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUSTED</td><td></td><td>result cache deterministic PLSQL functions</td></tr>
+<tr><td>445</td><td>result_cache_max_result</td><td>1</td><td>TRUE</td><td>FALSE</td><td>5</td><td></td><td>maximum result size as percent of cache size</td></tr>
+<tr><td>446</td><td>result_cache_max_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>164626432</td><td>157M</td><td>maximum amount of memory to be used by the cache</td></tr>
+<tr><td>447</td><td>result_cache_max_temp_result</td><td>1</td><td>TRUE</td><td>FALSE</td><td>5</td><td></td><td>maximum temp per result as percent of total temp for result cache</td></tr>
+<tr><td>448</td><td>result_cache_max_temp_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1637456280</td><td></td><td>maximum amount of temp space to be used</td></tr>
+<tr><td>449</td><td>result_cache_mode</td><td>1</td><td>TRUE</td><td>FALSE</td><td>MANUAL</td><td></td><td>result cache operator usage mode</td></tr>
+<tr><td>450</td><td>result_cache_remote_expiration</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>maximum life time (min) for any result using a remote object</td></tr>
+<tr><td>451</td><td>resumable_timeout</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>set resumable_timeout</td></tr>
+<tr><td>452</td><td>rollback_segments</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>undo segment list</td></tr>
+<tr><td>453</td><td>run_addm_for_awr_report</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>types of AWR snapshots for which ADDM can be run inside AWR report</td></tr>
+<tr><td>454</td><td>saga_hist_retention</td><td>1</td><td>TRUE</td><td>FALSE</td><td>43200</td><td></td><td>default value for retention of completed sagas</td></tr>
+<tr><td>455</td><td>scheduler_follow_pdbtz</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Make scheduler objects follow PDB TZ</td></tr>
+<tr><td>456</td><td>sec_max_failed_login_attempts</td><td>1</td><td>TRUE</td><td>FALSE</td><td>3</td><td></td><td>maximum number of failed login attempts on a connection</td></tr>
+<tr><td>457</td><td>sec_protocol_error_further_action</td><td>1</td><td>TRUE</td><td>FALSE</td><td>(DROP,3)</td><td></td><td>TTC protocol error continue action</td></tr>
+<tr><td>458</td><td>sec_protocol_error_trace_action</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRACE</td><td></td><td>TTC protocol error action</td></tr>
+<tr><td>459</td><td>sec_return_server_release_banner</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>whether the server retruns the complete version information</td></tr>
+<tr><td>460</td><td>serial_reuse</td><td>1</td><td>TRUE</td><td>FALSE</td><td>disable</td><td></td><td>reuse the frame segments</td></tr>
+<tr><td>461</td><td>service_names</td><td>1</td><td>TRUE</td><td>FALSE</td><td>cdb23c_zgh_kix.sub01030811150.dbvcn.oraclevcn.com</td><td></td><td>service names supported by the instance</td></tr>
+<tr><td>462</td><td>session_cached_cursors</td><td>1</td><td>FALSE</td><td>FALSE</td><td>100</td><td></td><td>Number of cursors to cache in a session.</td></tr>
+<tr><td>463</td><td>session_exit_on_package_state_error</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Request client to exit when PL/SQL package state is discarded</td></tr>
+<tr><td>464</td><td>session_max_open_files</td><td>1</td><td>TRUE</td><td>FALSE</td><td>10</td><td></td><td>maximum number of open files allowed per session</td></tr>
+<tr><td>465</td><td>sessions</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1224</td><td></td><td>user and system sessions</td></tr>
+<tr><td>466</td><td>sga_max_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>32749125632</td><td>31232M</td><td>max total SGA size</td></tr>
+<tr><td>467</td><td>sga_min_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Minimum, guaranteed size of PDB's SGA</td></tr>
+<tr><td>468</td><td>sga_target</td><td>1</td><td>FALSE</td><td>FALSE</td><td>0</td><td></td><td>Target size of SGA</td></tr>
+<tr><td>469</td><td>shadow_core_dump</td><td>1</td><td>TRUE</td><td>FALSE</td><td>partial</td><td></td><td>Core Size for Shadow Processes</td></tr>
+<tr><td>470</td><td>shard_enable_raft_follower_read</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable read from follower replications units in a shard</td></tr>
+<tr><td>471</td><td>shard_queries_restricted_by_key</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>add shard key predicates to the query</td></tr>
+<tr><td>472</td><td>shared_memory_address</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>SGA starting address (low order 32-bits on 64-bit platforms)</td></tr>
+<tr><td>473</td><td>shared_pool_reserved_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>248973885</td><td></td><td>size in bytes of reserved area of shared pool</td></tr>
+<tr><td>474</td><td>shared_pool_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size in bytes of shared pool</td></tr>
+<tr><td>475</td><td>shared_server_sessions</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>max number of shared server sessions</td></tr>
+<tr><td>476</td><td>shared_servers</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1</td><td></td><td>number of shared servers to start up</td></tr>
+<tr><td>477</td><td>shrd_dupl_table_refresh_rate</td><td>1</td><td>TRUE</td><td>FALSE</td><td>60</td><td></td><td>duplicated table refresh rate (in seconds)</td></tr>
+<tr><td>478</td><td>skip_unusable_indexes</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>skip unusable indexes if set to TRUE</td></tr>
+<tr><td>479</td><td>smtp_out_server</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>utl_smtp server and port configuration parameter</td></tr>
+<tr><td>480</td><td>soda_behavior_flags</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>control soda behaviors</td></tr>
+<tr><td>481</td><td>sort_area_retained_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size of in-memory sort work area retained between fetch calls</td></tr>
+<tr><td>482</td><td>sort_area_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>65536</td><td></td><td>size of in-memory sort work area</td></tr>
+<tr><td>483</td><td>spatial_vector_acceleration</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable spatial vector acceleration</td></tr>
+<tr><td>484</td><td>spfile</td><td>1</td><td>TRUE</td><td>FALSE</td><td>+DATA/CDB23C_ZGH_KIX/PARAMETERFILE/spfile.262.1149786293</td><td></td><td>server parameter file</td></tr>
+<tr><td>485</td><td>sql92_security</td><td>1</td><td>FALSE</td><td>FALSE</td><td>TRUE</td><td></td><td>require select privilege for searched update/delete</td></tr>
+<tr><td>486</td><td>sql_error_mitigation</td><td>1</td><td>TRUE</td><td>FALSE</td><td>off</td><td></td><td>enables automatic error mitigation</td></tr>
+<tr><td>487</td><td>sql_history_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>SQL Query History is enabled when TRUE</td></tr>
+<tr><td>488</td><td>sql_trace</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable SQL trace</td></tr>
+<tr><td>489</td><td>sql_transpiler</td><td>1</td><td>TRUE</td><td>FALSE</td><td>OFF</td><td></td><td>Enable SQL transpiler</td></tr>
+<tr><td>490</td><td>sqltune_category</td><td>1</td><td>TRUE</td><td>FALSE</td><td>DEFAULT</td><td></td><td>Category qualifier for applying hintsets</td></tr>
+<tr><td>491</td><td>ssl_wallet</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>ssl_wallet</td></tr>
+<tr><td>492</td><td>standby_db_preserve_states</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>Preserve state cross standby role transition</td></tr>
+<tr><td>493</td><td>standby_file_management</td><td>1</td><td>TRUE</td><td>FALSE</td><td>MANUAL</td><td></td><td>if auto then files are created/dropped automatically on standby</td></tr>
+<tr><td>494</td><td>standby_pdb_source_file_dblink</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>database link to standby source files</td></tr>
+<tr><td>495</td><td>standby_pdb_source_file_directory</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>standby source file directory location</td></tr>
+<tr><td>496</td><td>star_transformation_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable the use of star transformation</td></tr>
+<tr><td>497</td><td>statement_redirect_service</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>statement redirect service</td></tr>
+<tr><td>498</td><td>statistics_level</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TYPICAL</td><td></td><td>statistics level</td></tr>
+<tr><td>499</td><td>streams_pool_size</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>size in bytes of the streams pool</td></tr>
+<tr><td>500</td><td>sysdate_at_dbtimezone</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>use DB timezone while computing sysdate and systimestamp value</td></tr>
+<tr><td>501</td><td>tablespace_encryption</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AUTO_ENABLE</td><td></td><td>Tablepsace encryption in hybrid ADG</td></tr>
+<tr><td>502</td><td>tablespace_encryption_default_algorithm</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AES256</td><td></td><td>default tablespace encryption block cipher mode</td></tr>
+<tr><td>503</td><td>tape_asynch_io</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>Use asynch I/O requests for tape devices</td></tr>
+<tr><td>504</td><td>target_pdbs</td><td>1</td><td>TRUE</td><td>FALSE</td><td>61</td><td></td><td>Parameter is a hint to adjust certain attributes of the CDB</td></tr>
+<tr><td>505</td><td>tde_configuration</td><td>1</td><td>FALSE</td><td>FALSE</td><td></td><td></td><td>Per-PDB configuration for Transparent Data Encryption</td></tr>
+<tr><td>506</td><td>tde_key_cache</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable caching of TDE intermediate key</td></tr>
+<tr><td>507</td><td>temp_undo_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>is temporary undo enabled</td></tr>
+<tr><td>508</td><td>thread</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>Redo thread to mount</td></tr>
+<tr><td>509</td><td>threaded_execution</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Threaded Execution Mode</td></tr>
+<tr><td>510</td><td>time_at_dbtimezone</td><td>1</td><td>TRUE</td><td>FALSE</td><td>off</td><td></td><td>use DB timezone when computing current time</td></tr>
+<tr><td>511</td><td>timed_os_statistics</td><td>1</td><td>TRUE</td><td>FALSE</td><td>0</td><td></td><td>internal os statistic gathering interval in seconds</td></tr>
+<tr><td>512</td><td>timed_statistics</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>maintain internal timing statistics</td></tr>
+<tr><td>513</td><td>timezone_version_upgrade_integrity</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enforced</td><td></td><td>perform DST upgrade leveraging constraints with desired integrity</td></tr>
+<tr><td>514</td><td>timezone_version_upgrade_online</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>enable/disable time zone version upgrade online</td></tr>
+<tr><td>515</td><td>trace_enabled</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>enable in memory tracing</td></tr>
+<tr><td>516</td><td>tracefile_content_classification</td><td>1</td><td>TRUE</td><td>FALSE</td><td>DEFAULT</td><td></td><td>enable output of trace record security label prefix</td></tr>
+<tr><td>517</td><td>tracefile_identifier</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>trace file custom identifier</td></tr>
+<tr><td>518</td><td>transactions</td><td>1</td><td>TRUE</td><td>FALSE</td><td>1346</td><td></td><td>max. number of concurrent active transactions</td></tr>
+<tr><td>519</td><td>transactions_per_rollback_segment</td><td>1</td><td>TRUE</td><td>FALSE</td><td>5</td><td></td><td>number of active transactions per rollback segment</td></tr>
+<tr><td>520</td><td>true_cache</td><td>1</td><td>TRUE</td><td>FALSE</td><td>FALSE</td><td></td><td>Enable True Cache</td></tr>
+<tr><td>521</td><td>txn_auto_rollback_high_priority_wait_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>2147483647</td><td></td><td>Auto abort wait for high pri txns</td></tr>
+<tr><td>522</td><td>txn_auto_rollback_medium_priority_wait_target</td><td>1</td><td>TRUE</td><td>FALSE</td><td>2147483647</td><td></td><td>Auto abort wait for medium pri txns</td></tr>
+<tr><td>523</td><td>txn_auto_rollback_mode</td><td>1</td><td>TRUE</td><td>FALSE</td><td>ROLLBACK</td><td></td><td>Modes for Auto Transaction Rollback feature</td></tr>
+<tr><td>524</td><td>txn_priority</td><td>1</td><td>TRUE</td><td>FALSE</td><td>HIGH</td><td></td><td>Priority of a transaction in a session</td></tr>
+<tr><td>525</td><td>undo_management</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AUTO</td><td></td><td>instance runs in SMU mode if TRUE, else in RBU mode</td></tr>
+<tr><td>526</td><td>undo_retention</td><td>1</td><td>FALSE</td><td>FALSE</td><td>900</td><td></td><td>undo retention in seconds</td></tr>
+<tr><td>527</td><td>undo_tablespace</td><td>1</td><td>FALSE</td><td>FALSE</td><td>UNDOTBS1</td><td></td><td>use/switch undo tablespace</td></tr>
+<tr><td>528</td><td>unified_audit_common_systemlog</td><td>0</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Syslog facility and level for only common unified audit records</td></tr>
+<tr><td>529</td><td>unified_audit_systemlog</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Syslog facility and level for Unified Audit</td></tr>
+<tr><td>530</td><td>uniform_log_timestamp_format</td><td>1</td><td>TRUE</td><td>FALSE</td><td>TRUE</td><td></td><td>use uniform timestamp formats vs pre-12.2 formats</td></tr>
+<tr><td>531</td><td>use_dedicated_broker</td><td>1</td><td>TRUE</td><td>FALSE</td><td>NONE</td><td></td><td>Use dedicated connection broker</td></tr>
+<tr><td>532</td><td>use_large_pages</td><td>1</td><td>FALSE</td><td>FALSE</td><td>only</td><td></td><td>Use large pages if available (TRUE/FALSE/ONLY)</td></tr>
+<tr><td>533</td><td>user_dump_dest</td><td>1</td><td>TRUE</td><td>FALSE</td><td>/u01/app/oracle/product/23.0.0.0/dbhome_1/rdbms/log</td><td></td><td>User process dump directory</td></tr>
+<tr><td>534</td><td>wallet_root</td><td>1</td><td>FALSE</td><td>FALSE</td><td>/opt/oracle/dcs/commonstore/wallets/cdb23c_zgh_kix</td><td></td><td>wallet root instance initialization parameter</td></tr>
+<tr><td>535</td><td>workarea_size_policy</td><td>1</td><td>TRUE</td><td>FALSE</td><td>AUTO</td><td></td><td>policy used to size SQL working areas (MANUAL/AUTO)</td></tr>
+<tr><td>536</td><td>xml_client_side_decoding</td><td>1</td><td>TRUE</td><td>FALSE</td><td>true</td><td></td><td>enable/disable xml client-side decoding</td></tr>
+<tr><td>537</td><td>xml_db_events</td><td>1</td><td>TRUE</td><td>FALSE</td><td>enable</td><td></td><td>are XML DB events enabled</td></tr>
+<tr><td>538</td><td>xml_handling_of_invalid_chars</td><td>1</td><td>TRUE</td><td>FALSE</td><td>raise_error</td><td></td><td>Handle invalid chars during xmlelement</td></tr>
+<tr><td>539</td><td>xml_params</td><td>1</td><td>TRUE</td><td>FALSE</td><td></td><td></td><td>Parameters to alter xml behavior</td></tr>
+</tbody></table>
+</details>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="ASH_P"></a><details open><br/><summary id="summary2">ASH by Plan </summary>
+Active Session History by execution plan<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="ASH_PL"></a><details open><br/><summary id="summary2">ASH by Plan Line</summary>
+Active Session History by plan line<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="ASH_P_M"></a><details open><br/><summary id="summary2">ASH by Plan (in Memory)</summary>
+Active Session History Information related to the query<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="ASH_PL_M"></a><details open><br/><summary id="summary2">ASH by Plan Line (in Memory)</summary>
+Active Session History by execution plan line<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="MEM_BINDS"></a><details open><br/><summary id="summary2">Peeked vs Monitored Bind Values - In Memory</summary>
+In memory information about the Peeked Binds<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="CAP_BINDS"></a><details open><br/><summary id="summary2">Peeked vs Captured Bind Values - In Memory</summary>
+In memory information about Captured Binds<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+<br><a name="AWR_BINDS"></a><details open><br/><summary id="summary2">Peeked vs Captured Bind Values - AWR</summary>
+AWR information about Peeked and Captured Binds<br><br>
+</tbody></table>
+</details>
+<h4>No data was found for this section</h4><br>
+<br><a href="#MAIN_MENU">Go To Main Menu</a><br><br>
+</html>
