@@ -547,3 +547,6 @@ Using the report name awrrpt_1_3_4.html
 
 
 
+https://oracle-livelabs.github.io/database/truecache/workshops/tenancy/
+
+Exadata/ODA 标准功能，不需要 DataGuard Option

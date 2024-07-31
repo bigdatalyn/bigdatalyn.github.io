@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle 23c Shrink Bigfile tablespace Tips"
+title: "Oracle 23ai Linux 9 Install Tips"
 category: Oracle
 tags: Oracle Tips
 ---
@@ -8,142 +8,373 @@ tags: Oracle Tips
 * content
 {:toc}
 
-Oracle 23c Shrink Bigfile tablespace Tips
+Oracle 23ai Linux 9 Install Tips
 
-Oracle database 23ai onward we can use the DBMS_SPACE package to shrink a bigfile tablespace to reclaim unused space.
+Some tips for oracle 23ai install.
+
+[1 Oracle Database Installation Checklist](https://docs.oracle.com/en/database/oracle/oracle-database/23/ladbi/oracle-database-installation-checklist.html)
+
+[Oracle Database 19c Installation On Oracle Linux 7 (OL7)](https://oracle-base.com/articles/19c/oracle-db-19c-installation-on-oracle-linux-7)
 
 
 
 
 
 
-### Test
+
+### Oracle 23ai Install 
 
 Commands tips:
 ```
-$ sqlplus /nolog
-SLQ>
-connect / as sysdba
-create bigfile tablespace TBS01 datafile '+DATA' size 2g ;
-create user TRY identified by TRY12345 default tablespace TBS01 ;
-alter  user TRY quota unlimited on TBS01 ;
-grant CONNECT, RESOURCE to TRY ;
 
-connect TRY/TRY12345
-drop table tab001 purge;
-create table TAB001 (COL1 number,
-                    COL2 date, 
-                    COL3 varchar2(100), 
-                    COL4 varchar2(100),
-                    COL5 varchar2(100)) ;
+# Install Oracle Linux Developer yum repository configuration
+dnf -y install oraclelinux-developer-release-el9
 
--- 1,000,000 rows created.
-insert /*+append */ into TAB001 select LEVEL
-                       , to_date('2024/06/01', 'YYYY/MM/DD') + mod(LEVEL, 12*5)
-                       , rpad('hong',                            100, '*')
-                       , rpad('hong'||to_char(mod(LEVEL, 1000)), 100, '*')
-                       , rpad('hong'||to_char(mod(LEVEL,10000)), 100, '*')
-    from DUAL connect by LEVEL <= 1000000 ;
-commit ;
+# Install rlwrap and set alias
+dnf -y install oracle-epel-release-el9
 
-drop table TAB002 purge;
-create table TAB002 (COL1 number,
-                    COL2 date, 
-                    COL3 varchar2(100), 
-                    COL4 varchar2(100),
-                    COL5 varchar2(100)) ;
+# If you plan to use the "oracle-database-preinstall-19c" package to perform all your prerequisite setup, issue the following command.
+# dnf -y install oracle-database-preinstall-19c
+# https://docs.oracle.com/en/database/oracle/oracle-database/23/ladbi/supported-oracle-linux-9-distributions-for-x86-64.html
 
+dnf -y install oracle-database-preinstall-23ai
 
-insert /*+append */ into TAB002 select LEVEL
-                       , to_date('2024/06/01', 'YYYY/MM/DD') + mod(LEVEL, 12*5)
-                       , rpad('lin',                            100, '*')
-                       , rpad('lin'||to_char(mod(LEVEL, 1000)), 100, '*')
-                       , rpad('lin'||to_char(mod(LEVEL,10000)), 100, '*')
-    from DUAL connect by LEVEL <= 1000000 ;
-commit ;
+## The following packages are listed as required. Many of the packages should be installed already.
+dnf -y install bc
+dnf -y install binutils
+dnf -y install compat-openssl11
+dnf -y install elfutils-libelf
+dnf -y install fontconfig
+dnf -y install glibc
+dnf -y install glibc-devel
+dnf -y install glibc-headers
+dnf -y install ksh
+dnf -y install libaio
+dnf -y install libasan
+dnf -y install liblsan
+dnf -y install libX11
+dnf -y install libXau
+dnf -y install libXi
+dnf -y install libXrender
+dnf -y install libXtst
+dnf -y install libxcrypt-compat
+dnf -y install libgcc
+dnf -y install libibverbs
+dnf -y install libnsl
+dnf -y install librdmacm
+dnf -y install libstdc++
+dnf -y install libxcb
+dnf -y install libvirt-libs
+dnf -y install make
+dnf -y install policycoreutils
+dnf -y install policycoreutils-python-utils
+dnf -y install smartmontools
+dnf -y install sysstat
+## Add Hong
+dnf -y install gcc
+dnf -y install unixODBC
 
-exec dbms_stats.gather_table_stats(null, 'TAB001');
-exec dbms_stats.gather_table_stats(null, 'TAB002');
+# Set oracle password
+echo oracle:"oracle" | sudo chpasswd
 
--- Segmeng Size
-set linesize 150 pages 5000
-col SEGMENT_NAME for a20
-col TABLESPACE_NAME for a20
-select SEGMENT_NAME, SEGMENT_TYPE, BLOCKS, TABLESPACE_NAME, BYTES/1024/1024
-  from USER_SEGMENTS order by 2 DESC, 1 ASC ;
-
-SEGMENT_NAME	     SEGMENT_TYPE	    BLOCKS TABLESPACE_NAME	BYTES/1024/1024
--------------------- ------------------ ---------- -------------------- ---------------
-TAB001		     TABLE		     46080 TBS01			    360
-TAB002		     TABLE		     46080 TBS01			    360
-
-truncate table TAB001;
-exec dbms_stats.gather_table_stats(null, 'TAB001');
-
-
-set serveroutput on
-execute dbms_space.shrink_tablespace('TBS01', shrink_mode => dbms_space.ts_mode_analyze);
+### /etc/sysconfig/selinux
+### /etc/selinux/config
+vi /etc/selinux/config
+SELINUX=permissive
+## 
+sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
+setenforce Permissive
 
 
-SQL> set serveroutput on
-SQL> execute dbms_space.shrink_tablespace('TBS01', shrink_mode => dbms_space.ts_mode_analyze);
--------------------ANALYZE RESULT-------------------
-Total Movable Objects: 0
-Total Movable Size(GB): 0
-Original Datafile Size(GB): 2
-Suggested Target Size(GB): .77
-Process Time: +00 00:00:00.012235
-
-PL/SQL procedure successfully completed.
-
-SQL> 
+## Disable Linux firewall 
+systemctl stop firewalld
+systemctl disable firewalld
 
 
-set serveroutput on
-execute dbms_space.shrink_tablespace('TBS01');
+dnf -y --enablerepo=ol9_developer_EPEL install rlwrap
+cat <<EOT >>/home/oracle/.bashrc
+alias sqlplus='rlwrap sqlplus'
+EOT
 
-SQL> execute dbms_space.shrink_tablespace('TBS01');
--------------------SHRINK RESULT-------------------
-Total Moved Objects: 0
-Total Moved Size(GB): 0
-Original Datafile Size(GB): 2
-New Datafile Size(GB): .77
-Process Time: +00 00:00:00.984202
+### 
 
-PL/SQL procedure successfully completed.
+ORACLE_BASE=/u01/app/oracle
+ORACLE_CHARACTERSET=AL32UTF8
+ORACLE_HOME=/u01/app/oracle/product/23.0.0.0/dbhome_1
 
-SQL> 
+# Create directories
+sudo mkdir -p "$ORACLE_HOME"
+sudo chown -R oracle:oinstall "$ORACLE_BASE"/..
+sudo chmod -R 775 "$ORACLE_BASE"/..
+
+# Set environment variables
+sudo tee -a /home/oracle/.bash_profile <<EOT
+export ORACLE_BASE=$ORACLE_BASE
+export ORACLE_HOME=$ORACLE_HOME
+export ORACLE_SID=ORCLCDB
+export PATH=\$PATH:\$ORACLE_HOME/bin:\$ORACLE_HOME/jdk/bin
+EOT
+
+su - oracle
+
+# Unzip software.
+cd $ORACLE_HOME
+unzip -oq /mnt/XXXX.zip
+
+[oracle@db23ai RDBMS_MAIN_LINUX.X64_XXXXX]$ ls -tlr
+total 3959204
+-r--r--r--. 1 oracle oinstall  775195664 Jul 31 13:41 client231000.zip
+-r--r--r--. 1 oracle oinstall 1039991367 Jul 31 13:42 grid_home.zip
+-r--r--r--. 1 oracle oinstall 2239018898 Jul 31 13:43 db_home.zip
+[oracle@db23ai RDBMS_MAIN_LINUX.X64_XXXXX]$ cd $ORACLE_HOME
+[oracle@db23ai dbhome_1]$ unzip -oq /home/oracle/RDBMS_MAIN_LINUX.X64_XXXXX/db_home.zip 
+[oracle@db23ai dbhome_1]$ ls -tlr
+total 272
+-rw-r--r--.  1 oracle oinstall   852 Aug 18  2015 env.ora
+-rw-r--r--.  1 oracle oinstall  2927 Jul 20  2020 schagent.conf
+-rwxr-x---.  1 oracle oinstall  2867 Mar 27 09:25 runInstaller
+
+# Interactive mode.
+./runInstaller
+
+# Silent mode.
+./runInstaller -ignorePrereq -waitforcompletion -silent                        \
+    -responseFile ${ORACLE_HOME}/install/response/db_install.rsp               \
+    oracle.install.option=INSTALL_DB_SWONLY                                    \
+    ORACLE_HOSTNAME=db23ai                                                     \
+    UNIX_GROUP_NAME=oinstall                                                   \
+    INVENTORY_LOCATION=/u01/app/oracle                                         \
+    SELECTED_LANGUAGES=en,en_GB                                                \
+    ORACLE_HOME=${ORACLE_HOME}                                                 \
+    ORACLE_BASE=${ORACLE_BASE}                                                 \
+    oracle.install.db.InstallEdition=EE                                        \
+    oracle.install.db.OSDBA_GROUP=dba                                          \
+    oracle.install.db.OSBACKUPDBA_GROUP=dba                                    \
+    oracle.install.db.OSDGDBA_GROUP=dba                                        \
+    oracle.install.db.OSKMDBA_GROUP=dba                                        \
+    oracle.install.db.OSRACDBA_GROUP=dba                                       \
+    SECURITY_UPDATES_VIA_MYORACLESUPPORT=false                                 \
+    DECLINE_SECURITY_UPDATES=true
 
 
-SEGMENT_NAME	     SEGMENT_TYPE	    BLOCKS TABLESPACE_NAME	BYTES/1024/1024
--------------------- ------------------ ---------- -------------------- ---------------
-TAB001		     TABLE			 8 TBS01			  .0625
-TAB002		     TABLE		     46080 TBS01			    360
+
+# Start the listener.
+lsnrctl start
+
+
+listener.ora
+LISTENER =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))
+    )
+  )
+
+lsnrctl Slow tips:
+$ vi /etc/resolv.conf
+# Generated by NetworkManager
+# nameserver 119.29.29.29
+
+or use the following method.
+$ su - root
+$ vi /etc/ssh/sshd_config
+UseDNS no
+
+mkdir -p /u01/app/oradata
+# Silent mode.
+dbca -silent -createDatabase                                                   \
+     -templateName General_Purpose.dbc                                         \
+     -gdbname ORCLCDB -sid  ORCLCDB -responseFile NO_VALUE                     \
+     -characterSet AL32UTF8                                                    \
+     -sysPassword SysPassword1                                                 \
+     -systemPassword SysPassword1                                              \
+     -createAsContainerDatabase true                                           \
+     -numberOfPDBs 1                                                           \
+     -pdbName PDB1                                                      \
+     -pdbAdminPassword PdbPassword1                                            \
+     -databaseType MULTIPURPOSE                                                \
+     -memoryMgmtType auto_sga                                                  \
+     -totalMemory 2000                                                         \
+     -storageType FS                                                           \
+     -datafileDestination "/u01/app/oradata"                                        \
+     -redoLogFileSize 60                                                       \
+     -emConfiguration NONE                                                     \
+     -ignorePreReqs
+
+[oracle@db23ai ~]$ mkdir -p /u01/app/oradata
+[oracle@db23ai ~]$ dbca -silent -createDatabase                                                   \
+     -templateName General_Purpose.dbc                                         \
+     -gdbname ORCLCDB -sid  ORCLCDB -responseFile NO_VALUE                     \
+     -characterSet AL32UTF8                                                    \
+     -sysPassword SysPassword1                                                 \
+     -systemPassword SysPassword1                                              \
+     -createAsContainerDatabase true                                           \
+     -numberOfPDBs 1                                                           \
+     -pdbName PDB1                                                      \
+     -pdbAdminPassword PdbPassword1                                            \
+     -databaseType MULTIPURPOSE                                                \
+     -memoryMgmtType auto_sga                                                  \
+     -totalMemory 2000                                                         \
+     -storageType FS                                                           \
+     -datafileDestination "/u01/app/oradata"                                        \
+     -redoLogFileSize 60                                                       \
+     -emConfiguration NONE                                                     \
+     -ignorePreReqs
+Prepare for db operation
+8% complete
+Copying database files
+31% complete
+Creating and starting Oracle instance
+32% complete
+36% complete
+39% complete
+42% complete
+46% complete
+Completing Database Creation
+51% complete
+53% complete
+54% complete
+Creating Pluggable Databases
+58% complete
+77% complete
+Executing Post Configuration Actions
+100% complete
+Database creation complete. For details check the logfiles at:
+ /u01/app/oracle/cfgtoollogs/dbca/ORCLCDB.
+Database Information:
+Global Database Name:ORCLCDB
+System Identifier(SID):ORCLCDB
+Look at the log file "/u01/app/oracle/cfgtoollogs/dbca/ORCLCDB/ORCLCDB.log" for further details.
+[oracle@db23ai ~]$ 
+
+
+sqlplus system/SysPassword1@localhost/pdb1
+
+curl -L# https://github.com/oracle-samples/db-sample-schemas/archive/refs/tags/v23.3.tar.gz | tar xzf - -C "/home/oracle"
+
+wget https://github.com/oracle-samples/db-sample-schemas/archive/refs/tags/v23.3.tar.gz
+
+https://github.com/oracle-samples/db-sample-schemas/releases
+The new and improved Oracle Database 23c Sample Schemas contain several improvements:
+
+All active data sets have been refreshed
+Order Entry (OE) has been archived
+Product Media (PM) has been archived
+Schemas are installed independently from each other
+SYS/SYSTEM user account access is no longer required
+SQL*Loader is no longer required
+
+tar -zxvf db-sample-schemas-23.3.tar.gz
+cd /home/oracle/db-sample-schemas-23.3
+
+cd $ORACLE_HOME/demo/schema
+perl -p -i.bak -e 's#__SUB__CWD__#'$(pwd)'#g' */*.sql */*.dat
+
+[oracle@db23ai ~]$ cp -R db-sample-schemas-23.3/* $ORACLE_HOME/demo/schema/
+[oracle@db23ai ~]$ cd $ORACLE_HOME/demo/schema
+[oracle@db23ai schema]$ perl -p -i.bak -e 's#__SUB__CWD__#'$(pwd)'#g' */*.sql */*.dat
+[oracle@db23ai schema]$ ls -tlr
+total 40
+drwxr-xr-x. 2 oracle oinstall 4096 May 27 20:15 log
+-rw-r--r--. 1 oracle oinstall 1094 Jul 31 16:44 LICENSE.txt
+-rw-r--r--. 1 oracle oinstall 3613 Jul 31 16:44 README.txt
+-rw-r--r--. 1 oracle oinstall 3784 Jul 31 16:44 README.md
+-rw-r--r--. 1 oracle oinstall 1737 Jul 31 16:44 SECURITY.md
+drwxr-xr-x. 2 oracle oinstall 4096 Jul 31 16:44 customer_orders
+drwxr-xr-x. 2 oracle oinstall 4096 Jul 31 16:44 human_resources
+drwxr-xr-x. 2 oracle oinstall 4096 Jul 31 16:44 sales_history
+drwxr-xr-x. 2 oracle oinstall 4096 Jul 31 16:44 product_media
+drwxr-xr-x. 3 oracle oinstall 4096 Jul 31 16:44 order_entry
+[oracle@db23ai schema]$ 
+
+
+cd $ORACLE_HOME/demo/schema/customer_orders
+sqlplus system/SysPassword1@//localhost:1521/pdb1
+@co_install.sql
+
+cd $ORACLE_HOME/demo/schema/human_resources
+sqlplus system/SysPassword1@//localhost:1521/pdb1
+@hr_install.sql
+
+cd $ORACLE_HOME/demo/schema/sales_history
+sqlplus system/SysPassword1@//localhost:1521/pdb1
+@sh_install.sql
+
+The order entry installation is already silent. It requires several arguments to be specified, as shown here.
+cd $ORACLE_HOME/demo/schema/order_entry
+sqlplus system/SysPassword1@//localhost:1521/pdb1
+@oe_main.sql oe users temp hr_password SysPassword1 $ORACLE_HOME/demo/schema/order_entry/ /tmp/ v3 localhost:1521/pdb1
+
+cd $ORACLE_HOME/demo/schema/product_media
+sqlplus system/SysPassword1@//localhost:1521/pdb1
+@pm_main.sql pm users temp oe SysPassword1 $ORACLE_HOME/demo/schema/product_media/ /tmp/ $ORACLE_HOME/demo/schema/product_media/ localhost:1521/pdb1
+
+select owner,object_type,count(1) from dba_objects where owner in ('CO','HR','SH','OE','PM') group by owner,object_type order by 1;
 ```
 
-### Tips
+sample schema:
+```
+SQL> show pdbs
 
-Here is some additional information about shrinking bigfile tablespaces.
+   CON_ID CON_NAME    OPENMODE      RESTRICTED    
+_________ ___________ _____________ _____________ 
+        2 PDB$SEED    READ ONLY     NO            
+        3 PDB1        READ WRITE    NO            
+SQL> alter session set container=pdb1;
 
-- Objects are moved to compact the segments in the datafile, so all unused space is at the end of the datafile. This allows the datafile to be shrunk to reclaim the unused space.
-- Online moves are subject to the normal restrictions. The analyze phase will indicate if there are unsupported objects.
-- The shrink mode of TS_MODE_SHRINK_FORCE will do an offline move for objects that don't support online moves. Don't use this option if an offline move will cause a problem in your application.
-- If the tablespace is not set to autoextend, there will be no room for segments to grow at the end of the operation. You will need to resize the tablespace manually to make room.
-- A shrink can fail, but it may still reduce the size of the datafile if any moves completed successfully.
-- We can shrink the SYSAUX tablespace.
-- There is an overload of the SHRINK_TABLESPACE procedure that includes a SHRINK_RESULT out parameter, so the result of the operation can be returned as a CLOB, rather than being pushed out using DBMS_OUTPUT.
+Session altered.
 
+SQL> select owner,object_type,count(1) from dba_objects where owner in ('CO','HR','SH','OE','PM') group by owner,object_type order by 1,2;
+
+OWNER    OBJECT_TYPE             COUNT(1) 
+________ ____________________ ___________ 
+CO       INDEX                         21 
+CO       LOB                            3 
+CO       SEQUENCE                       6 
+CO       TABLE                          7 
+CO       VIEW                           4 
+HR       INDEX                         19 
+HR       PROCEDURE                      2 
+HR       SEQUENCE                       3 
+HR       TABLE                          7 
+HR       TRIGGER                        2 
+HR       VIEW                           1 
+OE       FUNCTION                       1 
+OE       INDEX                         48 
+OE       LOB                           15 
+OE       SEQUENCE                       1 
+OE       SYNONYM                        6 
+OE       TABLE                         14 
+OE       TRIGGER                        4 
+OE       TYPE                          37 
+OE       TYPE BODY                      3 
+OE       VIEW                          11 
+PM       INDEX                         10 
+PM       LOB                            7 
+PM       TABLE                          2 
+PM       TYPE                           3 
+SH       DIMENSION                      5 
+SH       INDEX                         33 
+SH       INDEX PARTITION              115 
+SH       LOB                            1 
+SH       MATERIALIZED VIEW              2 
+SH       TABLE                         18 
+SH       TABLE PARTITION               35 
+SH       VIEW                           1 
+
+33 rows selected. 
+
+SQL> 
+```
 
 ### Referece
 
-[Oracle Setting up the Star Schema Benchmark (SSB) Tips](http://www.bigdatalyn.com/2018/09/28/Oracle_SSB_Tips/)
+[1 Oracle Database Installation Checklist](https://docs.oracle.com/en/database/oracle/oracle-database/23/ladbi/oracle-database-installation-checklist.html)
 
-[Bigfile Tablespace Shrink in Oracle Database 23ai](https://oracle-base.com/articles/23/bigfile-tablespace-shrink-23)
+[Oracle Database 19c Installation On Oracle Linux 7 (OL7)](https://oracle-base.com/articles/19c/oracle-db-19c-installation-on-oracle-linux-7)
 
-[DBMS_SPACE](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_SPACE.html)
 
-[Sample Code](https://blogs.oracle.com/otnjp/post/shibacho-042)
-
-Have a good work&life! 2024/06 via LinHong
+Have a good work&life! 2024/07 via LinHong
 
 
