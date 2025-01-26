@@ -150,7 +150,7 @@ INFO[0000] socket: unix:///Users/honglin/.colima/default/docker.sock
 Ref. Images Info:
 
 Tag Version |  OS/Architecture |  Size |  Pull Command  |  Image ID |
-|:-----------:|:----------------:|:------:|:------------------------------------------------------------:|:-------------:|
+|:-----------:|:----------------:|:----------:|:------------------------------------------------------------:|:-------------:|
 latest	| linux/arm64	| 3 GB	| docker pull container-registry.oracle.com/database/free:latest	| 0e168a7f991a |
 23.6.0.0-arm64	| linux/arm64	| 3 GB	| docker pull container-registry.oracle.com/database/free:23.6.0.0-arm64	|	0e168a7f991a |
 23.6.0.0	| linux/arm64	| 3 GB	| docker pull container-registry.oracle.com/database/free:23.6.0.0	| 	0e168a7f991a |
@@ -453,7 +453,7 @@ SH       VIEW                           1
 (base) honglin@macos ~ % 
 ```
 
-### 配置 repo
+### 配置 repo Setup
 
 Repo源有问题替换成其他方法，网络没问题就无视次步骤
 
@@ -481,7 +481,7 @@ dnf install java-17-openjdk
 alternatives --config java
 ```
 
-### APEX 安装
+### APEX Setup 安装
 
 [Oracle APEX 24.2 is now available!](https://apex.oracle.com/)
 
@@ -523,7 +523,7 @@ SQL> ALTER USER APEX_PUBLIC_USER NO AUTHENTICATION ACCOUNT UNLOCK;
 SQL> ALTER PROFILE "DEFAULT" LIMIT PASSWORD_LIFE_TIME UNLIMITED;
 ```
 
-### ORDS 安装
+### ORDS Setup 安装
 
 root用户执行
 [安装ords](https://docs.oracle.com/en/database/oracle/apex/24.2/htmig/downloading-installing-ords.html)
