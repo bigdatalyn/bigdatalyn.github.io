@@ -12,6 +12,13 @@ tags: Oracle Tips
 Oracle session reset parameter Tips
 
 
+
+
+
+
+
+
+
 ### session reset parameter ORA-00922/ORA-03001
 
 11g:
