@@ -12,6 +12,15 @@ tags: Oracle Tips
 Oracle Calibrate IO Test Tips
 
 
+
+
+
+
+
+
+
+
+
 ### Oracle Calibrate IO 
 
 ```sql
