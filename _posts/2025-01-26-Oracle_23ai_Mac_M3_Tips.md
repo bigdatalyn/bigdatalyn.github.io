@@ -101,8 +101,8 @@ cpu: Default 2
 也可以colima start --edit 编辑默认值如cpu设置为4
 You can also use colima start --edit to modify default settings
 
-创建了 4c8m x86_64的 虚拟机
-Created 4c8m x86_64 vm.
+创建了 4c8g x86_64的 虚拟机
+Created 4c8g x86_64 vm.
 
 ```
 (base) honglin@macos ~ % colima list
