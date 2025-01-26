@@ -161,7 +161,6 @@ M3 cpu: arm64
 (base) honglin@macos ~ % uname -m
 arm64
 (base) honglin@macos ~ % 
-
 ```
 
 commands:
@@ -335,7 +334,6 @@ SQL> exit;
 Disconnected from Oracle Database 23ai Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
 Version 23.6.0.24.10
 (base) honglin@macos ~ % 
-
 ```
 
 定制化下oracle profile内容: / Customize the Oracle profile content:
@@ -485,9 +483,6 @@ alternatives --config java
 
 密码都用: `Welcome12345#`
 
-mkdir -p /home/oracle/apex/i/24.2.0/
-cp -r -p /home/oracle/apex/apex/images /home/oracle/apex/i/24.2.0/
-
 ```
 docker exec -it ora23ai /bin/bash
 mkdir /home/oracle
@@ -522,7 +517,6 @@ Created instance administrator ADMIN.
 
 SQL> ALTER USER APEX_PUBLIC_USER NO AUTHENTICATION ACCOUNT UNLOCK;
 SQL> ALTER PROFILE "DEFAULT" LIMIT PASSWORD_LIFE_TIME UNLIMITED;
-
 ```
 
 ### ORDS 安装
@@ -570,8 +564,10 @@ ords --config /etc/ords/config install
 ```
 
 ords 启动和停止脚本
+
 - /home/oracle/scripts/start_ords.sh
 - /home/oracle/scripts/stop_ords.sh
+
 ```
 vi /home/oracle/scripts/start_ords.sh
 
@@ -629,7 +625,11 @@ http://localhost:8080/ords/
 用hr schema模式登录用
 hr/hr 登录
 ```
+
 ![sqldeveloper]({{ "/files/Oracle/23ai/ords_sqldeveloper.png"}})	
+
+![ords_sqldev_hr]({{ "/files/Oracle/23ai/ords_sqldev_hr.png"}})	
+
 
 ### Referece
 
