@@ -53,6 +53,7 @@ Docker 23ai Free comes in many versions, so be sure to select the appropriate pl
 ### Test
 
 MacOS首选要安装colima/docker/qemu
+
 MacOS Install colima
 
 Colima version / docker version:
@@ -171,6 +172,7 @@ docker pull container-registry.oracle.com/database/free:23.6.0.0-amd64 (OK)
 ```
 
 拉取过程 （比较花时间)
+
 The pulling process (can be time-consuming).
 
 ```
@@ -209,6 +211,7 @@ oceanbase-ce                                  4.2.1            5c19f3e27bb1   7 
 ```
 
 查看各自23aifree的rpm包
+
 Check the RPM packages for each version of 23aifree.
 
 ```
@@ -223,6 +226,7 @@ docker image inspect container-registry.oracle.com/database/free:23.6.0.0-arm64 
 ```
 
 测试:不同平台会出错
+
 Testing: Errors may occur on different platforms.
 
 ```
