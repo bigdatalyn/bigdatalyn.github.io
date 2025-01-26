@@ -12,6 +12,12 @@ tags: Oracle linux Tips
 Reset root password on Oracle Linux 8
 
 
+
+
+
+
+
+
 ### Reset Tips
 
 - Reboot the system and access the `GRUB` boot-loader menu. 
