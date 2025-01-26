@@ -1,7 +1,7 @@
 ---
 layout: book
 title:  "2025年阅读书单"
-permalink: /booklist2022/
+permalink: /booklist2025/
 icon: heart
 ---
 
