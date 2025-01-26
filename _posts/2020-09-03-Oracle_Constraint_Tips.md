@@ -11,6 +11,13 @@ tags: Oracle Datapump Tips
 Disable and Enable all Constraint
 
 
+
+
+
+
+
+
+
 ####  Disable Constraint
 
 ```sql
