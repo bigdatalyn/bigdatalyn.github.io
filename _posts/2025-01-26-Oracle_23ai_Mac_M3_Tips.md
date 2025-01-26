@@ -17,6 +17,10 @@ Some tips for oracle 23ai install in Mac M3.
 - APEX / ORDS Install
 
 
+![ords]({{ "/files/Oracle/23ai/ords_hp.png"}})	
+
+
+
 
 
 
@@ -604,7 +608,7 @@ http://localhost:8080/ords/
 用hr schema模式登录用
 hr/hr 登录
 ```
-
+![sqldeveloper]({{ "/files/Oracle/23ai/ords_sqldeveloper.png"}})	
 
 ### Referece
 
@@ -616,8 +620,6 @@ https://pretius.com/blog/oracle-apex-docker-ords/
 
 [Oracle Database 23ai FreeとAPEXでRAGを使った生成AIアプリをローコード開発してみた (事前準備編)](https://qiita.com/ssfujita/items/34d9e3c39ca730d29351)
 
-
-[How to to Run Oracle Database 23c FREE on M1 / M2 Apple Mac](https://ronekins.com/2023/10/24/how-to-to-run-oracle-database-23c-free-on-m1-m2-apple-mac/)
 
 [Run Oracle Database 23ai Free on Mac computers with Apple silicon](https://ronekins.com/2024/07/02/run-oracle-database-23ai-free-on-mac-computers-with-apple-silicon/)
 
