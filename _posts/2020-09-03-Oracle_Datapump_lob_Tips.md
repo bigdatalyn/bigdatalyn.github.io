@@ -11,6 +11,14 @@ tags: Oracle Datapump Tips
 Oracle Datapump lob table Tips
 
 
+
+
+
+
+
+
+
+
 ### Datapump export the lob table.
 
 expdp TB lob table will met ORA-01555 problem.
