@@ -14,7 +14,7 @@ Some tips for oracle 23ai install in Mac M3.
 
 - Docker in Mac M3
 - Oracle 23ai Free in Docker
-- APEX / ORDS Install
+- APEX / ORDS Install wiht Oracle 23ai free
 
 
 ![ords]({{ "/files/Oracle/23ai/ords_hp.png"}})	
@@ -23,7 +23,7 @@ Some tips for oracle 23ai install in Mac M3.
 
 
 
-### Technical / 技术点 
+### Technical 
 
 Colima 
 
@@ -33,7 +33,39 @@ Colima（Container Lima）是一款专为 macOS 设计的轻量级工具，用�
 Colima (Container Lima) is a lightweight tool designed specifically for macOS to quickly run containerized environments (such as Docker or containerd) locally. Built on Lima (Linux Virtual Machine), it provides macOS users with a seamless containerized development experience through simplified command-line operations, making it an ideal replacement for Docker Desktop.
 ```
 
+Docker 
 
+```
+Docker 是一种开源的容器化平台，用于开发、部署和运行应用程序。它通过将应用程序及其依赖项打包到一个轻量级的容器中，实现了应用程序的快速部署和跨平台运行。
+
+Docker is an open-source containerization platform used for developing, deploying, and running applications. By packaging applications and their dependencies into lightweight containers, it enables rapid deployment and cross-platform operation of applications.
+```
+
+[Oracle 23ai Free](https://www.oracle.com/database/free/)
+
+```
+Oracle Database 23ai Free 是 Oracle 官方提供的免费版本，适用于学习、开发和测试。它包含了 Oracle 23ai 的核心功能，但有一些限制（例如，只能使用 2 个 CPU 和 2GB 内存）。可以在个人电脑或虚拟机中安装和使用。
+
+Oracle Database 23ai Free offers the ability to experience Oracle Database, which businesses throughout the world rely on for their mission-critical workloads. The resource limits for Oracle Database Free are up to 2 CPUs for foreground processes, 2 GB of RAM and 12 GB of user data on disk. It is packaged for ease of use and simple download.
+```
+
+[APEX 24.2 ](https://apex.oracle.com/en/)
+
+```
+用 100 倍的代码量减少，20 倍的速度构建企业应用程序。
+Oracle APEX 是全球最受欢迎的企业级低代码应用开发平台。
+
+Build enterprise apps 20x faster with 100x less code.
+Oracle APEX is the world's most popular enterprise low-code application platform.
+```
+
+[Oracle REST Data Services](https://www.oracle.com/database/technologies/appdev/rest.html)
+
+```
+Oracle REST Data Services (ORDS) 让您的 Oracle 数据库启用 HTTPS 功能。作为一个中间层 Java 应用，ORDS 提供了数据库管理 REST API、SQL Developer Web、PL/SQL 网关和适用于 REST 的 SODA，并且支持发布 RESTful Web 服务，可与 Oracle 数据库中的数据和存储过程进行交互。
+
+Oracle REST Data Services (ORDS) bridges HTTPS and your Oracle Database. A mid-tier Java application, ORDS provides a Database Management REST API, SQL Developer Web, a PL/SQL Gateway, SODA for REST, and the ability to publish RESTful Web Services for interacting with the data and stored procedures in your Oracle Database.
+```
 
 ### Docker Mac M3 install 23ai free 
 
