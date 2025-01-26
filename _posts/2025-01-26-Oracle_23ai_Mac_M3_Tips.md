@@ -23,6 +23,17 @@ Some tips for oracle 23ai install in Mac M3.
 
 
 
+### Technical / 技术点 
+
+Colima 
+
+```
+Colima（Container Lima）是一款专为 macOS 设计的轻量级工具，用于在本地快速运行容器化环境（如 Docker 或 containerd）。它基于 Lima（Linux 虚拟机）实现，通过简化的命令行操作，为 macOS 用户提供无缝的容器开发体验，尤其适合替代 Docker Desktop。
+
+Colima (Container Lima) is a lightweight tool designed specifically for macOS to quickly run containerized environments (such as Docker or containerd) locally. Built on Lima (Linux Virtual Machine), it provides macOS users with a seamless containerized development experience through simplified command-line operations, making it an ideal replacement for Docker Desktop.
+```
+
+
 
 ### Docker Mac M3 install 23ai free 
 
@@ -37,12 +48,14 @@ For example: ouser@ouser-mac ~ % docker run --name oracle-free -p 1521:1521 -e O
 
 docker 23ai free 有很多版本，注意选择平台和lite/full等
 
+Docker 23ai Free comes in many versions, so be sure to select the appropriate platform (e.g., macOS, Windows, Linux) and variant (e.g., Lite or Full) based on your needs.
+
 ### Test
 
 MacOS首选要安装colima/docker/qemu
 MacOS Install colima
 
-版本:
+Colima version / docker version:
 
 ```
 (base) honglin@macos ~ % colima version 
@@ -58,7 +71,7 @@ Docker version 27.3.1, build ce1223035a
 (base) honglin@macos ~ % 
 ```
 
-安装:
+Colima Install in MAC.
 
 ```
 brew install colima
@@ -66,7 +79,7 @@ brew install qemu
 colima start
 ```
 
-启动一个虚拟机
+Starup VM via colima cmd.
 
 ```
 colima start 
@@ -86,8 +99,10 @@ cpu: Default 2
 ```
 
 也可以colima start --edit 编辑默认值如cpu设置为4
+You can also use colima start --edit to modify default settings
 
 创建了 4c8m x86_64的 虚拟机
+Created 4c8m x86_64 vm.
 
 ```
 (base) honglin@macos ~ % colima list
@@ -131,7 +146,7 @@ INFO[0000] socket: unix:///Users/honglin/.colima/default/docker.sock
 
 ### docker pull 拉取 image
 
-参考 Images Info:
+Ref. Images Info:
 
 Tag Version |  OS/Architecture |  Size |  Pull Command  |  Image ID |
 |:-----------:|:----------------:|:------:|:------------------------------------------------------------:|:-------------:|
@@ -140,7 +155,7 @@ latest	| linux/arm64	| 3 GB	| docker pull container-registry.oracle.com/database
 23.6.0.0	| linux/arm64	| 3 GB	| docker pull container-registry.oracle.com/database/free:23.6.0.0	| 	0e168a7f991a |
 
 
-M3 cpu是arm64
+M3 cpu: arm64
 
 ```
 (base) honglin@macos ~ % uname -m
@@ -157,6 +172,7 @@ docker pull container-registry.oracle.com/database/free:23.6.0.0-amd64 (OK)
 ```
 
 拉取过程 （比较花时间)
+The pulling process (can be time-consuming).
 
 ```
 (base) honglin@macos ~ % docker pull container-registry.oracle.com/database/free:23.6.0.0-arm64
@@ -194,6 +210,7 @@ oceanbase-ce                                  4.2.1            5c19f3e27bb1   7 
 ```
 
 查看各自23aifree的rpm包
+Check the RPM packages for each version of 23aifree.
 
 ```
 docker image inspect container-registry.oracle.com/database/free:23.6.0.0-amd64 | grep INSTALL_FILE
@@ -207,6 +224,7 @@ docker image inspect container-registry.oracle.com/database/free:23.6.0.0-arm64 
 ```
 
 测试:不同平台会出错
+Testing: Errors may occur on different platforms.
 
 ```
 WARNING: The requested image's platform (linux/arm64) does not match the detected host platform (linux/amd64/v1) and no specific platform was requested
@@ -226,36 +244,39 @@ docker run -d \
   container-registry.oracle.com/database/free:23.6.0.0-amd64
 
 上面稍微花点时间
+The above process may take a little time.
 
 加了下面两个出错,时间也很久！  
+Adding the following two caused errors, and it also took a long time!
+
   -e ORACLE_PWD=Welcome12345# \
   -v /Users/honglin/oradata:/opt/oracle/oradata \
 
-其他示范: Other Options
+Other Options
 
--e ORACLE_CHARACTERSET=AL32UTF8：设置数据库的字符集为 AL32UTF8。
--e ENABLE_ARCHIVELOG=true：启用归档日志模式。
--e ENABLE_FORCE_LOGGING=true：启用强制日志模式。
+-e ORACLE_CHARACTERSET=AL32UTF8：设置数据库的字符集为 AL32UTF8。/ Set the database character set to AL32UTF8.
+-e ENABLE_ARCHIVELOG=true：启用归档日志模式。/ Enable archive log mode.
+-e ENABLE_FORCE_LOGGING=true：启用强制日志模式。/ Enable forced logging mode.
 
-查看container
+查看container / view the containers
 docker ps -la
 
-查看日志(dbca比较花时间)
+查看日志(dbca比较花时间) / Check the logs (dbca can be time-consuming).
 docker logs ora23ai
 
-有下面信息说明创建成功
+有下面信息说明创建成功 / The presence of the following information indicates that the creation was successful.
 ---> shows DATABASE IS READY TO USE!
 
-通过下面脚本修改初始密码
+通过下面脚本修改初始密码 / Modify the initial password using the script below.
 docker exec -it ora23ai /bin/bash
 ./setPassword.sh Welcome12345#
 
-查看CPU/内存:
+查看CPU/内存: / Check CPU/Memory:
 docker exec -it ora23ai /bin/bash
 mpstat -I SCPU
 free -m
 
-查看端口:
+查看端口: / Check ports:
 docker port ora23ai
 
 (base) honglin@macos ~ % docker port ora23ai
@@ -270,7 +291,7 @@ docker port ora23ai
 (base) honglin@macos ~ % 
 ```
 
-MAC sqlcl 连接测试：
+MAC sqlcl Conenct Testing
 
 [SQLcl 24.3.2 Downloads / Version 24.3.2.330.1718 - November 26, 2024](https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/download/)
 
@@ -287,7 +308,7 @@ docker exec -it ora23ai sqlplus / as sysdba
 SQL> select banner_full from v$version;
 ```
 
-参考日志:
+参考日志: / Refer to the logs:
 
 ```
 (base) honglin@macos ~ % export PATH=/Users/honglin/sqlcl/bin:$PATH
@@ -317,7 +338,7 @@ Version 23.6.0.24.10
 
 ```
 
-定制化下oracle profile内容:
+定制化下oracle profile内容: / Customize the Oracle profile content:
 
 ```
 docker exec -it ora23ai /bin/bash
@@ -344,7 +365,7 @@ alias sys='sqlplus / as sysdba'
 bash-4.4$ 
 ```
 
-Repo 源问题
+Repo 源问题 / Repo source issue.
 
 ```
 docker exec -it ora23ai /bin/bash
