@@ -13,6 +13,15 @@ Oracle 19c Linux 8 Install Tips
 Some tips for oracle 19c in Linux 8 install.
 
 
+
+
+
+
+
+
+
+
+
 ### Some MOS for oracle 19c in Linux 8 install
 
 

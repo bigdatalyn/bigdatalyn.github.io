@@ -13,6 +13,13 @@ Oracle 23ai scripts Tips
 Some tips for oracle 23ai.
 
 
+
+
+
+
+
+
+
 ### printRolePrivileges
 
 new-developer-role
