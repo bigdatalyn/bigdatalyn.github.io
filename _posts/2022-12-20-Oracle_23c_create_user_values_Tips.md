@@ -11,6 +11,14 @@ tags: Oracle 23c Tips
 Oracle 23c create user values Tips
 
 
+
+
+
+
+
+
+
+
 ### create user via same password
 
 ```
