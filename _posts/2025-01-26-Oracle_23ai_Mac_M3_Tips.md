@@ -635,8 +635,6 @@ hr/hr 登录
 
 Akiyama-san's Github : [Oracle-Database-23ai-Free-on-Docker](https://github.com/shakiyam/Oracle-Database-23ai-Free-on-Docker)
 
-https://pretius.com/blog/oracle-apex-docker-ords/
-
 [Oracle Container Registry](https://container-registry.oracle.com/ords/ocr/ba/database/free)
 
 [Oracle Database 23ai FreeとAPEXでRAGを使った生成AIアプリをローコード開発してみた (事前準備編)](https://qiita.com/ssfujita/items/34d9e3c39ca730d29351)
