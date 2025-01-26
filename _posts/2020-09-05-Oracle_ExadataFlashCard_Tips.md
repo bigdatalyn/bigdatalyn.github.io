@@ -15,6 +15,13 @@ There is Critial alert in AWR report like the following.
 ![CritialAlert]({{ "/files/Oracle/Exadata/ExadataAlertDetail.png"}})
 
 
+
+
+
+
+
+
+
 #### Messages
 
 The awr is from the RAC 12.1 and the Exadata is below spec.

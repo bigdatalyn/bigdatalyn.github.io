@@ -12,6 +12,14 @@ Oracle Exadata Startup Shutdown Tips
 
 Shutdown and Startup Exadata
 
+
+
+
+
+
+
+
+
 ### Shutdown steps
 
 
