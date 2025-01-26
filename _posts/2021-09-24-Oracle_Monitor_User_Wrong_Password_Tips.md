@@ -12,6 +12,13 @@ tags: Oracle Tips
 Monitor wrong password user
 
 
+
+
+
+
+
+
+
 ### Trigger to get ORA-1017 error and write messages to alert log
 
 ```sql
