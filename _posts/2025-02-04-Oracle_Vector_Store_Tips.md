@@ -679,6 +679,108 @@ exit
 
 Some error ... To be continue.
 
+### Pre-built Embedding Generation model for Oracle Database 23ai
+
+[OML4Py: Leveraging ONNX and Hugging Face for AI Vector Search](https://blogs.oracle.com/machinelearning/post/oml4py-leveraging-onnx-and-hugging-face-for-advanced-ai-vector-search)
+
+
+```
+Starting with OML4Py 2.0, the client converts pre-trained transformer models from Hugging Face to the Open Neural Network Exchange (ONNX) format for AI Vector Search. Hugging Face is an open-source Python library for deep learning, offering thousands of pre-trained models for natural language processing (NLP), computer vision, audio, and more. ONNX is an open format for representing various machine learning models, including transformers, classification, regression, and other types.
+
+Oracle Database 23ai 引入了 Oracle AI Vector Search，通过使用 Transformer 模型生成向量并在数据库中大规模管理这些向量，彻底改变了语义相似性搜索的方式。这使得用户能够基于含义和上下文找到相关信息，解决了将数据转移到独立向量数据库的痛点，从而降低了复杂性和运营开销。
+从 OML4Py 2.0 开始，客户端将 Hugging Face 上的预训练 Transformer 模型转换为用于 AI Vector Search 的开放神经网络交换（ONNX）格式。Hugging Face 是一个用于深度学习的开源 Python 库，提供数千种用于自然语言处理（NLP）、计算机视觉、音频等领域的预训练模型。ONNX 是一种用于表示各种机器学习模型的开放格式，包括 Transformer、分类、回归以及其他类型。
+OML4Py 客户端通过从 Hugging Face 仓库下载预训练模型，为其添加预处理和后处理步骤，将增强后的模型转换为 ONNX 格式，并将其加载到数据库内模型或导出到文件中，从而简化了在数据库中生成嵌入向量的路径。一旦以 ONNX 格式加载，您可以无缝使用数据库内的 ONNX 运行时为 AI Vector Search 生成向量嵌入。
+结合 OML4Py 客户端，AI Vector Search 为在 Oracle 数据库中利用向量嵌入提供了一个全面的解决方案，增强了文本数据分析、搜索能力和机器学习应用。
+```
+
+```
+-- ALL_MINILM_L12_V2
+col model_name for a20
+SELECT MODEL_NAME, ALGORITHM, MINING_FUNCTION
+FROM USER_MINING_MODELS 
+WHERE MODEL_NAME='ALL_MINILM_L12_V2';
+
+MODEL_NAME	     ALGORITHM			    MINING_FUNCTION
+-------------------- ------------------------------ ------------------------------
+ALL_MINILM_L12_V2    ONNX			    EMBEDDING
+
+col view_name for a25
+col view_type for a30
+SELECT VIEW_NAME, VIEW_TYPE 
+FROM USER_MINING_MODEL_VIEWS
+WHERE MODEL_NAME='ALL_MINILM_L12_V2'
+ORDER BY VIEW_NAME;
+
+VIEW_NAME		  VIEW_TYPE
+------------------------- ------------------------------
+DM$VJALL_MINILM_L12_V2	  ONNX Metadata Information
+DM$VMALL_MINILM_L12_V2	  ONNX Model Information
+DM$VPALL_MINILM_L12_V2	  ONNX Parsing Information
+
+-- 每个模型视图都有一个独特的名称。“DM$V”是模型视图的前缀，后面跟着一个字母，表示它包含的信息类型（例如，J=JSON，M=元数据，P=解析后的 JSON），最后是模型名称。
+
+col metadata for a90
+select * from DM$VJALL_MINILM_L12_V2;
+
+METADATA
+------------------------------------------------------------------------------------------
+{"function":"embedding","embeddingOutput":"embedding","input":{"input":["DATA"]}}
+
+```
+
+
+blog post Now Available! [Pre-built Embedding Generation model for Oracle Database 23ai.](https://blogs.oracle.com/machinelearning/post/use-our-prebuilt-onnx-model-now-available-for-embedding-generation-in-oracle-database-23ai)
+
+
+What is all-MiniLM-L12-v2?
+
+```
+Hugging Face's all-MiniLM-L12-v2 model is a compact yet powerful sentence transformers model widely leveraged for optimizing various natural language processing (NLP) tasks. Hugging Face's documentation states that it aims for efficiency and high-performance and features a 12-layer architecture that is designed to excel in tasks such as sentence similarity and text classification. This model's lightweight design is meant to allow for quicker processing and reduced computational demands compared to larger models. Despite its compact size, it is known to uphold high accuracy and reliability, establishing itself as a versatile choice for developers implementing NLP solutions.
+
+Hugging Face 的 all-MiniLM-L12-v2 模型是一个紧凑而强大的句子变换器（sentence transformers）模型，被广泛用于优化各种自然语言处理（NLP）任务。根据 Hugging Face 的文档，该模型旨在实现高效性和高性能，具有12层架构，专为在句子相似性、文本分类等任务中表现出色而设计。这种模型的轻量化设计旨在实现比大型模型更快的处理速度和更低的计算需求。尽管其体积小巧，但其以高准确性和可靠性著称，已成为开发者实施 NLP 解决方案时的多功能选择。
+```
+
+ google/vit-base-patch16-224 / `vit-base-patch16.onnx`
+
+```
+-- Loaded both ONNX models, for text and Image embedding
+DBMS_VECTOR.LOAD_ONNX_MODEL(
+            MODEL_NAME => 'CLIP_TXT_MODEL',
+            MODEL_DATA => <clip-vit-large_txt.onnx>,
+            METADATA   => JSON('{"function" : "embedding", "embeddingOutput" : "embedding", "input": {"input": ["DATA"]}}')
+        );
+ DBMS_VECTOR.LOAD_ONNX_MODEL(
+            MODEL_NAME => 'CLIP_IMG_MODEL',
+            MODEL_DATA => <clip-vit-large_img.onnx>,
+            METADATA   => JSON('{"function" : "embedding", "embeddingOutput" : "embedding", "input": {"input": ["DATA"]}}')
+        );
+
+-- Created vectors on my images
+
+update images set image_vector  = to_vector(vector_embedding (CLIP_IMG_MODEL using image_blob as data));
+
+-- Perform Semantic Search based on a text search term
+
+SELECT ID,
+       IMAGE_BLOB,
+       MIME_TYPE,
+       FILE_NAME,
+       IMAGE_DESCRIPTION,
+       IMAGE_VECTOR
+  FROM IMAGES
+ORDER BY VECTOR_DISTANCE(
+           TO_VECTOR(VECTOR_EMBEDDING(CLIP_TXT_MODEL USING :P1_SEARCH_TEXT AS DATA)),
+           IMAGE_VECTOR,
+           COSINE
+);
+```
+
+
+[11.3 Python Classes to Convert Pretrained Models to ONNX Models](https://docs.oracle.com/en/database/oracle/machine-learning/oml4py/2/mlugp/python-classes-convert-pretrained-models-onnx-models.html)
+
+[11.7 Load Custom Models from The Local Filesystem](https://docs.oracle.com/en/database/oracle/machine-learning/oml4py/2-23ai/mlpug/loading-pretrained-models-filesystem.html)
+
+
 ### Referece
 
 [Oracle AI Vector Search User's Guide](https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/import-onnx-models-oracle-database-end-end-example.html)
