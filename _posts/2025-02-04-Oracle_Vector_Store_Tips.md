@@ -780,6 +780,18 @@ ORDER BY VECTOR_DISTANCE(
 
 [11.7 Load Custom Models from The Local Filesystem](https://docs.oracle.com/en/database/oracle/machine-learning/oml4py/2-23ai/mlpug/loading-pretrained-models-filesystem.html)
 
+Oracle 23ai 23.7 Feature
+
+```
+Support for Image Transformer Models with AI Vector Search Using the In-Database ONNX Runtime
+This feature enables the import and use of image transformer models to use the in-database ONNX Runtime engine available in 23ai. Image transformer models must be in ONNX format and include the required image decoding and preprocessing as part of the ONNX pipeline.
+
+Oracle Database 23ai initially supported sentence transformers for use with the in-database ONNX Runtime and AI Vector Search. This enabled generating vectors for text only. With the support for image transformer models, users can now use AI Vector Search for semantic similarity search involving images to support a wider range of use cases.
+```
+
+[Import Pretrained Models in ONNX Format](https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/import-pretrained-models-onnx-format-vector-generation-database.html#VECSE-GUID-D8140BF9-08E9-4B3F-9E28-E40A6FD181A4)
+
+
 
 ### Referece
 
