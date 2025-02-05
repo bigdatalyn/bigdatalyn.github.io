@@ -278,6 +278,32 @@ docker run -d \
   -p 8443:8443 \
   container-registry.oracle.com/database/free:23.6.0.0-amd64
 
+
+docker run -d \
+  --name ora23ai \
+  -p 2222:22   \
+  -p 1521:1521 \
+  -p 5500:5500 \
+  -p 8080:8080 \
+  -p 8443:8443 \
+  -v /Users/honglin/Downloads:/mnt \
+  container-registry.oracle.com/database/free:23.6.0.0-arm64
+
+
+docker端口示例说明: 将宿主机的 8080 端口映射到容器的 80 端口
+docker run -d -p 8080:80 nginx
+
+docker文件映射通常在运行容器时通过 -v 或 --mount 参数来指定。
+例如，如果你想将宿主机上的某个目录映射到容器中，可以使用以下命令：
+docker run -v /path/to/host/directory:/path/in/container image_name
+
+内存不够，可能出现上面错误 也可以colima start --edit 编辑默认值如cpu设置为4/内存2g改为6g
+If the memory is insufficient, the error mentioned above may occur. You can also use the command colima start --edit to edit the default settings, such as changing the CPU setting from 4 to 6 and the memory from 2G to 6G.
+
+Errors in file /opt/oracle/diag/rdbms/free/FREE/trace/FREE_lgwr_1263.trc  (incident=9773) (PDBNAME=CDB$ROOT):
+ORA-00800: soft external error, arguments: [Set Priority Failed], [LGWR], [Check traces and OS configuration], [Check Oracle document and MOS notes], []
+Incident details in: /opt/oracle/diag/rdbms/free/FREE/incident/incdir_9773/FREE_lgwr_1263_i9773.trc
+
 上面稍微花点时间
 The above process may take a little time.
 
