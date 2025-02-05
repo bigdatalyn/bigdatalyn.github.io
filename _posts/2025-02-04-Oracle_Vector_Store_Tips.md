@@ -607,6 +607,51 @@ MANHATTAN度量，也称为L1距离或出租车距离，计算两个向量之间
 JACCARD度量计算杰卡德距离。查询中使用的两个向量必须是二进制向量。
 ```
 
+### Text Strings
+
+```sql 
+EXECUTE dbms_vector.drop_onnx_model(model_name => 'doc_model', force => true);
+
+BEGIN
+   DBMS_VECTOR.LOAD_ONNX_MODEL(
+        directory => 'DIR_DUMP',
+		file_name => 'all_MiniLM_L12_v2.onnx',
+        model_name => 'doc_model',
+        metadata => JSON('{"function" : "embedding", "embeddingOutput" : "embedding", "input": {"input": ["DATA"]}}'));
+END;
+/
+
+-- VECTOR_EMBEDDING:
+SELECT TO_VECTOR(VECTOR_EMBEDDING(doc_model USING 'hello' as data)) AS embedding;
+
+-- DBMS_VECTOR.UTL_TO_EMBEDDING:
+var params clob;
+exec :params := '{"provider":"database", "model":"doc_model"}';
+select dbms_vector.utl_to_embedding('hello', json(:params)) from dual;
+```
+
+```
+
+SQL> SELECT TO_VECTOR(VECTOR_EMBEDDING(doc_model USING 'hello' as data)) AS embedding;
+
+EMBEDDING
+--------------------------------------------------------------------------------
+[-7.4906975E-002,-1.44330636E-002,4.86498736E-002,-2.71380376E-002,
+
+SQL> var params clob;
+exec :params := '{"provider":"database", "model":"doc_model"}';
+select dbms_vector.utl_to_embedding('hello', json(:params)) from dual;SQL> 
+PL/SQL procedure successfully completed.
+
+SQL> 
+
+DBMS_VECTOR.UTL_TO_EMBEDDING('HELLO',JSON(:PARAMS))
+--------------------------------------------------------------------------------
+[-7.4906975E-002,-1.44330636E-002,4.86498736E-002,-2.71380376E-002,
+
+SQL> 
+```
+
 ### 7.Create vector embeddings for text chunks using the ALL_MINILM_L12_V2 model
 
 ```
