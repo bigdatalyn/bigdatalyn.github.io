@@ -10,6 +10,19 @@ tags: Oracle 23ai Tips
 
 Oracle 23ai and Ollama REST api Tips
 
+![ds_dbcs]({{ "/files/Oracle/dbcs/ds_dbcs.png"}})	
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### ollama
 
@@ -316,6 +329,7 @@ Elapsed: 00:00:46.38
 ### ollama Deepseek test
 
 Test vith ollama deepseek-r1
+
 ```
 curl http://localhost:11434/api/generate -d '{
   "model": "deepseek-r1",
