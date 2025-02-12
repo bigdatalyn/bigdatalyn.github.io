@@ -368,5 +368,24 @@ Elapsed: 00:00:19.52
 [Oracle AI Vector Search User's Guide 23ai UTL_TO_GENERATE_TEXT](https://docs.oracle.com/en/database/oracle/oracle-database/23/vecse/utl_to_generate_text-dbms_vector_chain.html)
 
 
+在 Ollama 中，generate 和 chat 是两种不同的 API 功能，主要区别在于交互方式和状态管理。
+- generate API
+
+```
+单次生成：generate 是一次性生成 API，用于在单个请求中生成指定的文本输出。
+无上下文记忆：它不会维持之前的对话状态，适合于没有对话上下文依赖的生成任务，比如完成单次代码生成、文字补全或单条指令的输出。
+典型用途：代码补全、生成文章段落、回答单一问题等任务。
+```
+
+- chat API
+
+```
+对话式交互：chat API 支持多轮对话，可以记住先前的交互内容并在后续响应中参考。它适用于连续对话和需要上下文信息的任务。
+上下文记忆：chat 会保留对话历史，逐步积累上下文，使模型能够根据之前的交流来生成相关性更强的回复。
+典型用途：例如，编写长篇文章时进行多次交互、问答式对话、需要与模型连续互动的应用。
+选择使用的场景
+如果你的任务是一次性生成内容且不需要对话记忆，使用 generate 更加简单和高效。
+如果需要多轮交互或上下文连续性，例如连续讨论或澄清问题，则 chat API 更为合适。
+```
 
 Have a good work&life! 2025/02 via LinHong
