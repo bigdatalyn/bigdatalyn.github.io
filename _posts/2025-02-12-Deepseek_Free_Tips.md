@@ -16,11 +16,11 @@ From [deepseek-free](https://github.com/deepseek-free/deepseek-free) / 2025/02/1
 
 > 更新日期：2025/02/13 
 
-[DeepSeek 专题](https://www.yixiaai.com)提供 DeepSeek 部署教程，包括 PC 电脑端本地部署最新 DeepSeek-R1 模型，手机端通过 Termux 快速部署 DeepSeek-R1 模型。收录各大云平台服务（英伟达、微软、亚马逊AWS、阿里云、腾讯云、硅基流动 x 华为云）提供的（免费） API 接口服务，以及收录支持 DeepSeek API 应用等等。
+DeepSeek 专题提供 DeepSeek 部署教程，包括 PC 电脑端本地部署最新 DeepSeek-R1 模型，手机端通过 Termux 快速部署 DeepSeek-R1 模型。收录各大云平台服务（英伟达、微软、亚马逊AWS、阿里云、腾讯云、硅基流动 x 华为云）提供的（免费） API 接口服务，以及收录支持 DeepSeek API 应用等等。
 
 ### 关于 DeepSeek
 
-[DeepSeek](https://chat.lify.vip) 是由深度求索（DeepSeek）自主研发的高性能大语言模型，以其开源、轻量化和强大的多场景适应能力受到广泛关注。其最新发布的 R1 大模型不仅在性能上媲美了 OpenAI 的 o1、o3，且以对手 3% 的超低成本实现了这一突破。
+DeepSeek是由深度求索（DeepSeek）自主研发的高性能大语言模型，以其开源、轻量化和强大的多场景适应能力受到广泛关注。其最新发布的 R1 大模型不仅在性能上媲美了 OpenAI 的 o1、o3，且以对手 3% 的超低成本实现了这一突破。
 
 
 
