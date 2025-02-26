@@ -12,14 +12,191 @@ AI SQL Tips
 
 本文是通过 [Qwen2.5-Max](https://chat.qwen.ai) 生成
 
+This tips are from [Qwen2.5-Max](https://chat.qwen.ai).
+
 输入: Oracle 执行计划
 
+Input: Oracle executeion plan
 
 
 
 
 
 
+
+## English version
+
+Below is the English translation of the content you requested:
+
+---
+
+### **1. Methods to View Execution Plans**
+Oracle provides several tools and commands to view execution plans:
+
+#### **(1) Using `EXPLAIN PLAN`**
+`EXPLAIN PLAN` is a static analysis tool used to generate an execution plan for an SQL query without actually executing it.
+```sql
+-- Generate the execution plan
+EXPLAIN PLAN FOR
+SELECT * FROM employees WHERE department_id = 10;
+
+-- View the execution plan
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+```
+- **Advantages**: Simple and easy to use, suitable for quickly viewing execution plans.
+- **Disadvantages**: Only shows the theoretical execution plan, which may differ from actual runtime behavior.
+
+#### **(2) Using `DBMS_XPLAN`**
+`DBMS_XPLAN` is a more powerful tool that can display detailed execution plan information.
+```sql
+-- View the execution plan of the most recently executed SQL
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY_CURSOR(NULL, NULL, 'ALLSTATS LAST'));
+```
+- Parameter explanation:
+  - `NULL, NULL`: Refers to the most recent SQL in the current session.
+  - `'ALLSTATS LAST'`: Displays actual execution statistics (e.g., number of rows, buffer reads).
+
+#### **(3) Using `AUTOTRACE`**
+`AUTOTRACE` is a feature in SQL*Plus that directly displays the execution plan and statistical information.
+```sql
+SET AUTOTRACE ON;
+
+-- Execute the query
+SELECT * FROM employees WHERE department_id = 10;
+
+SET AUTOTRACE OFF;
+```
+- **Advantages**: Displays both the execution plan and actual runtime statistics.
+- **Disadvantages**: Requires use in SQL*Plus or similar tools.
+
+#### **(4) Using AWR Reports**
+AWR (Automatic Workload Repository) reports capture historical performance data of the database, including execution plans for high-load SQL statements.
+- Use case: Suitable for analyzing historical performance issues in production environments.
+
+---
+
+### **2. Key Fields in Execution Plans**
+Execution plans are typically displayed in a tree structure, with each operation corresponding to one row. Below are some key fields and their meanings:
+
+| Field Name      | Meaning                                                                 |
+|-----------------|-------------------------------------------------------------------------|
+| **ID**          | Unique identifier for the operation, indicating the execution order (top-down). |
+| **OPERATION**   | Type of operation (e.g., `TABLE ACCESS FULL`, `INDEX RANGE SCAN`, etc.). |
+| **NAME**        | Name of the accessed object (e.g., table name or index name).           |
+| **ROWS**        | Estimated number of rows returned.                                      |
+| **BYTES**       | Estimated amount of data returned (in bytes).                           |
+| **COST**        | Query cost value (calculated by the optimizer, lower is better).        |
+| **TIME**        | Estimated execution time.                                               |
+| **PSTART/PSTOP**| Start and end partition numbers for partitioned tables (if applicable). |
+
+---
+
+### **3. Common Operation Types**
+The operation types in execution plans reflect how the query is executed. Below are some common operations and their meanings:
+
+#### **(1) Table Access Methods**
+- **TABLE ACCESS FULL**: Full table scan, reading the entire table row by row.
+  - **Optimization Tip**: Check if indexes are missing or if filters can reduce the scan range.
+
+- **TABLE ACCESS BY INDEX ROWID**: Locates specific rows in the table via an index.
+  - **Optimization Tip**: Ensure the index has high selectivity and avoid unnecessary table lookups.
+
+- **INDEX RANGE SCAN**: Scans the index within a range.
+  - **Optimization Tip**: Check the selectivity of indexed columns and avoid inefficient range queries.
+
+- **INDEX UNIQUE SCAN**: Unique index scan, often used for primary keys or unique constraints.
+  - **Optimization Tip**: Ensure query conditions fully utilize the unique index.
+
+#### **(2) Join Methods**
+- **NESTED LOOPS**: Nested loop join, suitable for small driving tables and large driven tables.
+  - **Optimization Tip**: Ensure the driving table is small and the join columns are indexed.
+
+- **HASH JOIN**: Hash join, suitable for joining large tables.
+  - **Optimization Tip**: Ensure sufficient memory is allocated for the hash table.
+
+- **MERGE JOIN**: Sort-merge join, suitable for pre-sorted datasets.
+  - **Optimization Tip**: Leverage indexes or pre-sort data whenever possible.
+
+#### **(3) Sorting and Aggregation**
+- **SORT ORDER BY**: Sorts the result set.
+  - **Optimization Tip**: Try to leverage indexes to avoid explicit sorting.
+
+- **SORT GROUP BY**: Sorts grouped data.
+  - **Optimization Tip**: Reduce the number of grouping columns or use covering indexes.
+
+---
+
+### **4. Steps to Analyze Execution Plans**
+When analyzing execution plans, follow these steps to identify potential issues:
+
+#### **(1) Check for Full Table Scans**
+- If `TABLE ACCESS FULL` is found, it means the query is not using an index.
+- **Optimization Direction**:
+  - Check if indexes can be added to the `WHERE` condition.
+  - Ensure statistics are up-to-date (use `DBMS_STATS.GATHER_TABLE_STATS` to update statistics).
+
+#### **(2) Check Index Usage**
+- Confirm whether the query is using appropriate indexes (e.g., `INDEX RANGE SCAN` or `INDEX UNIQUE SCAN`).
+- If no index is used, it could be due to:
+  - Low selectivity of the index.
+  - Use of functions in the query condition (e.g., `UPPER(column)`), causing the index to become invalid.
+  - Outdated or inaccurate statistics.
+
+#### **(3) Check Join Methods**
+- For multi-table joins, confirm whether the optimal join method is selected (e.g., `HASH JOIN` or `NESTED LOOPS`).
+- If join efficiency is low, consider adjusting the join order or creating appropriate indexes.
+
+#### **(4) Check Cost and Row Estimates**
+- Pay attention to the `COST` and `ROWS` columns to determine if the optimizer's estimates are reasonable.
+- If there is a significant discrepancy between estimated and actual row counts, it may be due to outdated or unevenly distributed statistics.
+
+---
+
+### **5. Example Analysis**
+Here is a simple example of an execution plan:
+
+```sql
+EXPLAIN PLAN FOR
+SELECT e.employee_id, e.first_name, d.department_name
+FROM employees e
+JOIN departments d ON e.department_id = d.department_id
+WHERE e.salary > 5000;
+
+SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY);
+```
+
+Execution plan output:
+
+```
+---------------------------------------------------------------
+| Id | Operation          | Name        | Rows | Bytes | Cost |
+---------------------------------------------------------------
+|  0 | SELECT STATEMENT   |             |  100 |  5000 |   15 |
+|  1 |  HASH JOIN         |             |  100 |  5000 |   15 |
+|  2 |   TABLE ACCESS FULL| DEPARTMENTS |   10 |   200 |    5 |
+|  3 |   TABLE ACCESS FULL| EMPLOYEES   |  500 | 15000 |   10 |
+---------------------------------------------------------------
+```
+
+**Analysis**:
+1. The query uses a `HASH JOIN`, which is suitable for joining large tables.
+2. Both tables perform full table scans (`TABLE ACCESS FULL`), likely due to the absence of indexes.
+3. **Optimization Suggestions**:
+   - Create an index on `employees(salary)` to avoid full table scans.
+   - Ensure there is an index on `departments(department_id)`.
+
+---
+
+### **6. Summary**
+Execution plans are essential tools for optimizing SQL queries. By analyzing execution plans, you can identify performance bottlenecks (e.g., full table scans, ineffective indexes, inefficient joins) and take appropriate optimization measures. Here are a few key points:
+- Regularly update statistics to ensure the optimizer generates accurate execution plans.
+- Design indexes reasonably, avoiding redundant or inefficient indexes.
+- Choose appropriate join methods and sorting strategies based on business requirements.
+
+If you have a specific SQL query or execution plan output, feel free to provide more details, and I can further analyze and optimize it for you!
+
+
+## 中文版本
 
 在 Oracle 数据库中，执行计划（Execution Plan）是查询优化器生成的一个详细步骤列表，用于描述 SQL 查询的执行方式。通过分析执行计划，可以了解查询是如何访问数据、使用索引以及处理连接等操作的，从而发现潜在的性能瓶颈并进行优化。
 
