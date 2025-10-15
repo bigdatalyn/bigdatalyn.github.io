@@ -99,6 +99,51 @@ SQL>
 [Oracle AI Database 26ai](https://docs.oracle.com/en/database/oracle/oracle-database/26/index.html)
 
 
+[DBMS_CLOUD Packages](https://docs.oracle.com/en/database/oracle/oracle-database/26/sutil/using-dbms_cloud-family-packages.html)
+
+```
+The DBMS_CLOUD family of packages consists of the following:
+     DBMS_CLOUD
+     DBMS_CLOUD_AI
+     DBMS_CLOUD_NOTIFICATION
+     DBMS_CLOUD_PIPELINE
+     DBMS_CLOUD_REPO
+
+Overview of Installation and Configuration Steps
+
+To set up DBMS_CLOUD, the following installation and configuration steps must be completed:
+
+Installing and configuring DBMS_CLOUD:
+     Create a schema owning the DBMS_CLOUD package, and install the DBMS_CLOUD code in the container database (CDB), and all pluggable databases (PDBs).
+     Create a wallet to contain the certificates required to access HTTP URIs and Object Stores.
+     Configure your database environment to use the new SSL wallet.
+     Configure your database with access control lists (ACLs) for DBMS_CLOUD.
+     Verify the configuration of DBMS_CLOUD.
+
+Configuring users or roles to use DBMS_CLOUD:
+     Grant the minimal privileges to a user or role for using DBMS_CLOUD
+     Configure ACLs for a user or role to use DBMS_CLOUD
+     Verify the proper setup of your user or role for using DBMS_CLOUD
+```
+
+
+[20.2 Installing DBMS_CLOUD](https://docs.oracle.com/en/database/oracle/oracle-database/26/sutil/installing-dbms_cloud.html)
+
+```
+To use the DBMS_CLOUD family of packages on a customer-managed Oracle Database, you must create a new user and install DBMS_CLOUD packages as that user.
+
+The default DBMS_CLOUD procedure installation is owned by a separate schema, the C##CLOUD$SERVICE schema. The schema is locked by default so that no connections are directly made as this user.
+
+When you update to a release update (RU) has a new DBMS_CLOUD deployment, you must rerun the installation procedure on top of your existing procedure on the PDBs where you want to access the DBMS_CLOUD family of packages. The installation is written-idempotent, so you do not have to uninstall and reinstall the DBMS_CLOUD family of packages, but the user you create to administer this installation can connect to the schema.
+
+To ensure correct installation of DBMS_CLOUD into any existing and future pluggable databases (PDBs), install the packages using the catcon.pl utility that is located in the directory Oracle home/rdbms/admin/. The code and installation scripts for DBMS_CLOUD are part of the Oracle distribution. The two main scripts are:
+
+catclouduser.sql: This script creates the schema C##CLOUD$SERVICE with the necessary privileges. Do not modify this script.
+dbms_cloud_install.sql: This script installs the DBMS_CLOUD packages in schema C##CLOUD$SERVICE. Do not modify this script.
+```
+
+
+
 ### 
 
 Have a good work&life! 2025/10 via LinHong
