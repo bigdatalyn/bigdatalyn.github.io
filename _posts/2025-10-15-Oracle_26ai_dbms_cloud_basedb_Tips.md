@@ -14,6 +14,16 @@ Oracle AI Database 26ai
 
 ![oracle26ai]({{ "/files/Oracle/26ai/26ai.jpg"}})	
 
+[Oracle AI Database 26ai replaces Oracle Database 23ai](https://mikedietrichde.com/2025/10/14/oracle-ai-database-26ai-replaces-oracle-database-23ai/)
+
+Release example...
+```
+April 2025: Oracle Database 23ai – 23.8.0.25.04
+July 2025: Oracle Database 23ai – 23.9.0.25.07
+October 2025: Oracle AI Database 26ai – 23.26.0.0.0 -----------> Now
+January 2026: Oracle AI Database 26ai – 23.26.1.0.0
+April 2026: Oracle AI Database 26ai – 23.26.2.0.0
+```
 
 ```
 Oracle AI Database 26ai is the next long-term support release of Oracle AI Database. It includes over 300 new features with a focus on artificial intelligence (AI) and developer productivity. Features such as AI Vector Search enable you to leverage a new generation of AI models to generate and store vectors of documents, images, sound, and so on;  index them and quickly look for similarity while leveraging the existing analytical capabilities of Oracle AI Database. This combined with the already extensive set of Machine Learning algorithms enables you to quickly create sophisticated AI-enabled applications. Oracle AI Database 26ai also uses AI to optimize many of the key database functions to make more accurate estimates on timings and resource costings.
