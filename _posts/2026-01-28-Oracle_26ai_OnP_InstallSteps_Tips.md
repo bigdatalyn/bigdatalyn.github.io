@@ -31,9 +31,11 @@ An announcement blog post GA of Oracle AI Database 26ai for Linux x86-64 on-prem
 - [announcement blog](https://blogs.oracle.com/database/?p=3837)
 
 V1054592-01.zip
+
 ![ords]({{ "/files/Oracle/26ai/20260127_download.jpg"}})	
 
 Install Version:
+
 ![ords]({{ "/files/Oracle/26ai/oracle_23.26.png"}})	
 
 
