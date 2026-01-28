@@ -31,8 +31,10 @@ An announcement blog post GA of Oracle AI Database 26ai for Linux x86-64 on-prem
 - [announcement blog](https://blogs.oracle.com/database/?p=3837)
 
 V1054592-01.zip
-
 ![ords]({{ "/files/Oracle/26ai/20260127_download.jpg"}})	
+
+Install Version:
+![ords]({{ "/files/Oracle/26ai/oracle_23.26.png"}})	
 
 
 
@@ -68,7 +70,6 @@ uid=54321(oracle) gid=54321(oinstall) groups=54321(oinstall),54322(dba),54323(op
 [root@onp26ai ~]# 
 
 Group Purposes:
-
 oinstall: Oracle Inventory group (primary)
 dba: Database Administrator (SYSDBA)
 oper: Database Operator (SYSOPER)
@@ -162,7 +163,7 @@ mkdir -p /u01/app/oracle/product/23.0.0/dbhome_1
 # Navigate to Oracle Home
 cd /u01/app/oracle/product/23.0.0/dbhome_1
 
-unzip -q /tmp/db_home.zip
+unzip -q /tmp/V1054592-01.zip
 ```
 
 Unzip Install file logs:
@@ -196,7 +197,6 @@ Execute the Oracle installer in silent mode to install software and create the d
   -ignorePrereq
 
 Installation Parameters:
-
 -createDatabase: Creates database during installation
 -installEdition EE: Enterprise Edition
 -gdbName: Global database name (CDB)
@@ -256,7 +256,6 @@ Run /u01/app/oracle/product/23.0.0/dbhome_1/root.sh on the following nodes:
 
 Successfully Setup Software with warning(s).
 Run the 'runInstaller -executeConfigTools' command to complete the configuration.
-
 
 Moved the install session logs to:
  /u01/app/oraInventory/logs/InstallActions2026-01-28_03-09-58AM
@@ -530,6 +529,7 @@ root       68885   10400  0 03:42 pts/0    00:00:00 grep --color=auto smon
 
 
 Others Setting:
+
 Setting timezone:
 ```
 timedatectl list-timezones
@@ -549,7 +549,6 @@ setenforce permissive
 Setting oracle user password:
 ```
 echo oracle:"$ORACLE_PASSWORD" | sudo chpasswd
-
 echo oracle:"welcome1" | sudo chpasswd
 ```
 Setting Save PDB state:
