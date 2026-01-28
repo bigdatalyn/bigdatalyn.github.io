@@ -571,6 +571,572 @@ Pluggable database altered.
 SQL> 
 ```
 
+### Oracle AI Database(show parameter)
+
+`show parameter` value as below.
+```
+SQL> show parameter
+NAME                                          TYPE        VALUE                                                                                        
+--------------------------------------------- ----------- -------------------------------------------------------------------------------------------- 
+DBFIPS_140                                    boolean     FALSE                                                                                        
+_instance_recovery_bloom_filter_size          integer     1048576                                                                                      
+adg_account_info_tracking                     string      LOCAL                                                                                        
+adg_redirect_dml                              boolean     FALSE                                                                                        
+alert_log_max_size                            big integer 1000M                                                                                        
+allow_global_dblinks                          boolean     FALSE                                                                                        
+allow_group_access_to_sga                     boolean     FALSE                                                                                        
+allow_legacy_reco_protocol                    boolean     TRUE                                                                                         
+allow_rowid_column_type                       boolean     FALSE                                                                                        
+allow_weak_crypto                             boolean     TRUE                                                                                         
+approx_for_aggregation                        boolean     FALSE                                                                                        
+approx_for_count_distinct                     boolean     FALSE                                                                                        
+approx_for_percentile                         string      NONE                                                                                         
+aq_tm_processes                               integer     1                                                                                            
+archive_lag_target                            integer     0                                                                                            
+asm_diskstring                                string                                                                                                   
+asm_preferred_read_failure_groups             string                                                                                                   
+audit_file_dest                               string      /u01/app/oracle/product/23.0.0/dbhome_1/rdbms/audit                                          
+audit_sys_operations                          boolean     FALSE                                                                                        
+audit_syslog_level                            string                                                                                                   
+audit_trail                                   string      NONE                                                                                         
+auto_start_pdb_services                       boolean     FALSE                                                                                        
+autotask_max_active_pdbs                      integer     2                                                                                            
+awr_pdb_autoflush_enabled                     boolean     TRUE                                                                                         
+awr_pdb_max_parallel_slaves                   integer     10                                                                                           
+awr_snapshot_time_offset                      integer     0                                                                                            
+background_core_dump                          string      partial                                                                                      
+background_dump_dest                          string      /u01/app/oracle/product/23.0.0/dbhome_1/rdbms/log                                            
+backup_tape_io_slaves                         boolean     FALSE                                                                                        
+bitmap_merge_area_size                        integer     1048576                                                                                      
+blank_trimming                                boolean     FALSE                                                                                        
+blockchain_table_max_no_drop                  integer                                                                                                  
+blockchain_table_retention_threshold          integer     16                                                                                           
+buffer_pool_keep                              string                                                                                                   
+buffer_pool_recycle                           string                                                                                                   
+calendar_fiscal_year_start                    string                                                                                                   
+cdb_cluster                                   boolean     FALSE                                                                                        
+cdb_cluster_name                              string                                                                                                   
+cell_offload_compaction                       string      ADAPTIVE                                                                                     
+cell_offload_decryption                       boolean     TRUE                                                                                         
+cell_offload_parameters                       string                                                                                                   
+cell_offload_plan_display                     string      AUTO                                                                                         
+cell_offload_processing                       boolean     TRUE                                                                                         
+cell_offloadgroup_name                        string                                                                                                   
+circuits                                      integer                                                                                                  
+client_prefetch_rows                          integer     0                                                                                            
+client_result_cache_lag                       big integer 3000                                                                                         
+client_result_cache_size                      big integer 0                                                                                            
+client_statistics_level                       string      TYPICAL                                                                                      
+clonedb                                       boolean     FALSE                                                                                        
+clonedb_dir                                   string                                                                                                   
+cloud_table_commit_threshold                  integer     0                                                                                            
+cluster_database                              boolean     FALSE                                                                                        
+cluster_interconnects                         string                                                                                                   
+commit_logging                                string                                                                                                   
+commit_point_strength                         integer     1                                                                                            
+commit_wait                                   string                                                                                                   
+commit_write                                  string                                                                                                   
+common_user_prefix                            string      C##                                                                                          
+compatible                                    string      23.6.0                                                                                       
+connection_brokers                            string      ((TYPE=DEDICATED)(BROKERS=2)(CONNECTIONS=2000)), ((TYPE=EMON)(BROKERS=1))                    
+container_data                                string      ALL                                                                                          
+containers_parallel_degree                    integer     65535                                                                                        
+control_file_record_keep_time                 integer     7                                                                                            
+control_files                                 string      /u01/app/oracle/oradata/ORCLCDB/control01.ctl, /u01/app/oracle/oradata/ORCLCDB/control02.ctl 
+control_management_pack_access                string      DIAGNOSTIC+TUNING                                                                            
+core_dump_dest                                string      /u01/app/oracle/diag/rdbms/orclcdb/orclcdb/cdump                                             
+cpu_count                                     string      4                                                                                            
+cpu_min_count                                 string      4                                                                                            
+create_bitmap_area_size                       integer     8388608                                                                                      
+create_stored_outlines                        string                                                                                                   
+cursor_bind_capture_destination               string      memory+disk                                                                                  
+cursor_invalidation                           string      IMMEDIATE                                                                                    
+cursor_sharing                                string      EXACT                                                                                        
+cursor_space_for_time                         boolean     FALSE                                                                                        
+data_guard_max_io_time                        integer     240                                                                                          
+data_guard_max_longio_time                    integer     240                                                                                          
+data_guard_sync_latency                       integer     0                                                                                            
+data_transfer_cache_size                      big integer 0                                                                                            
+db_16k_cache_size                             big integer 0                                                                                            
+db_2k_cache_size                              big integer 0                                                                                            
+db_32k_cache_size                             big integer 0                                                                                            
+db_4k_cache_size                              big integer 0                                                                                            
+db_8k_cache_size                              big integer 0                                                                                            
+db_big_table_cache_percent_target             string      0                                                                                            
+db_block_buffers                              integer     0                                                                                            
+db_block_checking                             string      FALSE                                                                                        
+db_block_checksum                             string      TYPICAL                                                                                      
+db_block_size                                 integer     8192                                                                                         
+db_cache_advice                               string      ON                                                                                           
+db_cache_size                                 big integer 0                                                                                            
+db_create_file_dest                           string                                                                                                   
+db_create_online_log_dest_1                   string                                                                                                   
+db_create_online_log_dest_2                   string                                                                                                   
+db_create_online_log_dest_3                   string                                                                                                   
+db_create_online_log_dest_4                   string                                                                                                   
+db_create_online_log_dest_5                   string                                                                                                   
+db_domain                                     string      example.com                                                                                  
+db_file_multiblock_read_count                 integer     128                                                                                          
+db_file_name_convert                          string                                                                                                   
+db_files                                      integer     200                                                                                          
+db_flash_cache_file                           string                                                                                                   
+db_flash_cache_size                           big integer 0                                                                                            
+db_flashback_log_dest                         string                                                                                                   
+db_flashback_log_dest_size                    big integer 0                                                                                            
+db_flashback_retention_target                 integer     1440                                                                                         
+db_index_compression_inheritance              string      NONE                                                                                         
+db_keep_cache_size                            big integer 0                                                                                            
+db_lost_write_protect                         string      AUTO                                                                                         
+db_name                                       string      orclcdb                                                                                      
+db_performance_profile                        string                                                                                                   
+db_recovery_auto_rekey                        string      ON                                                                                           
+db_recovery_file_dest                         string                                                                                                   
+db_recovery_file_dest_size                    big integer 0                                                                                            
+db_recycle_cache_size                         big integer 0                                                                                            
+db_securefile                                 string      PREFERRED                                                                                    
+db_ultra_safe                                 string      OFF                                                                                          
+db_unique_name                                string      orclcdb                                                                                      
+db_unrecoverable_scn_tracking                 boolean     TRUE                                                                                         
+db_writer_processes                           integer     1                                                                                            
+dbnest_enable                                 string      NONE                                                                                         
+dbnest_pdb_fs_conf                            string                                                                                                   
+dbwr_io_slaves                                integer     0                                                                                            
+ddl_lock_timeout                              integer     0                                                                                            
+debug_log_max_size                            big integer 1000M                                                                                        
+default_credential                            string                                                                                                   
+default_sharing                               string      metadata                                                                                     
+deferred_segment_creation                     boolean     TRUE                                                                                         
+dg_broker_config_file1                        string      /u01/app/oracle/product/23.0.0/dbhome_1/dbs/dr1orclcdb.dat                                   
+dg_broker_config_file2                        string      /u01/app/oracle/product/23.0.0/dbhome_1/dbs/dr2orclcdb.dat                                   
+dg_broker_start                               boolean     FALSE                                                                                        
+diagnostic_dest                               string      /u01/app/oracle                                                                              
+diagnostics_control                           string      IGNORE                                                                                       
+directory_prefixes_allowed                    string                                                                                                   
+disable_pdb_feature                           big integer 0                                                                                            
+disk_asynch_io                                boolean     TRUE                                                                                         
+dispatchers                                   string      (PROTOCOL=TCP) (SERVICE=orclcdbXDB)                                                          
+distributed_lock_timeout                      integer     60                                                                                           
+dml_locks                                     integer     2216                                                                                         
+dnfs_batch_size                               integer     4096                                                                                         
+drcp_connection_limit                         integer     0                                                                                            
+drcp_dedicated_opt                            string      NO                                                                                           
+dst_upgrade_insert_conv                       boolean     TRUE                                                                                         
+enable_automatic_maintenance_pdb              boolean     TRUE                                                                                         
+enable_ddl_logging                            boolean     FALSE                                                                                        
+enable_dnfs_dispatcher                        boolean     FALSE                                                                                        
+enable_goldengate_replication                 boolean     FALSE                                                                                        
+enable_imc_with_mira                          boolean     FALSE                                                                                        
+enable_per_pdb_drcp                           boolean     FALSE                                                                                        
+enable_pluggable_database                     boolean     TRUE                                                                                         
+enabled_PDBs_on_standby                       string      *                                                                                            
+encrypt_new_tablespaces                       string      CLOUD_ONLY                                                                                   
+error_message_details                         string      ON                                                                                           
+event                                         string                                                                                                   
+external_keystore_credential_location         string                                                                                                   
+fal_client                                    string                                                                                                   
+fal_server                                    string                                                                                                   
+fast_start_io_target                          integer     0                                                                                            
+fast_start_mttr_target                        integer     0                                                                                            
+fast_start_parallel_rollback                  string      LOW                                                                                          
+file_mapping                                  boolean     FALSE                                                                                        
+fileio_network_adapters                       string                                                                                                   
+filesystemio_options                          string      none                                                                                         
+fixed_date                                    string                                                                                                   
+forward_listener                              string                                                                                                   
+gcs_server_processes                          integer     0                                                                                            
+global_names                                  boolean     FALSE                                                                                        
+global_txn_processes                          integer     1                                                                                            
+group_by_position_enabled                     boolean     FALSE                                                                                        
+hash_area_size                                integer     131072                                                                                       
+heartbeat_batch_size                          integer     5                                                                                            
+heat_map                                      string      OFF                                                                                          
+hi_shared_memory_address                      integer     0                                                                                            
+hs_autoregister                               boolean     TRUE                                                                                         
+http_proxy                                    string                                                                                                   
+hybrid_read_only                              boolean     FALSE                                                                                        
+identity_provider_config                      string                                                                                                   
+identity_provider_type                        string      NONE                                                                                         
+ifile                                         file                                                                                                     
+ignore_session_set_param_errors               string                                                                                                   
+inmemory_adg_enabled                          boolean     TRUE                                                                                         
+inmemory_automatic_level                      string      OFF                                                                                          
+inmemory_clause_default                       string                                                                                                   
+inmemory_deep_vectorization                   boolean     TRUE                                                                                         
+inmemory_expressions_usage                    string      ENABLE                                                                                       
+inmemory_force                                string      DEFAULT                                                                                      
+inmemory_graph_algorithm_execution            string      DEFAULT                                                                                      
+inmemory_max_populate_servers                 integer     0                                                                                            
+inmemory_optimized_arithmetic                 string      DISABLE                                                                                      
+inmemory_optimized_date                       string      DISABLE                                                                                      
+inmemory_prefer_xmem_memcompress              string                                                                                                   
+inmemory_prefer_xmem_priority                 string                                                                                                   
+inmemory_query                                string      ENABLE                                                                                       
+inmemory_size                                 big integer 0                                                                                            
+inmemory_trickle_repopulate_servers_percent   integer     1                                                                                            
+inmemory_virtual_columns                      string      MANUAL                                                                                       
+inmemory_xmem_size                            big integer 0                                                                                            
+instance_abort_delay_time                     integer     0                                                                                            
+instance_groups                               string                                                                                                   
+instance_mode                                 string      READ-WRITE                                                                                   
+instance_name                                 string      orclcdb                                                                                      
+instance_number                               integer     0                                                                                            
+instance_type                                 string      RDBMS                                                                                        
+instant_restore                               boolean     FALSE                                                                                        
+iorm_limit_policy                             string      RM_PLAN                                                                                      
+ipddb_enable                                  boolean     FALSE                                                                                        
+java_jit_enabled                              boolean     TRUE                                                                                         
+java_max_sessionspace_size                    integer     0                                                                                            
+java_pool_size                                big integer 0                                                                                            
+java_restrict                                 string      none                                                                                         
+java_soft_sessionspace_limit                  integer     0                                                                                            
+job_queue_processes                           integer     80                                                                                           
+json_behavior                                 string                                                                                                   
+json_expression_check                         string      off                                                                                          
+kafka_config_file                             string                                                                                                   
+large_pool_size                               big integer 0                                                                                            
+ldap_directory_access                         string      NONE                                                                                         
+ldap_directory_sysauth                        string      no                                                                                           
+license_max_sessions                          integer     0                                                                                            
+license_max_users                             integer     0                                                                                            
+license_sessions_warning                      integer     0                                                                                            
+listener_networks                             string                                                                                                   
+load_without_compile                          string      none                                                                                         
+lob_signature_enable                          boolean     FALSE                                                                                        
+local_listener                                string      LISTENER_ORCLCDB                                                                             
+lock_name_space                               string                                                                                                   
+lock_sga                                      boolean     FALSE                                                                                        
+lockdown_errors                               string      RAISE                                                                                        
+lockfree_reservation                          string      ON                                                                                           
+log_archive_config                            string                                                                                                   
+log_archive_dest                              string                                                                                                   
+log_archive_dest_1                            string                                                                                                   
+log_archive_dest_10                           string                                                                                                   
+log_archive_dest_11                           string                                                                                                   
+log_archive_dest_12                           string                                                                                                   
+log_archive_dest_13                           string                                                                                                   
+log_archive_dest_14                           string                                                                                                   
+log_archive_dest_15                           string                                                                                                   
+log_archive_dest_16                           string                                                                                                   
+log_archive_dest_17                           string                                                                                                   
+log_archive_dest_18                           string                                                                                                   
+log_archive_dest_19                           string                                                                                                   
+log_archive_dest_2                            string                                                                                                   
+log_archive_dest_20                           string                                                                                                   
+log_archive_dest_21                           string                                                                                                   
+log_archive_dest_22                           string                                                                                                   
+log_archive_dest_23                           string                                                                                                   
+log_archive_dest_24                           string                                                                                                   
+log_archive_dest_25                           string                                                                                                   
+log_archive_dest_26                           string                                                                                                   
+log_archive_dest_27                           string                                                                                                   
+log_archive_dest_28                           string                                                                                                   
+log_archive_dest_29                           string                                                                                                   
+log_archive_dest_3                            string                                                                                                   
+log_archive_dest_30                           string                                                                                                   
+log_archive_dest_31                           string                                                                                                   
+log_archive_dest_4                            string                                                                                                   
+log_archive_dest_5                            string                                                                                                   
+log_archive_dest_6                            string                                                                                                   
+log_archive_dest_7                            string                                                                                                   
+log_archive_dest_8                            string                                                                                                   
+log_archive_dest_9                            string                                                                                                   
+log_archive_dest_state_1                      string      enable                                                                                       
+log_archive_dest_state_10                     string      enable                                                                                       
+log_archive_dest_state_11                     string      enable                                                                                       
+log_archive_dest_state_12                     string      enable                                                                                       
+log_archive_dest_state_13                     string      enable                                                                                       
+log_archive_dest_state_14                     string      enable                                                                                       
+log_archive_dest_state_15                     string      enable                                                                                       
+log_archive_dest_state_16                     string      enable                                                                                       
+log_archive_dest_state_17                     string      enable                                                                                       
+log_archive_dest_state_18                     string      enable                                                                                       
+log_archive_dest_state_19                     string      enable                                                                                       
+log_archive_dest_state_2                      string      enable                                                                                       
+log_archive_dest_state_20                     string      enable                                                                                       
+log_archive_dest_state_21                     string      enable                                                                                       
+log_archive_dest_state_22                     string      enable                                                                                       
+log_archive_dest_state_23                     string      enable                                                                                       
+log_archive_dest_state_24                     string      enable                                                                                       
+log_archive_dest_state_25                     string      enable                                                                                       
+log_archive_dest_state_26                     string      enable                                                                                       
+log_archive_dest_state_27                     string      enable                                                                                       
+log_archive_dest_state_28                     string      enable                                                                                       
+log_archive_dest_state_29                     string      enable                                                                                       
+log_archive_dest_state_3                      string      enable                                                                                       
+log_archive_dest_state_30                     string      enable                                                                                       
+log_archive_dest_state_31                     string      enable                                                                                       
+log_archive_dest_state_4                      string      enable                                                                                       
+log_archive_dest_state_5                      string      enable                                                                                       
+log_archive_dest_state_6                      string      enable                                                                                       
+log_archive_dest_state_7                      string      enable                                                                                       
+log_archive_dest_state_8                      string      enable                                                                                       
+log_archive_dest_state_9                      string      enable                                                                                       
+log_archive_duplex_dest                       string                                                                                                   
+log_archive_format                            string      %t_%s_%r.dbf                                                                                 
+log_archive_max_processes                     integer     4                                                                                            
+log_archive_min_succeed_dest                  integer     1                                                                                            
+log_archive_trace                             integer     0                                                                                            
+log_buffer                                    big integer 8288K                                                                                        
+log_checkpoint_interval                       integer     0                                                                                            
+log_checkpoint_timeout                        integer     1800                                                                                         
+log_checkpoints_to_alert                      boolean     FALSE                                                                                        
+log_file_name_convert                         string                                                                                                   
+long_module_action                            boolean     TRUE                                                                                         
+main_workload_type                            string      OLTP                                                                                         
+mandatory_user_profile                        string                                                                                                   
+max_auth_servers                              integer     25                                                                                           
+max_columns                                   string      STANDARD                                                                                     
+max_datapump_jobs_per_pdb                     string      AUTO                                                                                         
+max_datapump_parallel_per_job                 string      AUTO                                                                                         
+max_dispatchers                               integer                                                                                                  
+max_dump_file_size                            string      1G                                                                                           
+max_idle_blocker_time                         integer     0                                                                                            
+max_idle_time                                 integer     0                                                                                            
+max_iops                                      integer     0                                                                                            
+max_mbps                                      integer     0                                                                                            
+max_pdbs                                      integer     254                                                                                          
+max_saga_duration                             integer     86400                                                                                        
+max_shared_servers                            integer                                                                                                  
+max_string_size                               string      STANDARD                                                                                     
+memoptimize_pool_size                         big integer 0                                                                                            
+memoptimize_write_area_size                   big integer 0                                                                                            
+memoptimize_writes                            string      HINT                                                                                         
+memory_max_size                               big integer 0                                                                                            
+memory_max_target                             big integer 0                                                                                            
+memory_size                                   big integer 0                                                                                            
+memory_target                                 big integer 0                                                                                            
+mfa_duo_api_host                              string                                                                                                   
+mfa_oma_iam_domain_url                        string                                                                                                   
+mfa_sender_email_displayname                  string                                                                                                   
+mfa_sender_email_id                           string                                                                                                   
+mfa_smtp_host                                 string                                                                                                   
+mfa_smtp_port                                 integer     587                                                                                          
+min_auth_servers                              integer     1                                                                                            
+mle_prog_languages                            string      all                                                                                          
+multishard_query_data_consistency             string      strong                                                                                       
+multishard_query_partial_results              string      not allowed                                                                                  
+native_blockchain_features                    string                                                                                                   
+nls_calendar                                  string      GREGORIAN                                                                                    
+nls_comp                                      string      BINARY                                                                                       
+nls_currency                                  string      $                                                                                            
+nls_date_format                               string      DD-MON-RR                                                                                    
+nls_date_language                             string      AMERICAN                                                                                     
+nls_dual_currency                             string      $                                                                                            
+nls_iso_currency                              string      AMERICA                                                                                      
+nls_language                                  string      AMERICAN                                                                                     
+nls_length_semantics                          string      BYTE                                                                                         
+nls_nchar_conv_excp                           string      FALSE                                                                                        
+nls_numeric_characters                        string      .,                                                                                           
+nls_sort                                      string      BINARY                                                                                       
+nls_territory                                 string      AMERICA                                                                                      
+nls_time_format                               string      HH.MI.SSXFF AM                                                                               
+nls_time_tz_format                            string      HH.MI.SSXFF AM TZR                                                                           
+nls_timestamp_format                          string      DD-MON-RR HH.MI.SSXFF AM                                                                     
+nls_timestamp_tz_format                       string      DD-MON-RR HH.MI.SSXFF AM TZR                                                                 
+noncdb_compatible                             boolean     FALSE                                                                                        
+object_cache_max_size_percent                 integer     10                                                                                           
+object_cache_optimal_size                     integer     51200000                                                                                     
+ofs_threads                                   integer     4                                                                                            
+olap_page_pool_size                           big integer 0                                                                                            
+one_step_plugin_for_pdb_with_tde              boolean     FALSE                                                                                        
+open_cursors                                  integer     300                                                                                          
+open_links                                    integer     4                                                                                            
+open_links_per_instance                       integer     4                                                                                            
+optimizer_adaptive_plans                      boolean     TRUE                                                                                         
+optimizer_adaptive_reporting_only             boolean     FALSE                                                                                        
+optimizer_adaptive_statistics                 boolean     FALSE                                                                                        
+optimizer_capture_sql_plan_baselines          boolean     FALSE                                                                                        
+optimizer_capture_sql_quarantine              boolean     FALSE                                                                                        
+optimizer_cross_shard_resiliency              boolean     FALSE                                                                                        
+optimizer_dynamic_sampling                    integer     2                                                                                            
+optimizer_features_enable                     string      23.1.0                                                                                       
+optimizer_ignore_hints                        boolean     FALSE                                                                                        
+optimizer_ignore_parallel_hints               boolean     FALSE                                                                                        
+optimizer_index_caching                       integer     0                                                                                            
+optimizer_index_cost_adj                      integer     100                                                                                          
+optimizer_inmemory_aware                      boolean     TRUE                                                                                         
+optimizer_mode                                string      ALL_ROWS                                                                                     
+optimizer_real_time_statistics                boolean     FALSE                                                                                        
+optimizer_secure_view_merging                 boolean                                                                                                  
+optimizer_session_type                        string      NORMAL                                                                                       
+optimizer_use_invisible_indexes               boolean     FALSE                                                                                        
+optimizer_use_pending_statistics              boolean     FALSE                                                                                        
+optimizer_use_sql_plan_baselines              boolean     TRUE                                                                                         
+optimizer_use_sql_quarantine                  boolean     TRUE                                                                                         
+os_authent_prefix                             string      ops$                                                                                         
+os_roles                                      boolean     FALSE                                                                                        
+outbound_dblink_protocols                     string      ALL                                                                                          
+parallel_adaptive_multi_user                  boolean     FALSE                                                                                        
+parallel_degree_limit                         string      CPU                                                                                          
+parallel_degree_policy                        string      MANUAL                                                                                       
+parallel_execution_message_size               integer     16384                                                                                        
+parallel_force_local                          boolean     FALSE                                                                                        
+parallel_instance_group                       string                                                                                                   
+parallel_max_servers                          integer     80                                                                                           
+parallel_min_degree                           string      1                                                                                            
+parallel_min_percent                          integer     0                                                                                            
+parallel_min_servers                          integer     8                                                                                            
+parallel_min_time_threshold                   string      AUTO                                                                                         
+parallel_servers_target                       integer     80                                                                                           
+parallel_threads_per_cpu                      integer     1                                                                                            
+paranoid_concurrency_mode                     boolean     FALSE                                                                                        
+pdb_file_name_convert                         string                                                                                                   
+pdb_lockdown                                  string                                                                                                   
+pdb_os_credential                             string                                                                                                   
+pdb_template                                  string                                                                                                   
+pdc_file_size                                 big integer 4100K                                                                                        
+permit_92_wrap_format                         boolean     FALSE                                                                                        
+pga_aggregate_limit                           big integer 2G                                                                                           
+pga_aggregate_target                          big integer 1000M                                                                                        
+pkcs11_library_location                       string                                                                                                   
+plscope_settings                              string      IDENTIFIERS:NONE                                                                             
+plsql_ccflags                                 string                                                                                                   
+plsql_code_type                               string      INTERPRETED                                                                                  
+plsql_debug                                   boolean     FALSE                                                                                        
+plsql_function_dynamic_stats                  string      PREFERENCE                                                                                   
+plsql_implicit_conversion_bool                boolean     FALSE                                                                                        
+plsql_optimize_level                          integer     2                                                                                            
+plsql_v2_compatibility                        boolean     FALSE                                                                                        
+plsql_warnings                                string      DISABLE:ALL                                                                                  
+pmem_filestore                                string                                                                                                   
+pre_page_sga                                  boolean     TRUE                                                                                         
+priority_txns_high_wait_target                integer     2147483647                                                                                   
+priority_txns_medium_wait_target              integer     2147483647                                                                                   
+priority_txns_mode                            string      ROLLBACK                                                                                     
+private_temp_table_prefix                     string      ORA$PTT_                                                                                     
+processes                                     integer     320                                                                                          
+processor_group_name                          string                                                                                                   
+query_rewrite_enabled                         string      TRUE                                                                                         
+query_rewrite_integrity                       string      enforced                                                                                     
+rdbms_server_dn                               string                                                                                                   
+read_only                                     boolean     FALSE                                                                                        
+read_only_open_delayed                        boolean     FALSE                                                                                        
+recovery_parallelism                          integer     0                                                                                            
+recyclebin                                    string      on                                                                                           
+redo_transport_user                           string                                                                                                   
+remote_dependencies_mode                      string      TIMESTAMP                                                                                    
+remote_listener                               string                                                                                                   
+remote_login_passwordfile                     string      EXCLUSIVE                                                                                    
+remote_os_roles                               boolean     FALSE                                                                                        
+remote_recovery_file_dest                     string                                                                                                   
+replication_dependency_tracking               boolean     TRUE                                                                                         
+resource_limit                                boolean     TRUE                                                                                         
+resource_manage_goldengate                    boolean     FALSE                                                                                        
+resource_manager_cpu_allocation               integer     0                                                                                            
+resource_manager_cpu_scope                    string      INSTANCE_ONLY                                                                                
+resource_manager_plan                         string                                                                                                   
+result_cache_auto_blocklist                   string      ON                                                                                           
+result_cache_execution_threshold              integer     2                                                                                            
+result_cache_integrity                        string      TRUSTED                                                                                      
+result_cache_max_result                       integer     5                                                                                            
+result_cache_max_size                         big integer 15872K                                                                                       
+result_cache_max_temp_result                  integer     5                                                                                            
+result_cache_max_temp_size                    big integer 155M                                                                                         
+result_cache_mode                             string      MANUAL                                                                                       
+result_cache_remote_expiration                integer     0                                                                                            
+resumable_timeout                             integer     0                                                                                            
+rman_restore_file_storage_metadata            boolean     FALSE                                                                                        
+rollback_segments                             string                                                                                                   
+run_addm_for_awr_report                       string      NONE                                                                                         
+saga_hist_retention                           integer     43200                                                                                        
+saga_msg_framework                            string      classic_queue                                                                                
+scheduler_follow_pdbtz                        boolean     FALSE                                                                                        
+sec_max_failed_login_attempts                 integer     3                                                                                            
+sec_protocol_error_further_action             string      (DROP,3)                                                                                     
+sec_protocol_error_trace_action               string      TRACE                                                                                        
+sec_return_server_release_banner              boolean     FALSE                                                                                        
+serial_reuse                                  string      disable                                                                                      
+service_names                                 string      orclcdb.example.com                                                                          
+session_cached_cursors                        integer     50                                                                                           
+session_exit_on_package_state_error           boolean     FALSE                                                                                        
+session_max_open_files                        integer     10                                                                                           
+sessions                                      integer     504                                                                                          
+sga_max_size                                  big integer 3008M                                                                                        
+sga_min_size                                  big integer 0                                                                                            
+sga_target                                    big integer 3008M                                                                                        
+shadow_core_dump                              string      partial                                                                                      
+shard_apply_max_memory_size                   big integer 0                                                                                            
+shard_enable_raft_follower_read               boolean     FALSE                                                                                        
+shard_queries_restricted_by_key               boolean     FALSE                                                                                        
+shard_raft_logfile_size                       big integer 1G                                                                                           
+shared_memory_address                         integer     0                                                                                            
+shared_pool_reserved_size                     big integer 43452989                                                                                     
+shared_pool_size                              big integer 0                                                                                            
+shared_server_sessions                        integer                                                                                                  
+shared_servers                                integer     1                                                                                            
+shrd_dupl_table_refresh_rate                  integer     60                                                                                           
+skip_unusable_indexes                         boolean     TRUE                                                                                         
+smtp_out_server                               string                                                                                                   
+soda_behavior                                 string                                                                                                   
+sort_area_retained_size                       integer     0                                                                                            
+sort_area_size                                integer     65536                                                                                        
+spatial_vector_acceleration                   boolean     TRUE                                                                                         
+spfile                                        string      /u01/app/oracle/product/23.0.0/dbhome_1/dbs/spfileorclcdb.ora                                
+sql92_security                                boolean     TRUE                                                                                         
+sql_error_mitigation                          string      on                                                                                           
+sql_history_enabled                           boolean     FALSE                                                                                        
+sql_trace                                     boolean     FALSE                                                                                        
+sql_transpiler                                string      OFF                                                                                          
+sqltune_category                              string      DEFAULT                                                                                      
+ssl_wallet                                    string                                                                                                   
+standby_db_preserve_states                    string      NONE                                                                                         
+standby_file_management                       string      MANUAL                                                                                       
+standby_parse_limit_seconds                   integer     300                                                                                          
+standby_pdb_source_file_dblink                string                                                                                                   
+standby_pdb_source_file_directory             string                                                                                                   
+star_transformation_enabled                   string      FALSE                                                                                        
+statement_redirect_service                    string                                                                                                   
+statistics_level                              string      TYPICAL                                                                                      
+streams_pool_size                             big integer 0                                                                                            
+sysdate_at_dbtimezone                         boolean     FALSE                                                                                        
+tablespace_encryption                         string      MANUAL_ENABLE                                                                                
+tablespace_encryption_default_algorithm       string      AES256                                                                                       
+tablespace_encryption_default_cipher_mode     string      XTS                                                                                          
+tape_asynch_io                                boolean     TRUE                                                                                         
+target_pdbs                                   integer     5                                                                                            
+tde_configuration                             string                                                                                                   
+tde_key_cache                                 boolean     FALSE                                                                                        
+temp_undo_enabled                             boolean     FALSE                                                                                        
+thread                                        integer     0                                                                                            
+threaded_execution                            boolean     FALSE                                                                                        
+time_at_dbtimezone                            string      off                                                                                          
+timed_os_statistics                           integer     0                                                                                            
+timed_statistics                              boolean     TRUE                                                                                         
+timezone_version_upgrade_integrity            string      enforced                                                                                     
+timezone_version_upgrade_online               boolean     FALSE                                                                                        
+trace_enabled                                 boolean     TRUE                                                                                         
+tracefile_content_classification              string      DEFAULT                                                                                      
+tracefile_identifier                          string                                                                                                   
+transaction_recovery                          string      ENABLED                                                                                      
+transactions                                  integer     554                                                                                          
+transactions_per_rollback_segment             integer     5                                                                                            
+true_cache                                    boolean     FALSE                                                                                        
+true_cache_config                             string                                                                                                   
+txn_auto_rollback_high_priority_wait_target   integer     2147483647                                                                                   
+txn_auto_rollback_medium_priority_wait_target integer     2147483647                                                                                   
+txn_auto_rollback_mode                        string      ROLLBACK                                                                                     
+txn_priority                                  string      HIGH                                                                                         
+undo_management                               string      AUTO                                                                                         
+undo_retention                                integer     900                                                                                          
+undo_tablespace                               string      UNDOTBS1                                                                                     
+unified_audit_common_systemlog                string                                                                                                   
+unified_audit_systemlog                       string                                                                                                   
+unified_audit_trail_exclude_columns           string      NONE                                                                                         
+uniform_log_timestamp_format                  boolean     TRUE                                                                                         
+use_dedicated_broker                          string      NONE                                                                                         
+use_large_pages                               string      TRUE                                                                                         
+user_dump_dest                                string      /u01/app/oracle/product/23.0.0/dbhome_1/rdbms/log                                            
+vector_index_neighbor_graph_reload            string      RESTART                                                                                      
+vector_memory_size                            big integer 0                                                                                            
+vector_query_capture                          string      ON                                                                                           
+wallet_root                                   string                                                                                                   
+workarea_size_policy                          string      AUTO                                                                                         
+xml_client_side_decoding                      string      true                                                                                         
+xml_db_events                                 string      enable                                                                                       
+xml_handling_of_invalid_chars                 string      raise_error                                                                                  
+xml_params                                    string                                                                                                   
+SQL> 
+```
 
 ### Good Day
 
