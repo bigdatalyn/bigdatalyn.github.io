@@ -644,7 +644,7 @@ container_data                                string      ALL
 containers_parallel_degree                    integer     65535  
 control_file_record_keep_time                 integer     7      
 control_files                                 string      /u01/app/oracle/oradata/ORCLCDB/control01.ctl, /u01/app/oracle/oradata/ORCLCDB/control02.ctl 
-control_management_pack_access                string      DIAGNOSTIC+TUNING                                    
+control_management_pack_access                string      DIAGNOSTIC+TUNING
 core_dump_dest                                string      /u01/app/oracle/diag/rdbms/orclcdb/orclcdb/cdump     
 cpu_count                                     string      4      
 cpu_min_count                                 string      4      
@@ -710,12 +710,12 @@ deferred_segment_creation                     boolean     TRUE
 dg_broker_config_file1                        string      /u01/app/oracle/product/23.0.0/dbhome_1/dbs/dr1orclcdb.dat                                   
 dg_broker_config_file2                        string      /u01/app/oracle/product/23.0.0/dbhome_1/dbs/dr2orclcdb.dat                                   
 dg_broker_start                               boolean     FALSE  
-diagnostic_dest                               string      /u01/app/oracle                                      
+diagnostic_dest                               string      /u01/app/oracle
 diagnostics_control                           string      IGNORE       
 directory_prefixes_allowed                    string             
 disable_pdb_feature                           big integer 0      
 disk_asynch_io                                boolean     TRUE   
-dispatchers                                   string      (PROTOCOL=TCP) (SERVICE=orclcdbXDB)                  
+dispatchers                                   string      (PROTOCOL=TCP) (SERVICE=orclcdbXDB)
 distributed_lock_timeout                      integer     60     
 dml_locks                                     integer     2216   
 dnfs_batch_size                               integer     4096   
@@ -803,7 +803,7 @@ license_sessions_warning                      integer     0
 listener_networks                             string             
 load_without_compile                          string      none   
 lob_signature_enable                          boolean     FALSE  
-local_listener                                string      LISTENER_ORCLCDB                                     
+local_listener                                string      LISTENER_ORCLCDB
 lock_name_space                               string             
 lock_sga                                      boolean     FALSE  
 lockdown_errors                               string      RAISE  
@@ -873,7 +873,7 @@ log_archive_dest_state_7                      string      enable
 log_archive_dest_state_8                      string      enable       
 log_archive_dest_state_9                      string      enable       
 log_archive_duplex_dest                       string             
-log_archive_format                            string      %t_%s_%r.dbf                                         
+log_archive_format                            string      %t_%s_%r.dbf
 log_archive_max_processes                     integer     4      
 log_archive_min_succeed_dest                  integer     1      
 log_archive_trace                             integer     0      
@@ -930,10 +930,10 @@ nls_nchar_conv_excp                           string      FALSE
 nls_numeric_characters                        string      .,     
 nls_sort                                      string      BINARY       
 nls_territory                                 string      AMERICA      
-nls_time_format                               string      HH.MI.SSXFF AM                                       
-nls_time_tz_format                            string      HH.MI.SSXFF AM TZR                                   
-nls_timestamp_format                          string      DD-MON-RR HH.MI.SSXFF AM                             
-nls_timestamp_tz_format                       string      DD-MON-RR HH.MI.SSXFF AM TZR                         
+nls_time_format                               string      HH.MI.SSXFF AM
+nls_time_tz_format                            string      HH.MI.SSXFF AM TZR
+nls_timestamp_format                          string      DD-MON-RR HH.MI.SSXFF AM
+nls_timestamp_tz_format                       string      DD-MON-RR HH.MI.SSXFF AM TZR
 noncdb_compatible                             boolean     FALSE  
 object_cache_max_size_percent                 integer     10     
 object_cache_optimal_size                     integer     51200000     
@@ -990,7 +990,7 @@ permit_92_wrap_format                         boolean     FALSE
 pga_aggregate_limit                           big integer 2G     
 pga_aggregate_target                          big integer 1000M  
 pkcs11_library_location                       string             
-plscope_settings                              string      IDENTIFIERS:NONE                                     
+plscope_settings                              string      IDENTIFIERS:NONE
 plsql_ccflags                                 string             
 plsql_code_type                               string      INTERPRETED  
 plsql_debug                                   boolean     FALSE  
@@ -1024,7 +1024,7 @@ replication_dependency_tracking               boolean     TRUE
 resource_limit                                boolean     TRUE   
 resource_manage_goldengate                    boolean     FALSE  
 resource_manager_cpu_allocation               integer     0      
-resource_manager_cpu_scope                    string      INSTANCE_ONLY                                        
+resource_manager_cpu_scope                    string      INSTANCE_ONLY
 resource_manager_plan                         string             
 result_cache_auto_blocklist                   string      ON     
 result_cache_execution_threshold              integer     2      
@@ -1040,14 +1040,14 @@ rman_restore_file_storage_metadata            boolean     FALSE
 rollback_segments                             string             
 run_addm_for_awr_report                       string      NONE   
 saga_hist_retention                           integer     43200  
-saga_msg_framework                            string      classic_queue                                        
+saga_msg_framework                            string      classic_queue
 scheduler_follow_pdbtz                        boolean     FALSE  
 sec_max_failed_login_attempts                 integer     3      
 sec_protocol_error_further_action             string      (DROP,3)     
 sec_protocol_error_trace_action               string      TRACE  
 sec_return_server_release_banner              boolean     FALSE  
 serial_reuse                                  string      disable      
-service_names                                 string      orclcdb.example.com                                  
+service_names                                 string      orclcdb.example.com
 session_cached_cursors                        integer     50     
 session_exit_on_package_state_error           boolean     FALSE  
 session_max_open_files                        integer     10     
@@ -1090,7 +1090,7 @@ statement_redirect_service                    string
 statistics_level                              string      TYPICAL      
 streams_pool_size                             big integer 0      
 sysdate_at_dbtimezone                         boolean     FALSE  
-tablespace_encryption                         string      MANUAL_ENABLE                                        
+tablespace_encryption                         string      MANUAL_ENABLE
 tablespace_encryption_default_algorithm       string      AES256       
 tablespace_encryption_default_cipher_mode     string      XTS    
 tape_asynch_io                                boolean     TRUE   
