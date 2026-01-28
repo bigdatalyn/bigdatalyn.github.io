@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Oracle 26ai 23.26.1 OnP Tips"
+title: "Oracle 26ai 23.26.1 OnP Install Tips"
 category: Oracle
 tags: Oracle 26ai Tips
 ---
