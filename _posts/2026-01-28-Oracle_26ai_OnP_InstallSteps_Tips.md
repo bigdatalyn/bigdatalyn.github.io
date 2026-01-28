@@ -1139,6 +1139,39 @@ xml_params                                    string
 SQL> 
 ```
 
+### New Features in 23.26.1
+
+The New Features Guide summarizes the enhancements in 23.26.1 .
+
+[Release Update 23.26.1](https://docs.oracle.com/en/database/oracle/oracle-database/26/nfcoa/ru23_26_1.html)
+
+- ALTER INDEX Support for JSON Search Index
+- Aggregation Filters
+- Auto IVF Vector Index Reorganization
+- Calendar Functions
+- Configuration and Member Tagging for Oracle Data Guard
+- DBMS_SECUREFILES Package for SecureFile LOBs
+- Database Observability
+- Distributed HNSW Indexes with RAC
+- Enable Larger ONNX-Format Models
+- Included Columns with HNSW Indexes
+- JavaScript Web API for In-Database JavaScript
+- Kerberos Constrained Delegation for DB Links
+- Migrating LOBs Made Easier
+- Network Monitor
+- Online Index Rebuild
+- Partition by Expression
+- Post-Quantum Cryptography Support
+- Scalar Quantized HNSW Indexes
+- Select AI with RAG and Synthetic Data Generation
+- Simple Dot-Notation Syntax for JSON Indexes
+- Simplifying Data Integrity Using Assertions
+- Smart Connection Rebalance Recommendation
+- Support for DATEDIFF Function in Oracle
+- Support to Create SQL Property Graphs from Database Views
+- True Cache Support in OCI Session Pools
+- Vector Data Type Support in Precompiler
+
 ### Good Day
 
 Have a good work&life! 2026/01 via LinHong
