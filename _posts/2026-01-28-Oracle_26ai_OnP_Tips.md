@@ -16,26 +16,27 @@ Oracle AI Database 26ai (23.26.1) Enterprise Edition for Linux x86-64 will be of
 
 These software download locations will display links for this release at that time:
 
-https://www.oracle.com/database/free/get-started/
+- [get-started](https://www.oracle.com/database/free/get-started/)
 
-https://edelivery.oracle.com
+- [edelivery](https://edelivery.oracle.com)
 
-https://www.oracle.com/database/technologies/oracle-database-software-downloads.html
+- [oracle-database-software-downloads](https://www.oracle.com/database/technologies/oracle-database-software-downloads.html)
 
-https://www.oracle.com/database/technologies/oracle26ai-linux-downloads.html
+- [oracle26ai-linux-downloads](https://www.oracle.com/database/technologies/oracle26ai-linux-downloads.html)
 
-https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html
+- [instant-client](https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html)
 
 An announcement blog post GA of Oracle AI Database 26ai for Linux x86-64 on-premises platforms:
 
-https://blogs.oracle.com/database/?p=3837
+- [announcement blog](https://blogs.oracle.com/database/?p=3837)
 
+V1054592-01.zip
 
 ![ords]({{ "/files/Oracle/26ai/20260127_download.jpg"}})	
 
 ### Install 26ai 
 
-- V1054592-01.zip
+
 
 
 
