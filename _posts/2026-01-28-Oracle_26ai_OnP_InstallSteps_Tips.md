@@ -34,6 +34,13 @@ V1054592-01.zip
 
 ![ords]({{ "/files/Oracle/26ai/20260127_download.jpg"}})	
 
+
+
+
+
+
+
+
 ### Install 26ai 
 
 [Database Installation Guide for Linux](https://docs.oracle.com/en/database/oracle/oracle-database/26/ladbi/index.html)
