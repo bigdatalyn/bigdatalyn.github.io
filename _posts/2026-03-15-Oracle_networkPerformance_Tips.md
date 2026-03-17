@@ -35,6 +35,26 @@ On the client instance, run iperf3 in client mode and specify the private IP add
 iperf3 -c <server_instance_private_ip_address>
 ```
 
+### qperf
+
+[qperf をインストールして TCP, UDP レイテンシ(遅延)をマイクロ秒(μs)単位で測定してみてみた](https://qiita.com/shirok/items/7ee5cc026ef8227843ff)
+
+Network Test Prerequisites
+Latency and throughput are measured by iperf3 and qperf (installed on Exadata by default).
+
+[Network Tests](https://docs.oracle.com/en/database/oracle/oracle-database/26/haovw/maa-evaluations-multicloud-solutions.html)
+
+```
+Run the following tests multiple times to ensure consistency.
+It is recommended that the tests be run at different times of the day to ensure consistency throughout.
+For database server VMs, these tests should minimally be performed between one VM of the primary cluster and one VM of the standby database cluster. Additional tests can be performed on all database servers to ensure consistency.
+All iperf3 and qperf commands should be run as root (sudo su - from opc user).
+For iperf3 tests, you can optionally use the -f M parameter to display bitrate results in MB/s.
+```
+
+
+
+
 ### perf-check.py
 
 perf-check.py
