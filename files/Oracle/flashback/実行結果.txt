@@ -1,0 +1,553 @@
+SELECT name,
+       log_mode,
+       flashback_on,
+       open_mode,
+       database_role
+FROM   v$database;
+
+
+NAME    LOG_MODE   FLASHBACK_ON OPEN_MODE  DATABASE_ROLE 
+------- ---------- ------------ ---------- ------------- 
+E2O1POD ARCHIVELOG YES          READ WRITE PRIMARY       
+
+
+経過時間: 00:00:00.037
+1行が選択されました。
+
+SHOW PARAMETER recyclebin
+
+NAME       TYPE   VALUE 
+---------- ------ ----- 
+recyclebin string on    
+
+
+SELECT name, value
+FROM   v$parameter
+WHERE  name = 'recyclebin';
+
+NAME       VALUE 
+---------- ----- 
+recyclebin on    
+
+
+経過時間: 00:00:00.010
+1行が選択されました。
+
+
+SELECT object_name,
+       original_name,
+       operation,
+       type,
+       droptime
+FROM   user_recyclebin
+ORDER  BY droptime DESC;
+
+OBJECT_NAME                    ORIGINAL_NAME             OPERATION TYPE      DROPTIME            
+------------------------------ ------------------------- --------- --------- ------------------- 
+SYS_LOB0000115014C00003$$      SYS_LOB0000115014C00003$$ TRUNCATE  TABLE     2025-05-19:09:17:15 
+SYS_IL0000115014C00003$$       SYS_IL0000115014C00003$$  TRUNCATE  TABLE     2025-05-19:09:17:15 
+SYS_LOB0000115014C00002$$      SYS_LOB0000115014C00002$$ TRUNCATE  TABLE     2025-05-19:09:17:15 
+SYS_IL0000115014C00002$$       SYS_IL0000115014C00002$$  TRUNCATE  TABLE     2025-05-19:09:17:15 
+WIKISAMPLE_V                   WIKISAMPLE_V              TRUNCATE  TABLE     2025-05-19:09:17:15 
+SYS_LOB0000115014C00002$$      SYS_LOB0000115014C00002$$ TRUNCATE  TABLE     2025-05-19:08:51:54 
+SYS_IL0000115014C00003$$       SYS_IL0000115014C00003$$  TRUNCATE  TABLE     2025-05-19:08:51:54 
+WIKISAMPLE_V                   WIKISAMPLE_V              TRUNCATE  TABLE     2025-05-19:08:51:54 
+SYS_LOB0000115014C00003$$      SYS_LOB0000115014C00003$$ TRUNCATE  TABLE     2025-05-19:08:51:54 
+SYS_IL0000115014C00002$$       SYS_IL0000115014C00002$$  TRUNCATE  TABLE     2025-05-19:08:51:54 
+BIN$NXn5fysPoZTgY3wXAApuXw==$0 SYS_IL0000114937C00002$$  DROP      LOB INDEX 2025-05-19:08:32:38 
+BIN$NXn5fysRoZTgY3wXAApuXw==$0 SYS_LOB0000114937C00003$$ DROP      LOB       2025-05-19:08:32:38 
+BIN$NXn5fysSoZTgY3wXAApuXw==$0 WIKISAMPLE                DROP      TABLE     2025-05-19:08:32:38 
+BIN$NXn5fysQoZTgY3wXAApuXw==$0 SYS_LOB0000114937C00002$$ DROP      LOB       2025-05-19:08:32:38 
+BIN$NXn5fysOoZTgY3wXAApuXw==$0 SYS_IL0000114937C00003$$  DROP      LOB INDEX 2025-05-19:08:32:38 
+BIN$NTy5wNuGJHHgY3wXAAqgdw==$0 SYS_LOB0000114219C00002$$ DROP      LOB       2025-05-16:07:28:16 
+BIN$NTy5wNuHJHHgY3wXAAqgdw==$0 WIKISAMPLE                DROP      TABLE     2025-05-16:07:28:16 
+BIN$NTy5wNuFJHHgY3wXAAqgdw==$0 SYS_IL0000114219C00002$$  DROP      LOB INDEX 2025-05-16:07:28:16 
+BIN$NTy5wNuEJHHgY3wXAAqgdw==$0 INSUR_CUST_LTV_SAMPLE     DROP      TABLE     2025-05-16:07:28:16 
+BIN$NTy5wNuDJHHgY3wXAAqgdw==$0 ODMR_CARS_DATA            DROP      TABLE     2025-05-16:07:28:16 
+BIN$NTxbqsvzNnfgY3wXAAp19g==$0 ODMR_SALES_DATA           DROP      TABLE     2025-05-16:07:10:33 
+BIN$NTxbqsvyNnfgY3wXAAp19g==$0 ODMR_MINING_DATA_TEXT     DROP      TABLE     2025-05-16:07:10:17 
+BIN$NTxbqsvvNnfgY3wXAAp19g==$0 SYS_IL0000113971C00001$$  DROP      LOB INDEX 2025-05-16:07:09:49 
+BIN$NTxbqsvwNnfgY3wXAAp19g==$0 SYS_LOB0000113971C00001$$ DROP      LOB       2025-05-16:07:09:49 
+BIN$NTxbqsvxNnfgY3wXAAp19g==$0 ODMR_SALES_JSON_DATA      DROP      TABLE     2025-05-16:07:09:49 
+BIN$NTwU4J7XWrzgY3wXAApQxA==$0 SYS_LOB0000113974C00002$$ DROP      LOB       2025-05-16:07:00:03 
+BIN$NTwU4J7YWrzgY3wXAApQxA==$0 WIKISAMPLE                DROP      TABLE     2025-05-16:07:00:03 
+BIN$NTwU4J7UWrzgY3wXAApQxA==$0 ODMR_CARS_DATA            DROP      TABLE     2025-05-16:07:00:03 
+BIN$NTwU4J7VWrzgY3wXAApQxA==$0 INSUR_CUST_LTV_SAMPLE     DROP      TABLE     2025-05-16:07:00:03 
+BIN$NTwU4J7WWrzgY3wXAApQxA==$0 SYS_IL0000113974C00002$$  DROP      LOB INDEX 2025-05-16:07:00:03 
+BIN$NTwU4J7TWrzgY3wXAApQxA==$0 ODMR_SALES_DATA           DROP      TABLE     2025-05-16:06:47:52 
+BIN$NTwU4J7SWrzgY3wXAApQxA==$0 ODMR_SALES_JSON_DATA      DROP      TABLE     2025-05-16:06:47:07 
+BIN$NTwU4J7QWrzgY3wXAApQxA==$0 SYS_IL0000113723C00001$$  DROP      LOB INDEX 2025-05-16:06:47:07 
+BIN$NTwU4J7RWrzgY3wXAApQxA==$0 SYS_LOB0000113723C00001$$ DROP      LOB       2025-05-16:06:47:07 
+BIN$NTv5qY75BSjgY3wXAAqN5A==$0 INSUR_CUST_LTV_SAMPLE     DROP      TABLE     2025-05-16:06:39:22 
+BIN$NTv5qY77BSjgY3wXAAqN5A==$0 SYS_LOB0000113729C00002$$ DROP      LOB       2025-05-16:06:39:22 
+BIN$NTv5qY76BSjgY3wXAAqN5A==$0 SYS_IL0000113729C00002$$  DROP      LOB INDEX 2025-05-16:06:39:22 
+BIN$NTv5qY78BSjgY3wXAAqN5A==$0 WIKISAMPLE                DROP      TABLE     2025-05-16:06:39:22 
+BIN$NTv5qY74BSjgY3wXAAqN5A==$0 ODMR_CARS_DATA            DROP      TABLE     2025-05-16:06:39:22 
+BIN$NTv5qY73BSjgY3wXAAqN5A==$0 WIKISAMPLE                DROP      TABLE     2025-05-16:06:34:33 
+BIN$NTv5qY72BSjgY3wXAAqN5A==$0 SYS_LOB0000113726C00002$$ DROP      LOB       2025-05-16:06:34:33 
+BIN$NTv5qY71BSjgY3wXAAqN5A==$0 SYS_IL0000113726C00002$$  DROP      LOB INDEX 2025-05-16:06:34:33 
+
+
+経過時間: 00:00:00.046
+42行が選択されました。
+
+
+purge recyclebin;
+
+Recyclebinがパージされました。
+
+経過時間: 00:00:03.062
+
+
+SELECT object_name,
+       original_name,
+       operation,
+       type,
+       droptime
+FROM   user_recyclebin
+ORDER  BY droptime DESC;
+
+データが見つかりません
+
+SELECT name,
+       scn,
+       time,
+       storage_size,
+       guarantee_flashback_database
+FROM   v$restore_point;
+
+データが見つかりません
+
+
+SELECT log_mode FROM v$database;
+
+
+LOG_MODE   
+---------- 
+ARCHIVELOG 
+
+
+経過時間: 00:00:00.011
+1行が選択されました。
+
+SELECT name, value
+FROM   v$parameter
+WHERE  name IN ('undo_management', 'undo_tablespace', 'undo_retention');
+
+
+NAME            VALUE    
+--------------- -------- 
+undo_management AUTO     
+undo_tablespace UNDOTBS1 
+undo_retention  604800   
+
+
+経過時間: 00:00:00.012
+3行が選択されました。
+
+
+SELECT tablespace_name, retention
+FROM   dba_tablespaces
+WHERE  contents = 'UNDO';
+
+TABLESPACE_NAME RETENTION   
+--------------- ----------- 
+UNDOTBS1        NOGUARANTEE 
+UNDO_8          NOGUARANTEE 
+
+
+経過時間: 00:00:00.011
+2行が選択されました。
+
+SELECT MAX(tuned_undoretention) AS tuned_undoretention_sec
+FROM   v$undostat;
+
+TUNED_UNDORETENTION_SEC 
+----------------------- 
+                 417811 
+
+
+経過時間: 00:00:00.017
+1行が選択されました。
+
+
+
+Step 5
+
+
+Table FB_EMPLOYEESは作成されました。
+
+経過時間: 00:00:00.122
+
+
+Copy to clipboard
+
+
+1行挿入しました。
+
+経過時間: 00:00:00.033
+
+
+Copy to clipboard
+
+
+1行挿入しました。
+
+経過時間: 00:00:00.005
+
+
+Copy to clipboard
+
+
+1行挿入しました。
+
+経過時間: 00:00:00.004
+
+
+Copy to clipboard
+
+
+1行挿入しました。
+
+経過時間: 00:00:00.004
+
+
+Copy to clipboard
+
+
+1行挿入しました。
+
+経過時間: 00:00:00.004
+
+
+Copy to clipboard
+
+
+コミットが完了しました。
+
+経過時間: 00:00:00.003
+
+
+Copy to clipboard
+
+ROW_COUNT 
+--------- 
+        5 
+
+
+経過時間: 00:00:00.048
+1行が選択されました。
+
+Copy to clipboard
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME DEPARTMENT_ID SALARY UPDATED_AT                  
+----------- ---------- --------- ------------- ------ --------------------------- 
+        101 Taro       Yamada               10 500000 2026-08-16T07:21:14.503792Z 
+        102 Hanako     Suzuki               10 480000 2026-08-16T07:21:14.508962Z 
+        103 Jiro       Tanaka               20 520000 2026-08-16T07:21:14.513021Z 
+        104 Yuki       Watanabe             20 495000 2026-08-16T07:21:14.516992Z 
+        105 Kenji      Ito                  30 610000 2026-08-16T07:21:14.520977Z 
+
+
+経過時間: 00:00:00.013
+5行が選択されました。
+
+SELECT SYSTIMESTAMP                                AS before_delete_time,
+       DBMS_FLASHBACK.GET_SYSTEM_CHANGE_NUMBER     AS before_delete_scn
+FROM   dual;
+
+BEFORE_DELETE_TIME BEFORE_DELETE_SCN 
+------------------ ----------------- 
+2026/8/16 7:21:54     50298450312745 
+
+
+経過時間: 00:00:00.026
+1行が選択されました。
+
+
+-- 【事故の再現】部門 10 の従業員を削除してコミットしてしまう
+DELETE FROM fb_employees WHERE department_id = 10;
+
+COMMIT;
+
+-- 2 件が失われたことを確認する
+SELECT COUNT(*) AS row_count FROM fb_employees;
+SELECT * FROM fb_employees ORDER BY employee_id;
+
+
+
+2行削除されました。
+
+経過時間: 00:00:00.011
+
+
+Copy to clipboard
+
+
+コミットが完了しました。
+
+経過時間: 00:00:00.004
+
+
+Copy to clipboard
+
+ROW_COUNT 
+--------- 
+        3 
+
+
+経過時間: 00:00:00.003
+1行が選択されました。
+
+Copy to clipboard
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME DEPARTMENT_ID SALARY UPDATED_AT                  
+----------- ---------- --------- ------------- ------ --------------------------- 
+        103 Jiro       Tanaka               20 520000 2026-08-16T07:21:14.513021Z 
+        104 Yuki       Watanabe             20 495000 2026-08-16T07:21:14.516992Z 
+        105 Kenji      Ito                  30 610000 2026-08-16T07:21:14.520977Z 
+
+
+経過時間: 00:00:00.003
+3行が選択されました。
+
+
+SELECT DBMS_FLASHBACK.GET_SYSTEM_CHANGE_NUMBER AS current_scn FROM dual;
+
+
+   CURRENT_SCN 
+-------------- 
+50298476902707 
+
+
+経過時間: 00:00:00.005
+1行が選択されました。
+
+
+-- タイムスタンプから SCN を求める
+SELECT TIMESTAMP_TO_SCN(SYSTIMESTAMP - INTERVAL '10' MINUTE) AS scn_10min_ago
+FROM   dual;
+
+-- SCN からタイムスタンプを求める
+SELECT SCN_TO_TIMESTAMP(<調べたいSCN>) AS scn_time
+FROM   dual;
+
+
+ SCN_10MIN_AGO 
+-------------- 
+50298403403073 
+
+
+経過時間: 00:00:00.015
+1行が選択されました。
+
+
+-- SCN からタイムスタンプを求める
+SELECT SCN_TO_TIMESTAMP(50298403403073 ) AS scn_time
+FROM   dual;
+
+
+SCN_TIME             
+-------------------- 
+2026-08-16T07:12:59Z 
+
+
+経過時間: 00:00:00.015
+1行が選択されました。
+
+
+SELECT employee_id,
+       last_name,
+       ORA_ROWSCN                       AS row_scn,
+       SCN_TO_TIMESTAMP(ORA_ROWSCN)     AS row_change_time
+FROM   fb_employees
+ORDER  BY employee_id;
+
+
+EMPLOYEE_ID LAST_NAME        ROW_SCN ROW_CHANGE_TIME      
+----------- --------- -------------- -------------------- 
+        103 Tanaka    50298476826884 2026-08-16T07:22:20Z 
+        104 Watanabe  50298476826884 2026-08-16T07:22:20Z 
+        105 Ito       50298476826884 2026-08-16T07:22:20Z 
+
+
+経過時間: 00:00:00.008
+3行が選択されました。
+
+-- 1 分前の時点の件数
+SELECT COUNT(*) AS row_count
+FROM   fb_employees AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '1' MINUTE);
+
+-- 5 分前の時点の件数
+SELECT COUNT(*) AS row_count
+FROM   fb_employees AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '5' MINUTE);
+
+-- 10 分前の時点の件数
+SELECT COUNT(*) AS row_count
+FROM   fb_employees AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '10' MINUTE);
+
+
+ROW_COUNT 
+--------- 
+        3 
+
+
+経過時間: 00:00:00.006
+1行が選択されました。
+
+ROW_COUNT 
+--------- 
+        3 
+
+
+経過時間: 00:00:00.005
+1行が選択されました。
+
+Copy to clipboard
+
+ROW_COUNT 
+--------- 
+        5 
+
+
+経過時間: 00:00:00.004
+1行が選択されました。
+
+
+SELECT *
+FROM   fb_employees
+AS OF TIMESTAMP TO_TIMESTAMP('2026-08-16 07:21:59', 'YYYY-MM-DD HH24:MI:SS')
+WHERE  department_id = 10;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME DEPARTMENT_ID SALARY UPDATED_AT                  
+----------- ---------- --------- ------------- ------ --------------------------- 
+        101 Taro       Yamada               10 500000 2026-08-16T07:21:14.503792Z 
+        102 Hanako     Suzuki               10 480000 2026-08-16T07:21:14.508962Z 
+
+
+経過時間: 00:00:00.005
+2行が選択されました。
+
+SELECT *
+FROM   fb_employees
+AS OF TIMESTAMP (SYSTIMESTAMP - INTERVAL '10' MINUTE)
+WHERE  department_id = 10;
+
+
+
+
+SELECT *
+FROM   fb_employees
+AS OF SCN 50298450312745 
+WHERE  department_id = 10;
+
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME DEPARTMENT_ID SALARY UPDATED_AT                  
+----------- ---------- --------- ------------- ------ --------------------------- 
+        101 Taro       Yamada               10 500000 2026-08-16T07:21:14.503792Z 
+        102 Hanako     Suzuki               10 480000 2026-08-16T07:21:14.508962Z 
+
+
+経過時間: 00:00:00.007
+2行が選択されました。
+
+INSERT INTO fb_employees
+SELECT *
+FROM   fb_employees
+AS OF SCN 50298450312745 
+WHERE  department_id = 10;
+
+COMMIT;
+
+2行挿入しました。
+
+経過時間: 00:00:00.014
+
+
+Copy to clipboard
+
+
+コミットが完了しました。
+
+経過時間: 00:00:00.006
+
+
+-- 件数が元の 5 件に戻っていることを確認する
+SELECT COUNT(*) AS row_count FROM fb_employees;
+
+-- 全件の内容を確認する
+SELECT * FROM fb_employees ORDER BY employee_id;
+
+
+ROW_COUNT 
+--------- 
+        5 
+
+
+経過時間: 00:00:00.160
+1行が選択されました。
+
+Copy to clipboard
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME DEPARTMENT_ID SALARY UPDATED_AT                  
+----------- ---------- --------- ------------- ------ --------------------------- 
+        101 Taro       Yamada               10 500000 2026-08-16T07:21:14.503792Z 
+        102 Hanako     Suzuki               10 480000 2026-08-16T07:21:14.508962Z 
+        103 Jiro       Tanaka               20 520000 2026-08-16T07:21:14.513021Z 
+        104 Yuki       Watanabe             20 495000 2026-08-16T07:21:14.516992Z 
+        105 Kenji      Ito                  30 610000 2026-08-16T07:21:14.520977Z 
+
+
+経過時間: 00:00:00.024
+5行が選択されました。
+
+
+-- 削除直前には存在したが、現在は存在しない行（0 件であるべき）
+SELECT * FROM fb_employees AS OF SCN <削除直前の SCN>
+MINUS
+SELECT * FROM fb_employees;
+
+-- 現在は存在するが、削除直前には存在しなかった行（0 件であるべき）
+SELECT * FROM fb_employees
+MINUS
+SELECT * FROM fb_employees AS OF SCN <削除直前の SCN>;
+
+
+データが見つかりません
+
+Copy to clipboard
+
+データが見つかりません
+
+
+SELECT versions_startscn,
+       versions_starttime,
+       versions_endscn,
+       versions_endtime,
+       versions_xid,
+       versions_operation,
+       employee_id,
+       last_name,
+       salary
+FROM   fb_employees
+VERSIONS BETWEEN SCN 50298450312745 AND 50298450322745
+WHERE  employee_id = 101
+ORDER  BY versions_startscn;
+
+VERSIONS_STARTSCN VERSIONS_STARTTIME VERSIONS_ENDSCN VERSIONS_ENDTIME     VERSIONS_XID VERSIONS_OPERATION EMPLOYEE_ID LAST_NAME SALARY 
+----------------- ------------------ --------------- -------------------- ------------ ------------------ ----------- --------- ------ 
+             null null                50298450322746 2026-08-16T07:21:55Z null         null                       101 Yamada    500000 
+
+
+経過時間: 00:00:00.005
+1行が選択されました。
+
+
+SELECT xid, logon_user, operation, undo_sql
+FROM   flashback_transaction_query
+WHERE  xid IN (
+         SELECT versions_xid
+         FROM   fb_employees
+         VERSIONS BETWEEN SCN 50298450312745 AND 50298450322745
+       );
+
